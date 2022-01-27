@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 This project was developed by **Amela Technology**
 
 Below you'll find information about performing common tasks.
@@ -290,3 +291,7 @@ end
 
 49 directories, 124 files
 ```
+=======
+# soba-app
+
+>>>>>>> 4cdfa82f299f8728cf9be2e2cad87e70ae6acdff
