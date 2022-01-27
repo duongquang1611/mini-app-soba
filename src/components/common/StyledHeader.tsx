@@ -12,6 +12,10 @@ interface HeaderProps extends ViewProps {
     isBack?: boolean;
     title?: string;
     iconAction?: any;
+    iconQr?: any;
+    onPressNoti?(): void;
+    onPressQr?(): void;
+    iconNoti?: any;
     customStyle?: StyleProp<ViewStyle>;
     onPressAction?(): void;
     isShadow?: boolean;
@@ -23,7 +27,11 @@ const StyledHeader = (props: HeaderProps) => {
         isBack = true,
         title,
         iconAction,
+        iconQr,
+        iconNoti,
         customStyle,
+        onPressQr,
+        onPressNoti,
         onPressAction,
         isShadow = true,
         customHandleBackPress,
@@ -52,13 +60,22 @@ const StyledHeader = (props: HeaderProps) => {
                     <View style={styles.buttonBack} />
                 )}
                 <StyledText i18nText={title || ' '} customStyle={styles.title} numberOfLines={1} />
-                {iconAction ? (
-                    <StyledTouchable onPress={onPressAction} customStyle={styles.buttonAction}>
-                        <StyledIcon source={iconAction} size={30} customStyle={styles.iconAction} />
-                    </StyledTouchable>
-                ) : (
-                    <View style={styles.buttonAction} />
+                {(iconQr || iconNoti) && (
+                    <View style={styles.iconView}>
+                        <StyledTouchable onPress={onPressQr} customStyle={styles.buttonAction}>
+                            <StyledIcon source={iconQr} size={15} customStyle={styles.iconAction} />
+                        </StyledTouchable>
+                        <StyledTouchable onPress={onPressNoti} customStyle={styles.buttonAction}>
+                            <StyledIcon source={iconNoti} size={15} customStyle={styles.iconAction} />
+                        </StyledTouchable>
+                    </View>
                 )}
+                {iconAction && (
+                    <StyledTouchable onPress={onPressAction} customStyle={styles.buttonAction}>
+                        <StyledIcon source={iconQr} size={15} customStyle={styles.iconAction} />
+                    </StyledTouchable>
+                )}
+                {!iconQr && !iconNoti && !iconAction && <View style={styles.buttonAction} />}
             </View>
         </View>
     );
@@ -66,7 +83,6 @@ const StyledHeader = (props: HeaderProps) => {
 
 const styles = ScaledSheet.create({
     container: {
-        // height: '60@vs',
         backgroundColor: Themes.COLORS.white,
         justifyContent: 'flex-end',
         paddingTop: Metrics.safeTopPadding,
@@ -96,6 +112,9 @@ const styles = ScaledSheet.create({
         height: '25@vs',
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    iconView: {
+        flexDirection: 'row',
     },
     iconAction: {},
     shadow: {

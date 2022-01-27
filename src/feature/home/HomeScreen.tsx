@@ -1,78 +1,44 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import StyledHeader from 'components/common/StyledHeader';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
-import { wait } from 'utilities/helper';
-import StyledPicker from 'components/base/picker/StyledPicker';
-import ModalizeManager from 'components/base/modal/ModalizeManager';
-import { dataPicker } from 'utilities/staticData';
-import StyledOverlayLoading from 'components/base/StyledOverlayLoading';
 import { StyledButton } from 'components/base';
-import ModalContent from './components/ModalContent';
+import Images from 'assets/images';
+import { navigate } from 'navigation/NavigationService';
 
 const HomeScreen: FunctionComponent = () => {
     const navigation = useNavigation();
-    const modalize = ModalizeManager();
-    const [valuePicker, setValuePicker] = useState(dataPicker[0]);
-    const [currentValue, setCurrentValue] = useState(0);
-    const [isLoading, setIsLoading] = useState(false);
 
-    const fakeCallAPI = () => {
-        setIsLoading(true);
-        wait(2000).then(() => {
-            setIsLoading(false);
-        });
+    const goToQrScreen = () => {
+        navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.CHECK_IN);
     };
-
-    const handleConfirm = (item: string) => {
-        setValuePicker(item);
+    const goToNotiScreen = () => {
+        navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.NOTIFICATION);
     };
 
     return (
         <View style={{ flex: 1 }}>
-            <StyledHeader title={'Home Screen'} />
-            <StyledOverlayLoading visible={isLoading} />
+            <StyledHeader
+                title={'Home Screen'}
+                iconQr={Images.icons.tab.notification}
+                iconNoti={Images.icons.tab.notification}
+                onPressQr={goToQrScreen}
+                onPressNoti={goToNotiScreen}
+            />
             <View style={styles.contScreen}>
-                <StyledPicker
-                    label="Test Picker"
-                    currentValue={valuePicker}
-                    dataList={dataPicker}
-                    onConfirm={handleConfirm}
+                <StyledButton
+                    title={'Mobile Order Screen'}
+                    onPress={() => navigation.navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.MOBILE_ORDER)}
                 />
                 <StyledButton
-                    title="Open Modal 1"
-                    onPress={() => {
-                        modalize.show(
-                            'modalTest',
-                            <ModalContent
-                                currentValue={currentValue}
-                                handleSetValue={setCurrentValue}
-                                handleIncreaseNumber={() => setCurrentValue(currentValue + 1)}
-                                closeModal={() => modalize.dismiss('modalTest')}
-                                handleCallback={() => alert('Test callback from modal')}
-                            />,
-                            {
-                                isCenter: true,
-                                adjustToContentHeight: true,
-                                disableScrollIfPossible: false,
-                            },
-                        );
-                    }}
+                    title={'Order Default Screen'}
+                    onPress={() => navigation.navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.ORDER_DEFAULT)}
                 />
                 <StyledButton
-                    title={'Detail Screen'}
-                    onPress={() => navigation.navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.HOME_DETAIL)}
+                    title={'NewList Screen'}
+                    onPress={() => navigation.navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.NEW_LIST)}
                 />
-                <StyledButton
-                    title={'Data Screen'}
-                    onPress={() => navigation.navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.HOME_DATA)}
-                />
-                <StyledButton
-                    title={'User List Screen'}
-                    onPress={() => navigation.navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.HOME_USER_LIST)}
-                />
-                <StyledButton title={'Trigger Loading'} onPress={fakeCallAPI} />
             </View>
         </View>
     );

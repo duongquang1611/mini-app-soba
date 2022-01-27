@@ -51,7 +51,7 @@ const StyledTabBar = ({ state, descriptors, navigation }: any) => {
                         <StyledText
                             customStyle={[
                                 styles.tabLabel,
-                                { color: isFocused ? Themes.COLORS.primary : Themes.COLORS.textPrimary },
+                                { color: isFocused ? Themes.COLORS.red : Themes.COLORS.textPrimary },
                             ]}
                             i18nText={options?.title || ''}
                         />

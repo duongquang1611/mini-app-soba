@@ -49,6 +49,9 @@ export default {
         notification: '通知',
         setting: '設定',
         account: 'アカウント',
+        order: 'order',
+        stamp: 'stamp',
+        coupon: 'coupon',
     },
     authen: {
         login: {

@@ -20,32 +20,33 @@ const SendOTP: FunctionComponent = ({ route }: any) => {
         setCode(codeVer);
     };
 
-    const confirm = async () => {
-        try {
-            if (code?.length < 5) {
-                AlertMessage(t('alert.invalidOTP'));
-                return;
-            }
-            if (route?.params?.register) {
-                const response = await register({ email, password, verifiedCode: code });
-                const data = {
-                    ...response,
-                    user: { email, isSave: true },
-                };
-                AuthenticateService.handlerLogin(data);
-            } else {
-                const verifyCode = await checkVerifyCode(email, code);
-                if (verifyCode?.data?.isValid) {
-                    navigate(AUTHENTICATE_ROUTE.CHANGE_PASS, { email, code });
-                } else {
-                    AlertMessage(t('alert.invalidOTP'));
-                }
-            }
-        } catch (error) {
-            logger(error);
-            AlertMessage(error);
-        }
-    };
+    // const confirm = async () => {
+    //     try {
+    //         if (code?.length < 5) {
+    //             AlertMessage(t('alert.invalidOTP'));
+    //             return;
+    //         }
+    //         if (route?.params?.register) {
+    //             const response = await register({ email, password, verifiedCode: code });
+    //             const data = {
+    //                 ...response,
+    //                 user: { email, isSave: true },
+    //             };
+    //             AuthenticateService.handlerLogin(data);
+    //         } else {
+    //             const verifyCode = await checkVerifyCode(email, code);
+    //             if (verifyCode?.data?.isValid) {
+    //                 navigate(AUTHENTICATE_ROUTE.CHANGE_PASS, { email, code });
+    //             } else {
+    //                 AlertMessage(t('alert.invalidOTP'));
+    //             }
+    //         }
+    //     } catch (error) {
+    //         logger(error);
+    //         AlertMessage(error);
+    //     }
+    // };
+    const confirm = () => navigate(AUTHENTICATE_ROUTE.INFORMATION);
 
     const resendOTP = async () => {
         try {

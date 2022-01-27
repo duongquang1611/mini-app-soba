@@ -12,13 +12,14 @@ const common = {
 const Light = {
     COLORS: {
         ...common,
-        primary: '#4287f5',
+        primary: 'black',
         secondary: '#E9ECEF',
         textPrimary: '#000000',
-        textSecondary: '#607d8b',
+        textSecondary: 'white',
         backgroundModalUpdate: '#323232',
         backdropModalUpdate: '#00000071',
         progressUpdateColor: '#28A696',
+        red: 'red',
     },
     FONTS: {
         defaultFont: 'Montserrat-Regular',

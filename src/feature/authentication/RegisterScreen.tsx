@@ -34,12 +34,12 @@ const RegisterScreen: FunctionComponent = () => {
     } = form;
 
     const submit = async (user: any) => {
-        const res = await checkIsExistEmail(user?.email);
-        if (res?.data?.isExisted) {
-            AlertMessage(t('error.emailExisted'));
-            return;
-        }
-        await getVerifyCode(user?.email);
+        // const res = await checkIsExistEmail(user?.email);
+        // if (res?.data?.isExisted) {
+        //     AlertMessage(t('error.emailExisted'));
+        //     return;
+        // }
+        // await getVerifyCode(user?.email);
         navigate(AUTHENTICATE_ROUTE.SEND_OTP, { ...user, register: true });
     };
 

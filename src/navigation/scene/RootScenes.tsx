@@ -23,6 +23,7 @@ const Navigation: React.FunctionComponent = () => {
     if (token) {
         return <AppStack />;
     }
+    return <AppStack />;
     return <AuthStack />;
 };
 

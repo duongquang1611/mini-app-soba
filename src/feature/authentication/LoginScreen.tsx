@@ -76,9 +76,10 @@ const LoginScreen: FunctionComponent = () => {
                     onPress={handleSubmit(requestLogin)}
                     title="authen.login.buttonLogin"
                     disabled={!isValid}
+                    isSecondaryButton
                     customStyle={[
                         styles.loginButton,
-                        { backgroundColor: isValid ? `rgba(252, 177, 3, 1)` : `rgba(252, 177, 3, 0.5)` },
+                        // { backgroundColor: isValid ? Themes.COLORS.primary : Themes.COLORS.primary },
                     ]}
                 />
 
@@ -105,7 +106,7 @@ const styles = StyleSheet.create({
     },
     loginButton: {
         marginTop: 20,
-        borderWidth: 0,
+        borderWidth: 1,
     },
     registerButton: {
         marginTop: 20,
