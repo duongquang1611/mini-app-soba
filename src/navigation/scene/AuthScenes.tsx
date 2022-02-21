@@ -12,6 +12,7 @@ import Information from 'feature/authentication/Information';
 import RegisterStep1 from 'feature/authentication/RegisterStep1';
 import RegisterStep2 from 'feature/authentication/RegisterStep2';
 import RegisterStep3 from 'feature/authentication/RegisterStep3';
+import SendOtpForgotPass from 'feature/authentication/SendOtpForgotPass';
 
 const MainStack = createStackNavigator();
 
@@ -26,6 +27,7 @@ const AuthStack = () => (
         <MainStack.Screen name={AUTHENTICATE_ROUTE.REGISTER_STEP_1} component={RegisterStep1} />
         <MainStack.Screen name={AUTHENTICATE_ROUTE.REGISTER_STEP_2} component={RegisterStep2} />
         <MainStack.Screen name={AUTHENTICATE_ROUTE.REGISTER_STEP_3} component={RegisterStep3} />
+        <MainStack.Screen name={AUTHENTICATE_ROUTE.SEND_OTP_FORGOT_PASS} component={SendOtpForgotPass} />
     </MainStack.Navigator>
 );
 

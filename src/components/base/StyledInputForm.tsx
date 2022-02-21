@@ -39,6 +39,7 @@ const StyledInputForm = forwardRef((props: FormInputProps, ref: any) => {
                 value={value}
                 onChangeText={(text: string) => onChangeInput(text, onChange)}
                 errorMessage={errorMessage}
+                isSecureTextEntry={props.isSecureTextEntry}
                 {...inputProps}
             />
         );

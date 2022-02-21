@@ -1,8 +1,7 @@
-/* eslint-disable no-nested-ternary */
-import { StyledImage, StyledTouchable } from 'components/base';
+import { StyledTouchable } from 'components/base';
 import React, { memo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
+import { ActivityIndicator, ImageStyle, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import ActionSheet from 'react-native-actionsheet';
 import { logger } from 'utilities/logger';
 import ImageUploader from './ImageUploader';
@@ -11,7 +10,7 @@ interface ImagePickerProp {
     setImage: any;
     image: any;
     children: any;
-    customStyleImage?: StyleProp<ViewStyle>;
+    customStyleImage?: StyleProp<ImageStyle>;
     customStyle?: StyleProp<ViewStyle>;
 }
 
@@ -31,9 +30,14 @@ const ImagePicker = (props: ImagePickerProp) => {
         try {
             setLoading(true);
             const uri = await ImageUploader.pickImage(index);
-            setImage(uri || image);
+            if (uri) {
+                setImage(uri || image);
+            } else {
+                setLoading(false);
+            }
         } catch (err) {
             logger('err', err);
+            setLoading(false);
         } finally {
             setLoading(false);
         }
@@ -43,13 +47,13 @@ const ImagePicker = (props: ImagePickerProp) => {
         <View>
             <StyledTouchable customStyle={props.customStyle} onPress={showActionSheet}>
                 {image && !loading ? (
-                    <StyledImage customStyle={props.customStyleImage} source={{ uri: image }} />
+                    <>{children}</>
                 ) : loading ? (
                     <View style={[props.customStyleImage, styles.loading]}>
                         <ActivityIndicator />
                     </View>
                 ) : (
-                    <View>{children}</View>
+                    <>{children}</>
                 )}
             </StyledTouchable>
             <ActionSheet
