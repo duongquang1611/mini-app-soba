@@ -7,14 +7,21 @@ const common = {
     borderInputError: '#ff0000',
     green: 'green',
     grey: 'grey',
+    gray: 'gray',
+    backGroundInput: '#FBFBFB',
+    lightGray: '#F4F4F4',
+    mercury: '#E5E5E5',
+    silver: '#B8B8B8',
+    headerBackground: '#FEECD2',
+    viking: '#55DFBE',
 };
 
 const Light = {
     COLORS: {
         ...common,
-        primary: 'black',
-        secondary: '#E9ECEF',
-        textPrimary: '#000000',
+        primary: '#A61F17',
+        secondary: '#1D0157',
+        textPrimary: '#222222',
         textSecondary: 'white',
         backgroundModalUpdate: '#323232',
         backdropModalUpdate: '#00000071',

@@ -14,7 +14,7 @@ import { ScaledSheet } from 'react-native-size-matters';
 import AuthenticateService from 'utilities/authenticate/AuthenticateService';
 import { logger } from 'utilities/helper';
 
-const SendOTP: FunctionComponent = ({ route }: any) => {
+const SendOtpForgotPass: FunctionComponent = ({ route }: any) => {
     const [code, setCode] = useState('');
     const { t } = useTranslation();
     const { email, password } = route?.params;
@@ -48,7 +48,7 @@ const SendOTP: FunctionComponent = ({ route }: any) => {
     //         AlertMessage(error);
     //     }
     // };
-    const confirm = () => navigate(AUTHENTICATE_ROUTE.INFORMATION);
+    const confirm = () => navigate(AUTHENTICATE_ROUTE.CHANGE_PASS);
 
     const resendOTP = async () => {
         try {
@@ -67,18 +67,18 @@ const SendOTP: FunctionComponent = ({ route }: any) => {
     return (
         <SafeAreaView style={styles.flex1}>
             <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
-                <StyledHeader title={'regis'} />
-                <StyledText customStyle={styles.title} i18nText={'regis'} />
+                <StyledHeader title={'SendOtpForgotPass'} />
+                <StyledText customStyle={styles.title} i18nText={'SendOtpForgotPass'} />
                 <View style={styles.container}>
                     <CodeInput
-                        codeLength={6}
                         keyboardType="numeric"
-                        space={20}
+                        space={18}
                         size={30}
                         activeColor={Themes.COLORS.black}
                         containerStyle={styles.otpInput}
                         codeInputStyle={styles.underlineStyleBase}
                         onFulfill={onCodeFilled}
+                        codeLength={6}
                     />
                     <StyledTouchable onPress={resendOTP} customStyle={styles.containerResend}>
                         <StyledText customStyle={styles.resend} i18nText="common.sendOTP.resend" />
@@ -139,4 +139,4 @@ const styles = ScaledSheet.create({
     },
 });
 
-export default SendOTP;
+export default SendOtpForgotPass;

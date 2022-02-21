@@ -20,10 +20,7 @@ const TabCouponListScreen = () => {
     });
     return (
         <View style={styles.container}>
-            <StyledHeader title={'coupon List'} />
-            {/* <View style={styles.body}>
-                <StyledButton title={'detail coupon'} onPress={confirm} customStyle={styles.buttonSave} />
-            </View> */}
+            <StyledHeader title={'coupon List'} isBack={false} />
             <TabView
                 navigationState={{ index, routes }}
                 renderScene={renderScene}
@@ -33,15 +30,12 @@ const TabCouponListScreen = () => {
                 renderTabBar={(props) => (
                     <TabBar
                         style={styles.tabBar}
-                        inactiveColor={Themes.COLORS.primary}
-                        activeColor={Themes.COLORS.red}
+                        inactiveColor={Themes.COLORS.silver}
+                        activeColor={Themes.COLORS.white}
                         tabStyle={styles.tabStyle}
                         indicatorStyle={styles.indicatorTabBar}
-                        renderLabel={({ route }) => (
-                            <StyledText
-                                customStyle={[styles.label, { color: 'red' }]}
-                                originValue={route?.title || ''}
-                            />
+                        renderLabel={({ route, color }) => (
+                            <StyledText customStyle={[styles.label, { color }]} originValue={route?.title || ''} />
                         )}
                         {...props}
                     />
@@ -67,25 +61,23 @@ const styles = ScaledSheet.create({
     contentContainerTabBar: {
         alignItems: 'center',
     },
-    tabStyle: {
-        borderRadius: 10,
-    },
+    tabStyle: {},
     tabBar: {
         backgroundColor: Themes.COLORS.white,
         borderColor: Themes.COLORS.white,
-        borderRadius: 10,
         marginHorizontal: '20@s',
     },
     indicatorTabBar: {
         height: '100%',
-        backgroundColor: Themes.COLORS.secondary,
+        backgroundColor: Themes.COLORS.primary,
         borderWidth: 1,
-        borderRadius: 10,
+        // borderRadius: 10,
         borderColor: Themes.COLORS.white,
     },
     label: {
         fontSize: 13,
         fontWeight: 'bold',
         textAlign: 'center',
+        color: Themes.COLORS.silver,
     },
 });

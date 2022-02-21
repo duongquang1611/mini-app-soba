@@ -65,6 +65,8 @@ export default {
         register: {
             title: '新規会員登録はこちら',
             emailPlaceholder: 'sample@demo.webcom',
+            namePlaceholder: 'name',
+            birthdayPlaceholder: 'birthday',
             password: 'パスワード',
             passwordPlaceholder: 'パスワード',
             passwordConfirm: 'パスワード（再入力）',

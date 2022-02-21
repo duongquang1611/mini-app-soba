@@ -3,34 +3,21 @@ import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import StyledHeader from 'components/common/StyledHeader';
 import { Themes } from 'assets/themes';
-import { StyledImage, StyledText } from 'components/base';
-import { notificationListFake } from 'utilities/staticData';
+import { listNews } from 'utilities/staticData';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { useNavigation } from '@react-navigation/native';
+import { StyledText } from 'components/base';
+import { ListNewsItem } from './HomeScreen';
 
-const NotificationItem = (item: any) => {
-    return (
-        <TouchableOpacity
-            style={styles.notificationItem}
-            onPress={() => item?.navigation.navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.NOTIFICATION_DETAIL)}
-        >
-            <StyledImage source={{ uri: item.item?.img }} customStyle={styles.notificationImage} />
-            <StyledText originValue={item.item.content} customStyle={styles.contentText} />
-            <StyledText originValue={item.item.time} customStyle={styles.time} />
-        </TouchableOpacity>
-    );
-};
-const NotificationScreen = () => {
+const NewsListScreen = () => {
     const navigation = useNavigation();
     return (
         <View style={styles.container}>
             <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
-                <StyledHeader title={'noti'} />
+                <StyledHeader title={'news'} />
                 <View style={styles.body}>
-                    {notificationListFake?.map((item) => (
-                        <NotificationItem key={item.id} item={item} navigation={navigation} />
+                    {listNews.map((news, index) => (
+                        <ListNewsItem key={index} data={news} navigation={navigation} />
                     ))}
                 </View>
             </KeyboardAwareScrollView>
@@ -38,7 +25,7 @@ const NotificationScreen = () => {
     );
 };
 
-export default NotificationScreen;
+export default NewsListScreen;
 
 const styles = ScaledSheet.create({
     container: {
@@ -65,8 +52,5 @@ const styles = ScaledSheet.create({
     },
     contentText: {
         width: '60%',
-    },
-    time: {
-        alignSelf: 'flex-end',
     },
 });

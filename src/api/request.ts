@@ -5,8 +5,9 @@ import AuthenticateService from 'utilities/authenticate/AuthenticateService';
 import { logger, renderAlert } from 'utilities/helper';
 import NetInfo from '@react-native-community/netinfo';
 import { apiLogger } from 'utilities/logger';
-import { ERRORS } from 'utilities/staticData';
+import { apiLocal, ERRORS } from 'utilities/staticData';
 import i18next from 'utilities/i18next';
+import { store } from 'app-redux/store';
 
 const AUTH_URL_REFRESH_TOKEN = `${Config.API_URL}auth/refresh-token`;
 let hasAnyNetworkDialogShown = false;
@@ -32,11 +33,14 @@ const processQueue = (error: any, token: string | null | undefined = null) => {
     failedQueue = [];
 };
 
-const rejectError = (err: string, validNetwork: boolean) => {
+const rejectError = async (err: string, validNetwork: boolean, url: string) => {
     // Avoid being null
     if (validNetwork !== false) {
         return Promise.reject(i18next.t(err));
     }
+    const getKey = apiLocal.find((item) => item.url === url)?.key;
+    const dataResult: any = store.getState();
+    if (getKey && dataResult[getKey]) return Promise.resolve(dataResult[getKey]);
     return Promise.reject(i18next.t(ERRORS.network));
 };
 
@@ -63,15 +67,20 @@ request.interceptors.request.use(
 request.interceptors.response.use(
     (response: any) => response.data,
     async (error: any) => {
+        const { url } = error.config;
         // Check network first
         const network: any = await NetInfo.fetch();
         const validNetwork = network.isInternetReachable && network.isConnected;
         // validNetwork on first render in iOS will return NULL
         if (validNetwork === false && !hasAnyNetworkDialogShown) {
             hasAnyNetworkDialogShown = true;
-            renderAlert(i18next.t(ERRORS.network), () => {
-                hasAnyNetworkDialogShown = false;
-            });
+            const getKey = apiLocal.find((item) => item.url === url)?.key;
+            const dataResult: any = store.getState();
+            if (!(getKey && dataResult[getKey])) {
+                renderAlert(i18next.t(ERRORS.network), () => {
+                    hasAnyNetworkDialogShown = false;
+                });
+            }
         }
         // Any status codes that falls outside the range of 2xx cause this function to trigger
         // Do something with response error
@@ -88,7 +97,7 @@ request.interceptors.response.use(
             logger('RefreshToken_NotExist => logout');
             // Logout here
             AuthenticateService.logOut();
-            return rejectError(error, validNetwork);
+            return rejectError(error, validNetwork, url);
         }
         if (
             ((error.response && error.response.status === 401) || errorMessage === 'Token_Expire') &&
@@ -102,7 +111,7 @@ request.interceptors.response.use(
                     originalRequest.headers.Authorization = `Bearer ${queuePromise.token}`;
                     return request(originalRequest);
                 } catch (err) {
-                    return rejectError(err, validNetwork);
+                    return rejectError(err, validNetwork, url);
                 }
             }
             logger('refreshing token...');
@@ -122,14 +131,14 @@ request.interceptors.response.use(
                 // Logout here
                 AuthenticateService.logOut();
                 processQueue(err, null);
-                return rejectError(err, validNetwork);
+                return rejectError(err, validNetwork, url);
             } finally {
                 isRefreshing = false;
             }
         }
         error.message = errorMessage || ERRORS.default;
         error.keyMessage = errorKey || '';
-        return rejectError(error.message, validNetwork);
+        return rejectError(error.message, validNetwork, url);
     },
 );
 

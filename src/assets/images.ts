@@ -4,6 +4,7 @@ const Images = {
     icons: {
         selected: require('./icon/ic_select.png'),
         back: require('./icon/ic_back.png'),
+        facebook: require('./icon/ic_facebook.png'),
         tab: {
             home: require('./icon/ic_home.png'),
             notification: require('./icon/ic_notification.png'),
@@ -14,9 +15,14 @@ const Images = {
             check: require('./icon/ic_check_radio.png'),
             uncheck: require('./icon/ic_uncheck_radio.png'),
         },
+        camera: require('./icon/ic_camera.png'),
+        close: require('./icon/ic_close.png'),
+        eyeOff: require('./icon/ic_eye_off.png'),
+        eyeOn: require('./icon/ic_eye_on.png'),
     },
     photo: {
         defaultImage: require('./photo/img_default_image.png'),
+        avatarDefault: require('./photo/avatar_default.png'),
     },
 };
 

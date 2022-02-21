@@ -2,11 +2,23 @@ import React from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import StyledHeader from 'components/common/StyledHeader';
+import { Themes } from 'assets/themes';
+import { StyledImage, StyledText } from 'components/base';
+import Images from 'assets/images';
 
 const CheckInScreen = () => {
     return (
         <View style={styles.container}>
             <StyledHeader title={'check in'} />
+            <View style={styles.body}>
+                <View style={styles.qrView}>
+                    <StyledText originValue={'nameQr'} customStyle={styles.titleText} />
+                    <StyledImage source={Images.photo.defaultImage} customStyle={styles.img} />
+                </View>
+                <View style={styles.contentView}>
+                    <StyledText originValue={'content'} customStyle={styles.contentText} />
+                </View>
+            </View>
         </View>
     );
 };
@@ -18,10 +30,28 @@ const styles = ScaledSheet.create({
         flex: 1,
     },
     body: {
-        justifyContent: 'center',
-        alignItems: 'center',
         flex: 1,
-        marginHorizontal: '20@s',
+        backgroundColor: Themes.COLORS.lightGray,
+        paddingTop: '5@vs',
+    },
+    qrView: {
+        alignItems: 'center',
+        width: '100%',
+        backgroundColor: Themes.COLORS.white,
+    },
+    titleText: {
+        color: Themes.COLORS.secondary,
+        fontSize: '20@ms0.3',
+    },
+    img: {
+        width: '180@vs',
+        height: '180@vs',
     },
     buttonSave: {},
+    contentView: {
+        width: '100%',
+        paddingHorizontal: '20@s',
+        marginVertical: '15@vs',
+    },
+    contentText: {},
 });
