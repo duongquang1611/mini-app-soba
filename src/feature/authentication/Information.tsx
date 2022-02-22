@@ -1,19 +1,20 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { yupResolver } from '@hookform/resolvers/yup';
+import Images from 'assets/images';
+import Metrics from 'assets/metrics';
+import { Themes } from 'assets/themes';
 import { StyledButton, StyledInputForm, StyledText } from 'components/base';
+import StyledHeader from 'components/common/StyledHeader';
 import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useRef, useState } from 'react';
-import { Button, View } from 'react-native';
-import { scale, ScaledSheet } from 'react-native-size-matters';
-import StyledHeader from 'components/common/StyledHeader';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { View } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { scale, ScaledSheet } from 'react-native-size-matters';
 import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
-import { Themes } from 'assets/themes';
-import Metrics from 'assets/metrics';
-import Images from 'assets/images';
 import UpLoadAvatar from './components/UpLoadAvatar';
 
 const Information = () => {

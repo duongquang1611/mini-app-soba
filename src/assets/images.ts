@@ -19,6 +19,9 @@ const Images = {
         close: require('./icon/ic_close.png'),
         eyeOff: require('./icon/ic_eye_off.png'),
         eyeOn: require('./icon/ic_eye_on.png'),
+        message: require('./icon/ic_message.png'),
+        stampUsed: require('./icon/ic_stamp_used.png'),
+        question: require('./icon/ic_question.png'),
     },
     photo: {
         defaultImage: require('./photo/img_default_image.png'),

@@ -3,6 +3,9 @@ import 'dayjs/locale/ja';
 import i18next from 'i18next';
 
 dayjs.locale('ja');
+
+export const formatYMD = 'YYYY年MM月DD日';
+
 export const changeLocale = (locale: string): void => {
     dayjs.locale(locale);
 };
@@ -12,4 +15,9 @@ export const toLocalStringTime = (date: Date): string => {
 
 export const requireField = (field: string) => {
     return i18next.t('error.require', { field }) || '';
+};
+
+export const formatDate = (date: Date | string | number, defaultFormat = formatYMD) => {
+    if (!date) return '';
+    return `${dayjs(date).format(defaultFormat)}`;
 };

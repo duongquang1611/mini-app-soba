@@ -3,6 +3,12 @@ import Images from 'assets/images';
 export const staticValue = {
     DEFAULT: 1,
     TIME_IMAGE_LOAD: 500,
+    DEFAULT_HIT_SLOP: {
+        top: 10,
+        bottom: 10,
+        left: 10,
+        right: 10,
+    },
 };
 
 export const ERRORS = {
@@ -256,4 +262,30 @@ export const orderHistoryListFake = [
         price: '￥1,000',
         img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQb4km6pqiEE1QzzbLxzOOeHSqawgslw-wX5Q&usqp=CAU',
     },
+];
+
+export const createStampItem = (rd = Math.random()) => {
+    return {
+        id: rd,
+        name: `通常時ログイン用 ${Math.round(rd * 100)}`,
+        price: Math.round(rd * 2),
+        status: Math.round(rd),
+        start: '02/01/2022',
+        end: '04/04/2022',
+        used: Boolean(Math.round(Math.random())),
+        count: Math.round(rd * 5),
+        url: 'https://kenh14cdn.com/203336854389633024/2021/9/1/photo-1-16304832141231584345047.jpg',
+    };
+};
+
+export const STAMP_DATA = [
+    createStampItem(),
+    createStampItem(),
+    createStampItem(),
+    createStampItem(),
+    createStampItem(),
+    createStampItem(),
+    createStampItem(),
+    createStampItem(),
+    createStampItem(),
 ];

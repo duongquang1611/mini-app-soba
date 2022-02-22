@@ -1,15 +1,12 @@
-import { StyledButton, StyledIcon, StyledText } from 'components/base';
-import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
-import { navigate } from 'navigation/NavigationService';
+import Images from 'assets/images';
+import { Themes } from 'assets/themes';
+import { StyledIcon, StyledText } from 'components/base';
+import StyledHeader from 'components/common/StyledHeader';
 import React from 'react';
 import { View } from 'react-native';
-import { ScaledSheet, verticalScale } from 'react-native-size-matters';
-import StyledHeader from 'components/common/StyledHeader';
-import { Themes } from 'assets/themes';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { listOrderDefault } from 'utilities/staticData';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import Images from 'assets/images';
+import { ScaledSheet, verticalScale } from 'react-native-size-matters';
+import { listOrderDefault } from 'utilities/staticData';
 
 const OrderItem = (data: any) => {
     return (
@@ -38,9 +35,9 @@ const OrderItem = (data: any) => {
     );
 };
 const OrderHistoryDetailScreen = () => {
-    const confirm = () => {
-        navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.CART);
-    };
+    // const confirm = () => {
+    //     navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.CART);
+    // };
     return (
         <View style={styles.container}>
             <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>

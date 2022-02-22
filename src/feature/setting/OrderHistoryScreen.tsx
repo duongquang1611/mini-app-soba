@@ -1,14 +1,14 @@
+import { useNavigation } from '@react-navigation/native';
+import { Themes } from 'assets/themes';
+import { StyledIcon, StyledText } from 'components/base';
+import StyledHeader from 'components/common/StyledHeader';
+import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import React from 'react';
 import { View } from 'react-native';
-import { ScaledSheet } from 'react-native-size-matters';
-import StyledHeader from 'components/common/StyledHeader';
-import { Themes } from 'assets/themes';
-import { StyledIcon, StyledImage, StyledText } from 'components/base';
-import { orderHistoryListFake } from 'utilities/staticData';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
-import { useNavigation } from '@react-navigation/native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { ScaledSheet } from 'react-native-size-matters';
+import { orderHistoryListFake } from 'utilities/staticData';
 
 const OrderItem = (item: any) => {
     return (

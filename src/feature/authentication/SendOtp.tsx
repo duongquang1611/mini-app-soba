@@ -1,4 +1,5 @@
-import { checkVerifyCode, forgotPassword, getVerifyCode, register } from 'api/modules/api-app/authenticate';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { forgotPassword, getVerifyCode } from 'api/modules/api-app/authenticate';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledText, StyledTouchable } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
@@ -7,12 +8,10 @@ import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { FunctionComponent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { SafeAreaView, View } from 'react-native';
 import CodeInput from 'react-native-confirmation-code-input';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet } from 'react-native-size-matters';
-import AuthenticateService from 'utilities/authenticate/AuthenticateService';
-import { logger } from 'utilities/helper';
 
 const SendOTP: FunctionComponent = ({ route }: any) => {
     const [code, setCode] = useState('');

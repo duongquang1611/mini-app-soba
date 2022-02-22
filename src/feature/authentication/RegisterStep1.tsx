@@ -1,15 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import Images from 'assets/images';
+import Metrics from 'assets/metrics';
+import { Themes } from 'assets/themes';
 import { StyledButton, StyledIcon, StyledImage, StyledText } from 'components/base';
+import LinearView from 'components/common/LinearView';
+import StyledHeader from 'components/common/StyledHeader';
 import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useRef, useState } from 'react';
 import { View } from 'react-native';
-import { scale, ScaledSheet } from 'react-native-size-matters';
-import StyledHeader from 'components/common/StyledHeader';
-import { Themes } from 'assets/themes';
-import Images from 'assets/images';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
-import LinearGradient from 'react-native-linear-gradient';
-import Metrics from 'assets/metrics';
+import { scale, ScaledSheet } from 'react-native-size-matters';
 
 const list = [
     { category: 'all' },
@@ -65,7 +66,7 @@ const RegisterStep1 = () => {
     };
     const renderCategoryItems = ({ item, index }) => {
         return (
-            <LinearGradient
+            <LinearView
                 style={[styles.linear, { borderWidth: selected === item.category ? 0 : 1 }]}
                 colors={selected === item.category ? ['#DF2115', '#A61F17'] : ['#fff', '#fff']}
             >
@@ -86,7 +87,7 @@ const RegisterStep1 = () => {
                         originValue={item.category}
                     />
                 </TouchableOpacity>
-            </LinearGradient>
+            </LinearView>
         );
     };
     return (

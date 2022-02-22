@@ -1,16 +1,15 @@
-import React from 'react';
-import { ImageBackground, View } from 'react-native';
-import { StyledButton, StyledIcon, StyledImage, StyledText } from 'components/base';
-import AuthenticateService from 'utilities/authenticate/AuthenticateService';
-import { scale, ScaledSheet } from 'react-native-size-matters';
-import StyledHeader from 'components/common/StyledHeader';
-import { navigate } from 'navigation/NavigationService';
-import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
-import LinearGradient from 'react-native-linear-gradient';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
+import { StyledIcon, StyledImage, StyledText } from 'components/base';
+import LinearView from 'components/common/LinearView';
+import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
+import { navigate } from 'navigation/NavigationService';
+import React from 'react';
+import { ImageBackground, View } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
+import { scale, ScaledSheet } from 'react-native-size-matters';
+import AuthenticateService from 'utilities/authenticate/AuthenticateService';
 import { listButton } from 'utilities/staticData';
 
 const SettingScreen = () => {
@@ -69,10 +68,10 @@ const SettingScreen = () => {
                         <StyledImage source={Images.photo.avatarDefault} customStyle={styles.avatar} />
                         <View>
                             <StyledText originValue={'田中　英雄'} />
-                            <LinearGradient style={styles.linear} colors={['#FEECD2', '#F8D156']}>
+                            <LinearView style={styles.linear} colors={['#FEECD2', '#F8D156']}>
                                 <StyledText originValue={'ゴールドメンバー'} />
                                 <StyledIcon source={Images.icons.eyeOff} size={20} />
-                            </LinearGradient>
+                            </LinearView>
                         </View>
                     </View>
                     <StyledText originValue={'￥80,000'} customStyle={styles.price} />

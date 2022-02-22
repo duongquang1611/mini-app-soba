@@ -50,7 +50,7 @@ export default {
         setting: '設定',
         account: 'アカウント',
         order: 'order',
-        stamp: 'stamp',
+        stamp: 'スタンプ',
         coupon: 'coupon',
     },
     authen: {
@@ -114,5 +114,16 @@ export default {
         minLength: '8文字以上で入力してください。',
         inputComponent:
             'You need to wrap input by Form Provider or passing "form = useForm( ... )" into input component.',
+    },
+    stamp: {
+        title: 'スタンプカード',
+        noteUse: '押していないスタンプがｎ個あります。\n押す場合はこの欄をタッチ！',
+        canUse: '使用可',
+        used: '有効期限切れ',
+        rangeDate: '{{start}}－{{end}}',
+        titleCount: '獲得数',
+        count: '{{count}}個',
+        exchangeStamp: '交換\nカード',
+        cumulativeStamp: '累計\nカード',
     },
 };
