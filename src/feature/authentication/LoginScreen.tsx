@@ -1,6 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import Images from 'assets/images';
-import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledImage, StyledInputForm, StyledText, StyledTouchable } from 'components/base';
 import StyledOverlayLoading from 'components/base/StyledOverlayLoading';
@@ -8,7 +7,7 @@ import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { FunctionComponent, useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { SafeAreaView, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet } from 'react-native-size-matters';
 import { useLogin } from 'utilities/authenticate/AuthenticateService';

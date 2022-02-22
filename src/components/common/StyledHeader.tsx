@@ -3,130 +3,195 @@ import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledText, StyledTouchable } from 'components/base';
 import { goBack } from 'navigation/NavigationService';
-import React from 'react';
-import { StyleProp, View, ViewProps, ViewStyle } from 'react-native';
-import { ScaledSheet } from 'react-native-size-matters';
-import { logger } from 'utilities/helper';
+import React, { memo, useState } from 'react';
+import { ImageStyle, StatusBar, StyleProp, TextStyle, View, ViewProps, ViewStyle } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { scale, ScaledSheet } from 'react-native-size-matters';
+import { isIos } from 'utilities/helper';
+import { staticValue } from 'utilities/staticData';
 
-interface HeaderProps extends ViewProps {
-    isBack?: boolean;
+export interface StyledHeaderProps extends ViewProps {
+    iconBack?: any;
+    iconRight?: any;
+    iconCenter?: any;
+    hasBack?: boolean;
     title?: string;
-    iconAction?: any;
-    iconQr?: any;
-    onPressNoti?(): void;
-    onPressQr?(): void;
-    iconNoti?: any;
-    customStyle?: StyleProp<ViewStyle>;
-    onPressAction?(): void;
-    isShadow?: boolean;
-    customHandleBackPress?(): void;
+    titleParams?: any;
+    textRight?: string;
+    onPressBack?(): void;
+    onPressRight?(): void;
+    customTitleStyle?: StyleProp<TextStyle>;
+    customCenterContainer?: StyleProp<ViewStyle>;
+    customBackContainer?: StyleProp<ImageStyle>;
+    customContainerIconBack?: StyleProp<ViewStyle>;
+    customIconCenter?: StyleProp<ImageStyle>;
+    customIconRight?: StyleProp<ImageStyle>;
+    customStyleLogo?: StyleProp<ImageStyle>;
+    customRightContainer?: StyleProp<ViewStyle>;
+    customContainer?: StyleProp<ViewStyle>;
+    sizeIconCenter?: number;
+    renderBack?: any;
+    renderRight?: any;
+    renderCenter?: any;
 }
 
-const StyledHeader = (props: HeaderProps) => {
+const StyledHeader = (props: StyledHeaderProps) => {
+    const insets = useSafeAreaInsets();
     const {
-        isBack = true,
-        title,
-        iconAction,
-        iconQr,
-        iconNoti,
-        customStyle,
-        onPressQr,
-        onPressNoti,
-        onPressAction,
-        isShadow = true,
-        customHandleBackPress,
-        style,
+        title = '',
+        hasBack = true,
+        onPressBack,
+        onPressRight,
+        iconBack = Images.icons.back,
+        iconCenter,
+        iconRight,
+        customBackContainer,
+        customTitleStyle,
+        customCenterContainer,
+        customContainer,
+        customIconRight,
+        customRightContainer,
+        customIconCenter,
+        sizeIconCenter = 18,
+        renderBack,
+        renderRight,
+        renderCenter,
+        textRight = '',
+        titleParams,
     } = props;
-    const onBack = () => {
-        if (customHandleBackPress) {
-            customHandleBackPress();
-            return;
+    const [rightLayout, setRightLayout] = useState({ width: 0, height: 0 });
+
+    const handleBack = () => {
+        if (onPressBack) {
+            onPressBack();
+        } else {
+            goBack();
         }
-        goBack();
     };
 
-    if (style) {
-        logger('You should use customStyle to implement this component to avoid conflict', true);
-    }
+    const onLayoutRight = (data: any) => {
+        const { width, height } = data?.nativeEvent?.layout;
+        setRightLayout({ width, height });
+    };
 
     return (
-        <View style={[styles.container, customStyle, isShadow && styles.shadow]}>
-            <View style={styles.viewHeader}>
-                {isBack ? (
-                    <StyledTouchable onPress={onBack} customStyle={styles.buttonBack}>
-                        <StyledIcon source={Images.icons.back} size={30} />
-                    </StyledTouchable>
+        <>
+            <StatusBar backgroundColor={Themes.COLORS.headerBackground} barStyle={'dark-content'} />
+            {isIos && <View style={{ height: insets.top, backgroundColor: Themes.COLORS.headerBackground }} />}
+            <View style={[styles.container, customContainer]}>
+                {hasBack ? (
+                    renderBack ? (
+                        renderBack()
+                    ) : (
+                        <StyledTouchable
+                            hitSlop={staticValue.DEFAULT_HIT_SLOP}
+                            onPress={handleBack}
+                            customStyle={[styles.containerBack, customBackContainer]}
+                        >
+                            <StyledIcon size={24} source={iconBack} customStyle={styles.iconBack} />
+                        </StyledTouchable>
+                    )
                 ) : (
-                    <View style={styles.buttonBack} />
+                    <View style={styles.containerBack} />
                 )}
-                <StyledText i18nText={title || ' '} customStyle={styles.title} numberOfLines={1} />
-                {(iconQr || iconNoti) && (
-                    <View style={styles.iconView}>
-                        <StyledTouchable onPress={onPressQr} customStyle={styles.buttonAction}>
-                            <StyledIcon source={iconQr} size={15} customStyle={styles.iconAction} />
-                        </StyledTouchable>
-                        <StyledTouchable onPress={onPressNoti} customStyle={styles.buttonAction}>
-                            <StyledIcon source={iconNoti} size={15} customStyle={styles.iconAction} />
-                        </StyledTouchable>
+
+                {renderCenter ? (
+                    renderCenter()
+                ) : (
+                    <View
+                        style={[
+                            styles.containerCenter,
+                            customCenterContainer,
+                            {
+                                width: Metrics.screenWidth - scale(60) - rightLayout.width,
+                            },
+                        ]}
+                    >
+                        {iconCenter && (
+                            <StyledIcon
+                                size={sizeIconCenter}
+                                source={iconCenter}
+                                customStyle={[styles.iconCenter, customIconCenter]}
+                            />
+                        )}
+                        <StyledText
+                            numberOfLines={1}
+                            customStyle={[styles.textCenter, customTitleStyle, { marginLeft: scale(hasBack ? 12 : 0) }]}
+                            i18nText={title}
+                            i18nParams={titleParams}
+                        />
                     </View>
                 )}
-                {iconAction && (
-                    <StyledTouchable onPress={onPressAction} customStyle={styles.buttonAction}>
-                        <StyledIcon source={iconQr} size={15} customStyle={styles.iconAction} />
+                {renderRight ? (
+                    renderRight()
+                ) : (
+                    <StyledTouchable
+                        onPress={onPressRight}
+                        customStyle={[styles.containerRight, customRightContainer]}
+                        disabled={!onPressRight}
+                        onLayout={onLayoutRight}
+                    >
+                        {iconRight ? (
+                            <StyledIcon
+                                size={20}
+                                source={iconRight}
+                                customStyle={[styles.iconRight, customIconRight]}
+                            />
+                        ) : textRight ? (
+                            <StyledText i18nText={textRight} numberOfLines={1} customStyle={styles.textRight} />
+                        ) : null}
                     </StyledTouchable>
                 )}
-                {!iconQr && !iconNoti && !iconAction && <View style={styles.buttonAction} />}
             </View>
-        </View>
+        </>
     );
 };
 
 const styles = ScaledSheet.create({
     container: {
-        backgroundColor: Themes.COLORS.white,
-        justifyContent: 'flex-end',
-        paddingTop: Metrics.safeTopPadding,
-    },
-    viewHeader: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
         width: '100%',
-        marginBottom: '14@vs',
-        paddingHorizontal: '20@s',
+        paddingVertical: '15@vs',
+        backgroundColor: Themes.COLORS.headerBackground,
+        flexShrink: 1,
     },
-    buttonBack: {
-        width: '25@vs',
-        height: '25@vs',
+    containerBack: {
+        marginLeft: '20@s',
         justifyContent: 'center',
         alignItems: 'center',
+        height: '24@s',
     },
-    title: {
-        fontSize: '20@ms',
-        fontWeight: 'bold',
-        maxWidth: '80%',
-        color: Themes.COLORS.black,
-    },
-    buttonAction: {
-        width: '25@vs',
-        height: '25@vs',
-        justifyContent: 'center',
+    containerCenter: {
         alignItems: 'center',
-    },
-    iconView: {
         flexDirection: 'row',
+        height: '100%',
     },
-    iconAction: {},
-    shadow: {
-        shadowColor: Themes.COLORS.black,
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.17,
-        shadowRadius: 5.49,
-        elevation: 5,
+    textCenter: {
+        fontSize: '24@ms0.3',
+        color: Themes.COLORS.textPrimary,
+        fontWeight: 'bold',
+        width: '100%',
+    },
+    containerRight: {
+        marginLeft: 'auto',
+        marginRight: '25@s',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 30,
+        maxWidth: '80@s',
+    },
+    iconRight: {},
+    iconBack: {
+        marginBottom: '-2@s',
+    },
+    iconCenter: {
+        tintColor: Themes.COLORS.primary,
+    },
+    textRight: {
+        color: Themes.COLORS.primary,
+        fontSize: '14@ms0.3',
     },
 });
 
-export default React.memo(StyledHeader);
+export default memo(StyledHeader);

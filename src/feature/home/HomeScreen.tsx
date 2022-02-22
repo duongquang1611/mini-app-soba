@@ -1,16 +1,16 @@
+import { useNavigation } from '@react-navigation/native';
+import Images from 'assets/images';
+import { Themes } from 'assets/themes';
+import { StyledIcon, StyledImage, StyledText } from 'components/base';
+import StyledHeaderImage from 'components/common/StyledHeaderImage';
+import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
+import { navigate } from 'navigation/NavigationService';
 import React, { FunctionComponent } from 'react';
 import { ImageBackground, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
-import { StyledButton, StyledIcon, StyledImage, StyledText } from 'components/base';
-import Images from 'assets/images';
-import { navigate } from 'navigation/NavigationService';
-import StyledHeaderImage from 'components/common/StyledHeaderImage';
+import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet } from 'react-native-size-matters';
 import { imagesList, listNews, netWorkList } from 'utilities/staticData';
-import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
-import { Themes } from 'assets/themes';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const netWorkItem = (data: any) => {
     return (
@@ -66,7 +66,7 @@ const HomeScreen: FunctionComponent = () => {
                         showsHorizontalScrollIndicator={false}
                         renderItem={netWorkItem}
                         onEndReachedThreshold={0.1}
-                        keyExtractor={(item) => item.category}
+                        keyExtractor={(item) => `${item.id}`}
                     />
                     <ImageBackground source={Images.photo.defaultImage} resizeMode="cover" style={styles.rowView}>
                         <StyledImage source={Images.photo.defaultImage} customStyle={styles.logo} />
@@ -97,7 +97,6 @@ const HomeScreen: FunctionComponent = () => {
                     </ImageBackground>
                     <ImageBackground source={Images.photo.defaultImage} resizeMode="cover" style={styles.rowView}>
                         <StyledText i18nText={'ニュース'} customStyle={styles.textMobile} />
-
                         <TouchableOpacity
                             style={styles.buttonMobile}
                             onPress={() => navigation.navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.NEW_LIST)}
@@ -121,6 +120,7 @@ const styles = ScaledSheet.create({
     },
     contScreen: {
         paddingHorizontal: '20@s',
+        paddingBottom: '20@vs',
     },
     contModalContent: {
         backgroundColor: 'white',

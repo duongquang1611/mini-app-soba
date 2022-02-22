@@ -1,12 +1,11 @@
+import { useNavigation } from '@react-navigation/native';
+import { Themes } from 'assets/themes';
+import StyledHeader from 'components/common/StyledHeader';
 import React from 'react';
 import { View } from 'react-native';
-import { ScaledSheet } from 'react-native-size-matters';
-import StyledHeader from 'components/common/StyledHeader';
-import { Themes } from 'assets/themes';
-import { listNews } from 'utilities/staticData';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useNavigation } from '@react-navigation/native';
-import { StyledText } from 'components/base';
+import { ScaledSheet } from 'react-native-size-matters';
+import { listNews } from 'utilities/staticData';
 import { ListNewsItem } from './HomeScreen';
 
 const NewsListScreen = () => {

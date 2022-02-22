@@ -1,9 +1,9 @@
-import React, { FunctionComponent } from 'react';
-import { StyleProp, StyleSheet, ViewStyle, TextStyle } from 'react-native';
-import { Themes } from 'assets/themes';
 import Metrics from 'assets/metrics';
-import { scale } from 'react-native-size-matters';
-import LinearGradient from 'react-native-linear-gradient';
+import { Themes } from 'assets/themes';
+import LinearView from 'components/common/LinearView';
+import React, { FunctionComponent } from 'react';
+import { StyleProp, TextStyle, View, ViewStyle } from 'react-native';
+import { scale, ScaledSheet } from 'react-native-size-matters';
 import { StyledText, StyledTouchable } from '.';
 
 interface StyledButtonProps {
@@ -13,9 +13,17 @@ interface StyledButtonProps {
     onPress(params?: any): void;
     onLongPress?(): void;
     disabled?: boolean;
-    isSecondaryButton?: boolean;
+    outline?: boolean;
     isNormal?: boolean;
 }
+
+const WrapTextComponent = ({ children, outline }: any) => {
+    return outline ? (
+        <View style={styles.secondaryBtn}>{children}</View>
+    ) : (
+        <LinearView style={styles.linear}>{children}</LinearView>
+    );
+};
 
 const StyledButton: FunctionComponent<StyledButtonProps> = (props: StyledButtonProps) => {
     const {
@@ -25,42 +33,43 @@ const StyledButton: FunctionComponent<StyledButtonProps> = (props: StyledButtonP
         customStyleText,
         onLongPress,
         disabled = false,
-        isSecondaryButton = false,
+        outline = false,
         isNormal = false,
     } = props;
+
     return (
         <StyledTouchable
             customStyle={[styles.container, customStyle]}
             onPress={onPress}
             onLongPress={onLongPress}
-            disabled={disabled}
+            disabled={disabled || !onPress}
         >
             {isNormal ? (
                 <StyledText
                     i18nText={title}
                     customStyle={[
                         styles.textButton,
-                        { color: isSecondaryButton ? Themes.COLORS.primary : Themes.COLORS.white },
+                        { color: outline ? Themes.COLORS.primary : Themes.COLORS.white },
                         customStyleText,
                     ]}
                 />
             ) : (
-                <LinearGradient style={styles.linear} colors={['#DF2115', '#A61F17']}>
+                <WrapTextComponent outline={outline}>
                     <StyledText
                         i18nText={title}
                         customStyle={[
-                            styles.textButton,
-                            { color: isSecondaryButton ? Themes.COLORS.primary : Themes.COLORS.white },
+                            styles.textButtonLinear,
+                            outline && { color: Themes.COLORS.primary, fontWeight: 'normal' },
                             customStyleText,
                         ]}
                     />
-                </LinearGradient>
+                </WrapTextComponent>
             )}
         </StyledTouchable>
     );
 };
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
     container: {
         width: Metrics.screenWidth - scale(40),
         justifyContent: 'center',
@@ -70,6 +79,9 @@ const styles = StyleSheet.create({
     },
     textButton: {
         color: Themes.COLORS.textSecondary,
+    },
+    textButtonLinear: {
+        color: Themes.COLORS.white,
         fontWeight: 'bold',
     },
     linear: {
@@ -78,6 +90,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 10,
+    },
+    secondaryBtn: {
+        paddingVertical: '5@vs',
+        paddingHorizontal: '10@s',
+        borderWidth: 1,
+        borderColor: Themes.COLORS.primary,
+        borderRadius: 5,
     },
 });
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { StyledButton, StyledIcon, StyledImage, StyledText } from 'components/base';
 import { navigate } from 'navigation/NavigationService';
 import React from 'react';

@@ -1,16 +1,15 @@
-import { StyledButton, StyledIcon, StyledImage, StyledText } from 'components/base';
-import React from 'react';
-import { View } from 'react-native';
-import { ScaledSheet } from 'react-native-size-matters';
-import StyledHeader from 'components/common/StyledHeader';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { coupon, listOrderDefault } from 'utilities/staticData';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { StyledButton, StyledIcon, StyledImage, StyledText } from 'components/base';
+import StyledHeader from 'components/common/StyledHeader';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
-import { cancel } from 'redux-saga/effects';
+import React from 'react';
+import { View } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { ScaledSheet } from 'react-native-size-matters';
+import { coupon, listOrderDefault } from 'utilities/staticData';
 
 const OrderDefaultItem = (data: any) => {
     return (
@@ -43,7 +42,7 @@ const MobileOrderScreen = () => {
     const edit = () => {
         navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.EDIT_ORDER);
     };
-    const cancel = () => {};
+    const cancel = () => null;
     return (
         <View style={styles.container}>
             <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>

@@ -1,17 +1,14 @@
-import { StyledButton, StyledText } from 'components/base';
-import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
-import { navigate } from 'navigation/NavigationService';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { Themes } from 'assets/themes';
+import { StyledText } from 'components/base';
+import StyledHeaderImage from 'components/common/StyledHeaderImage';
 import React from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
-import StyledHeader from 'components/common/StyledHeader';
-import StyledHeaderImage from 'components/common/StyledHeaderImage';
-import Images from 'assets/images';
 import { imagesList } from 'utilities/staticData';
-import { Themes } from 'assets/themes';
 
 const NewsDetailScreen = () => {
-    const confirm = () => {};
+    const confirm = () => null;
     return (
         <View style={styles.container}>
             {/* <StyledHeader title={'new detail'} /> */}

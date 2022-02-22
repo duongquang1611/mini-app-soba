@@ -1,6 +1,6 @@
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
-import { StyledButton, StyledImage, StyledText } from 'components/base';
+import { StyledImage, StyledText } from 'components/base';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React from 'react';

@@ -1,11 +1,11 @@
-import * as React from 'react';
-import { StyleProp, StyleSheet, Text, TextProps, TextStyle } from 'react-native';
 import { Themes } from 'assets/themes';
-import Size from 'assets/sizes';
-import { Normalize, useTranslation } from 'react-i18next';
 import i18next from 'i18next';
-import { logger } from 'utilities/helper';
+import * as React from 'react';
 import { memo } from 'react';
+import { Normalize, useTranslation } from 'react-i18next';
+import { StyleProp, Text, TextProps, TextStyle } from 'react-native';
+import { ScaledSheet } from 'react-native-size-matters';
+import { logger } from 'utilities/helper';
 import { Resource } from 'utilities/i18next';
 
 interface StyledTextProps extends TextProps {
@@ -20,7 +20,7 @@ interface StyledTextWithOriginValue extends StyledTextProps {
 
 interface StyledTextWithI18nValue extends StyledTextProps {
     originValue?: never;
-    i18nText: Normalize<Resource>;
+    i18nText: string;
 }
 
 type StyledTextCombineProps = StyledTextWithOriginValue | StyledTextWithI18nValue;
@@ -49,11 +49,10 @@ const StyledText = (props: StyledTextCombineProps) => {
     );
 };
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
     text: {
         color: Themes.COLORS.textPrimary,
-        fontSize: Size.FONTSIZE.normal,
-        // fontFamily: Themes.fonts.defaultFont,
+        fontSize: '14@ms0.3',
     },
 });
 

@@ -14,6 +14,9 @@ const common = {
     silver: '#B8B8B8',
     headerBackground: '#FEECD2',
     viking: '#55DFBE',
+    alto: '#DEDEDE',
+    defaultLinear: ['#DF2115', '#A61F17'],
+    mineShaft: '#222222',
 };
 
 const Light = {
@@ -21,12 +24,14 @@ const Light = {
         ...common,
         primary: '#A61F17',
         secondary: '#1D0157',
-        textPrimary: '#222222',
+        textPrimary: '#1D0157',
         textSecondary: 'white',
         backgroundModalUpdate: '#323232',
         backdropModalUpdate: '#00000071',
         progressUpdateColor: '#28A696',
         red: 'red',
+        stampExchange: 'rgba(88, 59, 150, 0.25)',
+        stampOther: 'rgba(189, 76, 69, 0.25)',
     },
     FONTS: {
         defaultFont: 'Montserrat-Regular',

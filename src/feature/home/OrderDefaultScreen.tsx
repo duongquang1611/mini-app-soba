@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { StyledButton, StyledIcon, StyledImage, StyledText } from 'components/base';
 import React from 'react';
 import { View } from 'react-native';
@@ -34,7 +35,7 @@ const OrderDefaultScreen = () => {
     const edit = () => {
         navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.EDIT_ORDER);
     };
-    const confirm = () => {};
+    const confirm = () => null;
     return (
         <View style={styles.container}>
             <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>

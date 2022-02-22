@@ -9,7 +9,7 @@ import { ScaledSheet } from 'react-native-size-matters';
 
 const DetailCouponScreen = (props: any) => {
     const { canUse } = props?.route?.params;
-    const useCoupon = () => {};
+    const useCoupon = () => null;
     return (
         <View style={styles.container}>
             <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
