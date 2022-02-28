@@ -41,6 +41,7 @@ export default {
             unknown: '不明なエラーが発生しました。',
             network: 'エラーが発生しました。暫くしてから、もう一度試してください。',
         },
+        yes: 'はい',
     },
 
     // screens
@@ -122,8 +123,25 @@ export default {
         used: '有効期限切れ',
         rangeDate: '{{start}}－{{end}}',
         titleCount: '獲得数',
-        count: '{{count}}個',
+        count: '{{count}} 個',
         exchangeStamp: '交換\nカード',
         cumulativeStamp: '累計\nカード',
+        guideTitle: 'スタンプカードの詳細',
+    },
+    chooseStamp: {
+        earnStamp: 'スタンプが貯まる',
+        orderId: '注文ID: ADDS',
+        pleaseChoose: '貯まるスタンプを選択してください',
+    },
+    stampDetail: {
+        title: '新年スタンプカード',
+        expired: '有効期限切れ',
+        numberOfRemain: '残数',
+        numberOfCollect: '獲得数',
+        numberOfUse: '使用数',
+        count: '{{count}} 個',
+        historyExchange: 'クーポン交換履歴',
+        couponExchangeBtn: 'クーポン交換',
+        couponGetHistory: 'クーポンGET履歴',
     },
 };

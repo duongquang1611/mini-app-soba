@@ -9,6 +9,7 @@ export const staticValue = {
         left: 10,
         right: 10,
     },
+    COLUMNS_COUPON_EXCHANGE: 5,
 };
 
 export const ERRORS = {
@@ -289,3 +290,9 @@ export const STAMP_DATA = [
     createStampItem(),
     createStampItem(),
 ];
+
+export const MODAL_ID = {
+    CHOOSE_STAMP: 50,
+    GUIDE_STAMP: 51,
+    HISTORY_STAMP: 52,
+};

@@ -1,6 +1,8 @@
-import { BottomTabBarProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import Images from 'assets/images';
+import { Themes } from 'assets/themes';
+import { StyledIcon } from 'components/base';
 import ChangePassword from 'feature/authentication/ChangePassword';
 import SendOtpForgotPass from 'feature/authentication/SendOtpForgotPass';
 import DetailCouponScreen from 'feature/coupon/DetailCouponScreen';
@@ -13,7 +15,7 @@ import HomeDetailScreen from 'feature/home/HomeDetailScreen';
 import HomeScreen from 'feature/home/HomeScreen';
 import HomeUserListScreen from 'feature/home/HomeUserListScreen';
 import MobileOrderScreen from 'feature/home/MobileOrderScreen';
-import NewsDetailScreen from 'feature/home/NewsDetailScren';
+import NewsDetailScreen from 'feature/home/NewsDetailScreen';
 import NewsListScreen from 'feature/home/NewsListScreen';
 import NotificationDetailScreen from 'feature/home/NotificationDetailScreen';
 import NotificationScreen from 'feature/home/NotificationScreen';
@@ -31,12 +33,8 @@ import OrderHistoryDetailScreen from 'feature/setting/OrderHistoryDetailScreen';
 import OrderHistoryScreen from 'feature/setting/OrderHistoryScreen';
 import SettingNotificationScreen from 'feature/setting/SettingNotificationScreen';
 import SettingScreen from 'feature/setting/SettingScreen';
-import AccumulationCardScreen from 'feature/stamp/AccumulationCardScreen';
-import CardDetailScreen from 'feature/stamp/CardDetailScreen';
-import ExchangeStampScreen from 'feature/stamp/ExchangeStampScreen';
-import NewStampScreen from 'feature/stamp/NewStamp';
+import StampCardDetailScreen from 'feature/stamp/StampCardDetailScreen';
 import StampCardScreen from 'feature/stamp/StampCardScreen';
-import StyledTabBar from 'navigation/components/StyledTabBar';
 import navigationConfigs from 'navigation/config/options';
 import {
     AUTHENTICATE_ROUTE,
@@ -48,6 +46,8 @@ import {
 } from 'navigation/config/routes';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { AnimatedTabBarNavigator } from 'react-native-animated-nav-tab-bar';
+import { scale } from 'react-native-size-matters';
 import { isIos } from 'utilities/helper';
 
 const MainStack = createStackNavigator();
@@ -86,10 +86,8 @@ const OrderStack = () => (
 const StampStack = () => (
     <MainStack.Navigator headerMode={'none'} screenOptions={navigationConfigs} keyboardHandlingEnabled={isIos}>
         <MainStack.Screen name={STAMP_ROUTE.ROOT} component={StampCardScreen} />
-        <MainStack.Screen name={STAMP_ROUTE.CARD_DETAIL} component={CardDetailScreen} />
-        <MainStack.Screen name={STAMP_ROUTE.NEW_STAMP} component={NewStampScreen} />
-        <MainStack.Screen name={STAMP_ROUTE.EXCHANGE_STAMP} component={ExchangeStampScreen} />
-        <MainStack.Screen name={STAMP_ROUTE.ACCUMULATION_CARD} component={AccumulationCardScreen} />
+        <MainStack.Screen name={STAMP_ROUTE.STAMP_CARD_DETAIL} component={StampCardDetailScreen} />
+        <MainStack.Screen name={COUPON_ROUTE.DETAIL_COUPON} component={DetailCouponScreen} />
     </MainStack.Navigator>
 );
 
@@ -112,9 +110,24 @@ const SettingStack = () => (
         <MainStack.Screen name={SETTING_ROUTE.ORDER_HISTORY_DETAIL} component={OrderHistoryDetailScreen} />
         <MainStack.Screen name={AUTHENTICATE_ROUTE.CHANGE_PASS} component={ChangePassword} />
         <MainStack.Screen name={AUTHENTICATE_ROUTE.SEND_OTP_FORGOT_PASS} component={SendOtpForgotPass} />
+        <MainStack.Screen name={HOME_ROUTE.EDIT_ORDER} component={EditOrderScreen} />
+        <MainStack.Screen name={ORDER_ROUTE.ORDER_QR_CODE} component={OrderQrCodeScreen} />
+        <MainStack.Screen name={ORDER_ROUTE.COUPON_LIST} component={CouponListScreen} />
+        <MainStack.Screen name={HOME_ROUTE.CART} component={CartScreen} />
     </MainStack.Navigator>
 );
 
+const AnimateTabs = AnimatedTabBarNavigator();
+
+const TabBarIcon = ({ focused, source }: any) => {
+    return (
+        <StyledIcon
+            source={source}
+            size={18}
+            customStyle={{ tintColor: focused ? Themes.COLORS.primary : Themes.COLORS.silver }}
+        />
+    );
+};
 const MainTabContainer = () => {
     const { t } = useTranslation();
     const ArrayTabs = [
@@ -123,38 +136,55 @@ const MainTabContainer = () => {
             title: t('tab.home'),
             component: HomeStack,
             icon: Images.icons.tab.home,
+            tabBarIcon: (iconProps: any) => <TabBarIcon {...iconProps} source={Images.icons.tab.home} />,
         },
         {
             name: STAMP_ROUTE.ROOT,
             title: t('tab.stamp'),
             component: StampStack,
             icon: Images.icons.tab.notification,
+            tabBarIcon: (iconProps: any) => <TabBarIcon {...iconProps} source={Images.icons.tab.notification} />,
         },
         {
             name: ORDER_ROUTE.ROOT,
             title: t('tab.order'),
             component: OrderStack,
             icon: Images.icons.tab.notification,
+            tabBarIcon: (iconProps: any) => <TabBarIcon {...iconProps} source={Images.icons.tab.notification} />,
         },
         {
             name: COUPON_ROUTE.ROOT,
             title: t('tab.coupon'),
             component: CouponStack,
             icon: Images.icons.tab.account,
+            tabBarIcon: (iconProps: any) => <TabBarIcon {...iconProps} source={Images.icons.tab.account} />,
         },
         {
             name: SETTING_ROUTE.ROOT,
             title: t('tab.setting'),
             component: SettingStack,
             icon: Images.icons.tab.setting,
+            tabBarIcon: (iconProps: any) => <TabBarIcon {...iconProps} source={Images.icons.tab.setting} />,
         },
     ];
     return (
-        <MainTab.Navigator tabBar={(props: BottomTabBarProps) => <StyledTabBar {...props} />}>
+        <AnimateTabs.Navigator
+            tabBarOptions={{
+                activeTintColor: Themes.COLORS.primary,
+                activeBackgroundColor: '#FFE8EC',
+                tabStyle: {
+                    shadowOpacity: 0.1,
+                },
+            }}
+            appearance={{
+                dotCornerRadius: 10,
+                horizontalPadding: scale(10),
+            }}
+        >
             {ArrayTabs.map((item, index) => (
                 <MainTab.Screen key={`${index}`} options={{ ...item }} {...item} />
             ))}
-        </MainTab.Navigator>
+        </AnimateTabs.Navigator>
     );
 };
 

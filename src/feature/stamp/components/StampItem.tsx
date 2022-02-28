@@ -2,20 +2,29 @@ import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
 import React from 'react';
-import { View } from 'react-native';
+import { StyleProp, View, ViewStyle } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import { formatDate } from 'utilities/format';
+import StampTypeView from './StampTypeView';
 
-const StampItem = ({ item, onPress }: any) => {
+interface IProps {
+    item: any;
+    onPress?: any;
+    customStyle?: StyleProp<ViewStyle>;
+    caseType?: number;
+}
+
+const StampItem = (props: IProps) => {
+    const { onPress, item, customStyle, caseType } = props;
     const { url, name, start, end, used, status, count } = item;
 
     return (
-        <StyledTouchable customStyle={styles.container} onPress={onPress}>
+        <StyledTouchable customStyle={[styles.container, customStyle]} onPress={onPress} disabled={!onPress}>
             <StyledImage source={{ uri: url }} customStyle={styles.imgStamp} />
             <View style={styles.content}>
                 <StyledText originValue={name} customStyle={styles.nameStamp} />
                 <StyledText
-                    i18nText={'stamp.rangeDate'}
+                    i18nText={caseType === 1 ? 'stampDetail.expired' : 'stamp.rangeDate'}
                     i18nParams={{ start: formatDate(start), end: formatDate(end) }}
                     customStyle={styles.textRangeDate}
                 />
@@ -25,7 +34,10 @@ const StampItem = ({ item, onPress }: any) => {
                         <StyledText i18nText={''} customStyle={styles.textCount} />
                     ) : (
                         <>
-                            <StyledText i18nText={'stamp.titleCount'} customStyle={styles.textTitleCount} />
+                            <StyledText
+                                i18nText={caseType === 1 ? 'stampDetail.numberOfRemain' : 'stamp.titleCount'}
+                                customStyle={styles.textTitleCount}
+                            />
                             <StyledText
                                 i18nText={'stamp.count'}
                                 i18nParams={{ count }}
@@ -35,12 +47,7 @@ const StampItem = ({ item, onPress }: any) => {
                     )}
                 </View>
             </View>
-            <View style={[styles.statusView, status && { backgroundColor: Themes.COLORS.stampOther }]}>
-                <StyledText
-                    i18nText={status ? 'stamp.cumulativeStamp' : 'stamp.exchangeStamp'}
-                    customStyle={styles.textStatus}
-                />
-            </View>
+            <StampTypeView status={status} />
             {!!used && <StyledIcon source={Images.icons.stampUsed} size={90} customStyle={styles.stampUsed} />}
         </StyledTouchable>
     );
@@ -75,12 +82,6 @@ const styles = ScaledSheet.create({
         marginRight: '15@s',
         textAlign: 'center',
     },
-    textStatus: {
-        textAlign: 'center',
-        fontSize: '12@ms0.3',
-        marginTop: '15@s',
-        marginRight: '5@s',
-    },
     textRangeDate: {
         fontSize: '12@ms0.3',
         color: Themes.COLORS.silver,
@@ -90,17 +91,6 @@ const styles = ScaledSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginTop: '6@vs',
-    },
-    statusView: {
-        backgroundColor: Themes.COLORS.stampExchange,
-        width: '79@s',
-        height: '79@s',
-        borderRadius: 100,
-        position: 'absolute',
-        top: '-25@s',
-        right: '-17@s',
-        alignItems: 'center',
-        justifyContent: 'center',
     },
     stampUsed: {
         position: 'absolute',

@@ -7,9 +7,10 @@ import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { FunctionComponent } from 'react';
 import { ImageBackground, View } from 'react-native';
+import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { ScaledSheet } from 'react-native-size-matters';
+import { scale, ScaledSheet } from 'react-native-size-matters';
 import { imagesList, listNews, netWorkList } from 'utilities/staticData';
 
 const netWorkItem = (data: any) => {
@@ -60,6 +61,22 @@ const HomeScreen: FunctionComponent = () => {
                     images={imagesList}
                 />
                 <View style={styles.contScreen}>
+                    <AnimatedCircularProgress
+                        style={{ alignSelf: 'center' }}
+                        size={scale(170)}
+                        width={scale(15)}
+                        backgroundWidth={scale(15)}
+                        fill={10}
+                        tintColor={'#55DFBE'}
+                        backgroundColor={Themes.COLORS.backgroundPrimary}
+                        rotation={0}
+                    >
+                        {(fill: number) => (
+                            <>
+                                <StyledText originValue={`${fill}`} customStyle={{}} />
+                            </>
+                        )}
+                    </AnimatedCircularProgress>
                     <FlatList
                         horizontal
                         data={netWorkList}
