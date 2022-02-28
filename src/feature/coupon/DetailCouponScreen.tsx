@@ -11,30 +11,35 @@ const DetailCouponScreen = (props: any) => {
     const { canUse } = props?.route?.params;
     const useCoupon = () => null;
     return (
-        <View style={styles.container}>
-            <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
-                <StyledHeader title={'Detail coupon'} />
-                <View style={styles.body}>
-                    <View style={styles.contentContainer}>
-                        <StyledText originValue={'クーポンＩＤ：CP690001'} customStyle={styles.time} />
-                        <StyledText originValue={'【リリース記念ＳＣ用】香味１杯　無料'} customStyle={styles.title} />
-                        <StyledImage customStyle={styles.img} source={Images.photo.defaultImage} />
-                        <StyledImage source={Images.photo.defaultImage} customStyle={styles.imgQr} />
-                        <View style={styles.rowView}>
-                            <StyledIcon source={Images.icons.eyeOff} size={15} customStyle={styles.iconDate} />
-                            <StyledText i18nText={'有効期限：無制限'} customStyle={styles.title} />
+        <>
+            <StyledHeader title={'Detail coupon'} />
+            <View style={styles.container}>
+                <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
+                    <View style={styles.body}>
+                        <View style={styles.contentContainer}>
+                            <StyledText originValue={'クーポンＩＤ：CP690001'} customStyle={styles.time} />
+                            <StyledText
+                                originValue={'【リリース記念ＳＣ用】香味１杯　無料'}
+                                customStyle={styles.title}
+                            />
+                            <StyledImage customStyle={styles.img} source={Images.photo.defaultImage} />
+                            <StyledImage source={Images.photo.defaultImage} customStyle={styles.imgQr} />
+                            <View style={styles.rowView}>
+                                <StyledIcon source={Images.icons.eyeOff} size={15} customStyle={styles.iconDate} />
+                                <StyledText i18nText={'有効期限：無制限'} customStyle={styles.title} />
+                            </View>
+                            <StyledText i18nText={'有効期限：無制限'} customStyle={styles.contentTitle} />
+                            <StyledText originValue={'content'} />
                         </View>
-                        <StyledText i18nText={'有効期限：無制限'} customStyle={styles.contentTitle} />
-                        <StyledText originValue={'content'} />
                     </View>
-                </View>
-            </KeyboardAwareScrollView>
-            {canUse && (
-                <View style={styles.buttonView}>
-                    <StyledButton title={'use coupon'} onPress={useCoupon} customStyle={styles.buttonUse} />
-                </View>
-            )}
-        </View>
+                </KeyboardAwareScrollView>
+                {canUse && (
+                    <View style={styles.buttonView}>
+                        <StyledButton title={'use coupon'} onPress={useCoupon} customStyle={styles.buttonUse} />
+                    </View>
+                )}
+            </View>
+        </>
     );
 };
 

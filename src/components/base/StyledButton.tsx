@@ -10,18 +10,20 @@ interface StyledButtonProps {
     title: any;
     customStyle?: StyleProp<ViewStyle>;
     customStyleText?: StyleProp<TextStyle>;
-    onPress(params?: any): void;
+    onPress?(params?: any): void;
     onLongPress?(): void;
     disabled?: boolean;
     outline?: boolean;
     isNormal?: boolean;
 }
 
-const WrapTextComponent = ({ children, outline }: any) => {
+const WrapTextComponent = ({ children, outline, disabled }: any) => {
     return outline ? (
         <View style={styles.secondaryBtn}>{children}</View>
     ) : (
-        <LinearView style={styles.linear}>{children}</LinearView>
+        <LinearView style={styles.linear} disabled={disabled}>
+            {children}
+        </LinearView>
     );
 };
 
@@ -54,12 +56,13 @@ const StyledButton: FunctionComponent<StyledButtonProps> = (props: StyledButtonP
                     ]}
                 />
             ) : (
-                <WrapTextComponent outline={outline}>
+                <WrapTextComponent outline={outline} disabled={disabled}>
                     <StyledText
                         i18nText={title}
                         customStyle={[
                             styles.textButtonLinear,
                             outline && { color: Themes.COLORS.primary, fontWeight: 'normal' },
+                            disabled && { color: Themes.COLORS.silver },
                             customStyleText,
                         ]}
                     />
@@ -75,7 +78,7 @@ const styles = ScaledSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 10,
-        marginTop: 10,
+        marginTop: '10@vs',
     },
     textButton: {
         color: Themes.COLORS.textSecondary,
@@ -86,7 +89,7 @@ const styles = ScaledSheet.create({
     },
     linear: {
         width: '100%',
-        paddingVertical: 15,
+        paddingVertical: '15@vs',
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 10,

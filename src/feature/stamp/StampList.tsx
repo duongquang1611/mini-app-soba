@@ -1,41 +1,42 @@
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
-import { StyledIcon, StyledList, StyledText } from 'components/base';
+import { StyledIcon, StyledList, StyledText, StyledTouchable } from 'components/base';
 import DashView from 'components/common/DashView';
 import LinearView from 'components/common/LinearView';
-import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
+import { STAMP_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import { STAMP_DATA } from 'utilities/staticData';
-import StampItem from './StampItem';
+import StampItem from './components/StampItem';
 
-interface StampTabProps {
+interface StampListProps {
     canUse?: boolean;
+    showEarnStamp?: any;
 }
-const goToDetail = () => {
-    navigate(TAB_NAVIGATION_ROOT.STAMP_ROUTE.CARD_DETAIL);
-};
 
-const StampTab = (props: StampTabProps) => {
-    const { canUse = false } = props;
+const StampList = (props: StampListProps) => {
+    const { canUse = false, showEarnStamp } = props;
+    const goToDetail = (item: any) => {
+        navigate(STAMP_ROUTE.STAMP_CARD_DETAIL, { item });
+    };
 
     const renderItemStamp = ({ item }: any) => {
-        return <StampItem item={item} onPress={goToDetail} />;
+        return <StampItem item={item} onPress={() => goToDetail(item)} />;
     };
     return (
         <View style={styles.container}>
             {canUse ? (
                 <>
-                    <LinearView style={styles.wrapNote}>
-                        <StyledIcon source={Images.icons.message} size={20} />
-                        <StyledText i18nText={'stamp.noteUse'} customStyle={styles.noteUse} />
-                    </LinearView>
+                    <StyledTouchable onPress={showEarnStamp}>
+                        <LinearView style={styles.wrapNote}>
+                            <StyledIcon source={Images.icons.message} size={20} />
+                            <StyledText i18nText={'stamp.noteUse'} customStyle={styles.noteUse} />
+                        </LinearView>
+                    </StyledTouchable>
                 </>
             ) : null}
-            {/* <StyledButton title={'detail stamp'} onPress={goToDetail} outline /> */}
-            {/* {canUse ? <StyledText originValue={'can use'} /> : <StyledText originValue={'used'} />} */}
             <StyledList
                 data={STAMP_DATA.filter((item: any) => item.used === !canUse)}
                 renderItem={renderItemStamp}
@@ -66,4 +67,4 @@ const styles = ScaledSheet.create({
         flexGrow: 1,
     },
 });
-export default StampTab;
+export default StampList;
