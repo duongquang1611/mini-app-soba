@@ -1,15 +1,15 @@
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
-import { StyledIcon, StyledImage, StyledText } from 'components/base';
+import { StyledIcon, StyledText } from 'components/base';
 import LinearView from 'components/common/LinearView';
 import React from 'react';
-import { View, Text } from 'react-native';
+import { Text, View } from 'react-native';
+import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet } from 'react-native-size-matters';
 import { statusUser } from 'utilities/staticData';
-import { AnimatedCircularProgress } from 'react-native-circular-progress';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const UserStatusItem = (item: any) => {
     const { name, colors, background, crownColor, content1, content2 } = item?.item;
@@ -69,7 +69,6 @@ const UserStatus = () => {
                             </>
                         )}
                     </AnimatedCircularProgress>
-                    {/* <View style={styles.chart} /> */}
                     <Text style={styles.money}>
                         {'￥5000'}
                         <Text style={styles.content}>{'  を支払うと、ダイヤモンドメンバー に昇格します'}</Text>
@@ -101,6 +100,8 @@ const styles = ScaledSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         width: Metrics.screenWidth,
+        borderTopRightRadius: 15,
+        borderTopLeftRadius: 15,
     },
     chart: {
         width: '164@s',
@@ -128,8 +129,9 @@ const styles = ScaledSheet.create({
         paddingVertical: '10@vs',
         borderRadius: 10,
         marginTop: '10@vs',
-        height: '80@vs',
+        height: '75@s',
         alignItems: 'flex-end',
+        justifyContent: 'space-between',
     },
     background: {
         position: 'absolute',

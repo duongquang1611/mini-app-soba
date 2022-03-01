@@ -240,6 +240,7 @@ const styles = ScaledSheet.create({
         position: 'absolute',
         left: '3.97@s',
         top: '43.68@vs',
+        borderRadius: 5,
     },
 });
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { BubbleTabBarItemConfig, TabsConfig } from '@gorhom/animated-tabbar';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -186,29 +187,29 @@ const MainTabContainer = () => {
             name: STAMP_ROUTE.ROOT,
             title: t('tab.stamp'),
             component: StampStack,
-            icon: Images.icons.tab.notification,
-            tabBarIcon: (iconProps: any) => <TabBarIcon {...iconProps} source={Images.icons.tab.notification} />,
+            icon: Images.icons.tab.stamp_card,
+            tabBarIcon: (iconProps: any) => <TabBarIcon {...iconProps} source={Images.icons.tab.stamp_card} />,
         },
         {
             name: ORDER_ROUTE.ROOT,
             title: t('tab.order'),
             component: OrderStack,
-            icon: Images.icons.tab.notification,
-            tabBarIcon: (iconProps: any) => <TabBarIcon {...iconProps} source={Images.icons.tab.notification} />,
+            icon: Images.icons.tab.bag,
+            tabBarIcon: (iconProps: any) => <TabBarIcon {...iconProps} source={Images.icons.tab.bag} />,
         },
         {
             name: COUPON_ROUTE.ROOT,
             title: t('tab.coupon'),
             component: CouponStack,
-            icon: Images.icons.tab.account,
-            tabBarIcon: (iconProps: any) => <TabBarIcon {...iconProps} source={Images.icons.tab.account} />,
+            icon: Images.icons.tab.coupon,
+            tabBarIcon: (iconProps: any) => <TabBarIcon {...iconProps} source={Images.icons.tab.coupon} />,
         },
         {
             name: SETTING_ROUTE.ROOT,
             title: t('tab.setting'),
             component: SettingStack,
-            icon: Images.icons.tab.setting,
-            tabBarIcon: (iconProps: any) => <TabBarIcon {...iconProps} source={Images.icons.tab.setting} />,
+            icon: Images.icons.tab.user,
+            tabBarIcon: (iconProps: any) => <TabBarIcon {...iconProps} source={Images.icons.tab.user} />,
         },
     ];
     // const styleIcon = (focused: boolean) => {

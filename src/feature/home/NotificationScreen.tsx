@@ -43,7 +43,7 @@ const NotificationScreen = () => {
     const navigation = useNavigation();
     return (
         <View style={styles.container}>
-            <StyledHeader title={'通知一覧 '} />
+            <StyledHeader title={'通知一覧 '} textRight="すべて既読" />
             <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
                 <View style={styles.body}>
                     {notificationListFake?.map((item) => (

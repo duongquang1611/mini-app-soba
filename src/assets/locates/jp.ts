@@ -54,11 +54,11 @@ export default {
     tab: {
         home: 'ホーム',
         notification: '通知',
-        setting: '設定',
+        setting: 'マイページ',
         account: 'アカウント',
-        order: 'order',
+        order: '注文',
         stamp: 'スタンプ',
-        coupon: 'coupon',
+        coupon: 'クーポン',
     },
     authen: {
         login: {

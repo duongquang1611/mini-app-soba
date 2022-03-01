@@ -202,6 +202,7 @@ const styles = ScaledSheet.create({
     },
     contentText: {
         marginVertical: '10@vs',
+        marginHorizontal: '20@s',
     },
     name: {
         fontSize: '16@ms0.3',

@@ -6,8 +6,8 @@ import StyledHeaderImage from 'components/common/StyledHeaderImage';
 import StyledTabTopView from 'components/common/StyledTabTopView';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
-import React, { FunctionComponent } from 'react';
-import { View } from 'react-native';
+import React, { FunctionComponent, useState } from 'react';
+import { ImageBackground, View } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet } from 'react-native-size-matters';
@@ -22,6 +22,18 @@ const netWorkItem = (data: any) => {
             <StyledText originValue={data?.item?.name} isBlack />
         </TouchableOpacity>
     );
+};
+const getColorTab = (key: number) => {
+    switch (key) {
+        case 0:
+            return Themes.COLORS.secondary;
+        case 1:
+            return Themes.COLORS.primary;
+        case 2:
+            return '#7B68EE';
+        default:
+            return Themes.COLORS.secondary;
+    }
 };
 export const ListNewsItem = (data: any) => {
     return (
@@ -64,6 +76,7 @@ const visitQr = {
 };
 const HomeScreen: FunctionComponent = () => {
     const navigation = useNavigation();
+    const [indexTab, setIndexTab] = useState(1);
     const goToQrScreen = () => {
         navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.CHECK_IN);
     };
@@ -113,12 +126,13 @@ const HomeScreen: FunctionComponent = () => {
                         />
                     </View>
                     <StyledTabTopView
+                        setIndexTab={setIndexTab}
                         containerStyle={styles.tabContainerStyle}
                         routes={routes}
                         renderScene={renderScene}
-                        customIndicatorStyle={{ backgroundColor: Themes.COLORS.secondary }}
+                        customIndicatorStyle={{ backgroundColor: getColorTab(indexTab) }}
                     />
-                    {/* <ImageBackground source={Images.photo.defaultImage} resizeMode="cover" style={styles.rowView}>
+                    <ImageBackground source={Images.photo.defaultImage} resizeMode="cover" style={styles.rowView}>
                         <StyledImage source={Images.photo.defaultImage} customStyle={styles.logo} />
                         <TouchableOpacity style={styles.buttonMobile}>
                             <StyledText i18nText={'店舗検索'} customStyle={styles.textMobile} />
@@ -155,7 +169,7 @@ const HomeScreen: FunctionComponent = () => {
                         >
                             <StyledText i18nText={'全て見る'} customStyle={styles.textNews} />
                         </TouchableOpacity>
-                    </ImageBackground> */}
+                    </ImageBackground>
                     {listNews.map((news, index) => (
                         <ListNewsItem key={index} data={news} navigation={navigation} />
                     ))}
@@ -285,7 +299,7 @@ const styles = ScaledSheet.create({
         tintColor: '#FBE3C0',
     },
     tabContainerStyle: {
-        height: '230@vs',
+        height: '230@s',
     },
 });
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
@@ -44,7 +45,7 @@ const SettingScreen = () => {
                     Picker.hide();
                     modalize.dismiss('modalPickerBackdrop');
                 }}
-                customStyle={{ height: Metrics.screenHeight }}
+                // customStyle={{ height: Metrics.screenHeight }}
             >
                 <UserStatus />
             </StyledTouchable>,
@@ -55,6 +56,9 @@ const SettingScreen = () => {
                 },
                 adjustToContentHeight: true,
                 disableScrollIfPossible: false,
+                scrollViewProps: {
+                    contentContainerStyle: { flexGrow: 1 },
+                },
             },
         );
         Picker.show();
@@ -105,7 +109,7 @@ const SettingScreen = () => {
             <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
                 <View style={styles.headerContainer}>
                     <View style={styles.row}>
-                        <StyledText customStyle={styles.title} i18nText={'Setting'} />
+                        <StyledText customStyle={styles.title} i18nText={'マイページ'} />
                         <TouchableOpacity onPress={goToMyPage} style={styles.editButton}>
                             <StyledIcon source={Images.icons.edit} size={20} />
                         </TouchableOpacity>
@@ -216,7 +220,7 @@ const styles = ScaledSheet.create({
     },
     background: {
         width: '100%',
-        height: '170@vs',
+        height: '170@s',
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,
         justifyContent: 'space-between',

@@ -183,7 +183,7 @@ const EditProfileScreen = () => {
                                 <StyledText customStyle={styles.textGender} i18nText={'Female'} />
                             </TouchableOpacity>
                         </View>
-                        <TouchableOpacity
+                        {/* <TouchableOpacity
                             style={[styles.buttonGender, { width: Metrics.screenWidth - scale(40) }]}
                             onPress={() => {
                                 setRule(!rule);
@@ -199,7 +199,7 @@ const EditProfileScreen = () => {
                                 ]}
                             />
                             <StyledText customStyle={styles.textGender} i18nText={'rule'} />
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </FormProvider>
                     <TouchableOpacity style={styles.buttonChangePass} onPress={changePass}>
                         <StyledText customStyle={styles.changePass} i18nText={'パスワード変更'} />

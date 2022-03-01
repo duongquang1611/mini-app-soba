@@ -70,6 +70,7 @@ const Images = {
         qrCode: require('./photo/pt_qr_code.png'),
         ptCouponDetail: require('./photo/pt_coupon_detail.png'),
         backgroundMyPage: require('./photo/pt_background_my_page.png'),
+        used: require('./photo/pt_used.png'),
     },
 };
 

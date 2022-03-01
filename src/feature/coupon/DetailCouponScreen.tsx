@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
-import { StyledIcon, StyledImage, StyledText } from 'components/base';
+import { StyledButton, StyledIcon, StyledImage, StyledText } from 'components/base';
 import StyledHeader from 'components/common/StyledHeader';
 import React from 'react';
-import { View } from 'react-native';
+import { ImageBackground, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { color } from 'react-native-reanimated';
 import { ScaledSheet } from 'react-native-size-matters';
 
 const DetailCouponScreen = (props: any) => {
@@ -13,7 +14,7 @@ const DetailCouponScreen = (props: any) => {
     const useCoupon = () => null;
     return (
         <View style={styles.container}>
-            <StyledHeader title={'【リリース記念ＳＣ用】...'} />
+            <StyledHeader title={canUse ? '【リリース記念ＳＣ用】...' : '新年会クーポン'} />
             <KeyboardAwareScrollView
                 style={styles.container}
                 enableOnAndroid={true}
@@ -23,8 +24,13 @@ const DetailCouponScreen = (props: any) => {
                     <View style={styles.contentContainer}>
                         <StyledText originValue={'クーポンＩＤ：CP690001'} customStyle={styles.time} />
                         <StyledText originValue={'【リリース記念ＳＣ用】香味１杯　無料'} customStyle={styles.title} />
-                        <StyledImage customStyle={styles.img} source={Images.photo.ptCouponDetail} />
-                        <StyledImage source={Images.photo.qrCode} customStyle={styles.imgQr} />
+                        <ImageBackground style={styles.img} source={Images.photo.ptCouponDetail}>
+                            {!canUse && (
+                                <View style={styles.transparent}>
+                                    <StyledImage source={Images.photo.used} customStyle={styles.imgQr} />
+                                </View>
+                            )}
+                        </ImageBackground>
                         <View style={styles.rowView}>
                             <StyledIcon source={Images.icons.calendar} size={20} customStyle={styles.iconDate} />
                             <StyledText i18nText={'有効期限：無制限'} customStyle={styles.title} />
@@ -34,6 +40,11 @@ const DetailCouponScreen = (props: any) => {
                     </View>
                 </View>
             </KeyboardAwareScrollView>
+            {canUse && (
+                <View style={styles.buttonView}>
+                    <StyledButton title={'クーポン使用'} />
+                </View>
+            )}
         </View>
     );
 };
@@ -76,6 +87,16 @@ const styles = ScaledSheet.create({
         width: '100%',
         height: '335@vs',
         marginVertical: '10@vs',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    transparent: {
+        width: '100%',
+        height: '335@vs',
+        marginVertical: '10@vs',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'rgba(34, 34, 34, 0.5)',
     },
     qrView: {
         alignItems: 'center',
@@ -85,6 +106,10 @@ const styles = ScaledSheet.create({
     titleText: {
         color: Themes.COLORS.secondary,
         fontSize: '20@ms0.3',
+    },
+    imgUsed: {
+        width: '335@s',
+        height: '335@s',
     },
     imgQr: {
         width: '150@vs',
@@ -106,5 +131,6 @@ const styles = ScaledSheet.create({
     buttonView: {
         backgroundColor: Themes.COLORS.white,
         paddingVertical: '10@vs',
+        alignItems: 'center',
     },
 });

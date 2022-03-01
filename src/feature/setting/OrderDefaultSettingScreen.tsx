@@ -135,7 +135,6 @@ const styles = ScaledSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         flex: 1,
-        marginHorizontal: '10@s',
         backgroundColor: Themes.COLORS.white,
     },
     buttonSave: {

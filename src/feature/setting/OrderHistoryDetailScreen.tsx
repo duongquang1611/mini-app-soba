@@ -5,7 +5,7 @@ import StyledHeader from 'components/common/StyledHeader';
 import React from 'react';
 import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { ScaledSheet, verticalScale } from 'react-native-size-matters';
+import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { listOrderDefault } from 'utilities/staticData';
 
 const OrderItem = (data: any) => {
@@ -49,7 +49,7 @@ const OrderHistoryDetailScreen = () => {
                     <View style={styles.timeView}>
                         <StyledText i18nText={'setting.timeOrder'} isBlack />
                         <StyledText originValue={' : '} isBlack />
-                        <StyledText originValue={'2021年11月6日　5時36分'} customStyle={styles.timeValue} />
+                        <StyledText originValue={'2021年11月6日　5時36分'} isBlack customStyle={styles.timeValue} />
                     </View>
                     <View style={styles.numOrderView}>
                         <View style={styles.row}>
@@ -77,7 +77,11 @@ const OrderHistoryDetailScreen = () => {
                         </View>
                         <View style={styles.rowPrice}>
                             <View style={styles.contentRow}>
-                                <StyledIcon size={20} source={Images.icons.eyeOff} />
+                                <StyledIcon
+                                    size={20}
+                                    source={Images.icons.coupon}
+                                    customStyle={{ tintColor: Themes.COLORS.primary, marginBottom: scale(5) }}
+                                />
                                 <StyledText originValue={'クーポンタイトル'} customStyle={styles.titleOrder} />
                             </View>
                             <StyledText originValue={`￥ ${1600}`} customStyle={styles.price} isBlack />

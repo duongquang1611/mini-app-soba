@@ -70,7 +70,7 @@ const MobileOrderScreen = () => {
     return (
         <View style={styles.container}>
             <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
-                <StyledHeader title={'カート'} iconRight={Images.icons.question} />
+                <StyledHeader title={'事前注文QRコード'} iconRight={Images.icons.question} />
                 <View style={styles.body}>
                     <View style={styles.qrView}>
                         <StyledImage source={Images.photo.qrCode} customStyle={styles.img} />
