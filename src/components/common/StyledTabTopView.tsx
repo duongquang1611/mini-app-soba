@@ -18,6 +18,7 @@ interface IProps {
     activeColor?: string;
     inactiveColor?: string;
     setIndexTab?(index: number): void;
+    customIndicatorStyle?: StyleProp<ViewStyle>;
 }
 
 const StyledTabTopView = (propsTab: IProps) => {
@@ -33,6 +34,7 @@ const StyledTabTopView = (propsTab: IProps) => {
         activeColor,
         inactiveColor,
         setIndexTab,
+        customIndicatorStyle,
     } = propsTab;
     const [index, setIndex] = useState(defaultIndex || 0);
 
@@ -70,7 +72,7 @@ const StyledTabTopView = (propsTab: IProps) => {
                         pressColor={'transparent'}
                         activeColor={activeColor || Themes.COLORS.primary}
                         inactiveColor={inactiveColor || Themes.COLORS.white}
-                        indicatorStyle={styles.indicatorTabBar}
+                        indicatorStyle={[styles.indicatorTabBar, customIndicatorStyle]}
                         contentContainerStyle={[styles.contentContainerTabBar, contentContainerStyle]}
                         renderLabel={renderLabel}
                         {...props}

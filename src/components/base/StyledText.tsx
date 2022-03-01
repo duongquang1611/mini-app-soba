@@ -11,6 +11,7 @@ import { Resource } from 'utilities/i18next';
 interface StyledTextProps extends TextProps {
     customStyle?: StyleProp<TextStyle>;
     i18nParams?: any;
+    isBlack?: any;
 }
 
 interface StyledTextWithOriginValue extends StyledTextProps {
@@ -27,7 +28,7 @@ type StyledTextCombineProps = StyledTextWithOriginValue | StyledTextWithI18nValu
 
 const StyledText = (props: StyledTextCombineProps) => {
     const { t } = useTranslation();
-    const { style, originValue, i18nText, i18nParams } = props;
+    const { style, originValue, i18nText, i18nParams, isBlack } = props;
     let value;
 
     if (style) {
@@ -43,7 +44,14 @@ const StyledText = (props: StyledTextCombineProps) => {
     }
 
     return (
-        <Text style={[styles.text, props.customStyle]} {...props}>
+        <Text
+            style={[
+                styles.text,
+                { color: isBlack ? Themes.COLORS.mineShaft : Themes.COLORS.textPrimary },
+                props.customStyle,
+            ]}
+            {...props}
+        >
             {value}
         </Text>
     );
@@ -53,6 +61,7 @@ const styles = ScaledSheet.create({
     text: {
         color: Themes.COLORS.textPrimary,
         fontSize: '14@ms0.3',
+        // lineHeight: '20@vs',
     },
 });
 

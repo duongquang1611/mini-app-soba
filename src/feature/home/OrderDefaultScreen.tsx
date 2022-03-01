@@ -19,13 +19,18 @@ const OrderDefaultItem = (data: any) => {
             <View style={styles.orderTextView}>
                 <StyledText originValue={data?.data?.name} customStyle={styles.titleOrder} />
                 {data?.data?.listAdd?.map((item: any, index: number) => (
-                    <View key={index}>
-                        <StyledText originValue={`+ ${item?.name}`} />
+                    <View key={index} style={{ flexDirection: 'row' }}>
+                        <StyledText originValue={`+ ${item?.name}`} isBlack customStyle={styles.addText} />
+                        {item?.num && (
+                            <View style={styles.numView}>
+                                <StyledText originValue={`x ${item?.num}`} isBlack customStyle={styles.addValue} />
+                            </View>
+                        )}
                     </View>
                 ))}
                 <View style={styles.quantity}>
-                    <StyledText i18nText={'個数'} />
-                    <StyledText originValue={data?.data?.quantity} />
+                    <StyledText i18nText={'個数'} customStyle={styles.quantityText} />
+                    <StyledText originValue={data?.data?.quantity} isBlack />
                 </View>
             </View>
         </TouchableOpacity>
@@ -38,16 +43,16 @@ const OrderDefaultScreen = () => {
     const confirm = () => null;
     return (
         <View style={styles.container}>
+            <StyledHeader title={'いつもの！注文'} iconRight={Images.icons.question} />
             <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
-                <StyledHeader title={'OrderDefault'} />
                 <View style={styles.body}>
                     <View style={styles.qrView}>
-                        <StyledImage source={Images.photo.defaultImage} customStyle={styles.img} />
-                        <StyledButton title={'confirm'} onPress={edit} customStyle={styles.buttonSave} />
+                        <StyledImage source={Images.photo.qrCode} customStyle={styles.img} />
+                        <StyledButton title={'注文編集'} onPress={edit} customStyle={styles.buttonSave} />
                     </View>
                     <View style={styles.numOrderView}>
                         <View style={styles.row}>
-                            <StyledIcon source={Images.icons.eyeOff} size={17} />
+                            <StyledIcon source={Images.icons.bag} size={17} customStyle={styles.icBag} />
                             <StyledText originValue={'content'} customStyle={styles.contentText} />
                         </View>
                         <View style={styles.row}>
@@ -80,7 +85,7 @@ const styles = ScaledSheet.create({
         alignItems: 'center',
         width: '100%',
         backgroundColor: Themes.COLORS.white,
-        paddingVertical: '10@vs',
+        paddingVertical: '20@vs',
         marginBottom: '10@vs',
     },
     numOrderView: {
@@ -89,14 +94,17 @@ const styles = ScaledSheet.create({
         backgroundColor: Themes.COLORS.white,
         paddingVertical: '10@vs',
         paddingHorizontal: '20@s',
+        marginBottom: '10@vs',
     },
     titleText: {
         color: Themes.COLORS.secondary,
         fontSize: '20@ms0.3',
     },
     img: {
-        width: '180@vs',
-        height: '180@vs',
+        width: '162@s',
+        height: '162@s',
+        marginVertical: '10@vs',
+        marginBottom: '15@vs',
     },
     contentView: {
         width: '100%',
@@ -142,5 +150,25 @@ const styles = ScaledSheet.create({
         justifyContent: 'space-between',
         flexDirection: 'row',
         marginTop: '10@vs',
+    },
+    icBag: {
+        tintColor: Themes.COLORS.secondary,
+    },
+    addText: {
+        marginVertical: '3@vs',
+    },
+    quantityText: {
+        fontWeight: 'bold',
+    },
+    numView: {
+        backgroundColor: Themes.COLORS.headerBackground,
+        borderRadius: 5,
+        paddingHorizontal: '5@s',
+        paddingVertical: '2@vs',
+        marginLeft: '5@s',
+    },
+    addValue: {
+        color: Themes.COLORS.primary,
+        fontSize: '12@ms0.3',
     },
 });

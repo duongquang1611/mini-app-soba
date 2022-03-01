@@ -58,19 +58,25 @@ export const notificationListFake = [
         id: 1,
         content: 'text content',
         time: '20:20 Am',
-        img: 'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
+        img: 'promotion',
     },
     {
         id: 2,
         content: 'text content',
         time: '20:20 Am',
-        img: 'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
+        img: 'coupon',
     },
     {
         id: 3,
         content: 'text content',
         time: '20:20 Am',
-        img: 'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
+        img: 'stampCard',
+    },
+    {
+        id: 4,
+        content: 'text content',
+        time: '20:20 Am',
+        img: 'other',
     },
 ];
 export const imagesList: any = [
@@ -87,7 +93,7 @@ export const netWorkList: any = [
     {
         id: 1,
         name: 'Instagram',
-        img: Images.icons.facebook,
+        img: Images.icons.instagram,
     },
     {
         id: 2,
@@ -97,7 +103,7 @@ export const netWorkList: any = [
     {
         id: 3,
         name: 'line',
-        img: Images.icons.facebook,
+        img: Images.icons.line,
     },
     {
         id: 4,
@@ -134,7 +140,7 @@ export const listOrderDefault = [
         img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQb4km6pqiEE1QzzbLxzOOeHSqawgslw-wX5Q&usqp=CAU',
         listAdd: [
             { id: 1, name: 'いか天', price: 500 },
-            { id: 2, name: 'いか天', price: 500 },
+            { id: 2, name: 'いか天', price: 500, num: 2 },
         ],
         name: 'さくらえび',
         quantity: 1,
@@ -172,7 +178,7 @@ export const listCouponFake = [
     },
 ];
 export const coupon = [
-    { id: 1, name: '新年会クーポン' },
+    { id: 1, name: '80％割引' },
     { id: 2, name: '新年会クーポン' },
     { id: 3, name: '新年会クーポン' },
 ];
@@ -200,37 +206,37 @@ export const listButton = [
     {
         id: 1,
         name: '注文履歴',
-        img: Images.icons.facebook,
+        img: Images.icons.history,
         key: 'history',
     },
     {
         id: 2,
         name: 'いつもの！注文',
-        img: Images.icons.facebook,
+        img: Images.icons.cart,
         key: 'orderDefault',
     },
     {
         id: 3,
         name: '通知設定',
-        img: Images.icons.facebook,
+        img: Images.icons.setting,
         key: 'notification',
     },
     {
         id: 4,
         name: 'お問い合わせ',
-        img: Images.icons.facebook,
+        img: Images.icons.contact,
         key: 'contact',
     },
     {
         id: 5,
         name: 'ポリシー',
-        img: Images.icons.facebook,
+        img: Images.icons.document_text,
         key: 'contact',
     },
     {
         id: 6,
         name: 'ログアウト',
-        img: Images.icons.facebook,
+        img: Images.icons.logout,
         key: 'logOut',
     },
 ];
@@ -296,3 +302,85 @@ export const MODAL_ID = {
     GUIDE_STAMP: 51,
     HISTORY_STAMP: 52,
 };
+export const INFORMATION = [
+    { title: 'メールアドレス', icon: Images.icons.email, value: 'soba@gmail.com' },
+    { title: '名前', icon: Images.icons.userName, value: '田中　英雄（タナカ　ヒデオ）' },
+    { title: '生年月日', icon: Images.icons.birthday, value: '2021年3月4日' },
+    { title: '性別', icon: Images.icons.gender, value: '男' },
+];
+export const listImage = [
+    {
+        id: 1,
+        name: 'きつね',
+        img: 'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
+    },
+    {
+        id: 2,
+        name: 'きつね',
+        img: 'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
+    },
+    {
+        id: 3,
+        name: 'きつね',
+        img: 'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
+    },
+    {
+        id: 4,
+        name: 'きつね',
+        img: 'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
+    },
+    {
+        id: 5,
+        name: 'きつね',
+        img: 'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
+    },
+    {
+        id: 6,
+        name: 'きつね',
+        img: 'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
+    },
+    {
+        id: 7,
+        name: 'きつね',
+        img: 'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
+    },
+    {
+        id: 8,
+        name: 'きつね',
+        img: 'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
+    },
+];
+export const statusUser = [
+    {
+        name: 'ブロンズメンバー',
+        colors: ['#A46628', '#D7995B'],
+        background: '#CE9E6D',
+        crownColor: 'rgba(144, 89, 35, 0.4)',
+        content1: '￥5000を支払う、',
+        content2: '月に1回「新年おめでとう」クーポンを頂く',
+    },
+    {
+        name: 'シルバーメンバー',
+        colors: ['#CCCCCC', '#F2F2F2'],
+        background: '#F2F2F2',
+        crownColor: 'rgba(196, 196, 196, 0.4)',
+        content1: '￥10000を支払う、',
+        content2: '月に1回「新年おめでとう」クーポンを頂く',
+    },
+    {
+        name: 'ブロンズメンバー',
+        colors: ['#F8D156', '#FEECD2'],
+        background: '#FEECD2',
+        crownColor: 'rgba(249, 197, 33, 0.4)',
+        content1: '￥10000を支払う、',
+        content2: '月に1回「新年おめでとう」クーポンを頂く',
+    },
+    {
+        name: 'ブロンズメンバー',
+        colors: ['#A4F4F9', '#7B68EE'],
+        background: '#DCFDFF',
+        crownColor: 'rgba(172, 229, 238, 0.4)',
+        content1: '￥20000を支払う、',
+        content2: '月に1回「新年おめでとう」クーポンを頂く',
+    },
+];

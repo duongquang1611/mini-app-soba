@@ -26,31 +26,31 @@ fi
 
 if [[ "$targetEnvironment" == "1" || "$targetEnvironment" == "" ]]; then
     if [[ "$mandatory" == "y" || "$mandatory" == "" ]]; then
-        appcenter codepush release-react -a Project-ios-name -d Env-dev-name -m --description "$description" -t "$targetBinaryVersion"
-        appcenter codepush release-react -a Project-android-name -d Env-dev-name -m --description "$description" -t "$targetBinaryVersion"
+        appcenter codepush release-react -a Amela/soba-ios -d Dev -m --description "$description" -t "$targetBinaryVersion"
+        appcenter codepush release-react -a Amela/soba-android -d Dev -m --description "$description" -t "$targetBinaryVersion"
     elif [ "$mandatory" == "n" ]; then
-        appcenter codepush release-react -a Project-ios-name -d Env-dev-name --description "$description" -t "$targetBinaryVersion"
-        appcenter codepush release-react -a Project-android-name -d Env-dev-name --description "$description" -t "$targetBinaryVersion"
+        appcenter codepush release-react -a Amela/soba-ios -d Dev --description "$description" -t "$targetBinaryVersion"
+        appcenter codepush release-react -a Amela/soba-android -d Dev --description "$description" -t "$targetBinaryVersion"
     else
         echo 'Syntax error'
     fi
 elif [ "$targetEnvironment" == "2" ]; then
     if [[ "$mandatory" == "y" || "$mandatory" == "" ]]; then
-        appcenter codepush release-react -a Project-ios-name -d Env-staging-name -m --description "$description" -t "$targetBinaryVersion"
-        appcenter codepush release-react -a Project-android-name -d Env-staging-name -m --description "$description" -t "$targetBinaryVersion"
+        appcenter codepush release-react -a Amela/soba-ios -d Staging -m --description "$description" -t "$targetBinaryVersion"
+        appcenter codepush release-react -a Amela/soba-android -d Staging -m --description "$description" -t "$targetBinaryVersion"
     elif [ "$mandatory" == "n" ]; then
-        appcenter codepush release-react -a Project-ios-name -d Env-staging-name --description "$description" -t "$targetBinaryVersion"
-        appcenter codepush release-react -a Project-android-name -d Env-staging-name --description "$description" -t "$targetBinaryVersion"
+        appcenter codepush release-react -a Amela/soba-ios -d Staging --description "$description" -t "$targetBinaryVersion"
+        appcenter codepush release-react -a Amela/soba-android -d Staging --description "$description" -t "$targetBinaryVersion"
     else
         echo 'Syntax error'
     fi
 elif [ "$targetEnvironment" == "3" ]; then
     if [[ "$mandatory" == "y" || "$mandatory" == "" ]]; then
-        appcenter codepush release-react -a Project-ios-name -d Env-prod-name -m --description "$description" -t "$targetBinaryVersion"
-        appcenter codepush release-react -a  Project-android-name -d Env-prod-name -m --description "$description" -t "$targetBinaryVersion"
+        appcenter codepush release-react -a Amela/soba-ios -d Production -m --description "$description" -t "$targetBinaryVersion"
+        appcenter codepush release-react -a  Amela/soba-android -d Production -m --description "$description" -t "$targetBinaryVersion"
     elif [ "$mandatory" == "n" ]; then
-        appcenter codepush release-react -a Project-ios-name -d Env-prod-name --description "$description" -t "$targetBinaryVersion"
-        appcenter codepush release-react -a Project-android-name -d Env-prod-name --description "$description" -t "$targetBinaryVersion"
+        appcenter codepush release-react -a Amela/soba-ios -d Production --description "$description" -t "$targetBinaryVersion"
+        appcenter codepush release-react -a Amela/soba-android -d Production --description "$description" -t "$targetBinaryVersion"
     else
         echo 'Syntax error'
     fi

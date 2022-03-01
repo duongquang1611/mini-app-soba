@@ -10,12 +10,15 @@ import { ScaledSheet } from 'react-native-size-matters';
 
 const CouponItem = (item: any) => {
     return (
-        <View style={styles.couponItem}>
-            <StyledImage source={{ uri: item.item?.img }} customStyle={styles.couponImage} />
-            <View style={styles.couponName}>
-                <StyledText originValue={item.item.name} customStyle={styles.title} />
-                <StyledText originValue={item.item.time} customStyle={styles.time} />
+        <View>
+            <View style={styles.couponItem}>
+                <StyledImage source={{ uri: item.item?.img }} customStyle={styles.couponImage} />
+                <View style={styles.couponName}>
+                    <StyledText originValue={item.item.name} customStyle={styles.title} />
+                    <StyledText originValue={item.item.time} customStyle={styles.time} />
+                </View>
             </View>
+            <View style={styles.dot} />
         </View>
     );
 };
@@ -23,8 +26,8 @@ const CouponItem = (item: any) => {
 const NotificationDetailScreen = () => {
     return (
         <View style={styles.container}>
+            <StyledHeader title={'通知'} />
             <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
-                <StyledHeader title={'NotificationDetailScreen'} />
                 <View style={styles.body}>
                     <View style={styles.contentContainer}>
                         <StyledText originValue={'2021年11月2日'} customStyle={styles.time} />
@@ -34,11 +37,13 @@ const NotificationDetailScreen = () => {
                             originValue={
                                 '2/1に小諸そば公式アプリをリリースしました。 このアプリでは様々なお得な情報をお届けします。 http://～～～'
                             }
+                            isBlack
+                            customStyle={styles.normalText}
                         />
                     </View>
                     <View style={styles.contentContainer}>
                         <View style={styles.titleCoupon}>
-                            <StyledIcon source={Images.icons.eyeOff} size={15} customStyle={styles.iconCoupon} />
+                            <StyledIcon source={Images.icons.coupon} size={20} customStyle={styles.iconCoupon} />
                             <StyledText i18nText={'クーポンリスト'} customStyle={styles.title} />
                         </View>
                         {listCouponFake.map((item, index) => (
@@ -81,13 +86,17 @@ const styles = ScaledSheet.create({
     img: {
         width: '100%',
         height: '335@vs',
-        marginVertical: '10@vs',
+        marginVertical: '20@vs',
+        borderRadius: 10,
     },
     titleCoupon: {
         flexDirection: 'row',
     },
     iconCoupon: {
         marginRight: '15@s',
+        tintColor: Themes.COLORS.secondary,
+        alignItems: 'center',
+        marginBottom: '10@vs',
     },
     couponItem: {
         width: '100%',
@@ -104,5 +113,14 @@ const styles = ScaledSheet.create({
     couponName: {
         width: '80%',
         justifyContent: 'space-between',
+    },
+    dot: {
+        width: '100%',
+        borderWidth: 0.5,
+        borderStyle: 'dashed',
+        borderColor: Themes.COLORS.silver,
+    },
+    normalText: {
+        lineHeight: '27@vs',
     },
 });

@@ -14,37 +14,43 @@ import Images from 'assets/images';
 const ItemCoupon = (data: any) => {
     return (
         <View style={styles.rowItem}>
-            <StyledIcon source={Images.icons.eyeOff} size={15} />
-            <StyledText originValue={data?.data?.name} customStyle={styles.nameCoupon} />
-            <StyledIcon source={Images.icons.eyeOff} size={15} />
+            <StyledIcon source={Images.icons.coupon} size={20} customStyle={styles.icCoupon} />
+            <StyledText originValue={data?.data?.name} customStyle={styles.nameCoupon} isBlack />
+            <StyledIcon source={Images.icons.cancel} size={15} />
         </View>
     );
 };
-const OrderItem = (data: any) => {
+export const OrderItem = (data: any) => {
     return (
-        <View style={styles.orderItemView}>
-            <StyledIcon source={{ uri: data?.data?.img }} size={70} />
-            <View style={styles.orderTextView}>
-                <StyledText originValue={data?.data?.name} customStyle={styles.titleOrder} />
-                {data?.data?.listAdd?.map((item: any, index: number) => (
-                    <View key={index}>
-                        <StyledText originValue={`+ ${item?.name}`} />
-                    </View>
-                ))}
-                <View style={styles.quantity}>
-                    <StyledText i18nText={'個数'} />
-                    <View style={styles.row}>
-                        <TouchableOpacity>
-                            <StyledText originValue={'-'} />
-                        </TouchableOpacity>
-                        <StyledText originValue={data?.data?.quantity} customStyle={styles.quantityText} />
-                        <TouchableOpacity>
-                            <StyledText originValue={'+'} />
-                        </TouchableOpacity>
+        <>
+            <View style={styles.orderItemView}>
+                <StyledIcon source={{ uri: data?.data?.img }} size={70} />
+                <View style={styles.orderTextView}>
+                    <TouchableOpacity>
+                        <StyledIcon source={Images.icons.cancel} size={17} customStyle={styles.icCancel} />
+                    </TouchableOpacity>
+                    <StyledText originValue={data?.data?.name} customStyle={styles.titleOrder} />
+                    {data?.data?.listAdd?.map((item: any, index: number) => (
+                        <View key={index}>
+                            <StyledText originValue={`+ ${item?.name}`} isBlack customStyle={styles.addValue} />
+                        </View>
+                    ))}
+                    <View style={styles.quantity}>
+                        <StyledText i18nText={'個数'} customStyle={styles.changeText} />
+                        <View style={styles.row}>
+                            <TouchableOpacity>
+                                <StyledIcon source={Images.icons.minus} size={20} />
+                            </TouchableOpacity>
+                            <StyledText originValue={data?.data?.quantity} customStyle={styles.quantityText} />
+                            <TouchableOpacity>
+                                <StyledIcon source={Images.icons.add} size={20} />
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
             </View>
-        </View>
+            <View style={styles.dot} />
+        </>
     );
 };
 const EditOrderScreen = () => {
@@ -53,12 +59,12 @@ const EditOrderScreen = () => {
     };
     return (
         <View style={styles.container}>
+            <StyledHeader title={'カート'} textRight={'注文キャンセル'} />
             <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
-                <StyledHeader title={'edit order'} />
                 <View style={styles.body}>
                     <View style={styles.numOrderView}>
                         <View style={styles.row}>
-                            <StyledIcon source={Images.icons.eyeOff} size={17} />
+                            <StyledIcon source={Images.icons.bag} size={17} customStyle={styles.icBag} />
                             <StyledText originValue={'content'} customStyle={styles.contentText} />
                         </View>
                         <View style={styles.row}>
@@ -76,10 +82,13 @@ const EditOrderScreen = () => {
                         {coupon.map((item, index) => (
                             <ItemCoupon key={index} data={item} />
                         ))}
+                        <View style={styles.moreCouponView}>
+                            <StyledText customStyle={styles.moreCoupon} i18nText={'クーポン追加'} />
+                            <StyledIcon source={Images.icons.add} size={20} />
+                        </View>
                     </View>
                     <View style={styles.contentView}>
                         <StyledButton title={'ＱＲコード発行'} onPress={confirm} />
-
                         <StyledButton
                             isNormal={true}
                             title={'ＱＲコード発行'}
@@ -137,6 +146,7 @@ const styles = ScaledSheet.create({
         justifyContent: 'space-between',
         flexDirection: 'row',
         marginTop: '10@vs',
+        alignItems: 'center',
     },
     orderView: {
         alignItems: 'center',
@@ -182,10 +192,50 @@ const styles = ScaledSheet.create({
         paddingVertical: '10@vs',
         paddingHorizontal: '20@s',
         width: '100%',
+        marginVertical: '10@vs',
     },
     contentText: {
         marginLeft: '5@s',
         fontSize: '18@ms0.3',
         fontWeight: 'bold',
+    },
+    icBag: {
+        tintColor: Themes.COLORS.secondary,
+    },
+    dot: {
+        width: '100%',
+        borderWidth: 0.5,
+        borderStyle: 'dashed',
+        borderColor: Themes.COLORS.silver,
+    },
+    icCancel: {
+        position: 'absolute',
+        right: 0,
+        top: '5@vs',
+    },
+    addValue: {
+        marginVertical: '3@vs',
+    },
+    changeText: {
+        fontWeight: 'bold',
+    },
+    icCoupon: {
+        tintColor: Themes.COLORS.primary,
+    },
+    cancelText: {
+        color: Themes.COLORS.primary,
+        marginRight: '15@s',
+    },
+    moreCoupon: {
+        fontWeight: 'bold',
+        color: Themes.COLORS.primary,
+        marginRight: '10@s',
+        fontSize: '16@ms0.3',
+    },
+    moreCouponView: {
+        marginVertical: '10@vs',
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'center',
     },
 });

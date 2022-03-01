@@ -16,6 +16,8 @@ const common = {
     viking: '#55DFBE',
     defaultLinear: ['#DF2115', '#A61F17'],
     mineShaft: '#222222',
+    seaGreen: '#34835E',
+    backgroundButton: 'rgba(34, 34, 34, 0.5)',
 };
 
 const Light = {

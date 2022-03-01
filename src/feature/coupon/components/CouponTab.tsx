@@ -1,6 +1,6 @@
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
-import { StyledImage, StyledText } from 'components/base';
+import { StyledIcon, StyledImage, StyledText } from 'components/base';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React from 'react';
@@ -14,7 +14,6 @@ interface CouponTabProps {
 }
 
 const CouponItem = (item: any) => {
-    console.log({ item });
     return (
         <TouchableOpacity style={styles.couponItem} onPress={item?.goToDetail}>
             <StyledImage source={{ uri: item.item?.img }} customStyle={styles.couponImage} />
@@ -28,12 +27,12 @@ const CouponItem = (item: any) => {
                     {item.canUse && (
                         <TouchableOpacity style={styles.row}>
                             <StyledText originValue={'有効期限切れ'} customStyle={styles.useText} />
-                            <StyledText originValue={'->'} customStyle={styles.time} />
+                            <StyledIcon source={Images.icons.next} size={20} />
                         </TouchableOpacity>
                     )}
                 </View>
                 {!item.canUse && !item.item?.expired && (
-                    <StyledImage source={Images.photo.defaultImage} customStyle={styles.used} />
+                    <StyledIcon source={Images.icons.couponUsed} size={70} customStyle={styles.stampUsed} />
                 )}
             </View>
         </TouchableOpacity>
@@ -57,8 +56,8 @@ const CouponTab = (props: CouponTabProps) => {
 const styles = ScaledSheet.create({
     container: {
         flex: 1,
-        paddingHorizontal: '20@s',
-        backgroundColor: Themes.COLORS.white,
+
+        backgroundColor: Themes.COLORS.lightGray,
     },
     titleCoupon: {
         flexDirection: 'row',
@@ -72,6 +71,9 @@ const styles = ScaledSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         paddingVertical: '10@vs',
+        marginBottom: '3@vs',
+        backgroundColor: Themes.COLORS.white,
+        paddingHorizontal: '20@s',
     },
     couponImage: {
         width: '60@s',
@@ -99,6 +101,7 @@ const styles = ScaledSheet.create({
     row: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        alignItems: 'center',
     },
     used: {
         width: '50@s',
@@ -106,6 +109,11 @@ const styles = ScaledSheet.create({
         position: 'absolute',
         right: 0,
         top: 0,
+    },
+    stampUsed: {
+        position: 'absolute',
+        top: '-12@s',
+        right: '-20@s',
     },
 });
 export default CouponTab;

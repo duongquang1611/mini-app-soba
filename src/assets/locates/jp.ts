@@ -19,6 +19,7 @@ export default {
         noData: 'データなし',
         cancel: 'キャンセル',
         confirm: '決定',
+        save: '保存',
         sendOTP: {
             title: '認証コード',
             titleForgotPassword: 'パスワードを忘れた',
@@ -42,17 +43,22 @@ export default {
             network: 'エラーが発生しました。暫くしてから、もう一度試してください。',
         },
         yes: 'はい',
+        email: 'メールアドレス',
+        name: '名前',
+        birthday: '生年月日',
+        gender: '性別',
+        changePass: 'パスワード変更',
     },
 
     // screens
     tab: {
         home: 'ホーム',
         notification: '通知',
-        setting: '設定',
+        setting: 'マイページ',
         account: 'アカウント',
-        order: 'order',
+        order: '注文',
         stamp: 'スタンプ',
-        coupon: 'coupon',
+        coupon: 'クーポン',
     },
     authen: {
         login: {
@@ -84,7 +90,24 @@ export default {
     home: {},
     account: {},
     notification: {},
-    setting: {},
+    setting: {
+        editProfileTitle: 'マイページ編集',
+        editProfile: '保存',
+        cancel: 'キャンセル',
+        orderHistoryTitle: '注文履歴',
+        orderHistoryDetailTitle: '注文詳細',
+        timeOrder: '注文日時',
+        orderDefaultTitle: 'いつもの！注文',
+        viewCart: 'カートを見る',
+        orderSaveTitle: 'いつもの！注文',
+        position: 'タイトル',
+        content: '内容',
+        contactTitle: '問い合わせ',
+        send: '送信',
+        settingNotificationTitle: '通知設定',
+        pushNotification: 'プッシュ通知',
+        emailNotification: 'メール通知',
+    },
 
     // alert
     alert: {

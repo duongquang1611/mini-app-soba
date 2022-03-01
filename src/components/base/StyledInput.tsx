@@ -49,7 +49,7 @@ const StyledInput = (props: StyledInputProps, ref: any) => {
     return (
         <View style={[styles.container, props.containerStyle]}>
             {!!props.label && (
-                <StyledText customStyle={[styles.label, props.customLabelStyle]} i18nText={props.label} />
+                <StyledText customStyle={[styles.label, props.customLabelStyle]} isBlack i18nText={props.label} />
             )}
             <View style={[styles.containerInput, styles.textInput]}>
                 <TextInput
@@ -96,10 +96,10 @@ const styles: any = ScaledSheet.create({
     textInput: {
         width: '100%',
         borderRadius: 10,
-        padding: 10,
+        padding: 12,
         borderWidth: 1,
-        borderColor: Themes.COLORS.backGroundInput,
-        backgroundColor: Themes.COLORS.lightGray,
+        borderColor: Themes.COLORS.silver,
+        backgroundColor: Themes.COLORS.backGroundInput,
     },
     errorMessage: {
         fontSize: 12,
@@ -117,7 +117,8 @@ const styles: any = ScaledSheet.create({
         justifyContent: 'space-between',
     },
     label: {
-        marginBottom: '10@vs',
+        marginVertical: '10@vs',
+        fontWeight: 'bold',
     },
 });
 export default forwardRef(StyledInput);

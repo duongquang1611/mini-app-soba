@@ -13,7 +13,7 @@ const NewsListScreen = () => {
     return (
         <View style={styles.container}>
             <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
-                <StyledHeader title={'news'} />
+                <StyledHeader title={'ニュース一覧'} />
                 <View style={styles.body}>
                     {listNews.map((news, index) => (
                         <ListNewsItem key={index} data={news} navigation={navigation} />

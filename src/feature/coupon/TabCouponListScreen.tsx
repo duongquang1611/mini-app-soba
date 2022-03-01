@@ -4,6 +4,7 @@ import { StyledText } from 'components/base';
 import StyledHeader from 'components/common/StyledHeader';
 import React, { useState } from 'react';
 import { View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet } from 'react-native-size-matters';
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
 import CouponTab from './components/CouponTab';
@@ -20,7 +21,7 @@ const TabCouponListScreen = () => {
     });
     return (
         <View style={styles.container}>
-            <StyledHeader title={'coupon List'} isBack={false} />
+            <StyledHeader title={'クーポンリスト'} hasBack={false} />
             <TabView
                 navigationState={{ index, routes }}
                 renderScene={renderScene}
@@ -65,7 +66,6 @@ const styles = ScaledSheet.create({
     tabBar: {
         backgroundColor: Themes.COLORS.white,
         borderColor: Themes.COLORS.white,
-        marginHorizontal: '20@s',
     },
     indicatorTabBar: {
         height: '100%',

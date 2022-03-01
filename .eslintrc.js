@@ -66,6 +66,7 @@ module.exports = {
         'no-param-reassign': 'off',
         '@typescript-eslint/explicit-module-boundary-types': ['off'],
         'react/display-name': 'off',
+        'react/jsx-key': 'off',
     },
     parserOptions: {
         ecmaVersion: 2018, // Allows for the parsing of modern ECMAScript features

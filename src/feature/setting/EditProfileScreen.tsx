@@ -66,6 +66,8 @@ const EditProfileScreen = () => {
         gender: null,
         maleButtonColor: Themes.COLORS.white,
         femaleButtonColor: Themes.COLORS.white,
+        femaleBorderColor: Themes.COLORS.silver,
+        maleBorderColor: Themes.COLORS.silver,
     });
     const [rule, setRule] = useState(false);
     const birthdayRef = useRef<any>(null);
@@ -101,13 +103,13 @@ const EditProfileScreen = () => {
     };
     return (
         <View style={styles.container}>
-            <StyledHeader title={'edit profile'} />
+            <StyledHeader title={'setting.editProfileTitle'} />
             <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
                 <SafeAreaView style={styles.body}>
                     <FormProvider {...form}>
                         <UpLoadAvatar setValue={setValue} />
                         <StyledInputForm
-                            label={'email'}
+                            label={'common.email'}
                             name={'email'}
                             placeholder={t('authen.register.emailPlaceholder')}
                             keyboardType="email-address"
@@ -115,7 +117,7 @@ const EditProfileScreen = () => {
                             onSubmitEditing={() => nameRef.current.focus()}
                         />
                         <StyledInputForm
-                            label={'name'}
+                            label={'common.name'}
                             name={'name'}
                             ref={nameRef}
                             placeholder={t('authen.register.namePlaceholder')}
@@ -123,7 +125,7 @@ const EditProfileScreen = () => {
                             onSubmitEditing={() => birthdayRef.current.focus()}
                         />
                         <StyledInputForm
-                            label={'birthday'}
+                            label={'common.birthday'}
                             name={'birthday'}
                             placeholder={t('authen.register.birthdayPlaceholder')}
                             ref={birthdayRef}
@@ -132,19 +134,29 @@ const EditProfileScreen = () => {
                             maxLength={32}
                             // onSubmitEditing={() => passwordConfirmRef.current.focus()}
                         />
-                        <StyledText customStyle={styles.titleGender} i18nText={'gender'} />
+                        <StyledText customStyle={styles.titleGender} isBlack i18nText={'common.gender'} />
                         <View style={styles.row}>
                             <TouchableOpacity
                                 style={styles.buttonGender}
                                 onPress={() => {
                                     setStateGender({
                                         gender: 'male',
-                                        maleButtonColor: Themes.COLORS.red,
+                                        maleButtonColor: Themes.COLORS.primary,
                                         femaleButtonColor: Themes.COLORS.white,
+                                        femaleBorderColor: Themes.COLORS.silver,
+                                        maleBorderColor: '#FBA29D',
                                     });
                                 }}
                             >
-                                <View style={[styles.button, { backgroundColor: stateGender.maleButtonColor }]} />
+                                <View
+                                    style={[
+                                        styles.button,
+                                        {
+                                            backgroundColor: stateGender.maleButtonColor,
+                                            borderColor: stateGender.maleBorderColor,
+                                        },
+                                    ]}
+                                />
                                 <StyledText customStyle={styles.textGender} i18nText={'male'} />
                             </TouchableOpacity>
                             <TouchableOpacity
@@ -153,15 +165,25 @@ const EditProfileScreen = () => {
                                     setStateGender({
                                         gender: 'female',
                                         maleButtonColor: Themes.COLORS.white,
-                                        femaleButtonColor: Themes.COLORS.red,
+                                        femaleButtonColor: Themes.COLORS.primary,
+                                        femaleBorderColor: '#FBA29D',
+                                        maleBorderColor: Themes.COLORS.silver,
                                     });
                                 }}
                             >
-                                <View style={[styles.button, { backgroundColor: stateGender.femaleButtonColor }]} />
+                                <View
+                                    style={[
+                                        styles.button,
+                                        {
+                                            backgroundColor: stateGender.femaleButtonColor,
+                                            borderColor: stateGender.femaleBorderColor,
+                                        },
+                                    ]}
+                                />
                                 <StyledText customStyle={styles.textGender} i18nText={'Female'} />
                             </TouchableOpacity>
                         </View>
-                        <TouchableOpacity
+                        {/* <TouchableOpacity
                             style={[styles.buttonGender, { width: Metrics.screenWidth - scale(40) }]}
                             onPress={() => {
                                 setRule(!rule);
@@ -170,11 +192,14 @@ const EditProfileScreen = () => {
                             <View
                                 style={[
                                     styles.ruleButton,
-                                    { backgroundColor: rule ? Themes.COLORS.red : Themes.COLORS.white },
+                                    {
+                                        backgroundColor: rule ? Themes.COLORS.primary : Themes.COLORS.white,
+                                        borderColor: rule ? '#FBA29D' : Themes.COLORS.silver,
+                                    },
                                 ]}
                             />
                             <StyledText customStyle={styles.textGender} i18nText={'rule'} />
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </FormProvider>
                     <TouchableOpacity style={styles.buttonChangePass} onPress={changePass}>
                         <StyledText customStyle={styles.changePass} i18nText={'パスワード変更'} />
@@ -183,11 +208,15 @@ const EditProfileScreen = () => {
                         <StyledButton
                             isNormal
                             onPress={submit}
-                            title={'cancel'}
+                            title={'setting.cancel'}
                             customStyle={styles.buttonCancel}
                             customStyleText={styles.cancelText}
                         />
-                        <StyledButton title={'confirm'} onPress={goToRegis} customStyle={styles.buttonSave} />
+                        <StyledButton
+                            title={'setting.editProfile'}
+                            onPress={goToRegis}
+                            customStyle={styles.buttonSave}
+                        />
                     </View>
                 </SafeAreaView>
             </KeyboardAwareScrollView>
@@ -232,12 +261,13 @@ const styles = ScaledSheet.create({
         alignSelf: 'flex-start',
         marginLeft: '20@s',
         marginTop: '10@vs',
+        fontWeight: 'bold',
     },
     ruleButton: {
         width: '16@s',
         height: '16@s',
         borderRadius: 5,
-        borderWidth: 1,
+        borderWidth: 2,
     },
     row: {
         flexDirection: 'row',
