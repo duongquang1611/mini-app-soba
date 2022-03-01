@@ -1,33 +1,85 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Images from 'assets/images';
-import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
-import { StyledIcon, StyledText } from 'components/base';
-import LinearView from 'components/common/LinearView';
+import { StyledText, StyledTouchable } from 'components/base';
+import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledHeader from 'components/common/StyledHeader';
 import StyledTabTopView from 'components/common/StyledTabTopView';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
-import { ScaledSheet } from 'react-native-size-matters';
-import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
-import StampTab from './components/StampTab';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ScaledSheet, verticalScale } from 'react-native-size-matters';
+import { SceneMap } from 'react-native-tab-view';
+import { MODAL_ID } from 'utilities/staticData';
+import ChooseStampList from './components/ChooseStampList';
+import GuideStamp from './components/GuideStamp';
+import StampList from './StampList';
 
 const StampCardScreen = () => {
     const [index, setIndex] = useState(0);
+    const [positionModalize, setPositionModalize] = useState();
     const { t } = useTranslation();
+    const modalize = ModalizeManager();
     const routes = [
         { key: 'stampCanUse', title: t('stamp.canUse') },
         { key: 'stampUsed', title: t('stamp.used') },
     ];
     const renderScene = SceneMap({
-        stampCanUse: () => <StampTab canUse={true} />,
-        stampUsed: () => <StampTab />,
+        stampCanUse: () => <StampList canUse={true} showEarnStamp={showEarnStamp} />,
+        stampUsed: () => <StampList showEarnStamp={showEarnStamp} />,
     });
+
+    const onPositionChange = (data: any) => {
+        setPositionModalize(data);
+    };
+
+    const showEarnStamp = () => {
+        modalize.show(
+            MODAL_ID.CHOOSE_STAMP,
+            <ChooseStampList onPress={() => modalize?.dismiss?.(MODAL_ID.CHOOSE_STAMP)} />,
+            {
+                alwaysOpen: verticalScale(487),
+                scrollViewProps: {
+                    contentContainerStyle: { flexGrow: 1 },
+                },
+                onPositionChange,
+                overlayStyle: { backgroundColor: 'transparent' },
+                onClose: () => setPositionModalize(undefined),
+            },
+            { title: 'chooseStamp.earnStamp' },
+        );
+    };
+
+    const showGuide = () => {
+        modalize.show(
+            MODAL_ID.GUIDE_STAMP,
+            <GuideStamp onPress={() => modalize?.dismiss?.(MODAL_ID.GUIDE_STAMP)} content={'Test'} />,
+            {
+                modalHeight: verticalScale(487),
+                scrollViewProps: {
+                    contentContainerStyle: { flexGrow: 1 },
+                },
+            },
+            { title: 'stamp.guideTitle' },
+        );
+    };
 
     return (
         <View style={styles.container}>
-            <StyledHeader title={'stamp.title'} hasBack={false} iconRight={Images.icons.question} />
+            {positionModalize !== undefined && (
+                <StyledTouchable
+                    customStyle={styles.customModalOverlay}
+                    onPress={() => modalize?.dismiss?.(MODAL_ID.CHOOSE_STAMP)}
+                />
+            )}
+
+            <StyledHeader
+                title={'stamp.title'}
+                hasBack={false}
+                iconRight={Images.icons.question}
+                onPressRight={showGuide}
+            />
             <StyledTabTopView routes={routes} renderScene={renderScene} />
         </View>
     );
@@ -47,7 +99,7 @@ const styles = ScaledSheet.create({
         alignItems: 'center',
     },
     tabBar: {
-        backgroundColor: Themes.COLORS.alto,
+        backgroundColor: Themes.COLORS.disabled,
         borderColor: Themes.COLORS.white,
         justifyContent: 'center',
     },
@@ -63,5 +115,14 @@ const styles = ScaledSheet.create({
     contentContainerStyle: {
         height: '37@vs',
         alignItems: 'center',
+    },
+    customModalOverlay: {
+        position: 'absolute',
+        backgroundColor: Themes.COLORS.overlayModalize,
+        zIndex: 1,
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
     },
 });

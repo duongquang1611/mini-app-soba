@@ -91,7 +91,7 @@ const styles = ScaledSheet.create({
         alignItems: 'center',
     },
     tabBar: {
-        backgroundColor: Themes.COLORS.transparent,
+        backgroundColor: Themes.COLORS.disabled,
         marginTop: '10@vs',
     },
     indicatorTabBar: {

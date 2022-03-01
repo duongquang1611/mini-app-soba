@@ -12,7 +12,7 @@ const DashView = (props: any) => {
             dashGap={2}
             dashLength={2}
             dashThickness={1}
-            dashColor={Themes.COLORS.alto}
+            dashColor={Themes.COLORS.disabled}
         />
     );
 };
