@@ -89,6 +89,7 @@ project.ext.react = [
 
 apply from: "../../node_modules/react-native/react.gradle"
 apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
+apply from: "../../node_modules/react-native-code-push/android/codepush.gradle"
 
 /**
  * Set this to true to create two separate APKs instead of one:
@@ -138,11 +139,14 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.sobaapp"
+        applicationId env.get("ANDROID_APP_ID")
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode Integer.valueOf(env.get("ANDROID_APP_VERSION_CODE"))
+        versionName env.get("ANDROID_APP_VERSION_NAME")
+        multiDexEnabled true
+        resValue 'string', "CODE_PUSH_APK_BUILD_TIME", String.format("\"%d\"", System.currentTimeMillis())
+        missingDimensionStrategy 'react-native-camera', 'general'
     }
     splits {
         abi {
@@ -283,4 +287,3 @@ task copyDownloadableDepsToLibs(type: Copy) {
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
-apply from: "../../node_modules/react-native-code-push/android/codepush.gradle"

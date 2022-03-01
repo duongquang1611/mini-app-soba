@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledText } from 'components/base';
 import StyledHeader from 'components/common/StyledHeader';
@@ -17,7 +18,7 @@ const OrderItem = (item: any) => {
             onPress={() => item?.navigation.navigate(TAB_NAVIGATION_ROOT.SETTING_ROUTE.ORDER_HISTORY_DETAIL)}
         >
             <View style={styles.nameOrderRow}>
-                <StyledIcon source={{ uri: item.item?.img }} size={20} />
+                <StyledIcon source={Images.icons.order} size={25} />
                 <View style={styles.viewInfo}>
                     <StyledText originValue={item.item.name} customStyle={styles.contentText} />
                     <StyledText originValue={item.item.time} customStyle={styles.time} />
@@ -35,8 +36,8 @@ const OrderHistoryScreen = () => {
     const navigation = useNavigation();
     return (
         <View style={styles.container}>
+            <StyledHeader title={'setting.orderHistoryTitle'} />
             <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
-                <StyledHeader title={'order history'} />
                 <View style={styles.body}>
                     {orderHistoryListFake?.map((item) => (
                         <OrderItem key={item.id} item={item} navigation={navigation} />
@@ -88,6 +89,7 @@ const styles = ScaledSheet.create({
     },
     priceRow: {
         flexDirection: 'row',
+        alignItems: 'center',
     },
     price: {
         fontWeight: 'bold',
@@ -98,5 +100,6 @@ const styles = ScaledSheet.create({
         borderWidth: 0.5,
         borderStyle: 'dashed',
         marginTop: '10@vs',
+        borderColor: Themes.COLORS.silver,
     },
 });

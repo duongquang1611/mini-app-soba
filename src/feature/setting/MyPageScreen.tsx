@@ -20,7 +20,7 @@ const MyPageScreen = () => {
                     <StyledText customStyle={styles.title} i18nText={'Edit Profile'} />
                     <StyledIcon source={Images.icons.eyeOff} size={40} />
                 </View>
-                <ImageBackground source={Images.photo.defaultImage} style={styles.background}>
+                <ImageBackground source={Images.photo.backgroundMyPage} style={styles.background}>
                     <View style={styles.profileRow}>
                         <StyledImage source={Images.photo.avatarDefault} customStyle={styles.avatar} />
                         <View>

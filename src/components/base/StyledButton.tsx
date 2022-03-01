@@ -82,6 +82,7 @@ const styles = ScaledSheet.create({
     },
     textButton: {
         color: Themes.COLORS.textSecondary,
+        fontWeight: 'bold',
     },
     textButtonLinear: {
         color: Themes.COLORS.white,
@@ -96,7 +97,7 @@ const styles = ScaledSheet.create({
     },
     secondaryBtn: {
         paddingVertical: '5@vs',
-        paddingHorizontal: '10@s',
+        paddingHorizontal: '10@vs',
         borderWidth: 1,
         borderColor: Themes.COLORS.primary,
         borderRadius: 5,

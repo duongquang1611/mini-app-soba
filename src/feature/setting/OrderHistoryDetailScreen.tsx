@@ -10,28 +10,31 @@ import { listOrderDefault } from 'utilities/staticData';
 
 const OrderItem = (data: any) => {
     return (
-        <View style={styles.orderItemView}>
-            <StyledIcon source={{ uri: data?.data?.img }} size={70} />
-            <View style={styles.orderTextView}>
-                <StyledText originValue={data?.data?.name} customStyle={styles.titleOrder} />
-                {data?.data?.listAdd?.map((item: any, index: number) => (
-                    <View key={index} style={styles.rowPrice}>
-                        <StyledText originValue={`+ ${item?.name}`} />
-                        <StyledText originValue={`￥ ${item?.price}`} customStyle={styles.price} />
-                    </View>
-                ))}
-                <View style={styles.quantity}>
-                    <View style={styles.rowPrice}>
-                        <StyledText originValue={'個数'} customStyle={styles.titleOrder} />
-                        <StyledText originValue={data?.data?.quantity} customStyle={styles.price} />
-                    </View>
-                    <View style={[styles.rowPrice, { marginTop: verticalScale(10) }]}>
-                        <StyledText originValue={'小計'} customStyle={styles.titleOrder} />
-                        <StyledText originValue={`￥ ${data?.data?.quantity}`} customStyle={styles.price} />
+        <>
+            <View style={styles.orderItemView}>
+                <StyledIcon source={{ uri: data?.data?.img }} size={70} />
+                <View style={styles.orderTextView}>
+                    <StyledText originValue={data?.data?.name} customStyle={styles.titleOrder} />
+                    {data?.data?.listAdd?.map((item: any, index: number) => (
+                        <View key={index} style={styles.rowPrice}>
+                            <StyledText originValue={`+ ${item?.name}`} isBlack />
+                            <StyledText originValue={`￥ ${item?.price}`} customStyle={styles.price} isBlack />
+                        </View>
+                    ))}
+                    <View style={styles.quantity}>
+                        <View style={styles.rowPrice}>
+                            <StyledText originValue={'個数'} customStyle={styles.titleOrder} />
+                            <StyledText originValue={data?.data?.quantity} customStyle={styles.price} isBlack />
+                        </View>
+                        <View style={[styles.rowPrice, { marginTop: verticalScale(10) }]}>
+                            <StyledText originValue={'小計'} customStyle={styles.titleOrder} />
+                            <StyledText originValue={`￥ ${data?.data?.quantity}`} customStyle={styles.price} isBlack />
+                        </View>
                     </View>
                 </View>
             </View>
-        </View>
+            <View style={styles.dot} />
+        </>
     );
 };
 const OrderHistoryDetailScreen = () => {
@@ -40,12 +43,17 @@ const OrderHistoryDetailScreen = () => {
     // };
     return (
         <View style={styles.container}>
+            <StyledHeader title={'setting.orderHistoryDetailTitle'} />
             <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
-                <StyledHeader title={'order detail'} />
                 <View style={styles.body}>
+                    <View style={styles.timeView}>
+                        <StyledText i18nText={'setting.timeOrder'} isBlack />
+                        <StyledText originValue={' : '} isBlack />
+                        <StyledText originValue={'2021年11月6日　5時36分'} customStyle={styles.timeValue} />
+                    </View>
                     <View style={styles.numOrderView}>
                         <View style={styles.row}>
-                            <StyledIcon source={Images.icons.eyeOff} size={17} />
+                            <StyledIcon source={Images.icons.bag} customStyle={styles.icBag} size={17} />
                             <StyledText originValue={'content'} customStyle={styles.contentText} />
                         </View>
                         <View style={styles.row}>
@@ -60,15 +68,19 @@ const OrderHistoryDetailScreen = () => {
                     </View>
                     <View style={styles.contentView}>
                         <View style={styles.rowPrice}>
-                            <StyledText originValue={'小計'} customStyle={styles.titleOrder} />
-                            <StyledText originValue={`￥ ${1600}`} customStyle={styles.price} />
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <StyledText originValue={'注文数'} isBlack />
+                                <StyledText originValue={' 2 '} customStyle={styles.valueOrder} />
+                                <StyledText originValue={'点'} isBlack />
+                            </View>
+                            <StyledText originValue={`￥ ${1600}`} customStyle={styles.price} isBlack />
                         </View>
                         <View style={styles.rowPrice}>
                             <View style={styles.contentRow}>
                                 <StyledIcon size={20} source={Images.icons.eyeOff} />
                                 <StyledText originValue={'クーポンタイトル'} customStyle={styles.titleOrder} />
                             </View>
-                            <StyledText originValue={`￥ ${1600}`} customStyle={styles.price} />
+                            <StyledText originValue={`￥ ${1600}`} customStyle={styles.price} isBlack />
                         </View>
                         <View style={[styles.quantity, styles.priceSum]}>
                             <StyledText i18nText={'合計'} customStyle={styles.priceSumValue} />
@@ -120,13 +132,14 @@ const styles = ScaledSheet.create({
         backgroundColor: Themes.COLORS.lightGray,
         width: '100%',
         borderRadius: 5,
-        paddingVertical: '10@vs',
+        paddingVertical: '5@vs',
         paddingHorizontal: '20@s',
         justifyContent: 'space-between',
         marginTop: '10@vs',
     },
     priceSum: {
         flexDirection: 'row',
+        paddingVertical: '10@vs',
     },
     orderView: {
         alignItems: 'center',
@@ -172,6 +185,7 @@ const styles = ScaledSheet.create({
         paddingVertical: '10@vs',
         paddingHorizontal: '20@s',
         width: '100%',
+        marginVertical: '10@vs',
     },
     contentText: {
         marginLeft: '5@s',
@@ -195,5 +209,32 @@ const styles = ScaledSheet.create({
         fontSize: '16@ms0.3',
         color: Themes.COLORS.primary,
         fontWeight: 'bold',
+    },
+    icBag: {
+        tintColor: Themes.COLORS.secondary,
+    },
+    dot: {
+        width: '100%',
+        borderWidth: 0.5,
+        borderStyle: 'dashed',
+        borderColor: Themes.COLORS.silver,
+    },
+    timeView: {
+        paddingVertical: '10@vs',
+        paddingHorizontal: '20@s',
+        marginTop: '10@vs',
+        flexDirection: 'row',
+        width: '100%',
+        alignItems: 'center',
+    },
+    timeValue: {
+        fontWeight: 'bold',
+        marginLeft: '15@s',
+    },
+    valueOrder: {
+        color: Themes.COLORS.primary,
+        fontWeight: 'bold',
+        fontSize: '24@ms0.3',
+        marginHorizontal: '5@s',
     },
 });

@@ -11,11 +11,10 @@ const NewsDetailScreen = () => {
     const confirm = () => null;
     return (
         <View style={styles.container}>
-            {/* <StyledHeader title={'new detail'} /> */}
-            <StyledHeaderImage images={imagesList} />
+            <StyledHeaderImage images={imagesList} content={'士たげぎ究品きト掲応'} />
             <View style={styles.body}>
                 <StyledText customStyle={styles.time} originValue={'2021年11月2日'} />
-                <StyledText originValue={'content'} />
+                <StyledText originValue={'content'} isBlack />
             </View>
         </View>
     );

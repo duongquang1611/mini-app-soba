@@ -59,8 +59,7 @@ const styles = ScaledSheet.create({
     cameraContent: {
         width: '90@s',
         height: '35@s',
-        backgroundColor: Themes.COLORS.black,
-        opacity: 0.5,
+        backgroundColor: 'rgba(34, 34, 34, 0.3)',
         borderBottomRightRadius: 190,
         borderBottomLeftRadius: 190,
         alignItems: 'center',

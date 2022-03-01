@@ -11,6 +11,25 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { ScaledSheet } from 'react-native-size-matters';
 import { coupon, listOrderDefault } from 'utilities/staticData';
 
+// const OrderDefaultItem = (data: any) => {
+//     return (
+//         <TouchableOpacity style={styles.orderView}>
+//             <StyledIcon source={{ uri: data?.data?.img }} size={70} />
+//             <View style={styles.orderTextView}>
+//                 <StyledText originValue={data?.data?.name} customStyle={styles.titleOrder} />
+//                 {data?.data?.listAdd?.map((item: any, index: number) => (
+//                     <View key={index}>
+//                         <StyledText originValue={`+ ${item?.name}`} />
+//                     </View>
+//                 ))}
+//                 <View style={styles.quantity}>
+//                     <StyledText i18nText={'個数'} />
+//                     <StyledText originValue={data?.data?.quantity} />
+//                 </View>
+//             </View>
+//         </TouchableOpacity>
+//     );
+// };
 const OrderDefaultItem = (data: any) => {
     return (
         <TouchableOpacity style={styles.orderView}>
@@ -18,13 +37,18 @@ const OrderDefaultItem = (data: any) => {
             <View style={styles.orderTextView}>
                 <StyledText originValue={data?.data?.name} customStyle={styles.titleOrder} />
                 {data?.data?.listAdd?.map((item: any, index: number) => (
-                    <View key={index}>
-                        <StyledText originValue={`+ ${item?.name}`} />
+                    <View key={index} style={{ flexDirection: 'row' }}>
+                        <StyledText originValue={`+ ${item?.name}`} isBlack customStyle={styles.addText} />
+                        {item?.num && (
+                            <View style={styles.numView}>
+                                <StyledText originValue={`x ${item?.num}`} isBlack customStyle={styles.addValue} />
+                            </View>
+                        )}
                     </View>
                 ))}
                 <View style={styles.quantity}>
-                    <StyledText i18nText={'個数'} />
-                    <StyledText originValue={data?.data?.quantity} />
+                    <StyledText i18nText={'個数'} customStyle={styles.quantityText} />
+                    <StyledText originValue={data?.data?.quantity} isBlack />
                 </View>
             </View>
         </TouchableOpacity>
@@ -33,8 +57,8 @@ const OrderDefaultItem = (data: any) => {
 const ItemCoupon = (data: any) => {
     return (
         <View style={styles.rowItem}>
-            <StyledIcon source={Images.icons.eyeOff} size={15} />
-            <StyledText originValue={data?.data?.name} customStyle={styles.nameCoupon} />
+            <StyledIcon source={Images.icons.coupon} size={15} customStyle={styles.icCoupon} />
+            <StyledText originValue={data?.data?.name} customStyle={styles.nameCoupon} isBlack />
         </View>
     );
 };
@@ -46,23 +70,23 @@ const MobileOrderScreen = () => {
     return (
         <View style={styles.container}>
             <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
-                <StyledHeader title={'MobileOrder'} />
+                <StyledHeader title={'カート'} iconRight={Images.icons.question} />
                 <View style={styles.body}>
                     <View style={styles.qrView}>
-                        <StyledImage source={Images.photo.defaultImage} customStyle={styles.img} />
+                        <StyledImage source={Images.photo.qrCode} customStyle={styles.img} />
                         <StyledButton title={'注文編集'} onPress={edit} customStyle={styles.buttonSave} />
                         <StyledButton
                             isNormal={true}
                             title={'注文キャンセル'}
                             onPress={cancel}
                             customStyle={styles.cancelButton}
-                            customStyleText={styles.textProduct}
+                            customStyleText={styles.cancelText}
                         />
                     </View>
                     <View style={styles.numOrderView}>
                         <View style={styles.row}>
-                            <StyledIcon source={Images.icons.eyeOff} size={17} />
-                            <StyledText originValue={'content'} customStyle={styles.contentText} />
+                            <StyledIcon source={Images.icons.bag} size={17} customStyle={styles.icBag} />
+                            <StyledText originValue={'注文数'} customStyle={styles.contentText} />
                         </View>
                         <View style={styles.row}>
                             <StyledText originValue={'4'} customStyle={styles.contentText} />
@@ -109,6 +133,7 @@ const styles = ScaledSheet.create({
         backgroundColor: Themes.COLORS.white,
         paddingVertical: '10@vs',
         paddingHorizontal: '20@s',
+        marginBottom: '10@vs',
     },
     titleText: {
         color: Themes.COLORS.secondary,
@@ -117,11 +142,11 @@ const styles = ScaledSheet.create({
     img: {
         width: '180@vs',
         height: '180@vs',
+        marginVertical: '15@vs',
     },
     contentView: {
         width: '100%',
         paddingHorizontal: '20@s',
-        marginVertical: '15@vs',
         backgroundColor: Themes.COLORS.white,
         paddingVertical: '10@vs',
     },
@@ -132,6 +157,8 @@ const styles = ScaledSheet.create({
     cancelButton: {
         width: '162@s',
         alignSelf: 'center',
+        marginVertical: '10@vs',
+        marginTop: '15@vs',
     },
     row: {
         flexDirection: 'row',
@@ -176,14 +203,38 @@ const styles = ScaledSheet.create({
         backgroundColor: Themes.COLORS.white,
     },
     nameCoupon: {
-        width: '90%',
+        width: '93%',
     },
     title: {
         fontSize: '16@ms0.3',
         color: Themes.COLORS.secondary,
         fontWeight: 'bold',
     },
-    textProduct: {
-        color: Themes.COLORS.secondary,
+    cancelText: {
+        color: Themes.COLORS.primary,
+        fontWeight: 'bold',
+    },
+    icBag: {
+        tintColor: Themes.COLORS.secondary,
+    },
+    numView: {
+        backgroundColor: Themes.COLORS.headerBackground,
+        borderRadius: 5,
+        paddingHorizontal: '5@s',
+        paddingVertical: '2@vs',
+        marginLeft: '5@s',
+    },
+    addValue: {
+        color: Themes.COLORS.primary,
+        fontSize: '12@ms0.3',
+    },
+    quantityText: {
+        fontWeight: 'bold',
+    },
+    addText: {
+        marginVertical: '3@vs',
+    },
+    icCoupon: {
+        tintColor: Themes.COLORS.primary,
     },
 });

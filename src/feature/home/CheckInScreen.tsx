@@ -13,7 +13,7 @@ const CheckInScreen = () => {
             <View style={styles.body}>
                 <View style={styles.qrView}>
                     <StyledText originValue={'nameQr'} customStyle={styles.titleText} />
-                    <StyledImage source={Images.photo.defaultImage} customStyle={styles.img} />
+                    <StyledImage source={Images.photo.qrCode} customStyle={styles.img} />
                 </View>
                 <View style={styles.contentView}>
                     <StyledText originValue={'content'} customStyle={styles.contentText} />
