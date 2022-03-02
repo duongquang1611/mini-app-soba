@@ -33,7 +33,6 @@ export default ModalListCoupon;
 const styles = ScaledSheet.create({
     container: {
         flex: 1,
-        backgroundColor: Themes.COLORS.lightGray,
     },
     body: {
         alignItems: 'center',

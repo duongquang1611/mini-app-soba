@@ -81,7 +81,7 @@ const MenuScreen = () => {
             MODAL_ID.ORDER_GUIDE,
             <ModalGuide />,
             {
-                modalHeight: verticalScale(550),
+                modalHeight: verticalScale(420),
                 scrollViewProps: {
                     contentContainerStyle: { flexGrow: 1 },
                 },
@@ -89,12 +89,13 @@ const MenuScreen = () => {
             { title: 'order.orderGuide' },
         );
     };
+    const numberItemListCoupon = 3;
     const showModalListCoupon = () => {
         modalize.show(
             MODAL_ID.LIST_COUPON,
             <ModalListCoupon />,
             {
-                modalHeight: verticalScale(550),
+                modalHeight: verticalScale(numberItemListCoupon * 60 + 250),
                 scrollViewProps: {
                     contentContainerStyle: { flexGrow: 1 },
                 },
@@ -285,21 +286,22 @@ const styles = ScaledSheet.create({
         alignItems: 'center',
         width: '100%',
         paddingHorizontal: '20@s',
+        height: '100@s',
         justifyContent: 'space-between',
     },
     line1: {
         position: 'absolute',
-        width: 1,
-        height: '70@s',
+        width: 2,
+        height: '55@s',
         left: '32@s',
-        top: '45@s',
+        top: '70@s',
     },
     line2: {
         position: 'absolute',
-        width: 1,
-        height: '70@s',
+        width: 2,
+        height: '55@s',
         left: '32@s',
-        top: '125@s',
+        top: '175@s',
     },
     tabCategoryHeader: {
         alignItems: 'center',

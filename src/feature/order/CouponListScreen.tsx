@@ -38,12 +38,13 @@ const CouponListScreen = () => {
     const goToCouponDetail = () => {
         navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.COUPON_DETAIL);
     };
+    const numberItemListCoupon = 3;
     const showApplyCoupon = () => {
         modalize.show(
             MODAL_ID.APPLY_COUPON,
             <ModalCoupon />,
             {
-                modalHeight: verticalScale(550),
+                modalHeight: verticalScale(numberItemListCoupon * 60 + 250),
                 scrollViewProps: {
                     contentContainerStyle: { flexGrow: 1 },
                 },
