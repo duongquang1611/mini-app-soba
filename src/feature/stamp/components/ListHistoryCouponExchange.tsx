@@ -1,42 +1,38 @@
-import Images from 'assets/images';
-import Metrics from 'assets/metrics';
-import { Themes } from 'assets/themes';
-import { StyledButton, StyledIcon } from 'components/base';
+import { StyledButton } from 'components/base';
 import DashView from 'components/common/DashView';
-import React from 'react';
+import { STAMP_ROUTE } from 'navigation/config/routes';
+import { navigate } from 'navigation/NavigationService';
+import React, { memo } from 'react';
 import { View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
-import { staticValue } from 'utilities/staticData';
+import CouponExchangeItem from './CouponExchangeItem';
 
 const createItem = (on = false, rd = Math.random()) => {
-    return {
-        id: rd,
-        status: on,
-    };
+    return { id: rd, status: on, date: '2022-03-02T06:49:49.039Z' };
 };
-const data = Array(100).fill(createItem(true), 0, 8).fill(createItem(), 8, 100);
+const data = Array(50).fill(createItem(true), 0, 8).fill(createItem(), 8, 100);
+
 const itemHeight = 67;
 const separatorBottom = 10;
 const separatorTop = 10;
+const numCol = 5;
+// const numCol = staticValue.COLUMNS_COUPON_EXCHANGE[Math.round(Math.random() * 2)];
 
-const ListCouponExchange = ({ caseType }: any) => {
+const ListHistoryCouponExchange = ({ caseType }: any) => {
+    for (let index = 0; index < 6; index++) {
+        const newIndex = index + 10 + Math.round(Math.random() * 10);
+        data[newIndex] = {
+            ...data[newIndex],
+            giftType: Math.ceil(Math.random() * 2),
+        };
+    }
     const renderItem = ({ item }: any) => {
-        return (
-            <View
-                style={[
-                    styles.wrapItem,
-                    {
-                        backgroundColor: item.status ? Themes.COLORS.headerBackground : Themes.COLORS.disabled,
-                        width:
-                            (Metrics.screenWidth - scale(40 + 10 * (staticValue.COLUMNS_COUPON_EXCHANGE - 1))) /
-                            staticValue.COLUMNS_COUPON_EXCHANGE,
-                    },
-                ]}
-            >
-                <StyledIcon source={item?.status ? Images.icons.noodlesOn : Images.icons.noodlesOff} size={40} />
-            </View>
-        );
+        return <CouponExchangeItem item={item} numCol={numCol} />;
+    };
+
+    const goToExchangeCoupon = () => {
+        navigate(STAMP_ROUTE.EXCHANGE_COUPON);
     };
 
     return (
@@ -46,7 +42,7 @@ const ListCouponExchange = ({ caseType }: any) => {
                 <FlatList
                     data={data}
                     renderItem={renderItem}
-                    numColumns={staticValue.COLUMNS_COUPON_EXCHANGE}
+                    numColumns={numCol}
                     contentContainerStyle={styles.listCoupon}
                     keyExtractor={(item: any, index: number) => index.toString()}
                 />
@@ -57,6 +53,7 @@ const ListCouponExchange = ({ caseType }: any) => {
                     title={'stampDetail.couponExchangeBtn'}
                     customStyle={styles.btnExchange}
                     disabled={caseType === 1}
+                    onPress={goToExchangeCoupon}
                 />
             )}
         </>
@@ -69,7 +66,6 @@ const styles = ScaledSheet.create({
         marginBottom: verticalScale(separatorBottom),
         alignItems: 'center',
         justifyContent: 'center',
-        marginRight: '10@s',
         height: scale(itemHeight),
     },
     listCoupon: {
@@ -90,4 +86,4 @@ const styles = ScaledSheet.create({
     },
 });
 
-export default ListCouponExchange;
+export default memo(ListHistoryCouponExchange);

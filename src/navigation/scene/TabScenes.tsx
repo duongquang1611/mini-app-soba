@@ -38,6 +38,7 @@ import OrderHistoryScreen from 'feature/setting/OrderHistoryScreen';
 import OrderSave from 'feature/setting/OrderSaveScreen';
 import SettingNotificationScreen from 'feature/setting/SettingNotificationScreen';
 import SettingScreen from 'feature/setting/SettingScreen';
+import ExchangeCouponListScreen from 'feature/stamp/ExchangeCouponListScreen';
 import StampCardDetailScreen from 'feature/stamp/StampCardDetailScreen';
 import StampCardScreen from 'feature/stamp/StampCardScreen';
 import navigationConfigs from 'navigation/config/options';
@@ -57,6 +58,8 @@ import { isIos } from 'utilities/helper';
 
 const MainStack = createStackNavigator();
 const MainTab = createBottomTabNavigator();
+const AnimateTabs = AnimatedTabBarNavigator();
+
 const SIZE_ICON = 22;
 interface TabBarIconProps {
     color: string;
@@ -98,6 +101,7 @@ const StampStack = () => (
     <MainStack.Navigator headerMode={'none'} screenOptions={navigationConfigs} keyboardHandlingEnabled={isIos}>
         <MainStack.Screen name={STAMP_ROUTE.ROOT} component={StampCardScreen} />
         <MainStack.Screen name={STAMP_ROUTE.STAMP_CARD_DETAIL} component={StampCardDetailScreen} />
+        <MainStack.Screen name={STAMP_ROUTE.EXCHANGE_COUPON} component={ExchangeCouponListScreen} />
         <MainStack.Screen name={COUPON_ROUTE.DETAIL_COUPON} component={DetailCouponScreen} />
     </MainStack.Navigator>
 );
@@ -130,8 +134,6 @@ const SettingStack = () => (
     </MainStack.Navigator>
 );
 
-const AnimateTabs = AnimatedTabBarNavigator();
-
 const TabBarIcon = ({ focused, source }: any) => {
     return (
         <StyledIcon
@@ -145,36 +147,6 @@ const MainTabContainer = () => {
     // const badgeCount: any = useSelector((state: any) => state.badgeCount);
     const { t } = useTranslation();
     // const { countMessage, countNotification } = badgeCount;
-    const tabs: TabsConfig<BubbleTabBarItemConfig> = {
-        Home: {
-            labelStyle: {
-                color: '#5B37B7',
-            },
-            icon: {
-                component: Images.icons.bag,
-                activeColor: 'rgba(91,55,183,1)',
-                inactiveColor: 'rgba(0,0,0,1)',
-            },
-            background: {
-                activeColor: 'rgba(223,215,243,1)',
-                inactiveColor: 'rgba(223,215,243,0)',
-            },
-        },
-        Setting: {
-            labelStyle: {
-                color: '#1194AA',
-            },
-            icon: {
-                component: Images.icons.bag,
-                activeColor: 'rgba(17,148,170,1)',
-                inactiveColor: 'rgba(0,0,0,1)',
-            },
-            background: {
-                activeColor: 'rgba(207,235,239,1)',
-                inactiveColor: 'rgba(207,235,239,0)',
-            },
-        },
-    };
     const ArrayTabs = [
         {
             name: HOME_ROUTE.ROOT,
@@ -237,7 +209,6 @@ const MainTabContainer = () => {
             }}
             appearance={{
                 dotCornerRadius: 10,
-                horizontalPadding: scale(10),
             }}
         >
             {ArrayTabs.map((item, index) => (
@@ -247,7 +218,6 @@ const MainTabContainer = () => {
     );
 };
 
-export default MainTabContainer;
 const styles = ScaledSheet.create({
     tabStyleIos: {
         borderColor: Themes.COLORS.red,
@@ -295,3 +265,5 @@ const styles = ScaledSheet.create({
         fontSize: 13,
     },
 });
+
+export default MainTabContainer;

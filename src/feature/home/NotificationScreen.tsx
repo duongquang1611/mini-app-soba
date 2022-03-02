@@ -1,15 +1,15 @@
-import React from 'react';
-import { View } from 'react-native';
-import { ScaledSheet } from 'react-native-size-matters';
-import StyledHeader from 'components/common/StyledHeader';
-import { Themes } from 'assets/themes';
-import { StyledIcon, StyledImage, StyledText } from 'components/base';
-import { notificationListFake } from 'utilities/staticData';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { useNavigation } from '@react-navigation/native';
 import Images from 'assets/images';
+import { Themes } from 'assets/themes';
+import { StyledIcon, StyledText } from 'components/base';
+import StyledHeader from 'components/common/StyledHeader';
+import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
+import React from 'react';
+import { View } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { ScaledSheet } from 'react-native-size-matters';
+import { notificationListFake } from 'utilities/staticData';
 
 const NotificationItem = (item: any) => {
     return (

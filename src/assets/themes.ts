@@ -26,7 +26,7 @@ const Light = {
         primary: '#A61F17',
         secondary: '#1D0157',
         textPrimary: '#1D0157',
-        textSecondary: 'white',
+        textSecondary: '#222222',
         opacityPrimary: (opacity: number) => `rgba(166, 31, 23, ${opacity})`,
         backgroundPrimary: '#F4F4F4',
         backgroundModalUpdate: '#323232',
@@ -39,6 +39,7 @@ const Light = {
         thunderbird: '#DE1E13',
         opacityThunderbird: (opacity: number) => `rgba(222, 30, 19, ${opacity})`,
         disabled: '#DEDEDE',
+        redOxide: '#720303',
     },
     FONTS: {
         defaultFont: 'Montserrat-Regular',

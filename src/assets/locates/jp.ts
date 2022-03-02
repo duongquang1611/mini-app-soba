@@ -166,5 +166,26 @@ export default {
         historyExchange: 'クーポン交換履歴',
         couponExchangeBtn: 'クーポン交換',
         couponGetHistory: 'クーポンGET履歴',
+        modalGetCoupon: 'クーポンGET',
+    },
+    exchangeCoupon: {
+        title: 'クーポン交換',
+        listCanExchange: 'クーポン交換できるリスト',
+        btnExchange: 'クーポン交換',
+        confirm: {
+            title: '確認',
+            content: 'このクーポンを交換すると、交換可能スタンプ残数が「ｎ個」になります。交換しますか？',
+            textButtonCancel: 'いいえ',
+        },
+        success: {
+            title: '交換完了',
+            content: 'ご希望のクーポンと交換しました。',
+            textButtonCancel: 'スタンプカード\nに戻る',
+            textButtonOk: '獲得した\nクーポンを見る',
+        },
+        error: {
+            title: '注意',
+            content: '交換可能スタンプ残数が足りません。',
+        },
     },
 };

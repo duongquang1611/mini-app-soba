@@ -3,12 +3,13 @@ import { Themes } from 'assets/themes';
 import { StyledIcon, StyledText, StyledTouchable } from 'components/base';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledHeader from 'components/common/StyledHeader';
+import CouponContentView from 'feature/coupon/components/CouponContentView';
 import React, { useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { MODAL_ID } from 'utilities/staticData';
 import HistoryExchangeModal from './components/HistoryExchangeModal';
-import ListCouponExchange from './components/ListCouponExchange';
+import ListHistoryCouponExchange from './components/ListHistoryCouponExchange';
 import StampItem from './components/StampItem';
 
 const StampNumberView = ({ title, count }: any) => {
@@ -30,17 +31,29 @@ const StampCardDetailScreen = (props: any) => {
     };
 
     const showHistory = () => {
-        modalize.show(
-            MODAL_ID.HISTORY_STAMP,
-            <HistoryExchangeModal />,
-            {
-                modalHeight: verticalScale(550),
-                scrollViewProps: {
-                    contentContainerStyle: { flexGrow: 1 },
+        if (caseType === 2) {
+            modalize.show(
+                MODAL_ID.GET_COUPON_STAMP,
+                <CouponContentView isModal customStyle={styles.contentCoupon} />,
+                {
+                    scrollViewProps: {
+                        contentContainerStyle: { flexGrow: 1 },
+                    },
                 },
-            },
-            { title: 'stampDetail.historyExchange' },
-        );
+                { title: 'stampDetail.modalGetCoupon' },
+            );
+        } else
+            modalize.show(
+                MODAL_ID.HISTORY_STAMP,
+                <HistoryExchangeModal />,
+                {
+                    modalHeight: verticalScale(550),
+                    scrollViewProps: {
+                        contentContainerStyle: { flexGrow: 1 },
+                    },
+                },
+                { title: 'stampDetail.historyExchange' },
+            );
     };
 
     return (
@@ -70,7 +83,7 @@ const StampCardDetailScreen = (props: any) => {
                                 />
                             </StyledTouchable>
                         </View>
-                        <ListCouponExchange caseType={caseType} />
+                        <ListHistoryCouponExchange caseType={caseType} />
                     </View>
                     <StyledText
                         originValue={
@@ -139,5 +152,8 @@ const styles = ScaledSheet.create({
         marginBottom: '30@vs',
         color: Themes.COLORS.mineShaft,
         lineHeight: '20@vs',
+    },
+    contentCoupon: {
+        backgroundColor: Themes.COLORS.white,
     },
 });

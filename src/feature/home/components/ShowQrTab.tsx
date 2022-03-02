@@ -1,8 +1,8 @@
-import Images from 'assets/images';
+/* eslint-disable @typescript-eslint/no-empty-function */
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledIcon, StyledText } from 'components/base';
 import React from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 
 const ShowQrTab = (data: any) => {

@@ -1,14 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
-import { StyledText, StyledTouchable } from 'components/base';
+import { StyledButton } from 'components/base';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledHeader from 'components/common/StyledHeader';
 import StyledTabTopView from 'components/common/StyledTabTopView';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { SceneMap } from 'react-native-tab-view';
 import { MODAL_ID } from 'utilities/staticData';
@@ -39,13 +38,17 @@ const StampCardScreen = () => {
             MODAL_ID.CHOOSE_STAMP,
             <ChooseStampList onPress={() => modalize?.dismiss?.(MODAL_ID.CHOOSE_STAMP)} />,
             {
-                alwaysOpen: verticalScale(487),
                 scrollViewProps: {
-                    contentContainerStyle: { flexGrow: 1 },
+                    contentContainerStyle: styles.contentEarnStamp,
                 },
-                onPositionChange,
-                overlayStyle: { backgroundColor: 'transparent' },
-                onClose: () => setPositionModalize(undefined),
+                snapPoint: verticalScale(487),
+                FloatingComponent: () => (
+                    <StyledButton
+                        title={'common.yes'}
+                        customStyle={styles.footerButtonChooseStamp}
+                        onPress={() => modalize?.dismiss?.(MODAL_ID.CHOOSE_STAMP)}
+                    />
+                ),
             },
             { title: 'chooseStamp.earnStamp' },
         );
@@ -67,13 +70,6 @@ const StampCardScreen = () => {
 
     return (
         <View style={styles.container}>
-            {positionModalize !== undefined && (
-                <StyledTouchable
-                    customStyle={styles.customModalOverlay}
-                    onPress={() => modalize?.dismiss?.(MODAL_ID.CHOOSE_STAMP)}
-                />
-            )}
-
             <StyledHeader
                 title={'stamp.title'}
                 hasBack={false}
@@ -124,5 +120,18 @@ const styles = ScaledSheet.create({
         left: 0,
         width: '100%',
         height: '100%',
+    },
+    footerButtonChooseStamp: {
+        position: 'absolute',
+        right: '20@s',
+        bottom: '25@vs',
+        borderRadius: 30,
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 10,
+    },
+    contentEarnStamp: {
+        flexGrow: 1,
+        paddingBottom: '90@vs',
     },
 });

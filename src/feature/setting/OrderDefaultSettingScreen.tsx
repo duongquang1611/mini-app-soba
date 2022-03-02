@@ -1,17 +1,18 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useNavigation } from '@react-navigation/native';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
-import { StyledButton, StyledIcon, StyledImage, StyledText } from 'components/base';
+import { StyledButton, StyledIcon, StyledText } from 'components/base';
 import LinearView from 'components/common/LinearView';
 import StyledHeader from 'components/common/StyledHeader';
-import { AUTHENTICATE_ROUTE, TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
-import { navigate } from 'navigation/NavigationService';
+import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import React, { useRef, useState } from 'react';
 import { ImageBackground, View } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { scale, ScaledSheet } from 'react-native-size-matters';
-import { imagesList, listImage } from 'utilities/staticData';
+import { listImage } from 'utilities/staticData';
 
 const list = [
     { category: 'all' },
@@ -44,11 +45,11 @@ const OrderDefaultSettingScreen = () => {
     const [categoryRef, setCategoryRef] = useState(useRef());
     const [category, setCategory] = useState('');
     const [selected, setSelected] = useState();
-    const onPressCategory = (item) => {
+    const onPressCategory = (item: any) => {
         setCategory(item.category);
         setSelected(item.category);
     };
-    const renderCategoryItems = ({ item, index }) => {
+    const renderCategoryItems = ({ item, index }: any) => {
         return (
             <LinearView
                 style={[styles.linear, { borderWidth: selected === item.category ? 0 : 1 }]}
@@ -64,7 +65,6 @@ const OrderDefaultSettingScreen = () => {
                 >
                     <StyledText
                         customStyle={{
-                            fontWeight: 'bold',
                             color: selected === item.category ? Themes.COLORS.white : Themes.COLORS.primary,
                             fontWeight: selected === item.category ? 'bold' : '400',
                             fontSize: 14,
