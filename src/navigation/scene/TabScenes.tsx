@@ -24,6 +24,7 @@ import NotificationScreen from 'feature/home/NotificationScreen';
 import OrderDefaultScreen from 'feature/home/OrderDefaultScreen';
 import CartScreen from 'feature/order/CartScreen';
 import CouponListScreen from 'feature/order/CouponListScreen';
+import DetailCouponOrderScreen from 'feature/order/DetailCouponOrderScreen';
 import DetailMealScreen from 'feature/order/DetailMealScreen';
 import DetailShopScreen from 'feature/order/DetailShopScreen';
 import MenuScreen from 'feature/order/MenuScreen';
@@ -93,6 +94,7 @@ const OrderStack = () => (
         <MainStack.Screen name={ORDER_ROUTE.CART} component={CartScreen} />
         <MainStack.Screen name={ORDER_ROUTE.COUPON_LIST} component={CouponListScreen} />
         <MainStack.Screen name={ORDER_ROUTE.DETAIL_SHOP} component={DetailShopScreen} />
+        <MainStack.Screen name={ORDER_ROUTE.COUPON_DETAIL} component={DetailCouponOrderScreen} />
         <MainStack.Screen name={ORDER_ROUTE.ORDER_QR_CODE} component={OrderQrCodeScreen} />
     </MainStack.Navigator>
 );

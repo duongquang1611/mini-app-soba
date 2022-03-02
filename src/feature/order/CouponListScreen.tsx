@@ -1,20 +1,68 @@
-import { StyledButton } from 'components/base';
+import { Themes } from 'assets/themes';
+import { StyledButton, StyledText } from 'components/base';
+import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledHeader from 'components/common/StyledHeader';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React from 'react';
 import { View } from 'react-native';
-import { ScaledSheet } from 'react-native-size-matters';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { ScaledSheet, verticalScale } from 'react-native-size-matters';
+import { listCouponFake, MODAL_ID } from 'utilities/staticData';
+import CouponItem from './components/CouponItem';
+import { OrderChild } from './components/OrderItem';
 
+const data = [
+    { name: 'mon 1', id: 1, choose: true },
+    { name: 'mon 1', id: 2, choose: true },
+    { name: 'mon 1', id: 3, choose: true },
+];
+const ModalCoupon = () => (
+    <View style={styles.modalView}>
+        <StyledText originValue={'90％割引'} customStyle={styles.couponName} />
+        <StyledText i18nText={'クーポンを適用する商品を選択してください'} customStyle={styles.conTentCoupon} />
+        {data.map((item, index) => (
+            <OrderChild key={index} item={item} />
+        ))}
+        <StyledButton
+            title={'order.keep'}
+            onPress={() => {
+                console.log('keep');
+            }}
+            customStyle={{ alignSelf: 'center' }}
+        />
+    </View>
+);
 const CouponListScreen = () => {
-    const confirm = () => {
-        navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.DETAIL_SHOP);
+    const modalize = ModalizeManager();
+    const goToCouponDetail = () => {
+        navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.COUPON_DETAIL);
+    };
+    const showApplyCoupon = () => {
+        modalize.show(
+            MODAL_ID.APPLY_COUPON,
+            <ModalCoupon />,
+            {
+                modalHeight: verticalScale(550),
+                scrollViewProps: {
+                    contentContainerStyle: { flexGrow: 1 },
+                },
+            },
+            { title: 'order.applyCoupon' },
+        );
     };
     return (
         <View style={styles.container}>
-            <StyledHeader title={'couponList'} />
-            <View style={styles.body}>
-                <StyledButton title={'detail shop'} onPress={confirm} customStyle={styles.buttonSave} />
+            <StyledHeader title={'order.couponTitle'} />
+            <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
+                <View style={styles.body}>
+                    {listCouponFake.map((item, index) => (
+                        <CouponItem canUse={true} key={index} item={item} goToDetail={goToCouponDetail} />
+                    ))}
+                </View>
+            </KeyboardAwareScrollView>
+            <View style={styles.buttonView}>
+                <StyledButton title={'order.useCoupon'} onPress={showApplyCoupon} customStyle={styles.buttonSave} />
             </View>
         </View>
     );
@@ -27,10 +75,27 @@ const styles = ScaledSheet.create({
         flex: 1,
     },
     body: {
-        justifyContent: 'center',
-        alignItems: 'center',
         flex: 1,
-        marginHorizontal: '20@s',
+    },
+    buttonView: {
+        backgroundColor: Themes.COLORS.white,
+        alignItems: 'center',
+        width: '100%',
+        marginVertical: '10@vs',
     },
     buttonSave: {},
+    couponName: {
+        fontWeight: 'bold',
+        fontSize: '16@ms0.3',
+        paddingVertical: '10@vs',
+    },
+    conTentCoupon: {
+        fontWeight: 'bold',
+        fontSize: '16@ms0.3',
+        paddingBottom: '10@vs',
+        color: Themes.COLORS.primary,
+    },
+    modalView: {
+        paddingHorizontal: '20@s',
+    },
 });

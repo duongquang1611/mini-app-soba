@@ -90,6 +90,15 @@ export default {
     home: {},
     account: {},
     notification: {},
+    order: {
+        menuTitle: 'メニュー',
+        changeCart: 'カートの変更',
+        couponTitle: 'クーポンリスト',
+        useCoupon: 'クーポン使用',
+        applyCoupon: 'クーポンを適用',
+        keep: '保存',
+        orderGuide: '注文ガイド',
+    },
     setting: {
         editProfileTitle: 'マイページ編集',
         editProfile: '保存',

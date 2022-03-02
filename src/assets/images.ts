@@ -70,6 +70,10 @@ const Images: any = {
         confirm: require('./icon/ic_confirm.png'),
         success: require('./icon/ic_success.png'),
         error: require('./icon/ic_error.png'),
+        noCoupon: require('./icon/ic_no_coupon.png'),
+        step1: require('./icon/ic_step_1.png'),
+        step2: require('./icon/ic_step_2.png'),
+        step3: require('./icon/ic_step_3.png'),
     },
     photo: {
         defaultImage: require('./photo/img_default_image.png'),
@@ -80,6 +84,7 @@ const Images: any = {
         ptCouponDetail: require('./photo/pt_coupon_detail.png'),
         backgroundMyPage: require('./photo/pt_background_my_page.png'),
         used: require('./photo/pt_used.png'),
+        line: require('./photo/pt_line.png'),
     },
 };
 

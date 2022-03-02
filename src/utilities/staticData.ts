@@ -53,6 +53,25 @@ export const dataFakeOderDefault = [
         ],
     },
 ];
+export const listSideMenu = [
+    {
+        id: 1,
+        name: 'name',
+        dishes: [
+            { name: 'mon 1', id: 1, choose: true },
+            { name: 'mon 1', id: 2, choose: true },
+            { name: 'mon 1', id: 3, choose: true },
+        ],
+    },
+    {
+        id: 2,
+        name: 'name',
+        dishes: [
+            { name: 'mon 1', id: 1, choose: true },
+            { name: 'mon 1', id: 2, choose: true },
+        ],
+    },
+];
 export const notificationListFake = [
     {
         id: 1,
@@ -305,6 +324,9 @@ export const MODAL_ID = {
     EXCHANGE_COUPON_CONFIRM: 54,
     EXCHANGE_COUPON_SUCCESS: 55,
     EXCHANGE_COUPON_ERROR: 56,
+    APPLY_COUPON: 57,
+    ORDER_GUIDE: 58,
+    LIST_COUPON: 60,
 };
 
 export const INFORMATION = [
@@ -396,3 +418,26 @@ export enum POPUP_TYPE {
     SUCCESS,
     ERROR,
 }
+export const stepGuide = [
+    {
+        index: 1,
+        name: '手順 1：',
+        contentName: 'アプリ使用可能店 に行く',
+        content: '使用可能な店舗は随時追加します。※現在、使用可能な店舗はこちら',
+        icon: Images.icons.step1,
+    },
+    {
+        index: 2,
+        name: '手順 2：',
+        contentName: 'アプリ使用可能店 に行く',
+        content: '使用可能な店舗は随時追加します。※現在、使用可能な店舗はこちら',
+        icon: Images.icons.step2,
+    },
+    {
+        index: 3,
+        name: '手順 3：',
+        contentName: 'アプリ使用可能店 に行く',
+        content: '使用可能な店舗は随時追加します。※現在、使用可能な店舗はこちら',
+        icon: Images.icons.step3,
+    },
+];
