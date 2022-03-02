@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Themes } from 'assets/themes';
-import { StyledButton, StyledImage, StyledText, StyledTouchable } from 'components/base';
+import { StyledImage, StyledText, StyledTouchable } from 'components/base';
 import RadioCheckView from 'components/common/RadioCheckView';
 import React, { memo, useState } from 'react';
 import { View } from 'react-native';
@@ -32,7 +33,6 @@ const ChooseStampList = ({ onPress }: any) => {
             <StyledText i18nText={'chooseStamp.pleaseChoose'} customStyle={styles.textPlsChoose} />
             {/* <StyledList data={STAMP_DATA} renderItem={renderItem} customStyle={styles.listChoose} /> */}
             <View style={styles.listChoose}>{STAMP_DATA.map((item: any) => renderItem({ item }))}</View>
-            <StyledButton title={'common.yes'} customStyle={styles.btnYes} onPress={onPress} />
         </View>
     );
 };

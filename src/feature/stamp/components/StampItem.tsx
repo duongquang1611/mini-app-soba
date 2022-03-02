@@ -60,10 +60,12 @@ const styles = ScaledSheet.create({
         paddingVertical: '20@vs',
         alignItems: 'center',
         overflow: 'hidden',
+        backgroundColor: Themes.COLORS.white,
     },
     imgStamp: {
         width: '76@s',
         height: '76@s',
+        borderRadius: 1,
     },
     content: {
         marginLeft: '10@s',

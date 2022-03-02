@@ -1,6 +1,6 @@
 /* App config for images
  */
-const Images = {
+const Images: any = {
     icons: {
         selected: require('./icon/ic_select.png'),
         back: require('./icon/ic_back.png'),
@@ -37,6 +37,7 @@ const Images = {
         stamp_card: require('./icon/ic_stamp_card.png'),
         shop: require('./icon/ic_shop.png'),
         coupon: require('./icon/ic_coupon.png'),
+        couponBlue: require('./icon/ic_coupon_blue.png'),
         document: require('./icon/ic_document.png'),
         arrow_left: require('./icon/ic_arrow_left.png'),
         bag: require('./icon/ic_bag.png'),
@@ -61,6 +62,14 @@ const Images = {
         bag_happy: require('./icon/ic_bag_happy.png'),
         rectangle: require('./icon/ic_rectangle.png'),
         tick: require('./icon/ic_tick.png'),
+        giftOpenSmall: require('./icon/gift_open_small.png'),
+        giftOpen3: require('./icon/gift_open_3.png'),
+        giftOpen5: require('./icon/gift_open_5.png'),
+        giftOpen7: require('./icon/gift_open_7.png'),
+        giftClose: require('./icon/gift_close.png'),
+        confirm: require('./icon/ic_confirm.png'),
+        success: require('./icon/ic_success.png'),
+        error: require('./icon/ic_error.png'),
     },
     photo: {
         defaultImage: require('./photo/img_default_image.png'),

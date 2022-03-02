@@ -18,7 +18,13 @@ const StyledImage = (props: StyledImageProps) => {
     }, [source]);
 
     return (
-        <Image {...props} style={customStyle} onError={() => setError(true)} source={error ? defaultImage : source} />
+        <Image
+            resizeMode={'contain'}
+            {...props}
+            style={customStyle}
+            onError={() => setError(true)}
+            source={error ? defaultImage : source}
+        />
     );
 };
 

@@ -61,7 +61,6 @@ const styles = ScaledSheet.create({
     text: {
         color: Themes.COLORS.textPrimary,
         fontSize: '14@ms0.3',
-        // lineHeight: '20@vs',
     },
 });
 

@@ -9,7 +9,7 @@ export const staticValue = {
         left: 10,
         right: 10,
     },
-    COLUMNS_COUPON_EXCHANGE: 5,
+    COLUMNS_COUPON_EXCHANGE: [3, 5, 7],
 };
 
 export const ERRORS = {
@@ -301,13 +301,19 @@ export const MODAL_ID = {
     CHOOSE_STAMP: 50,
     GUIDE_STAMP: 51,
     HISTORY_STAMP: 52,
+    GET_COUPON_STAMP: 53,
+    EXCHANGE_COUPON_CONFIRM: 54,
+    EXCHANGE_COUPON_SUCCESS: 55,
+    EXCHANGE_COUPON_ERROR: 56,
 };
+
 export const INFORMATION = [
     { title: 'メールアドレス', icon: Images.icons.email, value: 'soba@gmail.com' },
     { title: '名前', icon: Images.icons.userName, value: '田中　英雄（タナカ　ヒデオ）' },
     { title: '生年月日', icon: Images.icons.birthday, value: '2021年3月4日' },
     { title: '性別', icon: Images.icons.gender, value: '男' },
 ];
+
 export const listImage = [
     {
         id: 1,
@@ -384,3 +390,9 @@ export const statusUser = [
         content2: '月に1回「新年おめでとう」クーポンを頂く',
     },
 ];
+
+export enum POPUP_TYPE {
+    CONFIRM,
+    SUCCESS,
+    ERROR,
+}

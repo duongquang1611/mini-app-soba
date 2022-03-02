@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledInputForm } from 'components/base';
 import StyledHeader from 'components/common/StyledHeader';

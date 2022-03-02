@@ -9,19 +9,21 @@ import { StyledText, StyledTouchable } from '.';
 interface StyledButtonProps {
     title: any;
     customStyle?: StyleProp<ViewStyle>;
+    customContentStyle?: StyleProp<ViewStyle>;
     customStyleText?: StyleProp<TextStyle>;
     onPress?(params?: any): void;
     onLongPress?(): void;
     disabled?: boolean;
     outline?: boolean;
     isNormal?: boolean;
+    colors?: any[];
 }
 
-const WrapTextComponent = ({ children, outline, disabled }: any) => {
+const WrapTextComponent = ({ children, outline, disabled, colors, customStyle }: any) => {
     return outline ? (
-        <View style={styles.secondaryBtn}>{children}</View>
+        <View style={[styles.secondaryBtn, customStyle]}>{children}</View>
     ) : (
-        <LinearView style={styles.linear} disabled={disabled}>
+        <LinearView style={[styles.linear, customStyle]} disabled={disabled} colors={colors}>
             {children}
         </LinearView>
     );
@@ -37,6 +39,8 @@ const StyledButton: FunctionComponent<StyledButtonProps> = (props: StyledButtonP
         disabled = false,
         outline = false,
         isNormal = false,
+        customContentStyle,
+        colors,
     } = props;
 
     return (
@@ -44,7 +48,7 @@ const StyledButton: FunctionComponent<StyledButtonProps> = (props: StyledButtonP
             customStyle={[styles.container, customStyle]}
             onPress={onPress}
             onLongPress={onLongPress}
-            disabled={disabled || !onPress}
+            disabled={disabled}
         >
             {isNormal ? (
                 <StyledText
@@ -56,7 +60,12 @@ const StyledButton: FunctionComponent<StyledButtonProps> = (props: StyledButtonP
                     ]}
                 />
             ) : (
-                <WrapTextComponent outline={outline} disabled={disabled}>
+                <WrapTextComponent
+                    outline={outline}
+                    disabled={disabled}
+                    colors={colors}
+                    customStyle={customContentStyle}
+                >
                     <StyledText
                         i18nText={title}
                         customStyle={[
@@ -81,7 +90,7 @@ const styles = ScaledSheet.create({
         marginTop: '10@vs',
     },
     textButton: {
-        color: Themes.COLORS.textSecondary,
+        color: Themes.COLORS.white,
         fontWeight: 'bold',
     },
     textButtonLinear: {

@@ -4,7 +4,6 @@ import { StyledText } from 'components/base';
 import StyledHeader from 'components/common/StyledHeader';
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet } from 'react-native-size-matters';
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
 import CouponTab from './components/CouponTab';

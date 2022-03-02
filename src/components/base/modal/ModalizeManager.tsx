@@ -95,7 +95,7 @@ const ModalizeManager = () => {
         }
     };
 
-    const dismiss = (id: any) => {
+    const dismiss = (id = modalControl[0], callback?: () => any) => {
         const item = modalControl.find((e) => e.id === id);
         if (item) {
             const { ref, element } = item;
@@ -105,7 +105,10 @@ const ModalizeManager = () => {
             modalControl = [...arrFilter];
             wait(200).then(() => {
                 element.destroy();
+                callback?.();
             });
+        } else {
+            callback?.();
         }
     };
 

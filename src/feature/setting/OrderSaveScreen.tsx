@@ -20,6 +20,7 @@ const OrderSave = () => {
 
     const confirm = async () => {
         try {
+            console.log('confirm');
         } catch (error) {
             logger(error);
             AlertMessage(error);
