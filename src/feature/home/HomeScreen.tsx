@@ -132,7 +132,7 @@ const HomeScreen: FunctionComponent = () => {
                         renderScene={renderScene}
                         customIndicatorStyle={{ backgroundColor: getColorTab(indexTab) }}
                     />
-                    <ImageBackground source={Images.photo.defaultImage} resizeMode="cover" style={styles.rowView}>
+                    {/* <ImageBackground source={Images.photo.defaultImage} resizeMode="cover" style={styles.rowView}>
                         <StyledImage source={Images.photo.defaultImage} customStyle={styles.logo} />
                         <TouchableOpacity style={styles.buttonMobile}>
                             <StyledText i18nText={'店舗検索'} customStyle={styles.textMobile} />
@@ -157,7 +157,7 @@ const HomeScreen: FunctionComponent = () => {
                             <StyledImage source={Images.photo.defaultImage} customStyle={styles.logo} />
                             <StyledIcon source={Images.icons.eyeOff} size={20} />
                         </TouchableOpacity>
-                    </ImageBackground>
+                    </ImageBackground> */}
                     <ImageBackground source={Images.photo.news} resizeMode="cover" style={styles.newsView}>
                         <View style={styles.buttonMobile}>
                             <StyledIcon source={Images.icons.document} customStyle={styles.iconLeft} size={20} />
