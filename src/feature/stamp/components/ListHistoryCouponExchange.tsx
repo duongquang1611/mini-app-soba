@@ -16,10 +16,10 @@ const data = Array(50).fill(createItem(true), 0, 8).fill(createItem(), 8, 100);
 const itemHeight = 67;
 const separatorBottom = 10;
 const separatorTop = 10;
-const numCol = 5;
+const numCol = 7;
 // const numCol = staticValue.COLUMNS_COUPON_EXCHANGE[Math.round(Math.random() * 2)];
 
-const ListHistoryCouponExchange = ({ caseType }: any) => {
+const ListHistoryCouponExchange = ({ caseType, onPressItemHistory }: any) => {
     for (let index = 0; index < 6; index++) {
         const newIndex = index + 10 + Math.round(Math.random() * 10);
         data[newIndex] = {
@@ -28,7 +28,7 @@ const ListHistoryCouponExchange = ({ caseType }: any) => {
         };
     }
     const renderItem = ({ item }: any) => {
-        return <CouponExchangeItem item={item} numCol={numCol} />;
+        return <CouponExchangeItem item={item} numCol={numCol} onPress={onPressItemHistory} />;
     };
 
     const goToExchangeCoupon = () => {

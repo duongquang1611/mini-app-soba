@@ -172,6 +172,7 @@ const MenuScreen = () => {
                     />
                 ) : null}
             </View>
+
             <View style={styles.recommendContainer}>
                 {listRecommended.length > 1 ? (
                     <FlatList
@@ -180,7 +181,7 @@ const MenuScreen = () => {
                         showsHorizontalScrollIndicator={false}
                         renderItem={renderRecommendedItems}
                         onEndReachedThreshold={0.1}
-                        keyExtractor={(item) => item.category}
+                        keyExtractor={(item, index) => index.toString()}
                     />
                 ) : null}
             </View>

@@ -18,7 +18,7 @@ const configThrottle = { trailing: false };
 const onPressDefault = () => null;
 
 const StyledTouchable: FunctionComponent<StyledTouchableProps> = (props: StyledTouchableProps) => {
-    const { customStyle, disabled, children, style, throttleTime = 1000, onPress = onPressDefault } = props;
+    const { customStyle, disabled, children, style, throttleTime = 500, onPress = onPressDefault } = props;
 
     if (style) {
         logger('You should use customStyle to implement this component to avoid conflict', true);

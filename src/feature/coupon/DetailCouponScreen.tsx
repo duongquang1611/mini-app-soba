@@ -9,6 +9,7 @@ import { ImageBackground, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { color } from 'react-native-reanimated';
 import { s, ScaledSheet } from 'react-native-size-matters';
+import { staticValue } from 'utilities/staticData';
 import CouponContentView from './components/CouponContentView';
 
 const SeparatorView = () => <View style={styles.separator} />;
@@ -30,7 +31,7 @@ const DetailCouponScreen = (props: any) => {
             {!!itemStamp && (
                 <>
                     <SeparatorView />
-                    <StampItem item={itemStamp} />
+                    <StampItem item={itemStamp} animation />
                     <SeparatorView />
                 </>
             )}

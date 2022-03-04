@@ -1,5 +1,6 @@
 import request from 'api/request';
+import { NOTIFICATION_URL } from 'api/urls';
 
-export const notificationList = ({ params }: any) => request.post(`notification`, params);
-export const notificationCheck = () => request.get(`notification`);
-export const notificationRead = (id: number) => request.put(`notification/read/${id}`);
+export const getNotificationList = ({ params }: any) => request.get(NOTIFICATION_URL.list, { params });
+export const getNotificationCoupon = (id: number | string, params?: any) =>
+    request.get(NOTIFICATION_URL.coupon(id), { params });

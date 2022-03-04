@@ -32,16 +32,7 @@ const StampCardDetailScreen = (props: any) => {
 
     const showHistory = () => {
         if (caseType === 2) {
-            modalize.show(
-                MODAL_ID.GET_COUPON_STAMP,
-                <CouponContentView isModal customStyle={styles.contentCoupon} />,
-                {
-                    scrollViewProps: {
-                        contentContainerStyle: { flexGrow: 1 },
-                    },
-                },
-                { title: 'stampDetail.modalGetCoupon' },
-            );
+            showModalGetCoupon();
         } else
             modalize.show(
                 MODAL_ID.HISTORY_STAMP,
@@ -56,6 +47,19 @@ const StampCardDetailScreen = (props: any) => {
             );
     };
 
+    const showModalGetCoupon = () => {
+        modalize.show(
+            MODAL_ID.GET_COUPON_STAMP,
+            <CouponContentView isModal customStyle={styles.contentCoupon} />,
+            {
+                scrollViewProps: {
+                    contentContainerStyle: { flexGrow: 1 },
+                },
+            },
+            { title: 'stampDetail.modalGetCoupon' },
+        );
+    };
+
     return (
         <>
             <StyledHeader title={'stampDetail.title'} />
@@ -68,7 +72,7 @@ const StampCardDetailScreen = (props: any) => {
                     nestedScrollEnabled
                     showsVerticalScrollIndicator={false}
                 >
-                    <StampItem item={item} customStyle={styles.customItemStyle} caseType={caseType} />
+                    <StampItem item={item} animation customStyle={styles.customItemStyle} caseType={caseType} />
                     <View style={styles.wrapContentHistory}>
                         <View style={styles.headerListContent}>
                             <StampNumberView title={'stampDetail.numberOfCollect'} count={20} />
@@ -83,7 +87,7 @@ const StampCardDetailScreen = (props: any) => {
                                 />
                             </StyledTouchable>
                         </View>
-                        <ListHistoryCouponExchange caseType={caseType} />
+                        <ListHistoryCouponExchange caseType={caseType} onPressItemHistory={showModalGetCoupon} />
                     </View>
                     <StyledText
                         originValue={

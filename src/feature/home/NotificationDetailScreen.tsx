@@ -8,10 +8,10 @@ import { listCouponFake } from 'utilities/staticData';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet } from 'react-native-size-matters';
 
-const CouponItem = (item: any) => {
+const CouponItemNotification = (item: any) => {
     return (
         <View>
-            <View style={styles.couponItem}>
+            <View style={styles.couponItemNotification}>
                 <StyledImage source={{ uri: item.item?.img }} customStyle={styles.couponImage} />
                 <View style={styles.couponName}>
                     <StyledText originValue={item.item.name} customStyle={styles.title} />
@@ -47,7 +47,7 @@ const NotificationDetailScreen = () => {
                             <StyledText i18nText={'クーポンリスト'} customStyle={styles.title} />
                         </View>
                         {listCouponFake.map((item, index) => (
-                            <CouponItem key={index} item={item} />
+                            <CouponItemNotification key={index} item={item} />
                         ))}
                     </View>
                 </View>
@@ -98,7 +98,7 @@ const styles = ScaledSheet.create({
         alignItems: 'center',
         marginBottom: '10@vs',
     },
-    couponItem: {
+    couponItemNotification: {
         width: '100%',
         backgroundColor: Themes.COLORS.white,
         marginVertical: '2@vs',

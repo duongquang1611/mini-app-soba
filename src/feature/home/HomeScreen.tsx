@@ -142,7 +142,7 @@ const HomeScreen: FunctionComponent = () => {
                     <ImageBackground source={Images.photo.defaultImage} resizeMode="cover" style={styles.rowView}>
                         <TouchableOpacity
                             style={styles.buttonMobile}
-                            onPress={() => navigation.navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.ORDER_DEFAULT)}
+                            onPress={() => navigation.navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.ORDER_DEFAULT_HOME)}
                         >
                             <StyledText i18nText={'デフォルト注文'} customStyle={styles.textMobile} />
                         </TouchableOpacity>

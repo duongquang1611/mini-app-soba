@@ -1,140 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { BubbleTabBarItemConfig, TabsConfig } from '@gorhom/animated-tabbar';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon } from 'components/base';
-import ChangePassword from 'feature/authentication/ChangePassword';
-import SendOtpForgotPass from 'feature/authentication/SendOtpForgotPass';
-import DetailCouponScreen from 'feature/coupon/DetailCouponScreen';
 import TabCouponListScreen from 'feature/coupon/TabCouponListScreen';
-import CheckInScreen from 'feature/home/CheckInScreen';
-import EditOrderScreen from 'feature/home/EditOrderScreen';
-import HomeDataScreen from 'feature/home/HomeDataScreen';
-import HomeDetailScreen from 'feature/home/HomeDetailScreen';
 // Screen
 import HomeScreen from 'feature/home/HomeScreen';
-import HomeUserListScreen from 'feature/home/HomeUserListScreen';
-import MobileOrderScreen from 'feature/home/MobileOrderScreen';
-import NewsDetailScreen from 'feature/home/NewsDetailScreen';
-import NewsListScreen from 'feature/home/NewsListScreen';
-import NotificationDetailScreen from 'feature/home/NotificationDetailScreen';
-import NotificationScreen from 'feature/home/NotificationScreen';
-import OrderDefaultScreen from 'feature/home/OrderDefaultScreen';
-import CartScreen from 'feature/order/CartScreen';
-import CouponListScreen from 'feature/order/CouponListScreen';
-import DetailCouponOrderScreen from 'feature/order/DetailCouponOrderScreen';
-import DetailMealScreen from 'feature/order/DetailMealScreen';
-import DetailShopScreen from 'feature/order/DetailShopScreen';
 import MenuScreen from 'feature/order/MenuScreen';
-import OrderQrCodeScreen from 'feature/order/OrderQrCode';
-import ContactScreen from 'feature/setting/ContactScreen';
-import DefaultOrderDetailScreen from 'feature/setting/DefaultOrderDetailScreen';
-import EditProfileScreen from 'feature/setting/EditProfileScreen';
-import MyPageScreen from 'feature/setting/MyPageScreen';
-import OrderDefaultSettingScreen from 'feature/setting/OrderDefaultSettingScreen';
-import OrderHistoryDetailScreen from 'feature/setting/OrderHistoryDetailScreen';
-import OrderHistoryScreen from 'feature/setting/OrderHistoryScreen';
-import OrderSave from 'feature/setting/OrderSaveScreen';
-import SettingNotificationScreen from 'feature/setting/SettingNotificationScreen';
 import SettingScreen from 'feature/setting/SettingScreen';
-import ExchangeCouponListScreen from 'feature/stamp/ExchangeCouponListScreen';
-import StampCardDetailScreen from 'feature/stamp/StampCardDetailScreen';
 import StampCardScreen from 'feature/stamp/StampCardScreen';
-import navigationConfigs from 'navigation/config/options';
-import {
-    AUTHENTICATE_ROUTE,
-    COUPON_ROUTE,
-    HOME_ROUTE,
-    ORDER_ROUTE,
-    SETTING_ROUTE,
-    STAMP_ROUTE,
-} from 'navigation/config/routes';
+import { COUPON_ROUTE, HOME_ROUTE, ORDER_ROUTE, SETTING_ROUTE, STAMP_ROUTE } from 'navigation/config/routes';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { AnimatedTabBarNavigator } from 'react-native-animated-nav-tab-bar';
-import { scale, ScaledSheet } from 'react-native-size-matters';
-import { isIos } from 'utilities/helper';
+import { ScaledSheet } from 'react-native-size-matters';
 
-const MainStack = createStackNavigator();
-const MainTab = createBottomTabNavigator();
 const AnimateTabs = AnimatedTabBarNavigator();
-
-const SIZE_ICON = 22;
-interface TabBarIconProps {
-    color: string;
-    focused: boolean;
-    size: number;
-}
-
-const HomeStack = () => (
-    <MainStack.Navigator headerMode={'none'} screenOptions={navigationConfigs} keyboardHandlingEnabled={isIos}>
-        <MainStack.Screen name={HOME_ROUTE.HOME} component={HomeScreen} />
-        <MainStack.Screen name={HOME_ROUTE.HOME_DETAIL} component={HomeDetailScreen} />
-        <MainStack.Screen name={HOME_ROUTE.WEB_VIEW} component={HomeDetailScreen} />
-        <MainStack.Screen name={HOME_ROUTE.HOME_DATA} component={HomeDataScreen} />
-        <MainStack.Screen name={HOME_ROUTE.HOME_USER_LIST} component={HomeUserListScreen} />
-        <MainStack.Screen name={HOME_ROUTE.CHECK_IN} component={CheckInScreen} />
-        <MainStack.Screen name={HOME_ROUTE.NOTIFICATION} component={NotificationScreen} />
-        <MainStack.Screen name={HOME_ROUTE.NEW_LIST} component={NewsListScreen} />
-        <MainStack.Screen name={HOME_ROUTE.NEW_DETAIL} component={NewsDetailScreen} />
-        <MainStack.Screen name={HOME_ROUTE.ORDER_DEFAULT} component={OrderDefaultScreen} />
-        <MainStack.Screen name={HOME_ROUTE.MOBILE_ORDER} component={MobileOrderScreen} />
-        <MainStack.Screen name={HOME_ROUTE.CART} component={CartScreen} />
-        <MainStack.Screen name={HOME_ROUTE.EDIT_ORDER} component={EditOrderScreen} />
-        <MainStack.Screen name={HOME_ROUTE.NOTIFICATION_DETAIL} component={NotificationDetailScreen} />
-    </MainStack.Navigator>
-);
-
-const OrderStack = () => (
-    <MainStack.Navigator headerMode={'none'} screenOptions={navigationConfigs} keyboardHandlingEnabled={isIos}>
-        <MainStack.Screen name={ORDER_ROUTE.ROOT} component={MenuScreen} />
-        <MainStack.Screen name={ORDER_ROUTE.DETAIL_MEAL} component={DetailMealScreen} />
-        <MainStack.Screen name={ORDER_ROUTE.CART} component={CartScreen} />
-        <MainStack.Screen name={ORDER_ROUTE.COUPON_LIST} component={CouponListScreen} />
-        <MainStack.Screen name={ORDER_ROUTE.DETAIL_SHOP} component={DetailShopScreen} />
-        <MainStack.Screen name={ORDER_ROUTE.COUPON_DETAIL} component={DetailCouponOrderScreen} />
-        <MainStack.Screen name={ORDER_ROUTE.ORDER_QR_CODE} component={OrderQrCodeScreen} />
-    </MainStack.Navigator>
-);
-
-const StampStack = () => (
-    <MainStack.Navigator headerMode={'none'} screenOptions={navigationConfigs} keyboardHandlingEnabled={isIos}>
-        <MainStack.Screen name={STAMP_ROUTE.ROOT} component={StampCardScreen} />
-        <MainStack.Screen name={STAMP_ROUTE.STAMP_CARD_DETAIL} component={StampCardDetailScreen} />
-        <MainStack.Screen name={STAMP_ROUTE.EXCHANGE_COUPON} component={ExchangeCouponListScreen} />
-        <MainStack.Screen name={COUPON_ROUTE.DETAIL_COUPON} component={DetailCouponScreen} />
-    </MainStack.Navigator>
-);
-
-const CouponStack = () => (
-    <MainStack.Navigator headerMode={'none'} screenOptions={navigationConfigs} keyboardHandlingEnabled={isIos}>
-        <MainStack.Screen name={COUPON_ROUTE.ROOT} component={TabCouponListScreen} />
-        <MainStack.Screen name={COUPON_ROUTE.DETAIL_COUPON} component={DetailCouponScreen} />
-    </MainStack.Navigator>
-);
-
-const SettingStack = () => (
-    <MainStack.Navigator headerMode={'none'} screenOptions={navigationConfigs} keyboardHandlingEnabled={isIos}>
-        <MainStack.Screen name={SETTING_ROUTE.ROOT} component={SettingScreen} />
-        <MainStack.Screen name={SETTING_ROUTE.MY_PAGE} component={MyPageScreen} />
-        <MainStack.Screen name={SETTING_ROUTE.EDIT_PROFILE} component={EditProfileScreen} />
-        <MainStack.Screen name={SETTING_ROUTE.ORDER_DEFAULT} component={OrderDefaultSettingScreen} />
-        <MainStack.Screen name={SETTING_ROUTE.ORDER_HISTORY} component={OrderHistoryScreen} />
-        <MainStack.Screen name={SETTING_ROUTE.CONTACT} component={ContactScreen} />
-        <MainStack.Screen name={SETTING_ROUTE.SETTING_NOTIFICATION} component={SettingNotificationScreen} />
-        <MainStack.Screen name={SETTING_ROUTE.ORDER_HISTORY_DETAIL} component={OrderHistoryDetailScreen} />
-        <MainStack.Screen name={AUTHENTICATE_ROUTE.CHANGE_PASS} component={ChangePassword} />
-        <MainStack.Screen name={SETTING_ROUTE.DEFAULT_ORDER_DETAIL} component={DefaultOrderDetailScreen} />
-        <MainStack.Screen name={SETTING_ROUTE.ORDER_SAVE} component={OrderSave} />
-        <MainStack.Screen name={AUTHENTICATE_ROUTE.SEND_OTP_FORGOT_PASS} component={SendOtpForgotPass} />
-        <MainStack.Screen name={HOME_ROUTE.EDIT_ORDER} component={EditOrderScreen} />
-        <MainStack.Screen name={ORDER_ROUTE.ORDER_QR_CODE} component={OrderQrCodeScreen} />
-        <MainStack.Screen name={ORDER_ROUTE.COUPON_LIST} component={CouponListScreen} />
-        <MainStack.Screen name={HOME_ROUTE.CART} component={CartScreen} />
-    </MainStack.Navigator>
-);
 
 const TabBarIcon = ({ focused, source }: any) => {
     return (
@@ -145,6 +25,7 @@ const TabBarIcon = ({ focused, source }: any) => {
         />
     );
 };
+
 const MainTabContainer = () => {
     // const badgeCount: any = useSelector((state: any) => state.badgeCount);
     const { t } = useTranslation();
@@ -153,35 +34,35 @@ const MainTabContainer = () => {
         {
             name: HOME_ROUTE.ROOT,
             title: t('tab.home'),
-            component: HomeStack,
+            component: HomeScreen,
             icon: Images.icons.tab.home,
             tabBarIcon: (iconProps: any) => <TabBarIcon {...iconProps} source={Images.icons.tab.home} />,
         },
         {
             name: STAMP_ROUTE.ROOT,
             title: t('tab.stamp'),
-            component: StampStack,
+            component: StampCardScreen,
             icon: Images.icons.tab.stamp_card,
             tabBarIcon: (iconProps: any) => <TabBarIcon {...iconProps} source={Images.icons.tab.stamp_card} />,
         },
         {
             name: ORDER_ROUTE.ROOT,
             title: t('tab.order'),
-            component: OrderStack,
+            component: MenuScreen,
             icon: Images.icons.tab.bag,
             tabBarIcon: (iconProps: any) => <TabBarIcon {...iconProps} source={Images.icons.tab.bag} />,
         },
         {
             name: COUPON_ROUTE.ROOT,
             title: t('tab.coupon'),
-            component: CouponStack,
+            component: TabCouponListScreen,
             icon: Images.icons.tab.coupon,
             tabBarIcon: (iconProps: any) => <TabBarIcon {...iconProps} source={Images.icons.tab.coupon} />,
         },
         {
             name: SETTING_ROUTE.ROOT,
             title: t('tab.setting'),
-            component: SettingStack,
+            component: SettingScreen,
             icon: Images.icons.tab.user,
             tabBarIcon: (iconProps: any) => <TabBarIcon {...iconProps} source={Images.icons.tab.user} />,
         },
@@ -214,58 +95,12 @@ const MainTabContainer = () => {
             }}
         >
             {ArrayTabs.map((item, index) => (
-                <MainTab.Screen key={`${index}`} options={{ ...item }} {...item} />
+                <AnimateTabs.Screen key={`${index}`} options={{ ...item }} {...item} />
             ))}
         </AnimateTabs.Navigator>
     );
 };
 
-const styles = ScaledSheet.create({
-    tabStyleIos: {
-        borderColor: Themes.COLORS.red,
-        borderWidth: 0.6,
-        borderTopRightRadius: 20,
-        borderTopLeftRadius: 20,
-        shadowOpacity: 0.75,
-        shadowRadius: 5,
-        shadowColor: Themes.COLORS.red,
-        shadowOffset: { height: 0, width: 0 },
-    },
-    tabStyleAndroid: {
-        borderColor: Themes.COLORS.red,
-        borderWidth: 1,
-        borderTopRightRadius: 20,
-        borderTopLeftRadius: 20,
-        elevation: 10,
-        shadowRadius: 2,
-        position: 'relative',
-        shadowColor: Themes.COLORS.red,
-        backgroundColor: 'white',
-        overflow: 'hidden',
-        shadowOpacity: 0.75,
-    },
-    labelStyle: {
-        fontWeight: 'normal',
-        marginLeft: 3,
-        fontSize: 12,
-    },
-    wrapperBadge: {
-        backgroundColor: Themes.COLORS.secondary,
-        width: 22,
-        height: 22,
-        borderRadius: 20,
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderWidth: 2,
-        borderColor: Themes.COLORS.white,
-        position: 'absolute',
-        top: -10,
-        right: -10,
-    },
-    textBadge: {
-        color: Themes.COLORS.white,
-        fontSize: 13,
-    },
-});
+const styles = ScaledSheet.create({});
 
 export default MainTabContainer;

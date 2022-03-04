@@ -1,6 +1,7 @@
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledText } from 'components/base';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
+import CouponItem from 'components/common/CouponItem';
 import StyledHeader from 'components/common/StyledHeader';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
@@ -9,7 +10,6 @@ import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { listCouponFake, MODAL_ID } from 'utilities/staticData';
-import CouponItem from './components/CouponItem';
 import { OrderChild } from './components/OrderItem';
 
 const data = [
