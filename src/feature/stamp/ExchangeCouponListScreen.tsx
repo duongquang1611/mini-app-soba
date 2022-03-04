@@ -3,10 +3,10 @@ import * as languageText from 'assets/locates/jp';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledList, StyledText } from 'components/base';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
+import CouponItem from 'components/common/CouponItem';
 import DashView from 'components/common/DashView';
 import PopupConfirm from 'components/common/PopupConfirm';
 import StyledHeader from 'components/common/StyledHeader';
-import CouponItem from 'feature/coupon/components/CouponItem';
 import { COUPON_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React from 'react';
@@ -44,6 +44,7 @@ const ExchangeCouponListScreen = () => {
                     dismissModal(id);
                     onCancel?.();
                 }}
+                nonPaddingVertical={type === POPUP_TYPE.SUCCESS}
                 {...dataText}
             />,
             {
@@ -92,7 +93,7 @@ const ExchangeCouponListScreen = () => {
         <View style={s.container}>
             <StyledHeader title={'exchangeCoupon.title'} />
             <SeparatorView />
-            <StampItem item={itemStamp} customStyle={s.customStyleItemStamp} />
+            <StampItem item={itemStamp} customStyle={s.customStyleItemStamp} animation />
             <SeparatorView />
             <View style={s.wrapTextCanExchange}>
                 <StyledIcon size={24} source={Images.icons.couponBlue} />

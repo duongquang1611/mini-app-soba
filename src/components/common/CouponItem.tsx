@@ -2,18 +2,15 @@ import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
 import React from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { View } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { ScaledSheet } from 'react-native-size-matters';
 
-const CouponItem = (props: any) => {
-    const { customStyle, item, canUse, goToDetail } = props;
-
-    const onPressItem = () => {
-        goToDetail?.(item);
-    };
+export const CouponItem = (props: any) => {
+    const { item, canUse, goToDetail } = props;
 
     return (
-        <StyledTouchable customStyle={[styles.couponItem, customStyle]} onPress={onPressItem}>
+        <StyledTouchable customStyle={styles.couponItem} onPress={goToDetail}>
             <StyledImage source={{ uri: item?.img }} customStyle={styles.couponImage} />
             <View style={styles.couponName}>
                 <StyledText originValue={item.name} customStyle={styles.title} />
@@ -35,9 +32,12 @@ const CouponItem = (props: any) => {
     );
 };
 
+export default CouponItem;
+
 const styles = ScaledSheet.create({
     container: {
         flex: 1,
+
         backgroundColor: Themes.COLORS.lightGray,
     },
     titleCoupon: {
@@ -48,9 +48,11 @@ const styles = ScaledSheet.create({
     },
     couponItem: {
         width: '100%',
+        marginVertical: '2@vs',
         flexDirection: 'row',
         justifyContent: 'space-between',
         paddingVertical: '10@vs',
+        marginBottom: '3@vs',
         backgroundColor: Themes.COLORS.white,
         paddingHorizontal: '20@s',
     },
@@ -71,6 +73,7 @@ const styles = ScaledSheet.create({
         color: Themes.COLORS.primary,
         fontWeight: 'bold',
         marginRight: '5@s',
+        fontSize: '12@ms0.3',
     },
     title: {
         fontSize: '16@ms0.3',
@@ -95,5 +98,3 @@ const styles = ScaledSheet.create({
         right: '-20@s',
     },
 });
-
-export default CouponItem;

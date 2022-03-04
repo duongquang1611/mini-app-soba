@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
-import { StyledImage, StyledText } from 'components/base';
+import { StyledImage, StyledText, StyledTouchable } from 'components/base';
 import React, { memo } from 'react';
-import { View } from 'react-native';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { DDMM, formatDate } from 'utilities/format';
 import { staticValue } from 'utilities/staticData';
@@ -12,11 +12,19 @@ const itemHeight = 67;
 const separatorBottom = 10;
 const separatorTop = 10;
 
-const CouponExchangeItem = ({ item, numCol }: any) => {
-    const { giftType, status, date } = item;
+const CouponExchangeItem = ({ item, numCol, onPress }: any) => {
+    const { giftType, status, date, on } = item;
+
+    const handlePressItem = () => {
+        onPress?.();
+    };
+
     return (
-        <View
-            style={[
+        <StyledTouchable
+            onPress={handlePressItem}
+            activeOpacity={0.9}
+            disabled={!giftType}
+            customStyle={[
                 s.wrapItem,
                 {
                     backgroundColor:
@@ -50,12 +58,11 @@ const CouponExchangeItem = ({ item, numCol }: any) => {
                     height: giftType === 1 ? '100%' : scale(numCol > staticValue.COLUMNS_COUPON_EXCHANGE[1] ? 32 : 40),
                     marginBottom: giftType === 2 ? scale(7) : 0,
                 }}
-                // resizeMode={'stretch'}
             />
             {status && !giftType && (
                 <StyledText originValue={formatDate(date, DDMM)} isBlack customStyle={s.textDate} />
             )}
-        </View>
+        </StyledTouchable>
     );
 };
 
@@ -66,6 +73,7 @@ const s = ScaledSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         height: scale(itemHeight),
+        overflow: 'hidden',
     },
     listCoupon: {
         justifyContent: 'space-between',

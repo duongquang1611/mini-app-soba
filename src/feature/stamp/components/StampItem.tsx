@@ -3,53 +3,59 @@ import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
 import React from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
+import * as Animatable from 'react-native-animatable';
 import { ScaledSheet } from 'react-native-size-matters';
 import { formatDate } from 'utilities/format';
+import { staticValue } from 'utilities/staticData';
 import StampTypeView from './StampTypeView';
 
 interface IProps {
     item: any;
     onPress?: any;
     customStyle?: StyleProp<ViewStyle>;
+    containerStyle?: StyleProp<ViewStyle>;
     caseType?: number;
+    animation?: boolean;
 }
 
 const StampItem = (props: IProps) => {
-    const { onPress, item, customStyle, caseType } = props;
+    const { onPress, item, customStyle, caseType, containerStyle, animation = false } = props;
     const { url, name, start, end, used, status, count } = item;
 
     return (
-        <StyledTouchable customStyle={[styles.container, customStyle]} onPress={onPress} disabled={!onPress}>
-            <StyledImage source={{ uri: url }} customStyle={styles.imgStamp} />
-            <View style={styles.content}>
-                <StyledText originValue={name} customStyle={styles.nameStamp} />
-                <StyledText
-                    i18nText={caseType === 1 ? 'stampDetail.expired' : 'stamp.rangeDate'}
-                    i18nParams={{ start: formatDate(start), end: formatDate(end) }}
-                    customStyle={styles.textRangeDate}
-                />
+        <Animatable.View style={containerStyle} animation={animation ? staticValue.ANIMATION_ITEM : ''} useNativeDriver>
+            <StyledTouchable customStyle={[styles.container, customStyle]} onPress={onPress} disabled={!onPress}>
+                <StyledImage source={{ uri: url }} customStyle={styles.imgStamp} />
+                <View style={styles.content}>
+                    <StyledText originValue={name} customStyle={styles.nameStamp} />
+                    <StyledText
+                        i18nText={caseType === 1 ? 'stampDetail.expired' : 'stamp.rangeDate'}
+                        i18nParams={{ start: formatDate(start), end: formatDate(end) }}
+                        customStyle={styles.textRangeDate}
+                    />
 
-                <View style={styles.wrapCount}>
-                    {used ? (
-                        <StyledText i18nText={''} customStyle={styles.textCount} />
-                    ) : (
-                        <>
-                            <StyledText
-                                i18nText={caseType === 1 ? 'stampDetail.numberOfRemain' : 'stamp.titleCount'}
-                                customStyle={styles.textTitleCount}
-                            />
-                            <StyledText
-                                i18nText={'stamp.count'}
-                                i18nParams={{ count }}
-                                customStyle={styles.textCount}
-                            />
-                        </>
-                    )}
+                    <View style={styles.wrapCount}>
+                        {used ? (
+                            <StyledText i18nText={''} customStyle={styles.textCount} />
+                        ) : (
+                            <>
+                                <StyledText
+                                    i18nText={caseType === 1 ? 'stampDetail.numberOfRemain' : 'stamp.titleCount'}
+                                    customStyle={styles.textTitleCount}
+                                />
+                                <StyledText
+                                    i18nText={'stamp.count'}
+                                    i18nParams={{ count }}
+                                    customStyle={styles.textCount}
+                                />
+                            </>
+                        )}
+                    </View>
                 </View>
-            </View>
-            <StampTypeView status={status} />
-            {!!used && <StyledIcon source={Images.icons.stampUsed} size={90} customStyle={styles.stampUsed} />}
-        </StyledTouchable>
+                <StampTypeView status={status} />
+                {!!used && <StyledIcon source={Images.icons.stampUsed} size={90} customStyle={styles.stampUsed} />}
+            </StyledTouchable>
+        </Animatable.View>
     );
 };
 

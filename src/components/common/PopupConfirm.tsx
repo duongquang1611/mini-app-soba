@@ -15,6 +15,7 @@ interface IProps {
     textButtonOk?: string;
     onOk?: any;
     onCancel?: any;
+    nonPaddingVertical?: boolean;
 }
 const IMAGE_SIZE = [177, 130, 100];
 const IMAGE_PATH = [Images.icons.confirm, Images.icons.success, Images.icons.error];
@@ -29,6 +30,7 @@ const PopupConfirm = (props: IProps) => {
         textButtonOk = 'common.yes',
         onCancel,
         onOk,
+        nonPaddingVertical,
     } = props;
 
     return (
@@ -46,8 +48,8 @@ const PopupConfirm = (props: IProps) => {
                             colors={['white', 'white']}
                             customStyle={styles.cancelBtn}
                             onPress={onCancel}
-                            customStyleText={styles.cancelBtnText}
-                            customContentStyle={styles.nonPaddingVer}
+                            customStyleText={[styles.cancelBtnText, nonPaddingVertical && styles.lineHeightText]}
+                            customContentStyle={nonPaddingVertical && styles.nonPaddingVer}
                         />
                         <View style={styles.separator} />
                     </>
@@ -56,8 +58,8 @@ const PopupConfirm = (props: IProps) => {
                     title={textButtonOk}
                     customStyle={styles.okBtn}
                     onPress={onOk}
-                    customStyleText={styles.okBtnText}
-                    customContentStyle={styles.nonPaddingVer}
+                    customStyleText={[styles.okBtnText, nonPaddingVertical && styles.lineHeightText]}
+                    customContentStyle={nonPaddingVertical && styles.nonPaddingVer}
                 />
             </View>
         </View>
@@ -93,14 +95,15 @@ const styles = ScaledSheet.create({
     nonPaddingVer: {
         paddingVertical: 0,
     },
+    lineHeightText: {
+        lineHeight: '25@vs',
+    },
     cancelBtnText: {
         color: Themes.COLORS.textPrimary,
         fontSize: '16@ms0.3',
         textAlign: 'center',
-        lineHeight: '25@vs',
     },
     okBtnText: {
-        lineHeight: '25@vs',
         fontSize: '16@ms0.3',
         textAlign: 'center',
     },

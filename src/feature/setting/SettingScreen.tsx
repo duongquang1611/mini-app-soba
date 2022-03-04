@@ -5,7 +5,7 @@ import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import LinearView from 'components/common/LinearView';
-import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
+import { SETTING_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React from 'react';
 import { ImageBackground, View } from 'react-native';
@@ -64,19 +64,19 @@ const SettingScreen = () => {
         Picker.show();
     };
     const goToMyPage = () => {
-        navigate(TAB_NAVIGATION_ROOT.SETTING_ROUTE.EDIT_PROFILE);
+        navigate(SETTING_ROUTE.EDIT_PROFILE);
     };
     const goToHistory = () => {
-        navigate(TAB_NAVIGATION_ROOT.SETTING_ROUTE.ORDER_HISTORY);
+        navigate(SETTING_ROUTE.ORDER_HISTORY);
     };
     const goToOrderDefault = () => {
-        navigate(TAB_NAVIGATION_ROOT.SETTING_ROUTE.ORDER_DEFAULT);
+        navigate(SETTING_ROUTE.ORDER_DEFAULT_SETTING);
     };
     const goToNotification = () => {
-        navigate(TAB_NAVIGATION_ROOT.SETTING_ROUTE.SETTING_NOTIFICATION);
+        navigate(SETTING_ROUTE.SETTING_NOTIFICATION);
     };
     const goToContact = () => {
-        navigate(TAB_NAVIGATION_ROOT.SETTING_ROUTE.CONTACT);
+        navigate(SETTING_ROUTE.CONTACT);
     };
     const logout = () => {
         AuthenticateService.logOut();

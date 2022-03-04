@@ -9,7 +9,7 @@ import { apiLocal, ERRORS } from 'utilities/staticData';
 import i18next from 'utilities/i18next';
 import { store } from 'app-redux/store';
 
-const AUTH_URL_REFRESH_TOKEN = `${Config.API_URL}auth/refresh-token`;
+const AUTH_URL_REFRESH_TOKEN = `${Config.API_URL}/auth/request-access-token`;
 let hasAnyNetworkDialogShown = false;
 
 const request = axios.create({
@@ -36,11 +36,13 @@ const processQueue = (error: any, token: string | null | undefined = null) => {
 const rejectError = async (err: string, validNetwork: boolean, url: string) => {
     // Avoid being null
     if (validNetwork !== false) {
+        logger('rejectError', false, { url, err });
         return Promise.reject(i18next.t(err));
     }
     const getKey = apiLocal.find((item) => item.url === url)?.key;
     const dataResult: any = store.getState();
     if (getKey && dataResult[getKey]) return Promise.resolve(dataResult[getKey]);
+    logger('rejectError', false, 'network error');
     return Promise.reject(i18next.t(ERRORS.network));
 };
 
@@ -110,7 +112,7 @@ request.interceptors.response.use(
                     });
                     originalRequest.headers.Authorization = `Bearer ${queuePromise.token}`;
                     return request(originalRequest);
-                } catch (err) {
+                } catch (err: any) {
                     return rejectError(err, validNetwork, url);
                 }
             }
@@ -127,7 +129,7 @@ request.interceptors.response.use(
                 originalRequest.headers.Authorization = `Bearer ${token}`;
                 processQueue(null, token);
                 return request(originalRequest);
-            } catch (err) {
+            } catch (err: any) {
                 // Logout here
                 AuthenticateService.logOut();
                 processQueue(err, null);

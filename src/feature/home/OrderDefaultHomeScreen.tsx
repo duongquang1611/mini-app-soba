@@ -36,7 +36,7 @@ const OrderDefaultItem = (data: any) => {
         </TouchableOpacity>
     );
 };
-const OrderDefaultScreen = () => {
+const OrderDefaultHomeScreen = () => {
     const edit = () => {
         navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.EDIT_ORDER);
     };
@@ -71,7 +71,7 @@ const OrderDefaultScreen = () => {
     );
 };
 
-export default OrderDefaultScreen;
+export default OrderDefaultHomeScreen;
 
 const styles = ScaledSheet.create({
     container: {

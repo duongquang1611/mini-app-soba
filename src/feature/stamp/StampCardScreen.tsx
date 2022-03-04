@@ -16,10 +16,9 @@ import GuideStamp from './components/GuideStamp';
 import StampList from './StampList';
 
 const StampCardScreen = () => {
-    const [index, setIndex] = useState(0);
-    const [positionModalize, setPositionModalize] = useState();
     const { t } = useTranslation();
     const modalize = ModalizeManager();
+
     const routes = [
         { key: 'stampCanUse', title: t('stamp.canUse') },
         { key: 'stampUsed', title: t('stamp.used') },
@@ -28,10 +27,6 @@ const StampCardScreen = () => {
         stampCanUse: () => <StampList canUse={true} showEarnStamp={showEarnStamp} />,
         stampUsed: () => <StampList showEarnStamp={showEarnStamp} />,
     });
-
-    const onPositionChange = (data: any) => {
-        setPositionModalize(data);
-    };
 
     const showEarnStamp = () => {
         modalize.show(

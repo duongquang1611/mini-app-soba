@@ -10,6 +10,12 @@ export const staticValue = {
         right: 10,
     },
     COLUMNS_COUPON_EXCHANGE: [3, 5, 7],
+    THROTTLE_TIME: 500,
+    CONFIG_THROTTLE: { trailing: false },
+    ANIMATION_ITEM: {
+        0: { opacity: 0, translateY: -100, scale: 0.2 },
+        1: { opacity: 1, translateY: 0, scale: 1 },
+    },
 };
 
 export const ERRORS = {
@@ -441,3 +447,8 @@ export const stepGuide = [
         icon: Images.icons.step3,
     },
 ];
+
+export const IMG_URL = {
+    IMG_1: 'https://kenh14cdn.com/203336854389633024/2021/9/1/photo-1-16304832141231584345047.jpg',
+    IMG_2: 'https://static.b52.club/uploads/2020/10/melody-marks-la-ai.jpg',
+};

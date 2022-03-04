@@ -1,4 +1,5 @@
 import { StyledList } from 'components/base';
+import CouponItem from 'components/common/CouponItem';
 import DashView from 'components/common/DashView';
 import { COUPON_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
@@ -6,7 +7,6 @@ import React from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import { listCouponFake } from 'utilities/staticData';
-import CouponItem from './CouponItem';
 
 interface CouponTabProps {
     canUse?: boolean;
