@@ -100,8 +100,8 @@ const styles = ScaledSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         width: Metrics.screenWidth,
-        borderTopRightRadius: 15,
-        borderTopLeftRadius: 15,
+        borderTopRightRadius: 10,
+        borderTopLeftRadius: 10,
     },
     chart: {
         width: '164@s',

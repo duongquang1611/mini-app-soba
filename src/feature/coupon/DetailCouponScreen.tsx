@@ -4,7 +4,7 @@ import { Themes } from 'assets/themes';
 import { StyledButton, StyledIcon, StyledImage, StyledText } from 'components/base';
 import StyledHeader from 'components/common/StyledHeader';
 import StampItem from 'feature/stamp/components/StampItem';
-import React from 'react';
+import React, { useState } from 'react';
 import { ImageBackground, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { color } from 'react-native-reanimated';
@@ -15,11 +15,14 @@ import CouponContentView from './components/CouponContentView';
 const SeparatorView = () => <View style={styles.separator} />;
 
 const DetailCouponScreen = (props: any) => {
-    const { canUse, itemStamp, titleButton, exchangeCoupon } = props?.route?.params;
+    const { canUse, itemStamp, titleButton, exchangeCoupon, disabled: disabledProps = false } = props?.route?.params;
+    const [disabled, setDisabled] = useState(disabledProps);
 
     const handleUseCoupon = () => {
         if (exchangeCoupon) {
-            exchangeCoupon?.();
+            exchangeCoupon?.({}, () => {
+                setDisabled(true);
+            });
         } else {
             console.log('use coupon');
         }
@@ -38,7 +41,7 @@ const DetailCouponScreen = (props: any) => {
             <CouponContentView canUse={canUse} />
             {canUse && (
                 <View style={styles.buttonView}>
-                    <StyledButton title={titleButton || 'クーポン使用'} onPress={handleUseCoupon} />
+                    <StyledButton title={titleButton || 'クーポン使用'} onPress={handleUseCoupon} disabled={disabled} />
                 </View>
             )}
         </View>

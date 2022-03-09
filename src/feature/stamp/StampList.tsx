@@ -1,8 +1,10 @@
+import { getStampList } from 'api/modules/api-app/stamp';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledList, StyledText, StyledTouchable } from 'components/base';
 import DashView from 'components/common/DashView';
 import LinearView from 'components/common/LinearView';
+import usePaging from 'hooks/usePaging';
 import { STAMP_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React from 'react';
@@ -18,6 +20,11 @@ interface StampListProps {
 
 const StampList = (props: StampListProps) => {
     const { canUse = false, showEarnStamp } = props;
+    const { pagingData, onRefresh } = usePaging(getStampList, {
+        type: Number(canUse),
+    });
+    const { list, refreshing } = pagingData;
+
     const goToDetail = (item: any) => {
         navigate(STAMP_ROUTE.STAMP_CARD_DETAIL, { item });
     };
@@ -38,10 +45,12 @@ const StampList = (props: StampListProps) => {
                 </>
             ) : null}
             <StyledList
-                data={STAMP_DATA.filter((item: any) => item.used === !canUse)}
+                data={(list.length > 0 ? list : STAMP_DATA).filter((item: any) => item.used === !canUse)}
                 renderItem={renderItemStamp}
                 ItemSeparatorComponent={DashView}
                 customStyle={styles.listStamp}
+                refreshing={refreshing}
+                onRefresh={onRefresh}
             />
         </View>
     );

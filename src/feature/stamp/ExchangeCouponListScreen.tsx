@@ -1,3 +1,4 @@
+import { postExchangeCoupon } from 'api/modules/api-app/stamp';
 import Images from 'assets/images';
 import * as languageText from 'assets/locates/jp';
 import { Themes } from 'assets/themes';
@@ -20,13 +21,15 @@ const itemStamp = createStampItem();
 
 const ExchangeCouponListScreen = () => {
     const modalize = ModalizeManager();
-    const goToDetail = (item: any) => {
+
+    const goToDetail = (item: any, disabled = false) => {
         navigate(COUPON_ROUTE.DETAIL_COUPON, {
             item,
             canUse: true,
             itemStamp,
             titleButton: 'exchangeCoupon.btnExchange',
             exchangeCoupon,
+            disabled,
         });
     };
 
@@ -56,24 +59,40 @@ const ExchangeCouponListScreen = () => {
         );
     };
 
-    const exchangeCoupon = (item: any) => {
+    const exchangeCoupon = (item: any, cb?: () => any) => {
         console.log(item);
         showPopUpConfirm(
             MODAL_ID.EXCHANGE_COUPON_CONFIRM,
             POPUP_TYPE.CONFIRM,
             languageText?.default?.exchangeCoupon?.confirm,
-            onConfirmOk,
+            () => onConfirmOk(cb),
         );
     };
 
-    const onConfirmOk = () => {
+    const onConfirmOk = async (cb?: () => any) => {
+        try {
+            const res = await postExchangeCoupon({
+                amount: 5,
+                couponId: 1,
+            });
+            console.log('file: ExchangeCouponListScreen.tsx -> line 75 -> onConfirmOk -> res', res);
+            cb?.();
+        } catch (error) {
+            cb?.();
+            console.log('file: ExchangeCouponListScreen.tsx -> line 77 -> onConfirmOk -> error', error);
+        }
         modalize.dismiss(MODAL_ID.EXCHANGE_COUPON_CONFIRM, () => {
             if (Math.round(Math.random())) {
                 showPopUpConfirm(
                     MODAL_ID.EXCHANGE_COUPON_SUCCESS,
                     POPUP_TYPE.SUCCESS,
                     languageText?.default?.exchangeCoupon?.success,
-                    () => dismissModal(MODAL_ID.EXCHANGE_COUPON_SUCCESS),
+                    () => {
+                        dismissModal(MODAL_ID.EXCHANGE_COUPON_SUCCESS);
+                        if (typeof cb !== 'function') {
+                            goToDetail({}, true);
+                        }
+                    },
                 );
             } else
                 showPopUpConfirm(
@@ -86,7 +105,7 @@ const ExchangeCouponListScreen = () => {
     };
 
     const renderItem = ({ item }: any) => {
-        return <CouponItem canUse={true} item={item} goToDetail={goToDetail} />;
+        return <CouponItem canUse={true} item={item} goToDetail={goToDetail} handleUseCoupon={exchangeCoupon} />;
     };
 
     return (

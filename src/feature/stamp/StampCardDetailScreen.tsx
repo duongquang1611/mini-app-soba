@@ -1,16 +1,17 @@
+import { getDetailStamp } from 'api/modules/api-app/stamp';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledText, StyledTouchable } from 'components/base';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledHeader from 'components/common/StyledHeader';
 import CouponContentView from 'feature/coupon/components/CouponContentView';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { MODAL_ID } from 'utilities/staticData';
 import HistoryExchangeModal from './components/HistoryExchangeModal';
-import ListHistoryCouponExchange from './components/ListHistoryCouponExchange';
 import StampItem from './components/StampItem';
+import StampTickList from './components/StampTickList';
 
 const StampNumberView = ({ title, count }: any) => {
     return (
@@ -24,7 +25,23 @@ const StampNumberView = ({ title, count }: any) => {
 const StampCardDetailScreen = (props: any) => {
     const modalize = ModalizeManager();
     const { item } = props?.route?.params || {};
+    const [stampDetail, setStampDetail] = useState(item);
     const [caseType, setCaseType] = useState(1);
+    const { amount, usedAmount } = stampDetail;
+
+    useEffect(() => {
+        getDetailStampData();
+    }, []);
+
+    const getDetailStampData = async () => {
+        try {
+            const res = await getDetailStamp(item.id);
+            setStampDetail(res);
+            console.log('file: StampCardDetailScreen.tsx -> line 40 -> getDetailStampData -> res', res);
+        } catch (error) {
+            console.log('file: StampCardDetailScreen.tsx -> line 42 -> getDetailStampData -> error', error);
+        }
+    };
 
     const changeCaseType = () => {
         setCaseType(caseType + 1 > 3 ? 1 : caseType + 1);
@@ -72,11 +89,11 @@ const StampCardDetailScreen = (props: any) => {
                     nestedScrollEnabled
                     showsVerticalScrollIndicator={false}
                 >
-                    <StampItem item={item} animation customStyle={styles.customItemStyle} caseType={caseType} />
+                    <StampItem item={stampDetail} animation customStyle={styles.customItemStyle} caseType={caseType} />
                     <View style={styles.wrapContentHistory}>
                         <View style={styles.headerListContent}>
-                            <StampNumberView title={'stampDetail.numberOfCollect'} count={20} />
-                            <StampNumberView title={'stampDetail.numberOfUse'} count={5} />
+                            <StampNumberView title={'stampDetail.numberOfCollect'} count={amount} />
+                            <StampNumberView title={'stampDetail.numberOfUse'} count={usedAmount} />
                             <StyledTouchable onPress={showHistory} customStyle={styles.btnHistory}>
                                 <StyledIcon source={Images.icons.history} size={15} />
                                 <StyledText
@@ -87,7 +104,11 @@ const StampCardDetailScreen = (props: any) => {
                                 />
                             </StyledTouchable>
                         </View>
-                        <ListHistoryCouponExchange caseType={caseType} onPressItemHistory={showModalGetCoupon} />
+                        <StampTickList
+                            caseType={caseType}
+                            onPressItemHistory={showModalGetCoupon}
+                            stampDetail={stampDetail}
+                        />
                     </View>
                     <StyledText
                         originValue={

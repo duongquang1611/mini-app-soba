@@ -48,7 +48,7 @@ const usePaging = (requestPaging: (config: AxiosRequestConfig) => Promise<any>, 
     };
 
     // config request paging
-    const runRequest = async (requestPageIndex: number, pageSize?: number, otherParams?: any) => {
+    const runRequest = async (requestPageIndex: number, take?: number, otherParams?: any) => {
         setPagingData({
             ...pagingData,
             noMore: true,
@@ -56,7 +56,7 @@ const usePaging = (requestPaging: (config: AxiosRequestConfig) => Promise<any>, 
         const res = await requestPaging({
             params: {
                 pageIndex: requestPageIndex,
-                pageSize: pageSize || SIZE_LIMIT,
+                take: take || SIZE_LIMIT,
                 ...otherParams,
             },
         });

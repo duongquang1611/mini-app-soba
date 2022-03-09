@@ -3,11 +3,10 @@ import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
 import React from 'react';
 import { View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { ScaledSheet } from 'react-native-size-matters';
 
 export const CouponItem = (props: any) => {
-    const { item, canUse, goToDetail } = props;
+    const { item, canUse, goToDetail, handleUseCoupon } = props;
 
     return (
         <StyledTouchable customStyle={styles.couponItem} onPress={goToDetail}>
@@ -18,10 +17,10 @@ export const CouponItem = (props: any) => {
                     <StyledText originValue={item.time} customStyle={styles.time} />
                     {!canUse && item?.expired && <StyledText originValue={'有効期限切れ'} customStyle={styles.time} />}
                     {canUse && (
-                        <TouchableOpacity style={styles.row}>
+                        <StyledTouchable customStyle={styles.row} onPress={handleUseCoupon}>
                             <StyledText originValue={'クーポン使用'} customStyle={styles.useText} />
                             <StyledIcon source={Images.icons.next} size={20} />
-                        </TouchableOpacity>
+                        </StyledTouchable>
                     )}
                 </View>
                 {!canUse && !item?.expired && (
@@ -37,14 +36,7 @@ export default CouponItem;
 const styles = ScaledSheet.create({
     container: {
         flex: 1,
-
         backgroundColor: Themes.COLORS.lightGray,
-    },
-    titleCoupon: {
-        flexDirection: 'row',
-    },
-    iconCoupon: {
-        marginRight: '15@s',
     },
     couponItem: {
         width: '100%',
@@ -84,13 +76,6 @@ const styles = ScaledSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-    },
-    used: {
-        width: '50@s',
-        height: '50@s',
-        position: 'absolute',
-        right: 0,
-        top: 0,
     },
     stampUsed: {
         position: 'absolute',

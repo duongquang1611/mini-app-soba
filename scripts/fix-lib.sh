@@ -17,7 +17,3 @@ fi
 if [ ./react-native-image-crop-picker/ImageCropPicker.m ]; then
   cp ./react-native-image-crop-picker/ImageCropPicker.m ../node_modules/./react-native-image-crop-picker/ios/src/ImageCropPicker.m
 fi
-
-if [ ./react-native-animated-nav-tab-bar/index.js ]; then
-  cp ./react-native-animated-nav-tab-bar/index.js ../node_modules/react-native-animated-nav-tab-bar/dist/lib/index.js
-fi

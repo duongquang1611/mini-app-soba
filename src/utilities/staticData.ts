@@ -18,6 +18,11 @@ export const staticValue = {
     },
 };
 
+export const IMG_URL = {
+    IMG_1: 'https://kenh14cdn.com/203336854389633024/2021/9/1/photo-1-16304832141231584345047.jpg',
+    IMG_2: 'https://static.b52.club/uploads/2020/10/melody-marks-la-ai.jpg',
+};
+
 export const ERRORS = {
     default: 'common.error.unknown',
     network: 'common.error.network',
@@ -299,14 +304,30 @@ export const orderHistoryListFake = [
 export const createStampItem = (rd = Math.random()) => {
     return {
         id: rd,
-        name: `通常時ログイン用 ${Math.round(rd * 100)}`,
+        title: `通常時ログイン用 ${Math.round(rd * 100)}`,
         price: Math.round(rd * 2),
         status: Math.round(rd),
-        start: '02/01/2022',
-        end: '04/04/2022',
+        startDate: '2022-03-08',
+        endDate: '2022-03-08',
         used: Boolean(Math.round(Math.random())),
         count: Math.round(rd * 5),
-        url: 'https://kenh14cdn.com/203336854389633024/2021/9/1/photo-1-16304832141231584345047.jpg',
+        image: IMG_URL.IMG_1,
+        type: 0,
+        amount: 0,
+        usedAmount: 0,
+        box: 0,
+        stampTicks: [
+            {
+                id: 1,
+                date: '2022-03-08',
+            },
+        ],
+        coupons: [
+            {
+                id: 1,
+                position: 1,
+            },
+        ],
     };
 };
 
@@ -448,7 +469,4 @@ export const stepGuide = [
     },
 ];
 
-export const IMG_URL = {
-    IMG_1: 'https://kenh14cdn.com/203336854389633024/2021/9/1/photo-1-16304832141231584345047.jpg',
-    IMG_2: 'https://static.b52.club/uploads/2020/10/melody-marks-la-ai.jpg',
-};
+export const FAKER = {};

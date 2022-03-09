@@ -53,12 +53,12 @@ export default {
     // screens
     tab: {
         home: 'ホーム',
-        notification: '通知',
+        stamp: 'スタンプ',
+        order: '注文',
+        coupon: 'クーポン',
         setting: 'マイページ',
         account: 'アカウント',
-        order: '注文',
-        stamp: 'スタンプ',
-        coupon: 'クーポン',
+        notification: '通知',
     },
     authen: {
         login: {

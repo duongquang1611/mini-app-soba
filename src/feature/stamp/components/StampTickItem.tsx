@@ -12,7 +12,7 @@ const itemHeight = 67;
 const separatorBottom = 10;
 const separatorTop = 10;
 
-const CouponExchangeItem = ({ item, numCol, onPress }: any) => {
+const StampTickItem = ({ item, numCol, onPress }: any) => {
     const { giftType, status, date, on } = item;
 
     const handlePressItem = () => {
@@ -96,4 +96,4 @@ const s = ScaledSheet.create({
     },
 });
 
-export default memo(CouponExchangeItem);
+export default memo(StampTickItem);
