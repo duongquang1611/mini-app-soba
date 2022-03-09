@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { forgotPassword } from 'api/modules/api-app/authenticate';
+import { forgotPassword, getVerifyCode } from 'api/modules/api-app/authenticate';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledButton } from 'components/base';
@@ -28,25 +28,19 @@ const SendEmailScreen: FunctionComponent = ({ route }: any) => {
         formState: { isValid },
     } = form;
     const confirm = async ({ email }: any) => {
-        navigate(AUTHENTICATE_ROUTE.SEND_OTP_FORGOT_PASS, { email });
-        // try {
-        //     await forgotPassword(email);
-        //     navigate(AUTHENTICATE_ROUTE.SEND_OTP, { email });
-        // } catch (error) {
-        //     AlertMessage(error);
-        // }
+        try {
+            await getVerifyCode(email);
+            navigate(AUTHENTICATE_ROUTE.SEND_OTP, { email });
+        } catch (error) {
+            AlertMessage(error);
+        }
     };
     return (
-        <SafeAreaView style={styles.flex1}>
+        <View style={styles.container}>
             <StyledHeader title={'forgotPass'} />
-            <View style={styles.container}>
-                <KeyboardAwareScrollView
-                    style={styles.content}
-                    contentContainerStyle={styles.contentContainer}
-                    enableOnAndroid={true}
-                    enableAutomaticScroll={isIos}
-                    showsVerticalScrollIndicator={false}
-                >
+
+            <SafeAreaView style={styles.flex1}>
+                <View style={styles.container}>
                     <StyledInputForm
                         label={'email'}
                         name={'email'}
@@ -70,9 +64,9 @@ const SendEmailScreen: FunctionComponent = ({ route }: any) => {
                         customStyle={[styles.buttonSave, !isValid && { backgroundColor: 'lightgray' }]}
                         // disabled={!isValid}
                     />
-                </KeyboardAwareScrollView>
-            </View>
-        </SafeAreaView>
+                </View>
+            </SafeAreaView>
+        </View>
     );
 };
 

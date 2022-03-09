@@ -14,5 +14,21 @@ const NOTIFICATION_URL = {
     list: 'notifications',
     coupon: (id: string | number) => `notifications/${id}`,
 };
+const MENU_URL = {
+    menu: 'menu',
+    dish: (id: string | number) => `menu/${id}`,
+    cart: 'cart',
+};
+const HOME_URL = {
+    listNews: 'news',
+    newsDetail: (id: string | number) => `news/${id}`,
+    checkIn: 'checkin-order',
+    mobile: 'mobile-order',
+    orderDefault: 'default-order',
+};
+const COUPON_URL = {
+    list: 'coupon-list',
+    coupon: (id: string | number) => `coupon-list/${id}`,
+};
 
-export { COMMON_URL, STAMP_URL, NOTIFICATION_URL };
+export { COMMON_URL, STAMP_URL, NOTIFICATION_URL, COUPON_URL, HOME_URL, MENU_URL };

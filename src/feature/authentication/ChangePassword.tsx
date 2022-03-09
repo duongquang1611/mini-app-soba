@@ -19,7 +19,7 @@ import yupValidate from 'utilities/yupValidate';
 import * as yup from 'yup';
 
 const ChangePassword: FunctionComponent = ({ route }: any) => {
-    const { email, code } = route?.params || {};
+    const { email } = route?.params || {};
     const { t } = useTranslation();
 
     const passwordConfirmRef = useRef<TextInput>(null);
@@ -40,7 +40,7 @@ const ChangePassword: FunctionComponent = ({ route }: any) => {
 
     const confirm = async ({ password }: any) => {
         try {
-            await resetPassword(email, password, code);
+            await resetPassword(email, password);
             navigate(AUTHENTICATE_ROUTE.LOGIN);
         } catch (error) {
             AlertMessage(error);

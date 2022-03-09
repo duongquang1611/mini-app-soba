@@ -10,6 +10,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { coupon, listOrderDefault } from 'utilities/staticData';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Images from 'assets/images';
+import DashView from 'components/common/DashView';
 
 const ItemCoupon = (data: any) => {
     return (
@@ -49,7 +50,7 @@ export const OrderItem = (data: any) => {
                     </View>
                 </View>
             </View>
-            <View style={styles.dot} />
+            <DashView />
         </>
     );
 };
@@ -201,12 +202,6 @@ const styles = ScaledSheet.create({
     },
     icBag: {
         tintColor: Themes.COLORS.secondary,
-    },
-    dot: {
-        width: '100%',
-        borderWidth: 0.5,
-        borderStyle: 'dashed',
-        borderColor: Themes.COLORS.silver,
     },
     icCancel: {
         position: 'absolute',

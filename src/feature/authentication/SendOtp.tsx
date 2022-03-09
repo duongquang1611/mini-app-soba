@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { forgotPassword, getVerifyCode } from 'api/modules/api-app/authenticate';
+import { checkVerifyCode, forgotPassword, getVerifyCode, register } from 'api/modules/api-app/authenticate';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledText, StyledTouchable } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
@@ -12,42 +12,44 @@ import { SafeAreaView, View } from 'react-native';
 import CodeInput from 'react-native-confirmation-code-input';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet } from 'react-native-size-matters';
+import { logger } from 'utilities/helper';
 
 const SendOTP: FunctionComponent = ({ route }: any) => {
     const [code, setCode] = useState('');
     const { t } = useTranslation();
-    const { email, password } = route?.params;
+    const { email, password, user } = route?.params;
     const onCodeFilled = (codeVer: string) => {
         setCode(codeVer);
     };
 
-    // const confirm = async () => {
-    //     try {
-    //         if (code?.length < 5) {
-    //             AlertMessage(t('alert.invalidOTP'));
-    //             return;
-    //         }
-    //         if (route?.params?.register) {
-    //             const response = await register({ email, password, verifiedCode: code });
-    //             const data = {
-    //                 ...response,
-    //                 user: { email, isSave: true },
-    //             };
-    //             AuthenticateService.handlerLogin(data);
-    //         } else {
-    //             const verifyCode = await checkVerifyCode(email, code);
-    //             if (verifyCode?.data?.isValid) {
-    //                 navigate(AUTHENTICATE_ROUTE.CHANGE_PASS, { email, code });
-    //             } else {
-    //                 AlertMessage(t('alert.invalidOTP'));
-    //             }
-    //         }
-    //     } catch (error) {
-    //         logger(error);
-    //         AlertMessage(error);
-    //     }
-    // };
-    const confirm = () => navigate(AUTHENTICATE_ROUTE.INFORMATION);
+    const confirm = async () => {
+        try {
+            if (code?.length < 5) {
+                AlertMessage(t('alert.invalidOTP'));
+                return;
+            }
+            if (route?.params?.register) {
+                const response = await register(user);
+                const data = {
+                    ...response,
+                    user: { email, isSave: true },
+                };
+                // AuthenticateService.handlerLogin(data);
+                navigate(AUTHENTICATE_ROUTE.REGISTER_STEP_1);
+            } else {
+                const verifyCode = await checkVerifyCode(email, code);
+                if (verifyCode?.data?.isValid) {
+                    navigate(AUTHENTICATE_ROUTE.CHANGE_PASS, { email, code });
+                } else {
+                    AlertMessage(t('alert.invalidOTP'));
+                }
+            }
+        } catch (error) {
+            logger(error);
+            AlertMessage(error);
+        }
+    };
+    // const confirm = () => navigate(AUTHENTICATE_ROUTE.INFORMATION);
 
     const resendOTP = async () => {
         try {
@@ -66,8 +68,11 @@ const SendOTP: FunctionComponent = ({ route }: any) => {
     return (
         <SafeAreaView style={styles.flex1}>
             <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
-                <StyledHeader title={'regis'} />
-                <StyledText customStyle={styles.title} i18nText={'regis'} />
+                <StyledHeader title={route?.params.register ? 'regis' : 'SendOtpForgotPass'} />
+                <StyledText
+                    customStyle={styles.title}
+                    i18nText={route?.params.register ? 'regis' : 'SendOtpForgotPass'}
+                />
                 <View style={styles.container}>
                     <CodeInput
                         codeLength={6}

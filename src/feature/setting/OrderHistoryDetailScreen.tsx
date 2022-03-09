@@ -1,6 +1,7 @@
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledText } from 'components/base';
+import DashView from 'components/common/DashView';
 import StyledHeader from 'components/common/StyledHeader';
 import React from 'react';
 import { View } from 'react-native';
@@ -33,7 +34,7 @@ const OrderItem = (data: any) => {
                     </View>
                 </View>
             </View>
-            <View style={styles.dot} />
+            <DashView />
         </>
     );
 };
@@ -216,12 +217,6 @@ const styles = ScaledSheet.create({
     },
     icBag: {
         tintColor: Themes.COLORS.secondary,
-    },
-    dot: {
-        width: '100%',
-        borderWidth: 0.5,
-        borderStyle: 'dashed',
-        borderColor: Themes.COLORS.silver,
     },
     timeView: {
         paddingVertical: '10@vs',

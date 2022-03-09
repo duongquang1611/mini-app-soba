@@ -2,11 +2,14 @@ import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText } from 'components/base';
 import StyledHeader from 'components/common/StyledHeader';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { listCouponFake } from 'utilities/staticData';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet } from 'react-native-size-matters';
+import DashView from 'components/common/DashView';
+import { getNotificationCoupon } from 'api/modules/api-app/notification';
+import AlertMessage from 'components/base/AlertMessage';
+import { logger } from 'utilities/helper';
 
 const CouponItemNotification = (item: any) => {
     return (
@@ -18,12 +21,25 @@ const CouponItemNotification = (item: any) => {
                     <StyledText originValue={item.item.time} customStyle={styles.time} />
                 </View>
             </View>
-            <View style={styles.dot} />
+            <DashView />
         </View>
     );
 };
 
 const NotificationDetailScreen = () => {
+    const [coupon, setCoupon] = useState([]);
+    useEffect(() => {
+        getNotification();
+    }, []);
+    const getNotification = async () => {
+        try {
+            const res = await getNotificationCoupon(1);
+            setCoupon(res?.data);
+        } catch (error) {
+            logger(error);
+            AlertMessage(error);
+        }
+    };
     return (
         <View style={styles.container}>
             <StyledHeader title={'通知'} />
@@ -46,7 +62,7 @@ const NotificationDetailScreen = () => {
                             <StyledIcon source={Images.icons.coupon} size={20} customStyle={styles.iconCoupon} />
                             <StyledText i18nText={'クーポンリスト'} customStyle={styles.title} />
                         </View>
-                        {listCouponFake.map((item, index) => (
+                        {coupon.map((item, index) => (
                             <CouponItemNotification key={index} item={item} />
                         ))}
                     </View>
@@ -113,12 +129,6 @@ const styles = ScaledSheet.create({
     couponName: {
         width: '80%',
         justifyContent: 'space-between',
-    },
-    dot: {
-        width: '100%',
-        borderWidth: 0.5,
-        borderStyle: 'dashed',
-        borderColor: Themes.COLORS.silver,
     },
     normalText: {
         lineHeight: '27@vs',

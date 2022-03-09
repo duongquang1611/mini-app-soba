@@ -1,48 +1,7 @@
-// import { StyledButton } from 'components/base';
-// import { navigate } from 'navigation/NavigationService';
-// import React from 'react';
-// import { View } from 'react-native';
-// import { ScaledSheet } from 'react-native-size-matters';
-// import StyledHeader from 'components/common/StyledHeader';
-// import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
-
-// const CartScreen = () => {
-//     const goToCouponList = () => {
-//         navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.COUPON_LIST);
-//     };
-//     const goToOrderQrCode = () => {
-//         navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.ORDER_QR_CODE);
-//     };
-//     return (
-//         <View style={styles.container}>
-//             <StyledHeader title={'cart screen'} />
-//             <View style={styles.body}>
-//                 <StyledButton title={'couponListScreen'} onPress={goToCouponList} customStyle={styles.buttonSave} />
-//                 <StyledButton title={'qrCodeScreen'} onPress={goToOrderQrCode} customStyle={styles.buttonSave} />
-//             </View>
-//         </View>
-//     );
-// };
-
-// export default CartScreen;
-
-// const styles = ScaledSheet.create({
-//     container: {
-//         flex: 1,
-//     },
-//     body: {
-//         justifyContent: 'center',
-//         alignItems: 'center',
-//         flex: 1,
-//         marginHorizontal: '20@s',
-//     },
-//     buttonSave: {},
-// });
-
 import { StyledButton, StyledIcon, StyledText } from 'components/base';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import StyledHeader from 'components/common/StyledHeader';
@@ -51,6 +10,9 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { coupon, listOrderDefault } from 'utilities/staticData';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Images from 'assets/images';
+import DashView from 'components/common/DashView';
+import { getCart } from 'api/modules/api-app/order';
+import { logger } from 'utilities/helper';
 
 const ItemCoupon = (data: any) => {
     return (
@@ -90,11 +52,23 @@ export const OrderItem = (data: any) => {
                     </View>
                 </View>
             </View>
-            <View style={styles.dot} />
+            <DashView />
         </>
     );
 };
 const CartScreen = () => {
+    const [cart, setCart] = useState(1);
+    useEffect(() => {
+        getCartData();
+    }, []);
+    const getCartData = async () => {
+        try {
+            const res = await getCart();
+            setCart(res?.data);
+        } catch (error) {
+            logger(error);
+        }
+    };
     const confirm = () => {
         navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.CART);
     };
@@ -257,12 +231,6 @@ const styles = ScaledSheet.create({
     },
     icBag: {
         tintColor: Themes.COLORS.secondary,
-    },
-    dot: {
-        width: '100%',
-        borderWidth: 0.5,
-        borderStyle: 'dashed',
-        borderColor: Themes.COLORS.silver,
     },
     icCancel: {
         position: 'absolute',

@@ -1,35 +1,19 @@
+import { getMobileOrder } from 'api/modules/api-app/home';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledIcon, StyledImage, StyledText } from 'components/base';
+import AlertMessage from 'components/base/AlertMessage';
 import StyledHeader from 'components/common/StyledHeader';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet } from 'react-native-size-matters';
+import { logger } from 'utilities/helper';
 import { coupon, listOrderDefault } from 'utilities/staticData';
 
-// const OrderDefaultItem = (data: any) => {
-//     return (
-//         <TouchableOpacity style={styles.orderView}>
-//             <StyledIcon source={{ uri: data?.data?.img }} size={70} />
-//             <View style={styles.orderTextView}>
-//                 <StyledText originValue={data?.data?.name} customStyle={styles.titleOrder} />
-//                 {data?.data?.listAdd?.map((item: any, index: number) => (
-//                     <View key={index}>
-//                         <StyledText originValue={`+ ${item?.name}`} />
-//                     </View>
-//                 ))}
-//                 <View style={styles.quantity}>
-//                     <StyledText i18nText={'個数'} />
-//                     <StyledText originValue={data?.data?.quantity} />
-//                 </View>
-//             </View>
-//         </TouchableOpacity>
-//     );
-// };
 const OrderDefaultItem = (data: any) => {
     return (
         <TouchableOpacity style={styles.orderView}>
@@ -63,6 +47,19 @@ const ItemCoupon = (data: any) => {
     );
 };
 const MobileOrderScreen = () => {
+    const [data, setData] = useState<any>();
+    useEffect(() => {
+        getData();
+    }, []);
+    const getData = async () => {
+        try {
+            const res = await getMobileOrder();
+            setData(res?.data);
+        } catch (error) {
+            logger(error);
+            AlertMessage(error);
+        }
+    };
     const edit = () => {
         navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.EDIT_ORDER);
     };
@@ -73,7 +70,7 @@ const MobileOrderScreen = () => {
                 <StyledHeader title={'事前注文QRコード'} iconRight={Images.icons.question} />
                 <View style={styles.body}>
                     <View style={styles.qrView}>
-                        <StyledImage source={Images.photo.qrCode} customStyle={styles.img} />
+                        <StyledImage source={data?.image || Images.photo.qrCode} customStyle={styles.img} />
                         <StyledButton title={'注文編集'} onPress={edit} customStyle={styles.buttonSave} />
                         <StyledButton
                             isNormal={true}

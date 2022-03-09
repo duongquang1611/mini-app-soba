@@ -16,6 +16,9 @@ import { Themes } from 'assets/themes';
 import Metrics from 'assets/metrics';
 import Images from 'assets/images';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { checkIsExistEmail, getVerifyCode } from 'api/modules/api-app/authenticate';
+import AlertMessage from 'components/base/AlertMessage';
+import yupValidate from 'utilities/yupValidate';
 import UpLoadAvatar from './components/UpLoadAvatar';
 
 const RegisTerScreen = () => {
@@ -24,7 +27,7 @@ const RegisTerScreen = () => {
     };
     const { t } = useTranslation();
     const [stateGender, setStateGender] = useState({
-        gender: null,
+        gender: '',
         maleButtonColor: Themes.COLORS.white,
         femaleButtonColor: Themes.COLORS.white,
     });
@@ -33,9 +36,9 @@ const RegisTerScreen = () => {
     const passwordConfirmRef = useRef<any>(null);
 
     const registerSchema = yup.object().shape({
-        // email: yupValidate.email(),
-        // password: yupValidate.password(),
-        // confirmPassword: yupValidate.password('password'),
+        email: yupValidate.email(),
+        password: yupValidate.password(),
+        confirmPassword: yupValidate.password('password'),
     });
 
     const form = useForm({
@@ -49,23 +52,24 @@ const RegisTerScreen = () => {
     } = form;
 
     const submit = async (user: any) => {
-        // const res = await checkIsExistEmail(user?.email);
-        // if (res?.data?.isExisted) {
-        //     AlertMessage(t('error.emailExisted'));
-        //     return;
-        // }
-        // await getVerifyCode(user?.email);
+        const res = await checkIsExistEmail(user?.email);
+        if (res?.data?.isExisted) {
+            AlertMessage(t('error.emailExisted'));
+            return;
+        }
+        await getVerifyCode(user?.email);
         navigate(AUTHENTICATE_ROUTE.SEND_OTP, { ...user, register: true });
     };
     return (
-        <KeyboardAwareScrollView
-            // style={styles.container}
-            // contentContainerStyle={styles.container}
-            enableOnAndroid={true}
-            showsVerticalScrollIndicator={false}
-        >
-            <View style={styles.container}>
-                <StyledHeader title={'register'} />
+        <View style={styles.container}>
+            <StyledHeader title={'register'} />
+
+            <KeyboardAwareScrollView
+                style={styles.container}
+                // contentContainerStyle={styles.container}
+                enableOnAndroid={true}
+                showsVerticalScrollIndicator={false}
+            >
                 <SafeAreaView style={styles.body}>
                     <FormProvider {...form}>
                         <UpLoadAvatar setValue={setValue} />
@@ -114,9 +118,9 @@ const RegisTerScreen = () => {
                             name={'birthday'}
                             placeholder={t('authen.register.birthdayPlaceholder')}
                             ref={passwordRef}
-                            secureTextEntry={true}
                             returnKeyType={'next'}
                             maxLength={32}
+                            icBirthday={Images.icons.calendar}
                             // onSubmitEditing={() => passwordConfirmRef.current.focus()}
                         />
                         <StyledText customStyle={styles.titleGender} i18nText={'gender'} />
@@ -161,17 +165,15 @@ const RegisTerScreen = () => {
                             <StyledText customStyle={styles.textGender} i18nText={'rule'} />
                         </TouchableOpacity>
                     </FormProvider>
-
-                    {/* <StyledButton
-                    onPress={submit}
-                    title={'Confirm'}
-                    customStyle={[styles.loginButton, !isValid && { backgroundColor: 'lightgray' }]}
-                    // disabled={!isValid}
-                /> */}
-                    <StyledButton title={'confirm'} onPress={goToRegis} customStyle={styles.buttonSave} />
+                    <StyledButton
+                        disabled={!isValid}
+                        title={'confirm'}
+                        onPress={goToRegis}
+                        customStyle={styles.buttonSave}
+                    />
                 </SafeAreaView>
-            </View>
-        </KeyboardAwareScrollView>
+            </KeyboardAwareScrollView>
+        </View>
     );
 };
 
