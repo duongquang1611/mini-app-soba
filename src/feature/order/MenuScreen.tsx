@@ -159,7 +159,7 @@ const MenuScreen = () => {
     const navigation = useNavigation();
     return (
         <View style={styles.container}>
-            <StyledHeader title={'order.menuTitle'} iconRight={Images.icons.question} />
+            <StyledHeader title={'order.menuTitle'} iconRight={Images.icons.question} hasBack={false} />
             <View style={styles.categoryContainer}>
                 {list.length > 1 ? (
                     <FlatList

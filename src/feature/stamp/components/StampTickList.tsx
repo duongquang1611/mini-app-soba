@@ -2,11 +2,11 @@ import { StyledButton } from 'components/base';
 import DashView from 'components/common/DashView';
 import { STAMP_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
-import React, { memo } from 'react';
+import React, { memo, useMemo } from 'react';
 import { View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
-import CouponExchangeItem from './CouponExchangeItem';
+import StampTickItem from './StampTickItem';
 
 const createItem = (on = false, rd = Math.random()) => {
     return { id: rd, status: on, date: '2022-03-02T06:49:49.039Z' };
@@ -19,7 +19,10 @@ const separatorTop = 10;
 const numCol = 7;
 // const numCol = staticValue.COLUMNS_COUPON_EXCHANGE[Math.round(Math.random() * 2)];
 
-const ListHistoryCouponExchange = ({ caseType, onPressItemHistory }: any) => {
+const StampTickList = ({ caseType, onPressItemHistory, stampDetail }: any) => {
+    const { amount, usedAmount } = stampDetail;
+    const remainAmount = useMemo(() => amount - usedAmount, [amount, usedAmount]);
+
     for (let index = 0; index < 6; index++) {
         const newIndex = index + 10 + Math.round(Math.random() * 10);
         data[newIndex] = {
@@ -28,7 +31,7 @@ const ListHistoryCouponExchange = ({ caseType, onPressItemHistory }: any) => {
         };
     }
     const renderItem = ({ item }: any) => {
-        return <CouponExchangeItem item={item} numCol={numCol} onPress={onPressItemHistory} />;
+        return <StampTickItem item={item} numCol={numCol} onPress={onPressItemHistory} />;
     };
 
     const goToExchangeCoupon = () => {
@@ -52,7 +55,7 @@ const ListHistoryCouponExchange = ({ caseType, onPressItemHistory }: any) => {
                 <StyledButton
                     title={'stampDetail.couponExchangeBtn'}
                     customStyle={styles.btnExchange}
-                    disabled={caseType === 1}
+                    disabled={caseType === 1 && remainAmount <= 0}
                     onPress={goToExchangeCoupon}
                 />
             )}
@@ -86,4 +89,4 @@ const styles = ScaledSheet.create({
     },
 });
 
-export default memo(ListHistoryCouponExchange);
+export default memo(StampTickList);

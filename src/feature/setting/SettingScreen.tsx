@@ -9,9 +9,8 @@ import { SETTING_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React from 'react';
 import { ImageBackground, View } from 'react-native';
-import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import Picker from 'react-native-picker';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import AuthenticateService from 'utilities/authenticate/AuthenticateService';
 import { INFORMATION, listButton } from 'utilities/staticData';
@@ -33,6 +32,7 @@ const InfoItem = (data: any) => {
 };
 const SettingScreen = () => {
     const modalize = ModalizeManager();
+
     const handleCancel = () => {
         modalize.dismiss('modalPickerBackdrop');
     };
@@ -42,10 +42,8 @@ const SettingScreen = () => {
             'modalPickerBackdrop',
             <StyledTouchable
                 onPress={() => {
-                    Picker.hide();
                     modalize.dismiss('modalPickerBackdrop');
                 }}
-                // customStyle={{ height: Metrics.screenHeight }}
             >
                 <UserStatus />
             </StyledTouchable>,
@@ -58,10 +56,15 @@ const SettingScreen = () => {
                 disableScrollIfPossible: false,
                 scrollViewProps: {
                     contentContainerStyle: { flexGrow: 1 },
+                    showsVerticalScrollIndicator: false,
+                },
+                childrenStyle: {
+                    borderTopRightRadius: 10,
+                    borderTopLeftRadius: 10,
+                    overflow: 'hidden',
                 },
             },
         );
-        Picker.show();
     };
     const goToMyPage = () => {
         navigate(SETTING_ROUTE.EDIT_PROFILE);
@@ -104,69 +107,60 @@ const SettingScreen = () => {
             default:
         }
     };
+
+    const renderItemSetting = (item: any) => (
+        <View key={item.id} style={styles.wrapBtnOptionSetting}>
+            <StyledTouchable onPress={() => goToDetail(item?.key)} customStyle={{ alignItems: 'center' }}>
+                <StyledIcon source={item.img} size={20} />
+                <StyledText originValue={item?.name} customStyle={styles.nameButton} isBlack />
+            </StyledTouchable>
+        </View>
+    );
+
     return (
         <View style={styles.container}>
-            <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
-                <View style={styles.headerContainer}>
-                    <View style={styles.row}>
-                        <StyledText customStyle={styles.title} i18nText={'マイページ'} />
-                        <TouchableOpacity onPress={goToMyPage} style={styles.editButton}>
-                            <StyledIcon source={Images.icons.edit} size={20} />
-                        </TouchableOpacity>
-                    </View>
+            <View style={styles.headerContainer}>
+                <View style={styles.row}>
+                    <StyledText customStyle={styles.title} i18nText={'マイページ'} />
+                    <TouchableOpacity onPress={goToMyPage} style={styles.editButton}>
+                        <StyledIcon source={Images.icons.edit} size={20} />
+                    </TouchableOpacity>
+                </View>
 
-                    <ImageBackground
-                        resizeMode={'stretch'}
-                        source={Images.photo.backgroundMyPage}
-                        style={styles.background}
-                    >
-                        <View style={styles.background}>
-                            <View style={styles.profileRow}>
-                                <StyledImage source={Images.photo.avatarDefault} customStyle={styles.avatar} />
-                                <View>
-                                    <StyledText originValue={'田中　英雄'} customStyle={styles.name} />
-                                    <TouchableOpacity onPress={handleShowPicker}>
-                                        <LinearView style={styles.linear} colors={['#F8D156', '#FEECD2']}>
-                                            <StyledText originValue={'ゴールドメンバー'} isBlack />
-                                            <StyledIcon source={Images.icons.gold} size={15} />
-                                        </LinearView>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                            <StyledText originValue={'￥80,000'} customStyle={styles.price} />
-                            <View style={styles.ratioContain}>
-                                <View style={styles.ratioAll} />
-                                <View style={[styles.ratio, { width: scale(200) }]} />
-                            </View>
-                            <View style={styles.desView}>
-                                <StyledText
-                                    originValue={'￥5000を支払うと、ダイヤモンドメンバー に昇格します'}
-                                    customStyle={styles.desText}
-                                />
+                <ImageBackground
+                    resizeMode={'stretch'}
+                    source={Images.photo.backgroundMyPage}
+                    style={styles.background}
+                >
+                    <View style={styles.background}>
+                        <View style={styles.profileRow}>
+                            <StyledImage source={Images.photo.avatarDefault} customStyle={styles.avatar} />
+                            <View>
+                                <StyledText originValue={'田中　英雄'} customStyle={styles.name} />
+                                <TouchableOpacity onPress={handleShowPicker}>
+                                    <LinearView style={styles.linear} colors={['#F8D156', '#FEECD2']}>
+                                        <StyledText originValue={'ゴールドメンバー'} isBlack />
+                                        <StyledIcon source={Images.icons.gold} size={15} />
+                                    </LinearView>
+                                </TouchableOpacity>
                             </View>
                         </View>
-                    </ImageBackground>
-                </View>
-                <View style={styles.body}>
-                    <FlatList
-                        scrollEnabled={false}
-                        showsVerticalScrollIndicator={false}
-                        showsHorizontalScrollIndicator={false}
-                        numColumns={3}
-                        data={listButton}
-                        keyExtractor={(item) => item.id}
-                        renderItem={({ item }) => (
-                            <TouchableOpacity
-                                key={item.id}
-                                style={styles.buttonDetail}
-                                onPress={() => goToDetail(item?.key)}
-                            >
-                                <StyledIcon source={item.img} size={20} />
-                                <StyledText originValue={item?.name} customStyle={styles.nameButton} isBlack />
-                            </TouchableOpacity>
-                        )}
-                    />
-                </View>
+                        <StyledText originValue={'￥80,000'} customStyle={styles.price} />
+                        <View style={styles.ratioContain}>
+                            <View style={styles.ratioAll} />
+                            <View style={[styles.ratio, { width: scale(200) }]} />
+                        </View>
+                        <View style={styles.desView}>
+                            <StyledText
+                                originValue={'￥5000を支払うと、ダイヤモンドメンバー に昇格します'}
+                                customStyle={styles.desText}
+                            />
+                        </View>
+                    </View>
+                </ImageBackground>
+            </View>
+            <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
+                <View style={styles.wrapListOptionSetting}>{listButton.map(renderItemSetting)}</View>
                 <View style={styles.infoContainerView}>
                     {INFORMATION.map((item, index) => (
                         <InfoItem key={index} data={item} />
@@ -182,13 +176,7 @@ const styles = ScaledSheet.create({
         flex: 1,
         backgroundColor: Themes.COLORS.lightGray,
     },
-    body: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingHorizontal: '20@s',
-        marginBottom: '10@vs',
-        backgroundColor: Themes.COLORS.white,
-    },
+
     buttonSave: {},
     headerContainer: {
         width: '100%',
@@ -265,12 +253,18 @@ const styles = ScaledSheet.create({
         paddingHorizontal: '20@s',
         marginTop: '10@vs',
     },
-    buttonDetail: {
-        width: (Metrics.screenWidth - scale(60)) / 3,
-        marginRight: '10@s',
-        alignItems: 'center',
-        padding: '10@s',
+    wrapListOptionSetting: {
         marginBottom: '10@vs',
+        backgroundColor: Themes.COLORS.white,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        paddingVertical: '5@vs',
+    },
+    wrapBtnOptionSetting: {
+        width: Metrics.screenWidth / 3,
+        alignItems: 'center',
+        paddingTop: '18@vs',
+        height: '80@vs',
     },
     nameButton: {
         marginTop: '10@s',

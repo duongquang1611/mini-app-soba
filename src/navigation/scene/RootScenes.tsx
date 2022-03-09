@@ -8,10 +8,7 @@ import DetailCouponScreen from 'feature/coupon/DetailCouponScreen';
 import TabCouponListScreen from 'feature/coupon/TabCouponListScreen';
 import CheckInScreen from 'feature/home/CheckInScreen';
 import EditOrderScreen from 'feature/home/EditOrderScreen';
-import HomeDataScreen from 'feature/home/HomeDataScreen';
-import HomeDetailScreen from 'feature/home/HomeDetailScreen';
 import HomeScreen from 'feature/home/HomeScreen';
-import HomeUserListScreen from 'feature/home/HomeUserListScreen';
 import MobileOrderScreen from 'feature/home/MobileOrderScreen';
 import NewsDetailScreen from 'feature/home/NewsDetailScreen';
 import NewsListScreen from 'feature/home/NewsListScreen';
@@ -69,10 +66,6 @@ const AppStack = () => (
 
             {/* HOME_ROUTE */}
             <MainStack.Screen name={HOME_ROUTE.HOME} component={HomeScreen} />
-            <MainStack.Screen name={HOME_ROUTE.HOME_DETAIL} component={HomeDetailScreen} />
-            <MainStack.Screen name={HOME_ROUTE.WEB_VIEW} component={HomeDetailScreen} />
-            <MainStack.Screen name={HOME_ROUTE.HOME_DATA} component={HomeDataScreen} />
-            <MainStack.Screen name={HOME_ROUTE.HOME_USER_LIST} component={HomeUserListScreen} />
             <MainStack.Screen name={HOME_ROUTE.CHECK_IN} component={CheckInScreen} />
             <MainStack.Screen name={HOME_ROUTE.NOTIFICATION} component={NotificationScreen} />
             <MainStack.Screen name={HOME_ROUTE.NEW_LIST} component={NewsListScreen} />
@@ -126,7 +119,7 @@ const Navigation: React.FunctionComponent = () => {
             const res = await getResources();
             dispatch(resourceActions.getResourceSuccess(res));
         } catch (error) {
-            console.log(error);
+            console.log('🚀 ~ file: RootScenes.tsx ~ line 122 ~ initApp ~ error', error);
         }
     };
 

@@ -44,12 +44,7 @@ export default {
     },
 
     // screens
-    tab: {
-        home: 'Home',
-        notification: 'Notification',
-        setting: 'Setting',
-        account: 'Account',
-    },
+    tab: {},
     authen: {
         login: {
             placeholderEmail: 'Email address required',

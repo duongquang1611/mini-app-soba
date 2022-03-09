@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon } from 'components/base';
@@ -11,8 +10,8 @@ import StampCardScreen from 'feature/stamp/StampCardScreen';
 import { COUPON_ROUTE, HOME_ROUTE, ORDER_ROUTE, SETTING_ROUTE, STAMP_ROUTE } from 'navigation/config/routes';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { AnimatedTabBarNavigator } from 'react-native-animated-nav-tab-bar';
-import { ScaledSheet } from 'react-native-size-matters';
+import { AnimatedTabBarNavigator, DotSize } from 'react-native-animated-nav-tab-bar';
+import { scale, ScaledSheet } from 'react-native-size-matters';
 
 const AnimateTabs = AnimatedTabBarNavigator();
 
@@ -27,9 +26,7 @@ const TabBarIcon = ({ focused, source }: any) => {
 };
 
 const MainTabContainer = () => {
-    // const badgeCount: any = useSelector((state: any) => state.badgeCount);
     const { t } = useTranslation();
-    // const { countMessage, countNotification } = badgeCount;
     const ArrayTabs = [
         {
             name: HOME_ROUTE.ROOT,
@@ -67,20 +64,7 @@ const MainTabContainer = () => {
             tabBarIcon: (iconProps: any) => <TabBarIcon {...iconProps} source={Images.icons.tab.user} />,
         },
     ];
-    // const styleIcon = (focused: boolean) => {
-    //     return { width: SIZE_ICON, height: SIZE_ICON, tintColor: focused ? Themes.COLORS.white : undefined };
-    // };
-    // const renderTextBadge = (tabName: string) => {
-    //     if (countMessage == 0 && countNotification == 0) return '';
-    //     if (tabName === t('tab.matching')) return countMessage < 100 ? countMessage : 99;
-    //     if (tabName === t('tab.notification')) return countNotification < 100 ? countNotification : 99;
-    // };
-    // const renderBadge = (tabName: string, focus: boolean) => {
-    //     if (countMessage === 0 && countNotification === 0) return false;
-    //     if (tabName === t('tab.matching') && !focus && countMessage > 0) return true;
-    //     if (tabName === t('tab.notification') && !focus && countNotification > 0) return true;
-    //     return false;
-    // };
+
     return (
         <AnimateTabs.Navigator
             tabBarOptions={{
@@ -89,9 +73,12 @@ const MainTabContainer = () => {
                 tabStyle: {
                     shadowOpacity: 0.1,
                 },
+                labelStyle: styles.labelStyle,
             }}
             appearance={{
                 dotCornerRadius: 10,
+                horizontalPadding: scale(15),
+                dotSize: DotSize.LARGE,
             }}
         >
             {ArrayTabs.map((item, index) => (
@@ -101,6 +88,12 @@ const MainTabContainer = () => {
     );
 };
 
-const styles = ScaledSheet.create({});
+const styles = ScaledSheet.create({
+    labelStyle: {
+        fontSize: '14@ms0.3',
+        marginLeft: '5@s',
+        fontWeight: 'bold',
+    },
+});
 
 export default MainTabContainer;

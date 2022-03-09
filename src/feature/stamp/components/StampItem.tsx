@@ -20,17 +20,17 @@ interface IProps {
 
 const StampItem = (props: IProps) => {
     const { onPress, item, customStyle, caseType, containerStyle, animation = false } = props;
-    const { url, name, start, end, used, status, count } = item;
+    const { image, title, startDate, endDate, used, status, amount, usedAmount } = item;
 
     return (
         <Animatable.View style={containerStyle} animation={animation ? staticValue.ANIMATION_ITEM : ''} useNativeDriver>
             <StyledTouchable customStyle={[styles.container, customStyle]} onPress={onPress} disabled={!onPress}>
-                <StyledImage source={{ uri: url }} customStyle={styles.imgStamp} />
+                <StyledImage source={{ uri: image }} customStyle={styles.imgStamp} />
                 <View style={styles.content}>
-                    <StyledText originValue={name} customStyle={styles.nameStamp} />
+                    <StyledText originValue={title} customStyle={styles.nameStamp} numberOfLines={2} />
                     <StyledText
                         i18nText={caseType === 1 ? 'stampDetail.expired' : 'stamp.rangeDate'}
-                        i18nParams={{ start: formatDate(start), end: formatDate(end) }}
+                        i18nParams={{ start: formatDate(startDate), end: formatDate(endDate) }}
                         customStyle={styles.textRangeDate}
                     />
 
@@ -45,7 +45,7 @@ const StampItem = (props: IProps) => {
                                 />
                                 <StyledText
                                     i18nText={'stamp.count'}
-                                    i18nParams={{ count }}
+                                    i18nParams={{ count: amount - usedAmount }}
                                     customStyle={styles.textCount}
                                 />
                             </>
@@ -74,6 +74,7 @@ const styles = ScaledSheet.create({
         borderRadius: 1,
     },
     content: {
+        flexShrink: 1,
         marginLeft: '10@s',
     },
     nameStamp: {
