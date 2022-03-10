@@ -1,11 +1,12 @@
-import React, { RefObject } from 'react';
 import { CommonActions, StackActions } from '@react-navigation/native';
+import React, { RefObject } from 'react';
+import { logger } from 'utilities/helper';
 import { APP_ROUTE } from './config/routes';
 
 export const navigationRef: RefObject<any> = React.createRef();
 
 export function navigate(name: string, params = {}): void {
-    // console.log(`${'navigate to ' + name}`, params)
+    logger(`${`navigate to ${name}`}`, false, params);
     navigationRef.current.navigate(name, params);
 }
 
@@ -14,7 +15,7 @@ export function goBack(): void {
 }
 
 export function navigateReplace(name: string, params = {}): void {
-    // console.log(`${`navigate replace  ${name}`}`, params);
+    logger(`${`navigate replace  ${name}`}`, false, params);
     navigationRef.current.dispatch(StackActions.replace(name, params));
 }
 

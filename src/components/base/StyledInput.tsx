@@ -1,8 +1,7 @@
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
-import React, { useState, forwardRef, useRef } from 'react';
+import React, { forwardRef, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {
     ColorValue,
     ReturnKeyTypeOptions,
@@ -14,11 +13,12 @@ import {
     ViewStyle,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { ScaledSheet } from 'react-native-size-matters';
 import { autoCompleteType, textContentType } from 'utilities/CommonInterface';
-import { StyledIcon } from '.';
-import StyledText from './StyledText';
 import { toLocalStringBirthday } from 'utilities/format';
+import { StyledIcon, StyledTouchable } from '.';
+import StyledText from './StyledText';
 
 export interface StyledInputProps extends TextInputProps {
     containerStyle?: StyleProp<ViewStyle>;
@@ -42,7 +42,7 @@ export interface StyledInputProps extends TextInputProps {
 }
 
 const StyledInput = (props: StyledInputProps, ref: any) => {
-    const { isSecureTextEntry, icYeyOff, icYeyOn, icBirthday, valueInput } = props;
+    const { isSecureTextEntry, icYeyOff, icYeyOn, icBirthday, valueInput, customPlaceHolder } = props;
     const [isFocused, setIsFocused] = useState(false);
     const [date, changeDate] = useState('');
     const [isTextEntry, SetTextEntry] = useState(isSecureTextEntry);
@@ -87,7 +87,7 @@ const StyledInput = (props: StyledInputProps, ref: any) => {
                     ]}
                     value={icBirthday ? date : valueInput}
                     placeholderTextColor={props.placeholderTextColor || Themes.COLORS.grey}
-                    placeholder={props.customPlaceHolder ? t(props.customPlaceHolder) : ''}
+                    placeholder={customPlaceHolder ? (t(customPlaceHolder as any) as string) : ''}
                     underlineColorAndroid={props.customUnderlineColor || 'transparent'}
                     autoCompleteType={props.autoCompleteType || 'off'}
                     textContentType={props.textContentType || 'none'}
@@ -99,13 +99,13 @@ const StyledInput = (props: StyledInputProps, ref: any) => {
                     {...props}
                 />
                 {isSecureTextEntry ? (
-                    <TouchableOpacity onPress={changeEntryText}>
+                    <StyledTouchable onPress={changeEntryText} customStyle={{}}>
                         {isTextEntry ? (
                             <StyledIcon size={15} source={icYeyOff || Images.icons.eyeOff} />
                         ) : (
                             <StyledIcon size={15} source={icYeyOn || Images.icons.eyeOn} />
                         )}
-                    </TouchableOpacity>
+                    </StyledTouchable>
                 ) : null}
                 {icBirthday && (
                     <TouchableOpacity onPress={showDatePicker}>
@@ -119,7 +119,7 @@ const StyledInput = (props: StyledInputProps, ref: any) => {
         </View>
     );
 };
-const styles: any = ScaledSheet.create({
+const styles = ScaledSheet.create({
     textInput: {
         width: '100%',
         borderRadius: 10,
@@ -151,4 +151,5 @@ const styles: any = ScaledSheet.create({
         tintColor: Themes.COLORS.silver,
     },
 });
+
 export default forwardRef(StyledInput);

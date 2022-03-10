@@ -1,14 +1,16 @@
-import { notificationRead } from 'api/modules/api-app/notification';
+import { readNotification } from 'api/modules/api-app/notification';
+import { RootState } from 'app-redux/hooks';
 import { store } from 'app-redux/store';
 import { useEffect } from 'react';
 import Config from 'react-native-config';
-import OneSignal, { OSNotification } from 'react-native-onesignal';
+import OneSignal from 'react-native-onesignal';
+import { useSelector } from 'react-redux';
 import { isLogin } from 'utilities/authenticate/AuthenticateService';
 import { logger } from 'utilities/helper';
 
 type NotificationReceivedEvent = {
-    complete: (notification?: OSNotification) => void;
-    getNotification: () => OSNotification;
+    complete: (notification?: any) => void;
+    getNotification: () => any;
 };
 
 export const enumType = {
@@ -32,10 +34,10 @@ export function deleteTagOneSignal() {
 export async function onMoveNavigation(data: any) {
     if (data?.id) {
         try {
-            await notificationRead(data.id);
+            await readNotification(data.id);
             // Navigate
         } catch (error) {
-            logger(error);
+            console.log('file: index.ts -> line 38 -> onMoveNavigation -> error', error);
         }
     }
 }
@@ -49,19 +51,23 @@ export function handleNavigateNotification(data: any) {
 function onReceived(data: NotificationReceivedEvent) {
     logger('onReceived', undefined, data);
     const notify = data.getNotification();
+
+    // Complete with null means don't show a notification.
     setTimeout(() => data.complete(notify), 0); // must need to show notify in tab bar
 }
 
 export const useOnesignal = (user?: any) => {
+    const { isPushDisabled } = useSelector((state: RootState) => state.globalData);
     if (!user) {
         const { userInfo } = store.getState();
         user = userInfo?.user;
     }
 
     useEffect(() => {
-        setTimeout(() => {
+        const oneSignalId = '351f4556-3f84-422d-b936-69c24e0c6a1b' || Config.ONE_SIGNAL_APP_ID;
+        setTimeout(async () => {
             try {
-                OneSignal.setAppId(Config.ONE_SIGNAL_APP_ID);
+                OneSignal.setAppId(oneSignalId);
                 // React Native OneSignal Ver4 Need pass function callback into function promptForPushNotificationsWithUserResponse to push notification in ios
                 OneSignal.promptForPushNotificationsWithUserResponse((response: any) => {
                     logger('User Accept Push Notification IOS:', false, response);
@@ -73,8 +79,16 @@ export const useOnesignal = (user?: any) => {
                 }
                 OneSignal.setNotificationWillShowInForegroundHandler(onReceived);
                 OneSignal.setNotificationOpenedHandler(handleNavigateNotification);
+                const deviceState = await OneSignal.getDeviceState();
+                // console.log(deviceState, isPushDisabled);
+                if (
+                    typeof deviceState?.isPushDisabled === 'boolean' &&
+                    isPushDisabled !== deviceState?.isPushDisabled
+                ) {
+                    OneSignal.disablePush(isPushDisabled);
+                }
             } catch (error) {
-                logger(error);
+                console.log('file: index.ts -> line 78 -> setTimeout -> error', error);
             }
         }, 200);
         return () => {

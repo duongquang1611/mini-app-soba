@@ -1,18 +1,18 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { getDish } from 'api/modules/api-app/order';
+import Images from 'assets/images';
+import Metrics from 'assets/metrics';
+import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText } from 'components/base';
+import StyledHeaderImage from 'components/common/StyledHeaderImage';
+import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
+import { navigate } from 'navigation/NavigationService';
 import React, { useEffect, useState } from 'react';
 import { ImageBackground, View } from 'react-native';
-import { scale, ScaledSheet } from 'react-native-size-matters';
-import Images from 'assets/images';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Themes } from 'assets/themes';
-import { dataFakeOderDefault, imagesList, listSideMenu } from 'utilities/staticData';
-import StyledHeaderImage from 'components/common/StyledHeaderImage';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import Metrics from 'assets/metrics';
-import { navigate } from 'navigation/NavigationService';
-import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
-import { getDish } from 'api/modules/api-app/order';
-import { logger } from 'utilities/helper';
+import { scale, ScaledSheet } from 'react-native-size-matters';
+import { dataFakeOderDefault, imagesList, listSideMenu } from 'utilities/staticData';
 import OrderItem from './components/OrderItem';
 
 const OrderItemCanChange = ({ data }: any) => (
@@ -47,7 +47,7 @@ const DetailMealScreen = () => {
             const res = await getDish(id);
             setDish(res?.data);
         } catch (error) {
-            logger(error);
+            console.log('file: DetailMealScreen.tsx -> line 51 -> getMenuDetail -> error', error);
         }
     };
     const add = () => {

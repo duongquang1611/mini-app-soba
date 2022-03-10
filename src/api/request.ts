@@ -9,11 +9,11 @@ import { apiLocal, ERRORS } from 'utilities/staticData';
 import i18next from 'utilities/i18next';
 import { store } from 'app-redux/store';
 
-const AUTH_URL_REFRESH_TOKEN = `${Config.API_URL}/auth/request-access-token`;
+const AUTH_URL_REFRESH_TOKEN = `${Config.API_URL}auth/request-access-token`;
 let hasAnyNetworkDialogShown = false;
 
 const request = axios.create({
-    baseURL: Config.API_URL,
+    baseURL: 'https://aos-api.test1.amelacorp.com/' || Config.API_URL,
     timeout: 8000,
     headers: { Accept: '*/*' },
 });

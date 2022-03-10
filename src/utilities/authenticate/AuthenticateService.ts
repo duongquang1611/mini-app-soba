@@ -1,12 +1,11 @@
-import { AxiosRequestConfig } from 'axios';
-import request from 'api/request';
-import { store } from 'app-redux/store';
-import { logger } from 'utilities/helper';
 import { login } from 'api/modules/api-app/authenticate';
-import { useState } from 'react';
-import AlertMessage from 'components/base/AlertMessage';
-import { deleteTagOneSignal, pushTagMember } from 'utilities/notification';
+import request from 'api/request';
 import { userInfoActions } from 'app-redux/slices/userInfoSlice';
+import { store } from 'app-redux/store';
+import { AxiosRequestConfig } from 'axios';
+import AlertMessage from 'components/base/AlertMessage';
+import { useState } from 'react';
+import { deleteTagOneSignal, pushTagMember } from 'utilities/notification';
 
 const AUTH_URL_REFRESH_TOKEN = '/refreshToken';
 export interface LoginRequestParams extends AxiosRequestConfig {
@@ -49,8 +48,8 @@ export const useLogin = (): LoginRequest => {
             store.dispatch(userInfoActions.getUserInfoRequest(response?.data?.token));
             AuthenticateService.handlerLogin({ ...response.data });
         } catch (e) {
-            AlertMessage(e);
-            logger(e);
+            console.log('file: AuthenticateService.ts -> line 52 -> requestLogin -> e', e);
+            AlertMessage(`${e}`);
         } finally {
             setLoading(false);
         }

@@ -1,44 +1,42 @@
+import { RootState } from 'app-redux/hooks';
+import { updateGlobalData } from 'app-redux/slices/globalDataSlice';
 import { Themes } from 'assets/themes';
 import { StyledText } from 'components/base';
+import StyledSwitch from 'components/base/StyledSwitch';
 import DashView from 'components/common/DashView';
 import StyledHeader from 'components/common/StyledHeader';
 import React, { useState } from 'react';
 import { View } from 'react-native';
+import OneSignal from 'react-native-onesignal';
 import { ScaledSheet } from 'react-native-size-matters';
-// import ToggleSwitch from 'rn-toggle-switch';
-import SwitchToggle from 'react-native-switch-toggle';
+import { useDispatch, useSelector } from 'react-redux';
 
 const SettingNotificationScreen = () => {
-    const [onPush, offPush] = useState(true);
-    const [onEmail, offEmail] = useState(true);
+    const [enableEmail, setEnableEmail] = useState(true);
+    const { isPushDisabled } = useSelector((state: RootState) => state.globalData);
+    const dispatch = useDispatch();
+
+    const togglePushNotification = async (value: any) => {
+        try {
+            dispatch(updateGlobalData({ isPushDisabled: !value }));
+            OneSignal.disablePush(!value);
+        } catch (error) {
+            console.log('file: SettingNotificationScreen.tsx -> line 24 -> togglePushNotification -> error', error);
+        }
+    };
+
     return (
         <View style={styles.container}>
             <StyledHeader title={'setting.settingNotificationTitle'} />
             <View style={styles.body}>
                 <View style={styles.row}>
                     <StyledText i18nText={'setting.pushNotification'} isBlack />
-                    <SwitchToggle
-                        switchOn={onPush}
-                        onPress={() => offPush(!onPush)}
-                        circleColorOff={Themes.COLORS.white}
-                        circleColorOn={Themes.COLORS.white}
-                        backgroundColorOn={Themes.COLORS.seaGreen}
-                        backgroundColorOff={Themes.COLORS.silver}
-                        containerStyle={styles.toggle}
-                    />
+                    <StyledSwitch enable={!isPushDisabled} setEnable={togglePushNotification} />
                 </View>
                 <DashView />
                 <View style={styles.row}>
                     <StyledText i18nText={'setting.emailNotification'} isBlack />
-                    <SwitchToggle
-                        switchOn={onEmail}
-                        onPress={() => offEmail(!onEmail)}
-                        circleColorOff={Themes.COLORS.white}
-                        circleColorOn={Themes.COLORS.white}
-                        backgroundColorOn={Themes.COLORS.seaGreen}
-                        backgroundColorOff={Themes.COLORS.silver}
-                        containerStyle={styles.toggle}
-                    />
+                    <StyledSwitch enable={enableEmail} setEnable={setEnableEmail} />
                 </View>
             </View>
         </View>

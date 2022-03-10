@@ -1,18 +1,19 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { getCart } from 'api/modules/api-app/order';
+import Images from 'assets/images';
+import { Themes } from 'assets/themes';
 import { StyledButton, StyledIcon, StyledText } from 'components/base';
+import DashView from 'components/common/DashView';
+import StyledHeader from 'components/common/StyledHeader';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { ScaledSheet } from 'react-native-size-matters';
-import StyledHeader from 'components/common/StyledHeader';
-import { Themes } from 'assets/themes';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { coupon, listOrderDefault } from 'utilities/staticData';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import Images from 'assets/images';
-import DashView from 'components/common/DashView';
-import { getCart } from 'api/modules/api-app/order';
+import { ScaledSheet } from 'react-native-size-matters';
 import { logger } from 'utilities/helper';
+import { coupon, listOrderDefault } from 'utilities/staticData';
 
 const ItemCoupon = (data: any) => {
     return (
@@ -66,7 +67,7 @@ const CartScreen = () => {
             const res = await getCart();
             setCart(res?.data);
         } catch (error) {
-            logger(error);
+            console.log('file: CartScreen.tsx -> line 69 -> getCartData -> error', error);
         }
     };
     const confirm = () => {
