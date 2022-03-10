@@ -13,6 +13,7 @@ const STAMP_URL = {
 const NOTIFICATION_URL = {
     list: 'notifications',
     coupon: (id: string | number) => `notifications/${id}`,
+    read: (id: string | number) => `notifications/${id}`,
 };
 const MENU_URL = {
     menu: 'menu',

@@ -3,7 +3,6 @@ import { getNewsList } from 'api/modules/api-app/home';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText } from 'components/base';
-import AlertMessage from 'components/base/AlertMessage';
 import DashView from 'components/common/DashView';
 import StyledHeaderImage from 'components/common/StyledHeaderImage';
 import StyledTabTopView from 'components/common/StyledTabTopView';
@@ -15,7 +14,7 @@ import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet } from 'react-native-size-matters';
 import { SceneMap } from 'react-native-tab-view';
-import { logger } from 'utilities/helper';
+import { useOnesignal } from 'utilities/notification';
 import { imagesList, netWorkList } from 'utilities/staticData';
 import ShowQrTab from './components/ShowQrTab';
 
@@ -81,32 +80,39 @@ const visitQr = {
     qrCode: Images.photo.qrCode,
 };
 const HomeScreen: FunctionComponent = () => {
+    useOnesignal();
     const navigation = useNavigation();
     const [indexTab, setIndexTab] = useState(1);
     const [listNews, setListNews] = useState([]);
+
     useEffect(() => {
         getNotification();
     }, []);
+
     const getNotification = async () => {
         try {
             const res = await getNewsList();
             setListNews(res?.data);
         } catch (error) {
-            logger(error);
-            AlertMessage(error);
+            console.log('file: HomeScreen.tsx -> line 100 -> getNotification -> error', error);
+            // AlertMessage(error);
         }
     };
+
     const goToQrScreen = () => {
         navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.CHECK_IN);
     };
+
     const goToNotiScreen = () => {
         navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.NOTIFICATION);
     };
+
     const routes = [
         { key: 'qr1', title: 'いつもの！注文' },
         { key: 'qr2', title: '事前注文' },
         { key: 'qr3', title: '来店QRコード' },
     ];
+
     const renderScene = SceneMap({
         qr1: () => (
             <ShowQrTab

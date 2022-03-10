@@ -66,7 +66,7 @@ const SendOTP: FunctionComponent = ({ route }: any) => {
     };
 
     return (
-        <SafeAreaView style={styles.flex1}>
+        <View style={styles.flex1}>
             <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
                 <StyledHeader title={route?.params.register ? 'regis' : 'SendOtpForgotPass'} />
                 <StyledText
@@ -96,7 +96,7 @@ const SendOTP: FunctionComponent = ({ route }: any) => {
                     />
                 </View>
             </KeyboardAwareScrollView>
-        </SafeAreaView>
+        </View>
     );
 };
 

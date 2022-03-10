@@ -15,7 +15,7 @@ import yupValidate from 'utilities/yupValidate';
 import * as yup from 'yup';
 
 const DEFAULT_FORM: any = {
-    email: 'le.ngo@amela.vn',
+    email: 'yeuquaimo@gmail.com',
     password: '123456',
 };
 
@@ -80,6 +80,7 @@ const LoginScreen: FunctionComponent = () => {
                         isSecureTextEntry={true}
                         icYeyOff={Images.icons.eyeOff}
                         icYeyOn={Images.icons.eyeOn}
+                        customStyle={styles.inputPass}
                     />
                 </FormProvider>
                 <View style={styles.buttonView}>
@@ -158,6 +159,9 @@ const styles = ScaledSheet.create({
         borderBottomRightRadius: 50,
         alignItems: 'center',
         marginBottom: '50@vs',
+    },
+    inputPass: {
+        flex: 1,
     },
 });
 

@@ -6,7 +6,6 @@ import StyledHeader from 'components/common/StyledHeader';
 import React from 'react';
 import { ImageBackground, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { color } from 'react-native-reanimated';
 import { ScaledSheet } from 'react-native-size-matters';
 
 const DetailCouponOrderScreen = (props: any) => {

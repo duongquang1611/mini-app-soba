@@ -38,7 +38,6 @@ const SendEmailScreen: FunctionComponent = ({ route }: any) => {
     return (
         <View style={styles.container}>
             <StyledHeader title={'forgotPass'} />
-
             <SafeAreaView style={styles.flex1}>
                 <View style={styles.container}>
                     <StyledInputForm
