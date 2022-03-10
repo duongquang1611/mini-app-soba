@@ -8,12 +8,14 @@ import resourceReducer from './slices/resourceSlice';
 import userInfoReducer from './slices/userInfoSlice';
 import languageReducer from './slices/languageSlice';
 import globalDataReducer from './slices/globalDataSlice';
+import saveOrderReducer from './slices/saveOrderSlice';
 
 const rootReducer = {
     resource: resourceReducer,
     userInfo: userInfoReducer,
     globalData: globalDataReducer,
     languageKey: languageReducer,
+    saveOrder: saveOrderReducer,
 };
 
 const sagaMiddleware = createSagaMiddleware();

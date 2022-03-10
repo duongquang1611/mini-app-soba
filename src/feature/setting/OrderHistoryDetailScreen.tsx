@@ -3,6 +3,7 @@ import { Themes } from 'assets/themes';
 import { StyledIcon, StyledText } from 'components/base';
 import DashView from 'components/common/DashView';
 import StyledHeader from 'components/common/StyledHeader';
+import AmountOrder from 'feature/order/components/AmountOrder';
 import React from 'react';
 import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -52,16 +53,7 @@ const OrderHistoryDetailScreen = () => {
                         <StyledText originValue={' : '} isBlack />
                         <StyledText originValue={'2021年11月6日　5時36分'} isBlack customStyle={styles.timeValue} />
                     </View>
-                    <View style={styles.numOrderView}>
-                        <View style={styles.row}>
-                            <StyledIcon source={Images.icons.bag} customStyle={styles.icBag} size={17} />
-                            <StyledText originValue={'content'} customStyle={styles.contentText} />
-                        </View>
-                        <View style={styles.row}>
-                            <StyledText originValue={'4'} customStyle={styles.contentText} />
-                            <StyledText i18nText={'点'} customStyle={styles.contentText} />
-                        </View>
-                    </View>
+                    <AmountOrder />
                     <View style={styles.orderView}>
                         {listOrderDefault.map((item, index) => (
                             <OrderItem key={index} data={item} />

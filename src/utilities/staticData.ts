@@ -64,6 +64,62 @@ export const dataFakeOderDefault = [
         ],
     },
 ];
+const exLinkImage =
+    'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg';
+const exLinkImageSquare = 'https://kenh14cdn.com/203336854389633024/2021/9/1/photo-1-16304832141231584345047.jpg';
+export const dataFakeDetailMeal = {
+    id: 1,
+    title: 'string',
+    thumbnail: exLinkImage,
+    description: 'string',
+    images: [exLinkImage, exLinkImage, exLinkImage],
+    dishOptions: [
+        {
+            id: 0,
+            title: 'string',
+            isRequired: 0,
+            type: 1,
+            subDish: [
+                {
+                    id: 0,
+                    defaultValue: 0,
+                    dish: {
+                        id: 0,
+                        title: 'string',
+                        thumbnail: exLinkImageSquare,
+                    },
+                },
+            ],
+        },
+        {
+            id: 1,
+            title: 'string',
+            isRequired: 0,
+            type: 0,
+            subDish: [
+                {
+                    id: 1,
+                    defaultValue: 0,
+                    dish: {
+                        id: 2,
+                        title: 'string',
+                        thumbnail: exLinkImageSquare,
+                    },
+                },
+                {
+                    id: 2,
+                    defaultValue: 1,
+                    dish: {
+                        id: 3,
+                        title: 'string',
+                        thumbnail: exLinkImageSquare,
+                    },
+                },
+            ],
+        },
+    ],
+};
+
 export const listSideMenu = [
     {
         id: 1,
@@ -83,6 +139,7 @@ export const listSideMenu = [
         ],
     },
 ];
+
 export const notificationListFake = [
     {
         id: 1,
@@ -110,14 +167,9 @@ export const notificationListFake = [
     },
 ];
 export const imagesList: any = [
-    {
-        id: 1,
-        img: 'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
-    },
-    {
-        id: 2,
-        img: 'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
-    },
+    'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
+
+    'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
 ];
 export const netWorkList: any = [
     {
@@ -186,27 +238,53 @@ export const listOrderDefault = [
         quantity: 1,
     },
 ];
-export const listCouponFake = [
-    {
-        id: 1,
-        name: '新年会クーポンt',
-        time: '2022/03/01～2022/03/31',
-        expired: true,
-        img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQb4km6pqiEE1QzzbLxzOOeHSqawgslw-wX5Q&usqp=CAU',
-    },
-    {
-        id: 2,
-        name: '新年会クーポンt',
-        time: '2022/03/01～2022/03/31',
-        img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQb4km6pqiEE1QzzbLxzOOeHSqawgslw-wX5Q&usqp=CAU',
-    },
-    {
-        id: 3,
-        name: '新年会クーポンt',
-        time: '2022/03/01～2022/03/31',
-        img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQb4km6pqiEE1QzzbLxzOOeHSqawgslw-wX5Q&usqp=CAU',
-    },
-];
+export const listCouponFake =
+    //  [
+    //     {
+    //         id: 1,
+    //         name: '新年会クーポンt',
+    //         time: '2022/03/01～2022/03/31',
+    //         expired: true,
+    //         img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQb4km6pqiEE1QzzbLxzOOeHSqawgslw-wX5Q&usqp=CAU',
+    //     },
+    // ]
+    [
+        {
+            id: 1,
+            title: 'string',
+            image: exLinkImageSquare,
+            startDate: '2022-03-10',
+            endDate: '2022-03-10',
+        },
+        {
+            id: 2,
+            title: 'string',
+            image: exLinkImageSquare,
+            startDate: '2022-03-10',
+            endDate: '2022-03-10',
+        },
+        {
+            id: 3,
+            title: 'string',
+            image: exLinkImageSquare,
+            startDate: '2022-03-10',
+            endDate: '2022-03-10',
+        },
+        {
+            id: 4,
+            title: 'string',
+            image: exLinkImageSquare,
+            startDate: '2022-03-10',
+            endDate: '2022-03-10',
+        },
+        {
+            id: 5,
+            title: 'string',
+            image: exLinkImageSquare,
+            startDate: '2022-03-10',
+            endDate: '2022-03-10',
+        },
+    ];
 export const coupon = [
     { id: 1, name: '80％割引' },
     { id: 2, name: '新年会クーポン' },
@@ -366,43 +444,59 @@ export const INFORMATION = [
 export const listImage = [
     {
         id: 1,
-        name: 'きつね',
-        img: 'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
+        title: 'きつね',
+        status: 0,
+        description: 'string',
+        thumbnail:
+            'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
     },
     {
         id: 2,
-        name: 'きつね',
-        img: 'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
+        title: 'きつね',
+        status: 0,
+        description: 'string',
+        thumbnail:
+            'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
     },
     {
         id: 3,
-        name: 'きつね',
-        img: 'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
+        title: 'きつね',
+        status: 0,
+        description: 'string',
+        thumbnail:
+            'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
     },
     {
         id: 4,
-        name: 'きつね',
-        img: 'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
+        title: 'きつね',
+        status: 0,
+        description: 'string',
+        thumbnail:
+            'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
     },
     {
         id: 5,
-        name: 'きつね',
-        img: 'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
+        title: 'きつね',
+        status: 0,
+        description: 'string',
+        thumbnail:
+            'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
     },
     {
         id: 6,
-        name: 'きつね',
-        img: 'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
+        title: 'きつね',
+        status: 0,
+        description: 'string',
+        thumbnail:
+            'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
     },
     {
         id: 7,
-        name: 'きつね',
-        img: 'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
-    },
-    {
-        id: 8,
-        name: 'きつね',
-        img: 'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
+        title: 'きつね',
+        status: 0,
+        description: 'string',
+        thumbnail:
+            'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
     },
 ];
 export const statusUser = [

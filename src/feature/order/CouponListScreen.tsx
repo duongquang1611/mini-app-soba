@@ -1,14 +1,18 @@
+import { getCouponList } from 'api/modules/api-app/coupon';
+import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledText } from 'components/base';
+import AlertMessage from 'components/base/AlertMessage';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import CouponItem from 'components/common/CouponItem';
 import StyledHeader from 'components/common/StyledHeader';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet, verticalScale } from 'react-native-size-matters';
+import { logger } from 'utilities/helper';
 import { listCouponFake, MODAL_ID } from 'utilities/staticData';
 import { OrderChild } from './components/OrderItem';
 
@@ -35,6 +39,19 @@ const ModalCoupon = () => (
 );
 const CouponListScreen = () => {
     const modalize = ModalizeManager();
+    const [listCoupon, setListCoupon] = useState(listCouponFake);
+    useEffect(() => {
+        getListCoupon();
+    }, []);
+    const getListCoupon = async () => {
+        try {
+            const res = await getCouponList();
+            setListCoupon(res?.data);
+        } catch (error) {
+            logger(error);
+            AlertMessage(error);
+        }
+    };
     const goToCouponDetail = () => {
         navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.COUPON_DETAIL);
     };
@@ -57,7 +74,7 @@ const CouponListScreen = () => {
             <StyledHeader title={'order.couponTitle'} />
             <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
                 <View style={styles.body}>
-                    {listCouponFake.map((item, index) => (
+                    {listCoupon.map((item, index) => (
                         <CouponItem canUse={true} key={index} item={item} goToDetail={goToCouponDetail} />
                     ))}
                 </View>
@@ -83,6 +100,7 @@ const styles = ScaledSheet.create({
         alignItems: 'center',
         width: '100%',
         marginVertical: '10@vs',
+        marginBottom: Metrics.safeBottomPadding,
     },
     buttonSave: {},
     couponName: {

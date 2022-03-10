@@ -10,11 +10,11 @@ export const CouponItem = (props: any) => {
 
     return (
         <StyledTouchable customStyle={styles.couponItem} onPress={goToDetail}>
-            <StyledImage source={{ uri: item?.img }} customStyle={styles.couponImage} />
+            <StyledImage source={{ uri: item?.image }} customStyle={styles.couponImage} />
             <View style={styles.couponName}>
-                <StyledText originValue={item.name} customStyle={styles.title} />
+                <StyledText originValue={item.title} customStyle={styles.title} />
                 <View style={styles.row}>
-                    <StyledText originValue={item.time} customStyle={styles.time} />
+                    <StyledText originValue={`${item?.startDate}～${item?.endDate}`} customStyle={styles.time} />
                     {!canUse && item?.expired && <StyledText originValue={'有効期限切れ'} customStyle={styles.time} />}
                     {canUse && (
                         <StyledTouchable customStyle={styles.row} onPress={handleUseCoupon}>
