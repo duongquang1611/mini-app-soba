@@ -1,15 +1,17 @@
 import { useNavigation } from '@react-navigation/native';
+import { getNotificationList } from 'api/modules/api-app/notification';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledText } from 'components/base';
+import AlertMessage from 'components/base/AlertMessage';
 import StyledHeader from 'components/common/StyledHeader';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet } from 'react-native-size-matters';
-import { notificationListFake } from 'utilities/staticData';
+import { logger } from 'utilities/helper';
 
 const NotificationItem = (item: any) => {
     return (
@@ -25,6 +27,7 @@ const NotificationItem = (item: any) => {
         </TouchableOpacity>
     );
 };
+
 const getIcon = (key: string) => {
     switch (key) {
         case 'promotion':
@@ -41,13 +44,26 @@ const getIcon = (key: string) => {
 };
 const NotificationScreen = () => {
     const navigation = useNavigation();
+    const [listNoti, setListNoti] = useState([]);
+    useEffect(() => {
+        getNotification();
+    }, []);
+    const getNotification = async () => {
+        try {
+            const res = await getNotificationList();
+            setListNoti(res?.data);
+        } catch (error) {
+            logger(error);
+            AlertMessage(error);
+        }
+    };
     return (
         <View style={styles.container}>
             <StyledHeader title={'通知一覧 '} textRight="すべて既読" />
             <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
                 <View style={styles.body}>
-                    {notificationListFake?.map((item) => (
-                        <NotificationItem key={item.id} item={item} navigation={navigation} />
+                    {listNoti?.map((item, index) => (
+                        <NotificationItem key={index} item={item} navigation={navigation} />
                     ))}
                 </View>
             </KeyboardAwareScrollView>

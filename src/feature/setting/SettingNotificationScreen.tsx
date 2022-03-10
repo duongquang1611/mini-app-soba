@@ -1,5 +1,6 @@
 import { Themes } from 'assets/themes';
 import { StyledText } from 'components/base';
+import DashView from 'components/common/DashView';
 import StyledHeader from 'components/common/StyledHeader';
 import React, { useState } from 'react';
 import { View } from 'react-native';
@@ -26,7 +27,7 @@ const SettingNotificationScreen = () => {
                         containerStyle={styles.toggle}
                     />
                 </View>
-                <View style={styles.dot} />
+                <DashView />
                 <View style={styles.row}>
                     <StyledText i18nText={'setting.emailNotification'} isBlack />
                     <SwitchToggle
@@ -64,12 +65,6 @@ const styles = ScaledSheet.create({
         alignItems: 'center',
         paddingVertical: '10@s',
         paddingHorizontal: '20@s',
-    },
-    dot: {
-        width: '100%',
-        borderWidth: 0.5,
-        borderStyle: 'dashed',
-        borderColor: Themes.COLORS.silver,
     },
     toggle: {
         width: '55@s',

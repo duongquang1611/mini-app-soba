@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
-import { StyledButton, StyledImage, StyledInputForm, StyledText, StyledTouchable } from 'components/base';
+import { StyledButton, StyledIcon, StyledImage, StyledInputForm, StyledText, StyledTouchable } from 'components/base';
 import StyledOverlayLoading from 'components/base/StyledOverlayLoading';
 import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
@@ -15,8 +15,8 @@ import yupValidate from 'utilities/yupValidate';
 import * as yup from 'yup';
 
 const DEFAULT_FORM: any = {
-    email: 'hoan.nguyen@amela.vn',
-    password: '123123123',
+    email: 'le.ngo@amela.vn',
+    password: '123456',
 };
 
 const LoginScreen: FunctionComponent = () => {
@@ -55,8 +55,11 @@ const LoginScreen: FunctionComponent = () => {
             enableResetScrollToCoords={false}
         >
             <StyledOverlayLoading visible={loading} />
-            <StyledImage source={Images.photo.defaultImage} customStyle={styles.img} />
-            <StyledText customStyle={styles.title} i18nText={'login'} />
+            <View style={styles.header}>
+                <StyledImage source={Images.photo.logo} customStyle={styles.logo} />
+                <StyledIcon source={Images.photo.ptLogin} size={200} customStyle={styles.img} />
+            </View>
+            <StyledText customStyle={styles.title} i18nText={'authen.login.buttonLogin'} />
             <SafeAreaView style={styles.body}>
                 <FormProvider {...form}>
                     <StyledInputForm
@@ -94,7 +97,8 @@ const LoginScreen: FunctionComponent = () => {
                     />
 
                     <StyledTouchable onPress={doRegister} customStyle={styles.registerButton}>
-                        <StyledText i18nText="authen.login.registerText" />
+                        <StyledText i18nText="authen.login.noAccountText" isBlack />
+                        <StyledText customStyle={styles.forgotText} i18nText="authen.login.registerText" />
                     </StyledTouchable>
                 </View>
             </SafeAreaView>
@@ -116,12 +120,11 @@ const styles = ScaledSheet.create({
     },
     registerButton: {
         marginTop: 20,
+        alignItems: 'center',
     },
     forgotButton: {
         alignSelf: 'flex-end',
         marginTop: 20,
-        borderBottomWidth: 1,
-        borderColor: Themes.COLORS.primary,
     },
     title: {
         fontWeight: 'bold',
@@ -132,8 +135,12 @@ const styles = ScaledSheet.create({
         color: Themes.COLORS.borderInputError,
     },
     img: {
-        width: '100%',
-        height: '300@vs',
+        marginTop: '10@vs',
+    },
+    logo: {
+        width: '125@s',
+        height: '65@s',
+        marginTop: '40@vs',
     },
     buttonView: {
         paddingHorizontal: '20@s',
@@ -142,6 +149,15 @@ const styles = ScaledSheet.create({
     },
     forgotText: {
         color: Themes.COLORS.primary,
+        textDecorationLine: 'underline',
+    },
+    header: {
+        width: '100%',
+        height: '225@vs',
+        backgroundColor: Themes.COLORS.headerBackground,
+        borderBottomRightRadius: 50,
+        alignItems: 'center',
+        marginBottom: '50@vs',
     },
 });
 

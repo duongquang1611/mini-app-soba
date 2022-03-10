@@ -1,19 +1,35 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import StyledHeader from 'components/common/StyledHeader';
 import { Themes } from 'assets/themes';
 import { StyledImage, StyledText } from 'components/base';
 import Images from 'assets/images';
+import { getCheckIn } from 'api/modules/api-app/home';
+import AlertMessage from 'components/base/AlertMessage';
+import { logger } from 'utilities/helper';
 
 const CheckInScreen = () => {
+    const [data, setData] = useState<any>();
+    useEffect(() => {
+        getData();
+    }, []);
+    const getData = async () => {
+        try {
+            const res = await getCheckIn();
+            setData(res?.data);
+        } catch (error) {
+            logger(error);
+            AlertMessage(error);
+        }
+    };
     return (
         <View style={styles.container}>
             <StyledHeader title={'check in'} />
             <View style={styles.body}>
                 <View style={styles.qrView}>
-                    <StyledText originValue={'nameQr'} customStyle={styles.titleText} />
-                    <StyledImage source={Images.photo.qrCode} customStyle={styles.img} />
+                    <StyledText originValue={data?.nameQr} customStyle={styles.titleText} />
+                    <StyledImage source={data?.image || Images.photo.qrCode} customStyle={styles.img} />
                 </View>
                 <View style={styles.contentView}>
                     <StyledText originValue={'content'} customStyle={styles.contentText} />

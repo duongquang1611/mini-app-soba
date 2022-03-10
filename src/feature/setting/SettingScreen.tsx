@@ -4,6 +4,7 @@ import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
+import DashView from 'components/common/DashView';
 import LinearView from 'components/common/LinearView';
 import { SETTING_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
@@ -26,7 +27,7 @@ const InfoItem = (data: any) => {
                     <StyledText customStyle={styles.valueInfo} i18nText={data?.data?.value} isBlack />
                 </View>
             </View>
-            <View style={styles.dot} />
+            <DashView />
         </View>
     );
 };
@@ -285,12 +286,6 @@ const styles = ScaledSheet.create({
     },
     desText: {
         color: Themes.COLORS.white,
-    },
-    dot: {
-        width: '100%',
-        borderWidth: 0.5,
-        borderStyle: 'dashed',
-        borderColor: Themes.COLORS.silver,
     },
     infoRow: {
         flexDirection: 'row',

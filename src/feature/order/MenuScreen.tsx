@@ -1,16 +1,19 @@
 import { useNavigation } from '@react-navigation/native';
+import { getMenu } from 'api/modules/api-app/order';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledIcon, StyledImage, StyledText } from 'components/base';
+import AlertMessage from 'components/base/AlertMessage';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import LinearView from 'components/common/LinearView';
 import StyledHeader from 'components/common/StyledHeader';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ImageBackground, View, Text } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
+import { logger } from 'utilities/helper';
 import { listImage, MODAL_ID, stepGuide } from 'utilities/staticData';
 import ModalListCoupon from './components/ModalListCoupon';
 
@@ -23,9 +26,10 @@ const list = [
 ];
 const listRecommended = [{ name: 'おすすめセット' }, { name: 'おすすめ季節商品' }];
 const ItemOrder = (item: any) => {
-    const [choose, setChoose] = useState(false);
+    const [choose, setChoose] = useState(0);
+    const isSetting = false;
     const gotoDetail = () => {
-        setChoose(!choose);
+        setChoose(choose + 1);
         item?.navigation.navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.DETAIL_MEAL);
     };
     return (
@@ -35,7 +39,12 @@ const ItemOrder = (item: any) => {
                 style={[styles.image, { borderColor: choose ? Themes.COLORS.primary : Themes.COLORS.white }]}
             >
                 <StyledText originValue={item?.item?.name} customStyle={styles.name} />
-                {choose ? <StyledIcon source={Images.icons.tick} size={20} /> : null}
+                {choose && isSetting ? <StyledIcon source={Images.icons.tick} size={20} /> : null}
+                {choose && !isSetting ? (
+                    <View style={styles.numberChooseView}>
+                        <StyledText originValue={`${choose}`} customStyle={styles.numberChoose} />
+                    </View>
+                ) : null}
             </ImageBackground>
         </TouchableOpacity>
     );
@@ -69,12 +78,31 @@ const ModalGuide = () => (
 const MenuScreen = () => {
     const modalize = ModalizeManager();
     const [selected, setSelected] = useState();
+    const [menu, setMenu] = useState([]);
+    const [subCategory, setSubCategory] = useState(false);
+
+    useEffect(() => {
+        getMenuList();
+    }, []);
+    const getMenuList = async () => {
+        try {
+            const res = await getMenu();
+            setMenu(res?.data);
+        } catch (error) {
+            logger(error);
+            AlertMessage(error);
+        }
+    };
     const onPressCategory = (item: any) => {
         setSelected(item.category);
+        setSubCategory(true);
     };
     const [recommendSelected, setRecommendSelected] = useState();
     const onPressRecommend = (item: any) => {
         setRecommendSelected(item.name);
+    };
+    const gotoCart = () => {
+        navigation.navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.CART);
     };
     const showModal = () => {
         modalize.show(
@@ -159,7 +187,12 @@ const MenuScreen = () => {
     const navigation = useNavigation();
     return (
         <View style={styles.container}>
-            <StyledHeader title={'order.menuTitle'} iconRight={Images.icons.question} hasBack={false} />
+            <StyledHeader
+                onPressRight={showModal}
+                title={'order.menuTitle'}
+                iconRight={Images.icons.question}
+                hasBack={false}
+            />
             <View style={styles.categoryContainer}>
                 {list.length > 1 ? (
                     <FlatList
@@ -174,7 +207,7 @@ const MenuScreen = () => {
             </View>
 
             <View style={styles.recommendContainer}>
-                {listRecommended.length > 1 ? (
+                {listRecommended.length > 1 && subCategory ? (
                     <FlatList
                         horizontal
                         data={listRecommended}
@@ -188,7 +221,7 @@ const MenuScreen = () => {
             <View style={styles.body}>
                 <FlatList
                     numColumns={2}
-                    data={listImage}
+                    data={listImage || menu}
                     keyExtractor={(item) => item.id}
                     renderItem={({ item }) => <ItemOrder navigation={navigation} key={item.id} item={item} />}
                 />
@@ -197,13 +230,13 @@ const MenuScreen = () => {
                 <ImageBackground source={Images.icons.rectangle} style={styles.rectangle}>
                     <StyledIcon source={Images.icons.bag_happy} size={35} customStyle={styles.icBag} />
                 </ImageBackground>
-                <TouchableOpacity style={styles.rowCart} onPress={showModalListCoupon}>
+                <TouchableOpacity style={styles.rowCart} onPress={gotoCart}>
                     <StyledText i18nText={'setting.viewCart'} customStyle={styles.textCart} />
                     <StyledText originValue={'（4）'} customStyle={styles.textCart} />
                 </TouchableOpacity>
             </View>
             <View style={styles.saveView}>
-                <StyledButton title={'common.save'} onPress={showModal} customStyle={styles.buttonSave} />
+                <StyledButton title={'common.save'} onPress={showModalListCoupon} customStyle={styles.buttonSave} />
             </View>
         </View>
     );
@@ -316,6 +349,7 @@ const styles = ScaledSheet.create({
         borderWidth: 1,
         borderColor: Themes.COLORS.secondary,
         borderRadius: 50,
+        marginBottom: '10@vs',
     },
     image: {
         width: (Metrics.screenWidth - scale(60)) / 2,
@@ -364,5 +398,19 @@ const styles = ScaledSheet.create({
         color: Themes.COLORS.white,
         fontWeight: 'bold',
         fontSize: '16@ms0.3',
+    },
+    numberChoose: {
+        color: Themes.COLORS.white,
+    },
+    numberChooseView: {
+        position: 'absolute',
+        top: '10@s',
+        right: '10@s',
+        width: '20@s',
+        height: '20@s',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: Themes.COLORS.primary,
+        borderRadius: 15,
     },
 });

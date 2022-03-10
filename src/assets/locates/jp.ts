@@ -68,6 +68,7 @@ export default {
             rememberText: 'ログイン状態を保持',
             forgotPasswordText: 'パスワードを忘れた方はこちら',
             registerText: '新規会員登録はこちら',
+            noAccountText: 'アカウントを持っていない方？',
         },
         register: {
             title: '新規会員登録はこちら',

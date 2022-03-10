@@ -1,13 +1,30 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { getNewsDetail } from 'api/modules/api-app/home';
 import { Themes } from 'assets/themes';
 import { StyledText } from 'components/base';
+import AlertMessage from 'components/base/AlertMessage';
 import StyledHeaderImage from 'components/common/StyledHeaderImage';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
+import { logger } from 'utilities/helper';
 import { imagesList } from 'utilities/staticData';
 
-const NewsDetailScreen = () => {
+const NewsDetailScreen = (props: any) => {
+    const { id } = props?.route?.params;
+    const [news, setNews] = useState();
+    useEffect(() => {
+        getNews();
+    }, []);
+    const getNews = async () => {
+        try {
+            const res = await getNewsDetail(id);
+            setNews(res?.data);
+        } catch (error) {
+            logger(error);
+            AlertMessage(error);
+        }
+    };
     const confirm = () => null;
     return (
         <View style={styles.container}>

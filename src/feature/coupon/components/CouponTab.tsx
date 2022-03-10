@@ -6,14 +6,15 @@ import { navigate } from 'navigation/NavigationService';
 import React from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
-import { listCouponFake } from 'utilities/staticData';
+// import { listCouponFake } from 'utilities/staticData';
 
 interface CouponTabProps {
     canUse?: boolean;
+    data: any;
 }
 
 const CouponTab = (props: CouponTabProps) => {
-    const { canUse } = props;
+    const { canUse, data } = props;
 
     const goToDetail = (item: any) => {
         navigate(COUPON_ROUTE.DETAIL_COUPON, { canUse, item });
@@ -25,7 +26,7 @@ const CouponTab = (props: CouponTabProps) => {
 
     return (
         <View style={styles.container}>
-            <StyledList data={listCouponFake} renderItem={renderItem} ItemSeparatorComponent={DashView} />
+            <StyledList data={data} renderItem={renderItem} ItemSeparatorComponent={DashView} />
         </View>
     );
 };

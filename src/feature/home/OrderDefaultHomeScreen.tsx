@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { StyledButton, StyledIcon, StyledImage, StyledText } from 'components/base';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import StyledHeader from 'components/common/StyledHeader';
@@ -11,6 +11,9 @@ import { listOrderDefault } from 'utilities/staticData';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
+import { getMobileOrder, getOrderDefault } from 'api/modules/api-app/home';
+import AlertMessage from 'components/base/AlertMessage';
+import { logger } from 'utilities/helper';
 
 const OrderDefaultItem = (data: any) => {
     return (
@@ -37,6 +40,19 @@ const OrderDefaultItem = (data: any) => {
     );
 };
 const OrderDefaultHomeScreen = () => {
+    const [data, setData] = useState<any>();
+    useEffect(() => {
+        getData();
+    }, []);
+    const getData = async () => {
+        try {
+            const res = await getOrderDefault();
+            setData(res?.data);
+        } catch (error) {
+            logger(error);
+            AlertMessage(error);
+        }
+    };
     const edit = () => {
         navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.EDIT_ORDER);
     };

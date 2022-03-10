@@ -7,18 +7,19 @@ import { ScaledSheet } from 'react-native-size-matters';
 
 const ShowQrTab = (data: any) => {
     const { button, background, qrCode, content1, content2 } = data?.data;
+    const { onClick } = data;
     return (
         <View style={[styles.containerQrTab, { backgroundColor: background || Themes.COLORS.primary }]}>
             {qrCode ? (
                 <View style={[styles.qrCodeView]}>
                     <StyledIcon source={qrCode} size={90} customStyle={{ tintColor: Themes.COLORS.headerBackground }} />
-                    <StyledButton onPress={() => {}} title={button} customStyle={[styles.detailButton]} />
+                    <StyledButton onPress={onClick} title={button} customStyle={[styles.detailButton]} />
                 </View>
             ) : (
                 <View style={[styles.noQrCodeView]}>
                     <StyledText originValue={content1} customStyle={styles.content} />
                     <StyledText originValue={content2} customStyle={styles.content} />
-                    <StyledButton onPress={() => {}} title={button} customStyle={[styles.detailButton]} />
+                    <StyledButton onPress={onClick} title={button} customStyle={[styles.detailButton]} />
                 </View>
             )}
         </View>

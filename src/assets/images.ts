@@ -85,6 +85,7 @@ const Images: any = {
         backgroundMyPage: require('./photo/pt_background_my_page.png'),
         used: require('./photo/pt_used.png'),
         line: require('./photo/pt_line.png'),
+        ptLogin: require('./photo/pt_login.png'),
     },
 };
 

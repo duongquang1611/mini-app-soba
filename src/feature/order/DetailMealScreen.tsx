@@ -1,5 +1,5 @@
 import { StyledIcon, StyledImage, StyledText } from 'components/base';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ImageBackground, View } from 'react-native';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import Images from 'assets/images';
@@ -11,6 +11,8 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import Metrics from 'assets/metrics';
 import { navigate } from 'navigation/NavigationService';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
+import { getDish } from 'api/modules/api-app/order';
+import { logger } from 'utilities/helper';
 import OrderItem from './components/OrderItem';
 
 const OrderItemCanChange = ({ data }: any) => (
@@ -33,7 +35,21 @@ const OrderItemCanChange = ({ data }: any) => (
     </View>
 );
 const DetailMealScreen = () => {
+    // const { id = 1 } = props?.route?.params;
+    const id = 1;
     const [num, setNum] = useState(1);
+    const [dish, setDish] = useState(1);
+    useEffect(() => {
+        getMenuDetail();
+    }, []);
+    const getMenuDetail = async () => {
+        try {
+            const res = await getDish(id);
+            setDish(res?.data);
+        } catch (error) {
+            logger(error);
+        }
+    };
     const add = () => {
         setNum(num + 1);
     };
@@ -41,7 +57,7 @@ const DetailMealScreen = () => {
         if (num > 0) setNum(num - 1);
     };
     const goToSaveOrder = () => {
-        navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.CART);
+        navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.ROOT);
     };
     return (
         <View style={styles.container}>
@@ -157,6 +173,7 @@ const styles = ScaledSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         height: '56@vs',
+        marginBottom: Metrics.safeBottomPadding,
     },
     buttonGender: {
         flexDirection: 'row',

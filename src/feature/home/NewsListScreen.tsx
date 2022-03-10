@@ -5,17 +5,17 @@ import React from 'react';
 import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet } from 'react-native-size-matters';
-import { listNews } from 'utilities/staticData';
 import { ListNewsItem } from './HomeScreen';
 
-const NewsListScreen = () => {
+const NewsListScreen = (props: any) => {
+    const { listNews } = props?.route?.params;
     const navigation = useNavigation();
     return (
         <View style={styles.container}>
             <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
                 <StyledHeader title={'ニュース一覧'} />
                 <View style={styles.body}>
-                    {listNews.map((news, index) => (
+                    {listNews.map((news: any, index: number) => (
                         <ListNewsItem key={index} data={news} navigation={navigation} />
                     ))}
                 </View>

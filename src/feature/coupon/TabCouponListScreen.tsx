@@ -1,22 +1,38 @@
+import { getCouponList } from 'api/modules/api-app/coupon';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledText } from 'components/base';
+import AlertMessage from 'components/base/AlertMessage';
 import StyledHeader from 'components/common/StyledHeader';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
+import { logger } from 'utilities/helper';
 import CouponTab from './components/CouponTab';
 
 const TabCouponListScreen = () => {
     const [index, setIndex] = useState(0);
+    const [ListCoupon, setListCoupon] = useState({ canUse: [], used: [] });
+    useEffect(() => {
+        getNotification();
+    }, []);
+    const getNotification = async () => {
+        try {
+            const res = await getCouponList();
+            setListCoupon(res?.data);
+        } catch (error) {
+            logger(error);
+            AlertMessage(error);
+        }
+    };
     const routes = [
         { key: 'stampCanUse', title: 'coupon.canUse' },
         { key: 'stampUsed', title: 'coupon.used' },
     ];
     const renderScene = SceneMap({
-        stampCanUse: () => <CouponTab canUse={true} />,
-        stampUsed: () => <CouponTab />,
+        stampCanUse: () => <CouponTab canUse={true} data={ListCoupon?.canUse} />,
+        stampUsed: () => <CouponTab data={ListCoupon?.used} />,
     });
     return (
         <View style={styles.container}>

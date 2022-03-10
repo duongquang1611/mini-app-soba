@@ -1,18 +1,22 @@
 import { useNavigation } from '@react-navigation/native';
+import { getNewsList } from 'api/modules/api-app/home';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText } from 'components/base';
+import AlertMessage from 'components/base/AlertMessage';
+import DashView from 'components/common/DashView';
 import StyledHeaderImage from 'components/common/StyledHeaderImage';
 import StyledTabTopView from 'components/common/StyledTabTopView';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import { ImageBackground, View } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet } from 'react-native-size-matters';
 import { SceneMap } from 'react-native-tab-view';
-import { imagesList, listNews, netWorkList } from 'utilities/staticData';
+import { logger } from 'utilities/helper';
+import { imagesList, netWorkList } from 'utilities/staticData';
 import ShowQrTab from './components/ShowQrTab';
 
 const netWorkItem = (data: any) => {
@@ -40,7 +44,9 @@ export const ListNewsItem = (data: any) => {
         <View>
             <TouchableOpacity
                 style={styles.listNewsView}
-                onPress={() => data?.navigation.navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.NEW_DETAIL)}
+                onPress={() =>
+                    data?.navigation.navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.NEW_DETAIL, { id: data?.data?.id })
+                }
             >
                 <StyledIcon source={{ uri: data?.data?.img }} size={70} />
                 <View style={styles.newsTextView}>
@@ -49,7 +55,7 @@ export const ListNewsItem = (data: any) => {
                     <StyledText originValue={data?.data?.time} customStyle={styles.time} />
                 </View>
             </TouchableOpacity>
-            <View style={styles.dot} />
+            <DashView />
         </View>
     );
 };
@@ -77,6 +83,19 @@ const visitQr = {
 const HomeScreen: FunctionComponent = () => {
     const navigation = useNavigation();
     const [indexTab, setIndexTab] = useState(1);
+    const [listNews, setListNews] = useState([]);
+    useEffect(() => {
+        getNotification();
+    }, []);
+    const getNotification = async () => {
+        try {
+            const res = await getNewsList();
+            setListNews(res?.data);
+        } catch (error) {
+            logger(error);
+            AlertMessage(error);
+        }
+    };
     const goToQrScreen = () => {
         navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.CHECK_IN);
     };
@@ -89,9 +108,21 @@ const HomeScreen: FunctionComponent = () => {
         { key: 'qr3', title: '来店QRコード' },
     ];
     const renderScene = SceneMap({
-        qr1: () => <ShowQrTab data={dataOder} />,
-        qr2: () => <ShowQrTab data={preOder} />,
-        qr3: () => <ShowQrTab data={visitQr} />,
+        qr1: () => (
+            <ShowQrTab
+                data={dataOder}
+                onClick={() => navigation.navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.ORDER_DEFAULT_HOME)}
+            />
+        ),
+        qr2: () => (
+            <ShowQrTab
+                data={preOder}
+                onClick={() => navigation.navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.MOBILE_ORDER)}
+            />
+        ),
+        qr3: () => (
+            <ShowQrTab data={visitQr} onClick={() => navigation.navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.CHECK_IN)} />
+        ),
     });
 
     return (
@@ -132,32 +163,6 @@ const HomeScreen: FunctionComponent = () => {
                         renderScene={renderScene}
                         customIndicatorStyle={{ backgroundColor: getColorTab(indexTab) }}
                     />
-                    {/* <ImageBackground source={Images.photo.defaultImage} resizeMode="cover" style={styles.rowView}>
-                        <StyledImage source={Images.photo.defaultImage} customStyle={styles.logo} />
-                        <TouchableOpacity style={styles.buttonMobile}>
-                            <StyledText i18nText={'店舗検索'} customStyle={styles.textMobile} />
-                            <StyledIcon source={Images.icons.eyeOff} size={20} />
-                        </TouchableOpacity>
-                    </ImageBackground>
-                    <ImageBackground source={Images.photo.defaultImage} resizeMode="cover" style={styles.rowView}>
-                        <TouchableOpacity
-                            style={styles.buttonMobile}
-                            onPress={() => navigation.navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.ORDER_DEFAULT_HOME)}
-                        >
-                            <StyledText i18nText={'デフォルト注文'} customStyle={styles.textMobile} />
-                        </TouchableOpacity>
-                        <StyledImage source={Images.photo.defaultImage} customStyle={styles.logo} />
-                    </ImageBackground>
-                    <ImageBackground source={Images.photo.defaultImage} resizeMode="cover" style={styles.rowView}>
-                        <StyledText i18nText={'事前注文'} customStyle={styles.textMobile} />
-                        <TouchableOpacity
-                            style={styles.buttonMobile}
-                            onPress={() => navigation.navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.MOBILE_ORDER)}
-                        >
-                            <StyledImage source={Images.photo.defaultImage} customStyle={styles.logo} />
-                            <StyledIcon source={Images.icons.eyeOff} size={20} />
-                        </TouchableOpacity>
-                    </ImageBackground> */}
                     <ImageBackground source={Images.photo.news} resizeMode="cover" style={styles.newsView}>
                         <View style={styles.buttonMobile}>
                             <StyledIcon source={Images.icons.document} customStyle={styles.iconLeft} size={20} />
@@ -165,7 +170,7 @@ const HomeScreen: FunctionComponent = () => {
                         </View>
                         <TouchableOpacity
                             style={styles.buttonMobile}
-                            onPress={() => navigation.navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.NEW_LIST)}
+                            onPress={() => navigation.navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.NEW_LIST, { listNews })}
                         >
                             <StyledText i18nText={'全て見る'} customStyle={styles.textNews} />
                         </TouchableOpacity>
@@ -249,12 +254,6 @@ const styles = ScaledSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         backgroundColor: Themes.COLORS.white,
-    },
-    dot: {
-        width: '100%',
-        borderWidth: 0.5,
-        borderStyle: 'dashed',
-        borderColor: Themes.COLORS.silver,
     },
     newsTextView: {
         width: '75%',
