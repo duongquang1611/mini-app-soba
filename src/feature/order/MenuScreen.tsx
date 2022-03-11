@@ -28,7 +28,7 @@ const list = [
 ];
 const listRecommended = [{ name: 'おすすめセット' }, { name: 'おすすめ季節商品' }];
 const ItemMenu = (item: any) => {
-    const { saveOrder } = useSelector((state: RootState) => state.saveOrder);
+    const { saveOrder } = useSelector((state: RootState) => state.order);
     const num = saveOrder?.dishes?.find((itemId: any) => itemId?.id === item?.item?.id)?.amount || 0;
     const isSetting = false;
     const gotoDetail = () => {
@@ -78,7 +78,7 @@ const ModalGuide = () => (
     </View>
 );
 const MenuScreen = () => {
-    const { saveOrder } = useSelector((state: RootState) => state.saveOrder);
+    const { saveOrder } = useSelector((state: RootState) => state.order);
     const { dishes } = saveOrder || [];
     let numOrder = 0;
     dishes?.map((item: any) => {

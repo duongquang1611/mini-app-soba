@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logger } from 'utilities/helper';
 import { coupon } from 'utilities/staticData';
 import QRCode from 'react-native-qrcode-svg';
-import { clearSaveOrder, updateSaveOrder } from 'app-redux/slices/saveOrderSlice';
+import { clearSaveOrder, updateSaveOrder } from 'app-redux/slices/orderSlice';
 import { OrderItemCart } from 'feature/order/CartScreen';
 import AmountOrder from 'feature/order/components/AmountOrder';
 
@@ -28,7 +28,7 @@ const ItemCoupon = (data: any) => {
     );
 };
 const MobileOrderScreen = () => {
-    const { saveOrder } = useSelector((state: RootState) => state.saveOrder);
+    const { saveOrder } = useSelector((state: RootState) => state.order);
     const [data, setData] = useState<any>();
     const dispatch = useDispatch();
     useEffect(() => {

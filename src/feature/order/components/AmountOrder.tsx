@@ -8,7 +8,7 @@ import { ScaledSheet } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
 
 const AmountOrder = () => {
-    const { saveOrder } = useSelector((state: RootState) => state.saveOrder);
+    const { saveOrder } = useSelector((state: RootState) => state.order);
     const { dishes } = saveOrder || [];
     let numOrder = 0;
     dishes?.map((item: any) => {

@@ -2,7 +2,7 @@
 import { getDish } from 'api/modules/api-app/order';
 import { RootState } from 'app-redux/hooks';
 import { updateGlobalData } from 'app-redux/slices/globalDataSlice';
-import { updateSaveOrder } from 'app-redux/slices/saveOrderSlice';
+import { updateSaveOrder } from 'app-redux/slices/orderSlice';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
@@ -21,7 +21,7 @@ import OrderItem from './components/OrderItem';
 
 const DetailMealScreen = (props: any) => {
     const { id } = props?.route?.params;
-    const { saveOrder } = useSelector((state: RootState) => state.saveOrder);
+    const { saveOrder } = useSelector((state: RootState) => state.order);
     const findIdStore = saveOrder?.dishes?.find((item: any) => item.id === id);
 
     const [num, setNum] = useState(findIdStore?.amount || 1);

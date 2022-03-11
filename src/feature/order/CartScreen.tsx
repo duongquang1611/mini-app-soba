@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { getCart } from 'api/modules/api-app/order';
 import { RootState } from 'app-redux/hooks';
-import { clearSaveOrder, updateSaveOrder } from 'app-redux/slices/saveOrderSlice';
+import { clearSaveOrder, updateSaveOrder } from 'app-redux/slices/orderSlice';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledIcon, StyledText } from 'components/base';
@@ -97,7 +97,7 @@ export const OrderItemCart = (data: any) => {
     );
 };
 const CartScreen = () => {
-    const { saveOrder } = useSelector((state: RootState) => state.saveOrder);
+    const { saveOrder } = useSelector((state: RootState) => state.order);
     const dispatch = useDispatch();
     const [cart, setCart] = useState(saveOrder);
     useEffect(() => {

@@ -2,19 +2,19 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { persistReducer } from 'redux-persist';
 import { generatePersistConfig } from 'utilities/helper';
 
-interface ISaveOrderState {
+interface IOrderState {
     orderDefault: any;
     cart: any;
     saveOrder: any;
 }
 
-const initialState: ISaveOrderState = {
+const initialState: IOrderState = {
     orderDefault: {},
     cart: {},
     saveOrder: {},
 };
 
-const saveOrderSlice = createSlice({
+const orderSlice = createSlice({
     name: 'init',
     initialState,
     reducers: {
@@ -29,7 +29,7 @@ const saveOrderSlice = createSlice({
     },
 });
 
-const persistConfig = generatePersistConfig('globalData', ['isPushDisabled']);
+const persistConfig = generatePersistConfig('order', ['saveOrder']);
 
-export const { updateSaveOrder, clearSaveOrder } = saveOrderSlice.actions;
-export default persistReducer<ISaveOrderState>(persistConfig, saveOrderSlice.reducer);
+export const { updateSaveOrder, clearSaveOrder } = orderSlice.actions;
+export default persistReducer<IOrderState>(persistConfig, orderSlice.reducer);
