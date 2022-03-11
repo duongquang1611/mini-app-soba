@@ -70,6 +70,7 @@ const StampCardScreen = () => {
                 hasBack={false}
                 iconRight={Images.icons.question}
                 onPressRight={showGuide}
+                largeTitleHeader
             />
             <StyledTabTopView routes={routes} renderScene={renderScene} />
         </View>

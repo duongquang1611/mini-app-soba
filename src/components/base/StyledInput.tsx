@@ -11,6 +11,7 @@ import {
     TextStyle,
     View,
     ViewStyle,
+    Text,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -31,7 +32,8 @@ export interface StyledInputProps extends TextInputProps {
     customReturnKeyType?: ReturnKeyTypeOptions;
     ref?: any;
     errorMessage?: string;
-    label?: string;
+    label?: any;
+    labelRequire?: string;
     textContentType?: textContentType;
     autoCompleteType?: autoCompleteType;
     isSecureTextEntry?: boolean;
@@ -42,7 +44,18 @@ export interface StyledInputProps extends TextInputProps {
 }
 
 const StyledInput = (props: StyledInputProps, ref: any) => {
-    const { isSecureTextEntry, icYeyOff, icYeyOn, icBirthday, valueInput, customPlaceHolder } = props;
+    const {
+        isSecureTextEntry,
+        icYeyOff,
+        icYeyOn,
+        icBirthday,
+        valueInput,
+        customPlaceHolder,
+        labelRequire = '',
+        label,
+        customLabelStyle,
+    } = props;
+
     const [isFocused, setIsFocused] = useState(false);
     const [date, changeDate] = useState('');
     const [isTextEntry, SetTextEntry] = useState(isSecureTextEntry);
@@ -73,8 +86,11 @@ const StyledInput = (props: StyledInputProps, ref: any) => {
                 onConfirm={handleConfirm}
                 onCancel={hideDatePicker}
             />
-            {!!props.label && (
-                <StyledText customStyle={[styles.label, props.customLabelStyle]} isBlack i18nText={props.label} />
+            {!!label && (
+                <Text style={[styles.label, customLabelStyle]}>
+                    {t(label)}
+                    {!!labelRequire && <Text style={styles.labelRequire}>{labelRequire}</Text>}
+                </Text>
             )}
             <View style={[styles.containerInput, styles.textInput]}>
                 <TextInput
@@ -82,6 +98,7 @@ const StyledInput = (props: StyledInputProps, ref: any) => {
                     onFocus={() => setIsFocused(true)}
                     onBlur={() => setIsFocused(false)}
                     style={[
+                        { width: '100%' },
                         props.customStyle,
                         !isFocused && !!props?.errorMessage && { borderColor: Themes.COLORS.borderInputError },
                     ]}
@@ -123,7 +140,7 @@ const styles = ScaledSheet.create({
     textInput: {
         width: '100%',
         borderRadius: 10,
-        padding: 12,
+        padding: '12@s',
         borderWidth: 1,
         borderColor: Themes.COLORS.silver,
         backgroundColor: Themes.COLORS.backGroundInput,
@@ -134,7 +151,7 @@ const styles = ScaledSheet.create({
         marginTop: 5,
     },
     container: {
-        marginVertical: 8,
+        marginVertical: '8@vs',
         width: '100%',
         paddingHorizontal: '20@vs',
     },
@@ -146,6 +163,11 @@ const styles = ScaledSheet.create({
     label: {
         marginVertical: '10@vs',
         fontWeight: 'bold',
+        fontSize: '14@ms0.3',
+        color: Themes.COLORS.mineShaft,
+    },
+    labelRequire: {
+        color: Themes.COLORS.primary,
     },
     icEntry: {
         tintColor: Themes.COLORS.silver,

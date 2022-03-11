@@ -33,6 +33,7 @@ export interface StyledHeaderProps extends ViewProps {
     renderBack?: any;
     renderRight?: any;
     renderCenter?: any;
+    largeTitleHeader?: boolean;
 }
 
 const StyledHeader = (props: StyledHeaderProps) => {
@@ -58,6 +59,7 @@ const StyledHeader = (props: StyledHeaderProps) => {
         renderCenter,
         textRight = '',
         titleParams,
+        largeTitleHeader = false,
     } = props;
     const [rightLayout, setRightLayout] = useState({ width: 0, height: 0 });
 
@@ -116,7 +118,12 @@ const StyledHeader = (props: StyledHeaderProps) => {
                         )}
                         <StyledText
                             numberOfLines={1}
-                            customStyle={[styles.textCenter, customTitleStyle, { marginLeft: scale(hasBack ? 12 : 0) }]}
+                            customStyle={[
+                                styles.textCenter,
+                                largeTitleHeader && styles.largeTitleHeader,
+                                customTitleStyle,
+                                { marginLeft: scale(hasBack ? 12 : 0) },
+                            ]}
                             i18nText={title}
                             i18nParams={titleParams}
                         />
@@ -168,10 +175,13 @@ const styles = ScaledSheet.create({
         height: '100%',
     },
     textCenter: {
-        fontSize: '24@ms0.3',
+        fontSize: '18@ms0.3',
         color: Themes.COLORS.textPrimary,
         fontWeight: 'bold',
         width: '100%',
+    },
+    largeTitleHeader: {
+        fontSize: '24@ms0.3',
     },
     containerRight: {
         marginLeft: 'auto',

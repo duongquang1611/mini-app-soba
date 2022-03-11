@@ -339,7 +339,7 @@ export const listButton = [
         id: 5,
         name: 'ポリシー',
         img: Images.icons.document_text,
-        key: 'contact',
+        key: 'policy',
     },
     {
         id: 6,

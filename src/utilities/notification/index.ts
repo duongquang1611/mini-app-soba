@@ -57,6 +57,7 @@ function onReceived(data: NotificationReceivedEvent) {
 }
 
 export const useOnesignal = (user?: any) => {
+    const { isPushDisabled } = useSelector((state: RootState) => state.globalData);
     if (!user) {
         const { userInfo } = store.getState();
         user = userInfo?.user;

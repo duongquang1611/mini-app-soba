@@ -14,9 +14,11 @@ import CouponTab from './components/CouponTab';
 const TabCouponListScreen = () => {
     const [index, setIndex] = useState(0);
     const [ListCoupon, setListCoupon] = useState({ canUse: [], used: [] });
+
     useEffect(() => {
         getListCoupon();
     }, []);
+
     const getListCoupon = async () => {
         try {
             const res = await getCouponList();
@@ -36,7 +38,7 @@ const TabCouponListScreen = () => {
     });
     return (
         <View style={styles.container}>
-            <StyledHeader title={'クーポンリスト'} hasBack={false} />
+            <StyledHeader title={'クーポンリスト'} hasBack={false} largeTitleHeader />
             <TabView
                 navigationState={{ index, routes }}
                 renderScene={renderScene}

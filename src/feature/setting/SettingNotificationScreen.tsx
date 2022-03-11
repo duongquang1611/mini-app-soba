@@ -5,14 +5,14 @@ import { StyledText } from 'components/base';
 import StyledSwitch from 'components/base/StyledSwitch';
 import DashView from 'components/common/DashView';
 import StyledHeader from 'components/common/StyledHeader';
-import React, { useState } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import OneSignal from 'react-native-onesignal';
 import { ScaledSheet } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
 
 const SettingNotificationScreen = () => {
-    const [enableEmail, setEnableEmail] = useState(true);
+    // const [enableEmail, setEnableEmail] = useState(true);
     const { isPushDisabled } = useSelector((state: RootState) => state.globalData);
     const dispatch = useDispatch();
 
@@ -34,10 +34,10 @@ const SettingNotificationScreen = () => {
                     <StyledSwitch enable={!isPushDisabled} setEnable={togglePushNotification} />
                 </View>
                 <DashView />
-                <View style={styles.row}>
+                {/* <View style={styles.row}>
                     <StyledText i18nText={'setting.emailNotification'} isBlack />
                     <StyledSwitch enable={enableEmail} setEnable={setEnableEmail} />
-                </View>
+                </View> */}
             </View>
         </View>
     );
