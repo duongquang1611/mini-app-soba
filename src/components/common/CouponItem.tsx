@@ -4,17 +4,25 @@ import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components
 import React from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
+import { formatDate, toLocalStringBirthday } from 'utilities/format';
 
 export const CouponItem = (props: any) => {
     const { item, canUse, goToDetail, handleUseCoupon } = props;
 
     return (
         <StyledTouchable customStyle={styles.couponItem} onPress={goToDetail}>
-            <StyledImage source={{ uri: item?.img }} customStyle={styles.couponImage} />
+            <StyledImage source={{ uri: item?.image }} customStyle={styles.couponImage} />
             <View style={styles.couponName}>
-                <StyledText originValue={item.name} customStyle={styles.title} />
+                <StyledText originValue={item.title} customStyle={styles.title} />
                 <View style={styles.row}>
-                    <StyledText originValue={item.time} customStyle={styles.time} />
+                    <StyledText
+                        i18nText={'stamp.rangeDate'}
+                        i18nParams={{
+                            start: toLocalStringBirthday(item?.startDate),
+                            end: toLocalStringBirthday(item?.startDate),
+                        }}
+                        customStyle={styles.time}
+                    />
                     {!canUse && item?.expired && <StyledText originValue={'有効期限切れ'} customStyle={styles.time} />}
                     {canUse && (
                         <StyledTouchable customStyle={styles.row} onPress={handleUseCoupon}>

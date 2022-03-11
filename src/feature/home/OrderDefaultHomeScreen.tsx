@@ -14,6 +14,7 @@ import { navigate } from 'navigation/NavigationService';
 import { getMobileOrder, getOrderDefault } from 'api/modules/api-app/home';
 import AlertMessage from 'components/base/AlertMessage';
 import { logger } from 'utilities/helper';
+import AmountOrder from 'feature/order/components/AmountOrder';
 
 const OrderDefaultItem = (data: any) => {
     return (
@@ -66,16 +67,7 @@ const OrderDefaultHomeScreen = () => {
                         <StyledImage source={Images.photo.qrCode} customStyle={styles.img} />
                         <StyledButton title={'注文編集'} onPress={edit} customStyle={styles.buttonSave} />
                     </View>
-                    <View style={styles.numOrderView}>
-                        <View style={styles.row}>
-                            <StyledIcon source={Images.icons.bag} size={17} customStyle={styles.icBag} />
-                            <StyledText originValue={'content'} customStyle={styles.contentText} />
-                        </View>
-                        <View style={styles.row}>
-                            <StyledText originValue={'4'} customStyle={styles.contentText} />
-                            <StyledText i18nText={'点'} customStyle={styles.contentText} />
-                        </View>
-                    </View>
+                    <AmountOrder />
                     <View style={styles.qrView}>
                         {listOrderDefault.map((item, index) => (
                             <OrderDefaultItem key={index} data={item} />

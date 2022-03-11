@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { getCart } from 'api/modules/api-app/order';
+import { RootState } from 'app-redux/hooks';
+import { clearSaveOrder, updateSaveOrder } from 'app-redux/slices/orderSlice';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledIcon, StyledText } from 'components/base';
@@ -12,8 +14,10 @@ import { View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet } from 'react-native-size-matters';
+import { useDispatch, useSelector } from 'react-redux';
 import { logger } from 'utilities/helper';
 import { coupon, listOrderDefault } from 'utilities/staticData';
+import AmountOrder from './components/AmountOrder';
 
 const ItemCoupon = (data: any) => {
     return (
@@ -24,31 +28,66 @@ const ItemCoupon = (data: any) => {
         </View>
     );
 };
-export const OrderItem = (data: any) => {
+export const OrderItemCart = (data: any) => {
+    const { image, name, amount, subDish, id } = data?.data;
+    const { onCancel, canChange } = data;
+    const [num, setNum] = useState(amount);
+    const add = () => {
+        setNum(num + 1);
+    };
+    const minus = () => {
+        if (num > 0) setNum(num - 1);
+    };
+
+    const goToDetail = () => {
+        navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.DETAIL_MEAL, { id });
+    };
+
     return (
         <>
             <View style={styles.orderItemView}>
-                <StyledIcon source={{ uri: data?.data?.img }} size={70} />
+                <TouchableOpacity onPress={goToDetail}>
+                    <StyledIcon source={{ uri: image }} size={70} />
+                </TouchableOpacity>
                 <View style={styles.orderTextView}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={onCancel}>
                         <StyledIcon source={Images.icons.cancel} size={17} customStyle={styles.icCancel} />
                     </TouchableOpacity>
-                    <StyledText originValue={data?.data?.name} customStyle={styles.titleOrder} />
-                    {data?.data?.listAdd?.map((item: any, index: number) => (
-                        <View key={index}>
-                            <StyledText originValue={`+ ${item?.name}`} isBlack customStyle={styles.addValue} />
+                    <StyledText originValue={name} customStyle={styles.titleOrder} />
+                    {subDish?.map((item: any, index: number) => (
+                        <View key={index} style={styles.rowSub}>
+                            <StyledText originValue={`+ ${item?.title}`} isBlack customStyle={styles.addValue} />
+                            {item?.value > 1 && (
+                                <View style={styles.numView}>
+                                    <StyledText
+                                        originValue={`x ${item?.value}`}
+                                        isBlack
+                                        customStyle={styles.addValueText}
+                                    />
+                                </View>
+                            )}
                         </View>
                     ))}
                     <View style={styles.quantity}>
                         <StyledText i18nText={'個数'} customStyle={styles.changeText} />
                         <View style={styles.row}>
-                            <TouchableOpacity>
-                                <StyledIcon source={Images.icons.minus} size={20} />
-                            </TouchableOpacity>
-                            <StyledText originValue={data?.data?.quantity} customStyle={styles.quantityText} />
-                            <TouchableOpacity>
-                                <StyledIcon source={Images.icons.add} size={20} />
-                            </TouchableOpacity>
+                            {canChange && (
+                                <TouchableOpacity onPress={minus}>
+                                    <StyledIcon
+                                        source={Images.icons.minus}
+                                        size={20}
+                                        customStyle={{
+                                            tintColor: num > 0 ? Themes.COLORS.primary : Themes.COLORS.silver,
+                                        }}
+                                    />
+                                </TouchableOpacity>
+                            )}
+                            <StyledText originValue={`${num}`} customStyle={styles.quantityText} />
+                            {canChange && (
+                                <TouchableOpacity onPress={add}>
+                                    <StyledIcon source={Images.icons.add} size={20} />
+                                </TouchableOpacity>
+                            )}
                         </View>
                     </View>
                 </View>
@@ -58,7 +97,9 @@ export const OrderItem = (data: any) => {
     );
 };
 const CartScreen = () => {
-    const [cart, setCart] = useState(1);
+    const { saveOrder } = useSelector((state: RootState) => state.order);
+    const dispatch = useDispatch();
+    const [cart, setCart] = useState(saveOrder);
     useEffect(() => {
         getCartData();
     }, []);
@@ -70,38 +111,39 @@ const CartScreen = () => {
             console.log('file: CartScreen.tsx -> line 69 -> getCartData -> error', error);
         }
     };
+    const cancelCart = () => {
+        dispatch(clearSaveOrder());
+    };
+    const cancelItem = (id: number) => {
+        const newDishes = saveOrder?.dishes?.filter((item: any) => item?.id !== id);
+        dispatch(updateSaveOrder({ ...saveOrder, dishes: newDishes }));
+    };
     const confirm = () => {
         navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.CART);
     };
     const goToCouponList = () => {
         navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.COUPON_LIST);
     };
+    const createORCode = () => {
+        navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.MOBILE_ORDER);
+    };
     return (
         <View style={styles.container}>
-            <StyledHeader title={'カート'} textRight={'注文キャンセル'} />
+            <StyledHeader title={'カート'} textRight={'注文キャンセル'} onPressRight={cancelCart} />
             <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
                 <View style={styles.body}>
-                    <View style={styles.numOrderView}>
-                        <View style={styles.row}>
-                            <StyledIcon source={Images.icons.bag} size={17} customStyle={styles.icBag} />
-                            <StyledText originValue={'content'} customStyle={styles.contentText} />
-                        </View>
-                        <View style={styles.row}>
-                            <StyledText originValue={'4'} customStyle={styles.contentText} />
-                            <StyledText i18nText={'点'} customStyle={styles.contentText} />
-                        </View>
-                    </View>
+                    <AmountOrder />
                     <View style={styles.orderView}>
-                        {listOrderDefault.map((item, index) => (
-                            <OrderItem key={index} data={item} />
+                        {cart?.dishes?.map((item: any, index: number) => (
+                            <OrderItemCart onCancel={cancelItem} key={index} data={item} canChange={true} />
                         ))}
                     </View>
                     <View style={styles.contentView}>
                         <StyledText customStyle={styles.title} i18nText={'クーポンリスト'} />
-                        {coupon.map((item, index) => (
+                        {saveOrder?.coupons?.map((item: any, index: number) => (
                             <ItemCoupon key={index} data={item} />
                         ))}
-                        {coupon.length === 0 && (
+                        {saveOrder?.coupons?.length === 0 && (
                             <View style={styles.noCouponView}>
                                 <StyledIcon source={Images.icons.noCoupon} size={40} />
                                 <StyledText customStyle={styles.noCoupon} i18nText={'なし'} />
@@ -113,7 +155,7 @@ const CartScreen = () => {
                         </TouchableOpacity>
                     </View>
                     <View style={styles.contentView}>
-                        <StyledButton title={'ＱＲコード発行'} onPress={confirm} />
+                        <StyledButton title={'ＱＲコード発行'} onPress={createORCode} />
                         <StyledButton
                             isNormal={true}
                             title={'商品追加'}
@@ -266,5 +308,21 @@ const styles = ScaledSheet.create({
     noCoupon: {
         color: Themes.COLORS.silver,
         marginTop: '10@vs',
+    },
+    numView: {
+        backgroundColor: Themes.COLORS.headerBackground,
+        borderRadius: 5,
+        paddingHorizontal: '5@s',
+        paddingVertical: '2@vs',
+        marginLeft: '5@s',
+    },
+    addValueText: {
+        color: Themes.COLORS.primary,
+        fontSize: '12@ms0.3',
+    },
+    rowSub: {
+        flexDirection: 'row',
+        marginVertical: '2@vs',
+        alignItems: 'center',
     },
 });

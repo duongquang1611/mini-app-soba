@@ -81,6 +81,7 @@ const Information = () => {
                         isSecureTextEntry={true}
                         icYeyOff={Images.icons.eyeOff}
                         icYeyOn={Images.icons.eyeOn}
+                        customStyle={styles.container}
                     />
                     <StyledInputForm
                         label={'confirmPassword'}

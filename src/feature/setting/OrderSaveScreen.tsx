@@ -14,6 +14,7 @@ import { Themes } from 'assets/themes';
 import { OrderItem } from 'feature/home/EditOrderScreen';
 import { listOrderDefault } from 'utilities/staticData';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import AmountOrder from 'feature/order/components/AmountOrder';
 
 const OrderSave = () => {
     const { t } = useTranslation();
@@ -37,16 +38,7 @@ const OrderSave = () => {
                 </View>
             </KeyboardAwareScrollView>
             <View style={styles.viewSave}>
-                <View style={styles.numOrderView}>
-                    <View style={styles.row}>
-                        <StyledIcon source={Images.icons.bag} size={17} customStyle={styles.icBag} />
-                        <StyledText originValue={'content'} customStyle={styles.contentText} />
-                    </View>
-                    <View style={styles.row}>
-                        <StyledText originValue={'4'} customStyle={styles.contentText} />
-                        <StyledText i18nText={'点'} customStyle={styles.contentText} />
-                    </View>
-                </View>
+                <AmountOrder />
                 <StyledButton title={'common.save'} onPress={confirm} customStyle={styles.buttonSave} />
             </View>
         </View>

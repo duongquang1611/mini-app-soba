@@ -1,43 +1,24 @@
 import { getMobileOrder } from 'api/modules/api-app/home';
+import { RootState } from 'app-redux/hooks';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
-import { StyledButton, StyledIcon, StyledImage, StyledText } from 'components/base';
+import { StyledButton, StyledIcon, StyledText } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
 import StyledHeader from 'components/common/StyledHeader';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet } from 'react-native-size-matters';
+import { useDispatch, useSelector } from 'react-redux';
 import { logger } from 'utilities/helper';
-import { coupon, listOrderDefault } from 'utilities/staticData';
+import { coupon } from 'utilities/staticData';
+import QRCode from 'react-native-qrcode-svg';
+import { clearSaveOrder, updateSaveOrder } from 'app-redux/slices/orderSlice';
+import { OrderItemCart } from 'feature/order/CartScreen';
+import AmountOrder from 'feature/order/components/AmountOrder';
 
-const OrderDefaultItem = (data: any) => {
-    return (
-        <TouchableOpacity style={styles.orderView}>
-            <StyledIcon source={{ uri: data?.data?.img }} size={70} />
-            <View style={styles.orderTextView}>
-                <StyledText originValue={data?.data?.name} customStyle={styles.titleOrder} />
-                {data?.data?.listAdd?.map((item: any, index: number) => (
-                    <View key={index} style={{ flexDirection: 'row' }}>
-                        <StyledText originValue={`+ ${item?.name}`} isBlack customStyle={styles.addText} />
-                        {item?.num && (
-                            <View style={styles.numView}>
-                                <StyledText originValue={`x ${item?.num}`} isBlack customStyle={styles.addValue} />
-                            </View>
-                        )}
-                    </View>
-                ))}
-                <View style={styles.quantity}>
-                    <StyledText i18nText={'個数'} customStyle={styles.quantityText} />
-                    <StyledText originValue={data?.data?.quantity} isBlack />
-                </View>
-            </View>
-        </TouchableOpacity>
-    );
-};
 const ItemCoupon = (data: any) => {
     return (
         <View style={styles.rowItem}>
@@ -47,7 +28,9 @@ const ItemCoupon = (data: any) => {
     );
 };
 const MobileOrderScreen = () => {
+    const { saveOrder } = useSelector((state: RootState) => state.order);
     const [data, setData] = useState<any>();
+    const dispatch = useDispatch();
     useEffect(() => {
         getData();
     }, []);
@@ -61,38 +44,35 @@ const MobileOrderScreen = () => {
         }
     };
     const edit = () => {
-        navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.EDIT_ORDER);
+        navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.CART);
     };
-    const cancel = () => null;
+    const cancelCart = () => {
+        dispatch(clearSaveOrder());
+    };
+    const cancelItem = (id: number) => {
+        const newDishes = saveOrder?.dishes?.filter((item: any) => item?.id !== id);
+        dispatch(updateSaveOrder({ ...saveOrder, dishes: newDishes }));
+    };
     return (
         <View style={styles.container}>
+            <StyledHeader title={'事前注文QRコード'} iconRight={Images.icons.question} />
             <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
-                <StyledHeader title={'事前注文QRコード'} iconRight={Images.icons.question} />
                 <View style={styles.body}>
                     <View style={styles.qrView}>
-                        <StyledImage source={data?.image || Images.photo.qrCode} customStyle={styles.img} />
+                        <QRCode value={JSON.stringify(saveOrder)} size={180} />
                         <StyledButton title={'注文編集'} onPress={edit} customStyle={styles.buttonSave} />
                         <StyledButton
                             isNormal={true}
                             title={'注文キャンセル'}
-                            onPress={cancel}
+                            onPress={cancelCart}
                             customStyle={styles.cancelButton}
                             customStyleText={styles.cancelText}
                         />
                     </View>
-                    <View style={styles.numOrderView}>
-                        <View style={styles.row}>
-                            <StyledIcon source={Images.icons.bag} size={17} customStyle={styles.icBag} />
-                            <StyledText originValue={'注文数'} customStyle={styles.contentText} />
-                        </View>
-                        <View style={styles.row}>
-                            <StyledText originValue={'4'} customStyle={styles.contentText} />
-                            <StyledText i18nText={'点'} customStyle={styles.contentText} />
-                        </View>
-                    </View>
+                    <AmountOrder />
                     <View style={styles.qrView}>
-                        {listOrderDefault.map((item, index) => (
-                            <OrderDefaultItem key={index} data={item} />
+                        {saveOrder?.dishes?.map((item: any, index: number) => (
+                            <OrderItemCart canChange={false} key={index} data={item} onCancel={cancelItem} />
                         ))}
                     </View>
                     <View style={styles.contentView}>

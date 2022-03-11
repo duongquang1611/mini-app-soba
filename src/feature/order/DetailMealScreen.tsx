@@ -1,44 +1,34 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { getDish } from 'api/modules/api-app/order';
+import { RootState } from 'app-redux/hooks';
+import { updateGlobalData } from 'app-redux/slices/globalDataSlice';
+import { updateSaveOrder } from 'app-redux/slices/orderSlice';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText } from 'components/base';
 import StyledHeaderImage from 'components/common/StyledHeaderImage';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
-import { navigate } from 'navigation/NavigationService';
+import { goBack, navigate } from 'navigation/NavigationService';
 import React, { useEffect, useState } from 'react';
 import { ImageBackground, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { scale, ScaledSheet } from 'react-native-size-matters';
-import { dataFakeOderDefault, imagesList, listSideMenu } from 'utilities/staticData';
+import { useDispatch, useSelector } from 'react-redux';
+import { dataFakeDetailMeal, dataFakeOderDefault, imagesList, listSideMenu } from 'utilities/staticData';
 import OrderItem from './components/OrderItem';
 
-const OrderItemCanChange = ({ data }: any) => (
-    <View style={styles.containerItem}>
-        <View style={styles.itemRow}>
-            <View style={styles.itemRow}>
-                <StyledImage source={Images.photo.defaultImage} customStyle={styles.imgItem} />
-                <StyledText originValue={data.name} customStyle={styles.nameOrder} />
-            </View>
-            <View style={styles.itemRow}>
-                <TouchableOpacity>
-                    <StyledIcon source={Images.icons.minus} size={20} />
-                </TouchableOpacity>
-                <StyledText originValue={'1'} customStyle={styles.quantitySideText} />
-                <TouchableOpacity>
-                    <StyledIcon source={Images.icons.add} size={20} />
-                </TouchableOpacity>
-            </View>
-        </View>
-    </View>
-);
-const DetailMealScreen = () => {
-    // const { id = 1 } = props?.route?.params;
-    const id = 1;
-    const [num, setNum] = useState(1);
-    const [dish, setDish] = useState(1);
+const DetailMealScreen = (props: any) => {
+    const { id } = props?.route?.params;
+    const { saveOrder } = useSelector((state: RootState) => state.order);
+    const findIdStore = saveOrder?.dishes?.find((item: any) => item.id === id);
+
+    const [num, setNum] = useState(findIdStore?.amount || 1);
+    const [dish, setDish] = useState(dataFakeDetailMeal);
+    const { dishOptions, title, description } = dish;
+    const [subDishDetail, setSubDishDetail] = useState(findIdStore?.subDish || []);
+    const dispatch = useDispatch();
     useEffect(() => {
         getMenuDetail();
     }, []);
@@ -57,20 +47,42 @@ const DetailMealScreen = () => {
         if (num > 0) setNum(num - 1);
     };
     const goToSaveOrder = () => {
-        navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.ROOT);
+        const orderChooseItem = { id };
+        const dishesStore = saveOrder?.dishes?.filter((item: any) => item.id !== id) || [];
+        const paramOrder =
+            num > 0
+                ? {
+                      dishes: [
+                          ...dishesStore,
+                          {
+                              id,
+                              name: dish?.title,
+                              size: 1,
+                              image: dish?.thumbnail,
+                              amount: num,
+                              subDish: subDishDetail,
+                          },
+                      ],
+                      coupons: [],
+                  }
+                : {};
+        // setSubDishDetail(paramOrder);
+        dispatch(updateSaveOrder(paramOrder));
+        goBack();
     };
     return (
         <View style={styles.container}>
-            <StyledHeaderImage images={imagesList} content={'たぬきそば'} />
+            <StyledHeaderImage images={dish.images} content={title} />
             <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
-                <StyledText originValue={'content'} isBlack customStyle={styles.contentText} />
+                <StyledText originValue={description} isBlack customStyle={styles.contentText} />
                 <View style={styles.body}>
-                    {dataFakeOderDefault.map((item) => (
-                        <OrderItem key={item.id} data={item} />
-                    ))}
-                    <StyledText originValue={'サイドメニュー'} customStyle={styles.contentSideText} />
-                    {listSideMenu.map((item) => (
-                        <OrderItemCanChange key={item.id} data={item} />
+                    {dishOptions.map((item) => (
+                        <OrderItem
+                            key={item.id}
+                            data={item}
+                            subDishDetail={subDishDetail}
+                            setSubDishDetail={setSubDishDetail}
+                        />
                     ))}
                 </View>
             </KeyboardAwareScrollView>

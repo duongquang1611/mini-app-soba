@@ -11,6 +11,7 @@ import { coupon, listOrderDefault } from 'utilities/staticData';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Images from 'assets/images';
 import DashView from 'components/common/DashView';
+import AmountOrder from 'feature/order/components/AmountOrder';
 
 const ItemCoupon = (data: any) => {
     return (
@@ -63,16 +64,7 @@ const EditOrderScreen = () => {
             <StyledHeader title={'カート'} textRight={'注文キャンセル'} />
             <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
                 <View style={styles.body}>
-                    <View style={styles.numOrderView}>
-                        <View style={styles.row}>
-                            <StyledIcon source={Images.icons.bag} size={17} customStyle={styles.icBag} />
-                            <StyledText originValue={'content'} customStyle={styles.contentText} />
-                        </View>
-                        <View style={styles.row}>
-                            <StyledText originValue={'4'} customStyle={styles.contentText} />
-                            <StyledText i18nText={'点'} customStyle={styles.contentText} />
-                        </View>
-                    </View>
+                    <AmountOrder />
                     <View style={styles.orderView}>
                         {listOrderDefault.map((item, index) => (
                             <OrderItem key={index} data={item} />

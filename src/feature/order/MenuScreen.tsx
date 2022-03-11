@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { getMenu } from 'api/modules/api-app/order';
+import { RootState } from 'app-redux/hooks';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
@@ -13,6 +14,7 @@ import React, { useEffect, useState } from 'react';
 import { ImageBackground, View, Text } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
+import { useSelector } from 'react-redux';
 import { logger } from 'utilities/helper';
 import { listImage, MODAL_ID, stepGuide } from 'utilities/staticData';
 import ModalListCoupon from './components/ModalListCoupon';
@@ -25,24 +27,24 @@ const list = [
     { category: 'category4' },
 ];
 const listRecommended = [{ name: 'おすすめセット' }, { name: 'おすすめ季節商品' }];
-const ItemOrder = (item: any) => {
-    const [choose, setChoose] = useState(0);
+const ItemMenu = (item: any) => {
+    const { saveOrder } = useSelector((state: RootState) => state.order);
+    const num = saveOrder?.dishes?.find((itemId: any) => itemId?.id === item?.item?.id)?.amount || 0;
     const isSetting = false;
     const gotoDetail = () => {
-        setChoose(choose + 1);
-        item?.navigation.navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.DETAIL_MEAL);
+        item?.navigation.navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.DETAIL_MEAL, { id: item?.item?.id });
     };
     return (
         <TouchableOpacity onPress={gotoDetail}>
             <ImageBackground
-                source={{ uri: item?.item?.img }}
-                style={[styles.image, { borderColor: choose ? Themes.COLORS.primary : Themes.COLORS.white }]}
+                source={{ uri: item?.item?.thumbnail }}
+                style={[styles.image, { borderColor: num > 0 ? Themes.COLORS.primary : Themes.COLORS.white }]}
             >
-                <StyledText originValue={item?.item?.name} customStyle={styles.name} />
-                {choose && isSetting ? <StyledIcon source={Images.icons.tick} size={20} /> : null}
-                {choose && !isSetting ? (
+                <StyledText originValue={item?.item?.title} customStyle={styles.name} />
+                {num > 0 && isSetting ? <StyledIcon source={Images.icons.tick} size={20} /> : null}
+                {num && !isSetting ? (
                     <View style={styles.numberChooseView}>
-                        <StyledText originValue={`${choose}`} customStyle={styles.numberChoose} />
+                        <StyledText originValue={`${num}`} customStyle={styles.numberChoose} />
                     </View>
                 ) : null}
             </ImageBackground>
@@ -76,6 +78,13 @@ const ModalGuide = () => (
     </View>
 );
 const MenuScreen = () => {
+    const { saveOrder } = useSelector((state: RootState) => state.order);
+    const { dishes } = saveOrder || [];
+    let numOrder = 0;
+    dishes?.map((item: any) => {
+        numOrder += item.amount;
+        return item;
+    });
     const modalize = ModalizeManager();
     const [selected, setSelected] = useState();
     const [menu, setMenu] = useState([]);
@@ -223,7 +232,7 @@ const MenuScreen = () => {
                     numColumns={2}
                     data={listImage || menu}
                     keyExtractor={(item) => item.id}
-                    renderItem={({ item }) => <ItemOrder navigation={navigation} key={item.id} item={item} />}
+                    renderItem={({ item }) => <ItemMenu navigation={navigation} key={item.id} item={item} />}
                 />
             </View>
             <View style={styles.secondaryView}>
@@ -232,7 +241,7 @@ const MenuScreen = () => {
                 </ImageBackground>
                 <TouchableOpacity style={styles.rowCart} onPress={gotoCart}>
                     <StyledText i18nText={'setting.viewCart'} customStyle={styles.textCart} />
-                    <StyledText originValue={'（4）'} customStyle={styles.textCart} />
+                    {numOrder > 0 && <StyledText originValue={`( ${numOrder} )`} customStyle={styles.textCart} />}
                 </TouchableOpacity>
             </View>
             <View style={styles.saveView}>

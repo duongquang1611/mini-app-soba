@@ -15,9 +15,9 @@ const TabCouponListScreen = () => {
     const [index, setIndex] = useState(0);
     const [ListCoupon, setListCoupon] = useState({ canUse: [], used: [] });
     useEffect(() => {
-        getNotification();
+        getListCoupon();
     }, []);
-    const getNotification = async () => {
+    const getListCoupon = async () => {
         try {
             const res = await getCouponList();
             setListCoupon(res?.data);

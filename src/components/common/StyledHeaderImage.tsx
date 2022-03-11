@@ -63,7 +63,7 @@ const StyledHeaderImage = (props: HeaderProps) => {
     const renderItem = (data: any) => {
         return (
             <View>
-                <StyledImage source={{ uri: data?.item?.img }} customStyle={styles.img} />
+                <StyledImage source={{ uri: data?.item }} customStyle={styles.img} />
             </View>
         );
     };
