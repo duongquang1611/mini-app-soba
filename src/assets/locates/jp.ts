@@ -126,6 +126,9 @@ export default {
         applyCoupon: 'クーポンを適用',
         keep: '保存',
         orderGuide: '注文ガイド',
+        rangeDate: '{{start}} : {{end}}',
+        addNew: 'New',
+        editMenu: 'edit',
     },
     setting: {
         editProfileTitle: 'マイページ編集',
@@ -229,6 +232,9 @@ export default {
     },
     coupon: {
         title: 'クーポンリスト',
+        useCoupon: 'クーポン使用',
+        canUse: '【リリース記念ＳＣ用】...',
+        canNotUse: '新年会クーポン',
     },
     otp: {
         register: {

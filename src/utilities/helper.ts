@@ -96,3 +96,8 @@ export const openURL = (url: string, cbNotSupport?: any) => {
         }
     });
 };
+export const checkCanUse = (endDate: any) => {
+    const d1 = new Date(endDate);
+    const d2 = new Date();
+    return d1 >= d2;
+};

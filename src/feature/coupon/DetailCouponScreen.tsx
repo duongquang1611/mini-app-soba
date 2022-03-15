@@ -1,28 +1,47 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { couponUse, getCouponDetail } from 'api/modules/api-app/coupon';
+import { RootState } from 'app-redux/hooks';
+import { updateSaveOrder } from 'app-redux/slices/orderSlice';
+import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledButton } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
 import StyledHeader from 'components/common/StyledHeader';
 import StampItem from 'feature/stamp/components/StampItem';
+import { AUTHENTICATE_ROUTE, TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
+import { navigate } from 'navigation/NavigationService';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
-import { logger } from 'utilities/helper';
+import { useSelector, useDispatch } from 'react-redux';
+import { checkCanUse, logger } from 'utilities/helper';
+import { detailCouponFake } from 'utilities/staticData';
 import CouponContentView from './components/CouponContentView';
 
 const SeparatorView = () => <View style={styles.separator} />;
 
 const DetailCouponScreen = (props: any) => {
-    const { canUse, itemStamp, titleButton, exchangeCoupon, disabled: disabledProps = false } = props?.route?.params;
+    const { saveOrder } = useSelector((state: RootState) => state.order);
+    const [data, setData] = useState<any>();
+    const dispatch = useDispatch();
+    const {
+        canUse,
+        itemStamp,
+        titleButton,
+        exchangeCoupon,
+        disabled: disabledProps = false,
+        id,
+    } = props?.route?.params;
     const [disabled, setDisabled] = useState(disabledProps);
-    const [coupon, setCoupon] = useState({});
+    const [coupon, setCoupon] = useState(detailCouponFake);
+    const { endDate } = coupon;
+
     useEffect(() => {
         getCoupon();
     }, []);
     const getCoupon = async () => {
         try {
-            const res = await getCouponDetail(itemStamp?.id);
+            const res = await getCouponDetail(itemStamp?.id || id);
             setCoupon(res?.data);
         } catch (error) {
             logger(error);
@@ -38,16 +57,29 @@ const DetailCouponScreen = (props: any) => {
             try {
                 const res = await couponUse(itemStamp?.id, itemStamp?.orderType);
                 setCoupon(res?.data);
+                const newCoupons = saveOrder?.coupons?.filter((item: any) => item?.id !== id);
+                dispatch(
+                    updateSaveOrder({
+                        ...saveOrder,
+                        coupons: [
+                            ...newCoupons,
+                            {
+                                id: coupon.id,
+                                title: coupon.title,
+                            },
+                        ],
+                    }),
+                );
+                navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.CART);
             } catch (error) {
                 logger(error);
                 AlertMessage(error);
             }
         }
     };
-
     return (
         <View style={styles.container}>
-            <StyledHeader title={canUse ? '【リリース記念ＳＣ用】...' : '新年会クーポン'} />
+            <StyledHeader title={checkCanUse(endDate) ? 'coupon.canUse' : 'coupon.canNotUse'} />
             {!!itemStamp && (
                 <>
                     <SeparatorView />
@@ -55,10 +87,14 @@ const DetailCouponScreen = (props: any) => {
                     <SeparatorView />
                 </>
             )}
-            <CouponContentView canUse={canUse} />
-            {canUse && (
+            <CouponContentView canUse={canUse} data={coupon} />
+            {checkCanUse(endDate) && (
                 <View style={styles.buttonView}>
-                    <StyledButton title={titleButton || 'クーポン使用'} onPress={handleUseCoupon} disabled={disabled} />
+                    <StyledButton
+                        title={titleButton || 'coupon.useCoupon'}
+                        onPress={handleUseCoupon}
+                        disabled={disabled}
+                    />
                 </View>
             )}
         </View>
@@ -81,6 +117,7 @@ const styles = ScaledSheet.create({
         backgroundColor: Themes.COLORS.white,
         paddingVertical: '10@vs',
         alignItems: 'center',
+        paddingBottom: Metrics.safeBottomPadding,
     },
     separator: {
         height: '10@vs',
