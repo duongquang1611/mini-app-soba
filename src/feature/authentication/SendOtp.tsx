@@ -1,41 +1,46 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { checkVerifyCode, forgotPassword, getVerifyCode, register } from 'api/modules/api-app/authenticate';
+import { userInfoActions } from 'app-redux/slices/userInfoSlice';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledText, StyledTouchable } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
 import StyledHeader from 'components/common/StyledHeader';
 import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { SafeAreaView, View } from 'react-native';
+import { View } from 'react-native';
 import CodeInput from 'react-native-confirmation-code-input';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet } from 'react-native-size-matters';
-import { logger } from 'utilities/helper';
+import { useDispatch } from 'react-redux';
+import { staticValue, VerifiedCodeType } from 'utilities/staticData';
 
 const SendOTP: FunctionComponent = ({ route }: any) => {
+    const dispatch = useDispatch();
     const [code, setCode] = useState('');
     const { t } = useTranslation();
-    const { email, password, user } = route?.params;
+    const { user, type } = route?.params;
+    const { email, password } = user;
+    const isRegister = useMemo(() => type === VerifiedCodeType.REGISTER, [type]);
     const onCodeFilled = (codeVer: string) => {
         setCode(codeVer);
     };
 
     const confirm = async () => {
         try {
-            if (code?.length < 5) {
+            if (code?.length < staticValue.OTP_LENGTH) {
                 AlertMessage(t('alert.invalidOTP'));
                 return;
             }
-            if (route?.params?.register) {
-                const response = await register(user);
-                const data = {
-                    ...response,
-                    user: { email, isSave: true },
-                };
-                // AuthenticateService.handlerLogin(data);
-                navigate(AUTHENTICATE_ROUTE.REGISTER_STEP_1);
+            if (isRegister) {
+                const response = await register({
+                    ...user,
+                    verifiedCode: code,
+                });
+                console.log(response.data);
+                dispatch(userInfoActions.updateToken(response.data));
+                // navigate(AUTHENTICATE_ROUTE.REGISTER_STEP_1);
             } else {
                 const verifyCode = await checkVerifyCode(email, code);
                 if (verifyCode?.data?.isValid) {
@@ -45,15 +50,14 @@ const SendOTP: FunctionComponent = ({ route }: any) => {
                 }
             }
         } catch (error) {
-            logger(error);
+            console.log('confirm -> error', error);
             AlertMessage(error);
         }
     };
-    // const confirm = () => navigate(AUTHENTICATE_ROUTE.INFORMATION);
 
     const resendOTP = async () => {
         try {
-            if (route?.params?.register) {
+            if (isRegister) {
                 await getVerifyCode(email);
                 AlertMessage(t('alert.success'));
                 return;
@@ -68,11 +72,8 @@ const SendOTP: FunctionComponent = ({ route }: any) => {
     return (
         <View style={styles.flex1}>
             <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
-                <StyledHeader title={route?.params.register ? 'regis' : 'SendOtpForgotPass'} />
-                <StyledText
-                    customStyle={styles.title}
-                    i18nText={route?.params.register ? 'regis' : 'SendOtpForgotPass'}
-                />
+                <StyledHeader title={isRegister ? 'regis' : 'SendOtpForgotPass'} />
+                <StyledText customStyle={styles.title} i18nText={isRegister ? 'regis' : 'SendOtpForgotPass'} />
                 <View style={styles.container}>
                     <CodeInput
                         codeLength={6}
@@ -89,9 +90,7 @@ const SendOTP: FunctionComponent = ({ route }: any) => {
                     </StyledTouchable>
                     <StyledButton
                         customStyle={styles.flex1}
-                        title={
-                            route?.params.register ? 'common.sendOTP.sendForgotPassword' : 'common.sendOTP.buttonNext'
-                        }
+                        title={isRegister ? 'common.sendOTP.sendForgotPassword' : 'common.sendOTP.buttonNext'}
                         onPress={confirm}
                     />
                 </View>

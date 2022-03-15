@@ -16,6 +16,12 @@ export const staticValue = {
         0: { opacity: 0, translateY: -100, scale: 0.2 },
         1: { opacity: 1, translateY: 0, scale: 1 },
     },
+    AWS_DOMAIN: 'https://aos-app-order-soba-8e35e74.s3.amazonaws.com/',
+    ACTION_WHENS_SET_VALUE: {
+        shouldValidate: true,
+        shouldDirty: true,
+    },
+    OTP_LENGTH: 6,
 };
 
 export const IMG_URL = {
@@ -339,7 +345,7 @@ export const listButton = [
         id: 5,
         name: 'ポリシー',
         img: Images.icons.document_text,
-        key: 'contact',
+        key: 'policy',
     },
     {
         id: 6,
@@ -431,7 +437,8 @@ export const MODAL_ID = {
     EXCHANGE_COUPON_ERROR: 56,
     APPLY_COUPON: 57,
     ORDER_GUIDE: 58,
-    LIST_COUPON: 60,
+    LIST_COUPON: 59,
+    IMG_PICKER: 60,
 };
 
 export const INFORMATION = [
@@ -564,3 +571,33 @@ export const stepGuide = [
 ];
 
 export const FAKER = {};
+
+// ENUM
+export enum VerifiedCodeType {
+    REGISTER = 1,
+    RESET_PASSWORD = 2,
+    CHANGE_EMAIL = 3,
+}
+
+export enum Gender {
+    MALE = 1,
+    FEMALE = 2,
+}
+
+export const GENDER_DATA = [
+    { id: Gender.MALE, title: '男性', value: `${Gender.MALE}` },
+    { id: Gender.FEMALE, title: '女性', value: `${Gender.FEMALE}` },
+];
+
+export const OPTION_SELECT_IMAGE = [
+    {
+        id: 2,
+        icon: Images.icons.arrowLeftPrimary,
+        name: 'common.optionCamera',
+    },
+    {
+        id: 1,
+        icon: Images.icons.arrowLeftPrimary,
+        name: 'common.optionFolder',
+    },
+];

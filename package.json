@@ -102,7 +102,7 @@
         "react-native-restart": "^0.0.22",
         "react-native-root-siblings": "^4.1.1",
         "react-native-safe-area-context": "^3.2.0",
-        "react-native-screens": "^3.4.0",
+        "react-native-screens": "3.10.2",
         "react-native-size-matters": "^0.4.0",
         "react-native-snap-carousel": "^3.9.1",
         "react-native-static-safe-area-insets": "^2.1.1",

@@ -40,6 +40,7 @@ const Images: any = {
         couponBlue: require('./icon/ic_coupon_blue.png'),
         document: require('./icon/ic_document.png'),
         arrow_left: require('./icon/ic_arrow_left.png'),
+        arrowLeftPrimary: require('./icon/ic_arrow_left_primary.png'),
         bag: require('./icon/ic_bag.png'),
         cancel: require('./icon/ic_cancel.png'),
         add: require('./icon/ic_add.png'),

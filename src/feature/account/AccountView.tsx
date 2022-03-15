@@ -20,7 +20,7 @@ const DEFAULT_FORM: any = {
 
 const AccountView = () => {
     const schema = yup.object().shape({
-        username: yupValidate.name(),
+        username: yupValidate.fullName(),
         email: yupValidate.email(),
         phone: yupValidate.phone(),
         password: yupValidate.password(),

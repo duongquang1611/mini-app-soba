@@ -1,26 +1,24 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledInputForm } from 'components/base';
 import StyledHeader from 'components/common/StyledHeader';
 import React, { useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { View } from 'react-native';
+import { Keyboard, View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import * as yup from 'yup';
 
 const ContactScreen = () => {
-    const contact = () => {
-        console.log('contact');
-    };
     const registerSchema = yup.object().shape({
-        // email: yupValidate.email(),
-        // password: yupValidate.password(),
-        // confirmPassword: yupValidate.password('password'),
+        position: yup.string().required(),
+        content: yup.string().required(),
     });
+
     const form = useForm({
         mode: 'onChange',
-        // resolver: yupResolver(registerSchema),
+        resolver: yupResolver(registerSchema),
     });
     const {
         formState: { isValid },
@@ -29,6 +27,11 @@ const ContactScreen = () => {
     } = form;
     const contentRef = useRef<any>(null);
     const { t } = useTranslation();
+
+    const sendContact = (formData: any) => {
+        console.log('sendContact -> formData', formData);
+    };
+
     return (
         <View style={styles.container}>
             <StyledHeader title={'setting.contactTitle'} />
@@ -45,18 +48,23 @@ const ContactScreen = () => {
                     <StyledInputForm
                         label={'setting.content'}
                         name={'content'}
+                        returnKeyType={'done'}
                         ref={contentRef}
                         placeholder={t('setting.content')}
                         keyboardType="email-address"
-                        returnKeyType={'next'}
-                        onSubmitEditing={contact}
+                        onSubmitEditing={Keyboard.dismiss}
                         customStyle={styles.contentInput}
                         multiline
                     />
                 </FormProvider>
-            </View>
-            <View style={styles.buttonView}>
-                <StyledButton title={'setting.send'} onPress={contact} customStyle={styles.buttonSave} />
+                <View style={styles.buttonView}>
+                    <StyledButton
+                        title={'setting.send'}
+                        onPress={handleSubmit(sendContact)}
+                        disabled={!isValid}
+                        customStyle={styles.buttonSave}
+                    />
+                </View>
             </View>
         </View>
     );
@@ -71,12 +79,13 @@ const styles = ScaledSheet.create({
     },
     body: {
         flex: 1,
-        marginVertical: '10@vs',
+        marginTop: '10@vs',
         backgroundColor: Themes.COLORS.white,
     },
-    buttonSave: {},
+    buttonSave: {
+        marginTop: '22@vs',
+    },
     buttonView: {
-        paddingVertical: '10@vs',
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: Themes.COLORS.white,

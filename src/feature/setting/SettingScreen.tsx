@@ -82,9 +82,11 @@ const SettingScreen = () => {
     const goToContact = () => {
         navigate(SETTING_ROUTE.CONTACT);
     };
+
     const logout = () => {
         AuthenticateService.logOut();
     };
+
     const goToDetail = (key: string) => {
         switch (key) {
             case 'myPage':
@@ -101,6 +103,9 @@ const SettingScreen = () => {
                 break;
             case 'contact':
                 goToContact();
+                break;
+            case 'policy':
+                alert('open link policy');
                 break;
             case 'logOut':
                 logout();

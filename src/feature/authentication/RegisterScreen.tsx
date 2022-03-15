@@ -2,177 +2,218 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { checkIsExistEmail, getVerifyCode } from 'api/modules/api-app/authenticate';
 import Images from 'assets/images';
-import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
-import { StyledButton, StyledInputForm, StyledText } from 'components/base';
+import { StyledButton, StyledImage, StyledInputForm, StyledText, StyledTouchable } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
+import { LabelInput } from 'components/base/StyledInput';
+import RadioCheckView from 'components/common/RadioCheckView';
 import StyledHeader from 'components/common/StyledHeader';
 import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { scale, ScaledSheet } from 'react-native-size-matters';
+import { ScaledSheet } from 'react-native-size-matters';
+import { openURL } from 'utilities/helper';
+import { GENDER_DATA, staticValue, VerifiedCodeType } from 'utilities/staticData';
+import { PASSWORD_MAX_LENGTH, USERNAME_MAX_LENGTH } from 'utilities/validate';
 import yupValidate from 'utilities/yupValidate';
 import * as yup from 'yup';
 import UpLoadAvatar from './components/UpLoadAvatar';
 
+const REGISTER_DEFAULT_FORM = __DEV__
+    ? {
+          email: 'yeuquaimo@love.you',
+          password: '12345678',
+          confirmPassword: '12345678',
+          fullName: 'DuongQuang',
+          birthday: '2022-03-14T05:53:39.027Z',
+          gender: '1',
+      }
+    : {};
+
 const RegisTerScreen = () => {
-    const goToRegis = () => {
-        navigate(AUTHENTICATE_ROUTE.REGISTER_STEP_1);
-    };
     const { t } = useTranslation();
-    const [stateGender, setStateGender] = useState({
-        gender: '',
-        maleButtonColor: Themes.COLORS.white,
-        femaleButtonColor: Themes.COLORS.white,
-    });
-    const [rule, setRule] = useState(false);
+    const [rule, setRule] = useState(__DEV__);
     const passwordRef = useRef<any>(null);
     const passwordConfirmRef = useRef<any>(null);
+    const fullNameRef = useRef<any>(null);
 
     const registerSchema = yup.object().shape({
         email: yupValidate.email(),
         password: yupValidate.password(),
         confirmPassword: yupValidate.password('password'),
+        fullName: yupValidate.fullName(),
+        birthday: yupValidate.birthday(),
+        gender: yupValidate.gender(),
     });
 
     const form = useForm({
         mode: 'onChange',
         resolver: yupResolver(registerSchema),
+        defaultValues: REGISTER_DEFAULT_FORM,
     });
     const {
         formState: { isValid },
         setValue,
         handleSubmit,
+        watch,
     } = form;
 
-    const submit = async (user: any) => {
-        const res = await checkIsExistEmail(user?.email);
-        if (res?.data?.isExisted) {
-            AlertMessage(t('error.emailExisted'));
-            return;
-        }
-        await getVerifyCode(user?.email);
-        navigate(AUTHENTICATE_ROUTE.SEND_OTP, { ...user, register: true });
+    const goToRegis = () => {
+        navigate(AUTHENTICATE_ROUTE.REGISTER_STEP_1);
     };
+
+    const submit = async (user: any) => {
+        try {
+            const res = await checkIsExistEmail({ email: user?.email });
+            if (res?.data?.isExisted) {
+                AlertMessage(t('error.emailExisted'));
+                return;
+            }
+            await getVerifyCode({ email: user?.email, type: VerifiedCodeType.REGISTER });
+            const newUser = { ...user };
+            delete newUser.confirmPassword;
+            if (newUser?.gender) {
+                newUser.gender = Number(newUser.gender);
+            }
+            navigate(AUTHENTICATE_ROUTE.SEND_OTP, { user: newUser, type: VerifiedCodeType.REGISTER });
+        } catch (error) {
+            AlertMessage(error);
+        }
+    };
+
+    const renderCenter = () => {
+        return <StyledImage source={Images.photo.logo} customStyle={styles.logo} />;
+    };
+
+    const setValueForm = (field: any, value: string | number) => {
+        setValue(field, value, staticValue.ACTION_WHENS_SET_VALUE);
+    };
+
+    const renderItemGender = (item: any) => {
+        return (
+            <StyledTouchable
+                customStyle={styles.buttonGender}
+                key={item.title}
+                onPress={() => setValueForm('gender', item.value)}
+            >
+                <RadioCheckView check={watch('gender') === item.value} />
+                <StyledText customStyle={styles.textGender} originValue={item.title} />
+            </StyledTouchable>
+        );
+    };
+    const goToLogin = () => {
+        navigate(AUTHENTICATE_ROUTE.LOGIN);
+    };
+
+    const openPolicy = () => {
+        openURL('https://fb.com');
+    };
+
     return (
         <View style={styles.container}>
-            <StyledHeader title={'register'} />
+            <StyledHeader
+                title={'register'}
+                renderCenter={renderCenter}
+                customContainer={styles.customContainerHeader}
+            />
 
             <KeyboardAwareScrollView
-                style={styles.container}
-                // contentContainerStyle={styles.container}
+                style={styles.scrollView}
+                contentContainerStyle={styles.contentScrollView}
                 enableOnAndroid={true}
                 showsVerticalScrollIndicator={false}
             >
-                <SafeAreaView style={styles.body}>
-                    <FormProvider {...form}>
-                        <UpLoadAvatar setValue={setValue} />
-                        <StyledInputForm
-                            label={'email'}
-                            name={'email'}
-                            placeholder={t('authen.register.namePlaceholder')}
-                            keyboardType="email-address"
-                            returnKeyType={'next'}
-                            onSubmitEditing={() => passwordRef.current.focus()}
-                        />
-                        <StyledInputForm
-                            label="password"
-                            name="password"
-                            customPlaceHolder="authen.login.placeholderPassword"
-                            ref={passwordRef}
-                            returnKeyType={'next'}
-                            maxLength={20}
-                            onSubmitEditing={() => passwordConfirmRef.current.focus()}
-                            isSecureTextEntry={true}
-                            icYeyOff={Images.icons.eyeOff}
-                            icYeyOn={Images.icons.eyeOn}
-                            customStyle={styles.container}
-                        />
-                        <StyledInputForm
-                            label={'confirmPassword'}
-                            name={'confirmPassword'}
-                            customPlaceHolder="authen.login.placeholderPassword"
-                            ref={passwordConfirmRef}
-                            returnKeyType={'done'}
-                            maxLength={20}
-                            onSubmitEditing={handleSubmit(submit)}
-                            isSecureTextEntry={true}
-                            icYeyOff={Images.icons.eyeOff}
-                            icYeyOn={Images.icons.eyeOn}
-                        />
-                        <StyledInputForm
-                            label={'name'}
-                            name={'name'}
-                            placeholder={t('authen.register.namePlaceholder')}
-                            keyboardType="email-address"
-                            returnKeyType={'next'}
-                            onSubmitEditing={() => passwordRef.current.focus()}
-                        />
-                        <StyledInputForm
-                            label={'birthday'}
-                            name={'birthday'}
-                            placeholder={t('authen.register.birthdayPlaceholder')}
-                            ref={passwordRef}
-                            returnKeyType={'next'}
-                            maxLength={32}
-                            icBirthday={Images.icons.calendar}
-                            // onSubmitEditing={() => passwordConfirmRef.current.focus()}
-                        />
-                        <StyledText customStyle={styles.titleGender} i18nText={'gender'} />
-                        <TouchableOpacity
-                            style={styles.buttonGender}
-                            onPress={() => {
-                                setStateGender({
-                                    gender: 'male',
-                                    maleButtonColor: Themes.COLORS.red,
-                                    femaleButtonColor: Themes.COLORS.white,
-                                });
-                            }}
-                        >
-                            <View style={[styles.button, { backgroundColor: stateGender.maleButtonColor }]} />
-                            <StyledText customStyle={styles.textGender} i18nText={'male'} />
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={styles.buttonGender}
-                            onPress={() => {
-                                setStateGender({
-                                    gender: 'female',
-                                    maleButtonColor: Themes.COLORS.white,
-                                    femaleButtonColor: Themes.COLORS.red,
-                                });
-                            }}
-                        >
-                            <View style={[styles.button, { backgroundColor: stateGender.femaleButtonColor }]} />
-                            <StyledText customStyle={styles.textGender} i18nText={'Female'} />
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={styles.buttonGender}
-                            onPress={() => {
-                                setRule(!rule);
-                            }}
-                        >
-                            <View
-                                style={[
-                                    styles.ruleButton,
-                                    { backgroundColor: rule ? Themes.COLORS.red : Themes.COLORS.white },
-                                ]}
-                            />
-                            <StyledText customStyle={styles.textGender} i18nText={'rule'} />
-                        </TouchableOpacity>
-                    </FormProvider>
-                    <StyledButton
-                        disabled={!isValid}
-                        title={'confirm'}
-                        onPress={goToRegis}
-                        customStyle={styles.buttonSave}
+                <StyledText customStyle={styles.title} i18nText={'authen.register.title'} />
+                <FormProvider {...form}>
+                    <View style={styles.fakeRegisterInput}>
+                        <StyledInputForm name={'avatar'} />
+                        <StyledInputForm name={'gender'} />
+                    </View>
+                    <UpLoadAvatar setValue={(img: any) => setValueForm('avatar', img)} />
+                    <StyledInputForm
+                        name={'email'}
+                        label={'authen.labelRegister.email'}
+                        customPlaceHolder={'authen.hintRegister.email'}
+                        keyboardType="email-address"
+                        onSubmitEditing={() => passwordRef.current.focus()}
                     />
-                </SafeAreaView>
+                    <StyledInputForm
+                        ref={passwordRef}
+                        name="password"
+                        label={'authen.labelRegister.password'}
+                        customPlaceHolder={'authen.hintRegister.password'}
+                        maxLength={PASSWORD_MAX_LENGTH}
+                        onSubmitEditing={() => passwordConfirmRef.current.focus()}
+                        isSecureTextEntry={true}
+                        icYeyOff={Images.icons.eyeOff}
+                        icYeyOn={Images.icons.eyeOn}
+                        customStyle={styles.inputPassword}
+                    />
+                    <StyledInputForm
+                        ref={passwordConfirmRef}
+                        name={'confirmPassword'}
+                        label={'authen.labelRegister.confirmPassword'}
+                        customPlaceHolder={'authen.hintRegister.confirmPassword'}
+                        returnKeyType={'done'}
+                        maxLength={PASSWORD_MAX_LENGTH}
+                        isSecureTextEntry={true}
+                        icYeyOff={Images.icons.eyeOff}
+                        icYeyOn={Images.icons.eyeOn}
+                        customStyle={styles.inputPassword}
+                    />
+                    <StyledInputForm
+                        ref={fullNameRef}
+                        name={'fullName'}
+                        customPlaceHolder={'authen.hintRegister.fullName'}
+                        maxLength={USERNAME_MAX_LENGTH}
+                        label={'authen.labelRegister.fullName'}
+                    />
+                    <StyledInputForm
+                        name={'birthday'}
+                        label={'authen.labelRegister.birthday'}
+                        customPlaceHolder={'authen.hintRegister.birthday'}
+                        icBirthday={Images.icons.calendar}
+                        customStyle={styles.inputBirthday}
+                        editable={false}
+                        pointerEvents={'none'}
+                        handleConfirm={(text: string) => setValueForm('birthday', text)}
+                    />
+                    <LabelInput label={t('authen.labelRegister.birthday')} customStyle={styles.titleGender} />
+                    {GENDER_DATA.map(renderItemGender)}
+                    <View style={styles.buttonRule}>
+                        <StyledTouchable onPress={() => setRule(!rule)}>
+                            <RadioCheckView
+                                customStyle={styles.ruleButton}
+                                check={rule}
+                                customContentStyle={styles.contentRuleButton}
+                            />
+                        </StyledTouchable>
+                        <Text style={styles.textRule}>
+                            <Text onPress={openPolicy} style={styles.textRuleCanPress}>
+                                {'利用規約、'}
+                            </Text>
+                            {'および'}
+                            <Text onPress={openPolicy} style={styles.textRuleCanPress}>
+                                {'プライバシーポリシー\n'}
+                            </Text>
+                            {'に同意する'}
+                        </Text>
+                    </View>
+                </FormProvider>
+                <StyledButton
+                    disabled={!isValid || !rule}
+                    title={'common.next'}
+                    onPress={handleSubmit(submit)}
+                    customStyle={styles.buttonSave}
+                />
+                <StyledText customStyle={styles.textNote} i18nText={'authen.register.note'} />
+                <StyledTouchable customStyle={styles.btnLogin} onPress={goToLogin}>
+                    <StyledText customStyle={styles.textLogin} i18nText={'authen.register.login'} />
+                </StyledTouchable>
             </KeyboardAwareScrollView>
         </View>
     );
@@ -184,14 +225,41 @@ const styles = ScaledSheet.create({
     container: {
         flex: 1,
     },
+    contentScrollView: {
+        paddingBottom: '40@vs',
+    },
     scrollView: {
+        flex: 1,
+    },
+    title: {
+        fontSize: '24@ms0.3',
+        fontWeight: 'bold',
+        marginLeft: '20@s',
+        marginVertical: '30@vs',
+        lineHeight: '32@vs',
+    },
+    inputPassword: {
+        flex: 1,
+    },
+    inputBirthday: {
+        flex: 1,
+    },
+    customContainerHeader: {
+        paddingVertical: 0,
+    },
+    logo: {
+        width: '125@s',
+        height: '65@s',
+        alignSelf: 'center',
         flex: 1,
     },
     body: {
         flex: 1,
-        alignItems: 'center',
     },
-    buttonSave: {},
+    buttonSave: {
+        alignSelf: 'center',
+        marginTop: '20@vs',
+    },
     button: {
         width: '16@s',
         height: '16@s',
@@ -200,22 +268,55 @@ const styles = ScaledSheet.create({
     },
     buttonGender: {
         flexDirection: 'row',
-        width: Metrics.screenWidth - scale(40),
-        alignSelf: 'flex-start',
-        marginVertical: '15@vs',
+        marginTop: '12@vs',
+        marginHorizontal: '20@s',
+        alignItems: 'center',
+    },
+    buttonRule: {
+        flexDirection: 'row',
+        marginTop: '40@vs',
+        marginHorizontal: '20@s',
+        flexShrink: 1,
+        alignItems: 'center',
     },
     textGender: {
         marginLeft: '15@s',
     },
     titleGender: {
-        alignSelf: 'flex-start',
         marginLeft: '20@s',
         marginTop: '10@vs',
     },
     ruleButton: {
-        width: '16@s',
-        height: '16@s',
         borderRadius: 5,
-        borderWidth: 1,
+    },
+    contentRuleButton: {
+        borderRadius: 3,
+    },
+    textNote: {
+        color: Themes.COLORS.mineShaft,
+        lineHeight: '21@vs',
+        alignSelf: 'center',
+        marginTop: '10@vs',
+    },
+    textLogin: {
+        color: Themes.COLORS.primary,
+    },
+    btnLogin: {
+        borderBottomWidth: 0.5,
+        alignSelf: 'center',
+        borderColor: Themes.COLORS.primary,
+    },
+    fakeRegisterInput: {
+        bottom: -99999999,
+        position: 'absolute',
+    },
+    textRule: {
+        fontSize: '16@ms0.3',
+        color: Themes.COLORS.mineShaft,
+        lineHeight: '24@vs',
+        marginLeft: '12@s',
+    },
+    textRuleCanPress: {
+        color: Themes.COLORS.primary,
     },
 });

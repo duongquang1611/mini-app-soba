@@ -1,5 +1,6 @@
 import { login } from 'api/modules/api-app/authenticate';
 import request from 'api/request';
+import { clearGlobalData } from 'app-redux/slices/globalDataSlice';
 import { userInfoActions } from 'app-redux/slices/userInfoSlice';
 import { store } from 'app-redux/store';
 import { AxiosRequestConfig } from 'axios';
@@ -30,6 +31,7 @@ const AuthenticateService = {
         }),
     logOut: () => {
         store.dispatch(userInfoActions.logOut());
+        store.dispatch(clearGlobalData());
         deleteTagOneSignal();
     },
     handlerLogin: (token: Record<string, string>) => {
@@ -45,13 +47,13 @@ export const useLogin = (): LoginRequest => {
         try {
             setLoading(true);
             const response = await login(options);
+            setLoading(false);
             store.dispatch(userInfoActions.getUserInfoRequest(response?.data?.token));
             AuthenticateService.handlerLogin({ ...response.data });
         } catch (e) {
+            setLoading(false);
             console.log('file: AuthenticateService.ts -> line 52 -> requestLogin -> e', e);
             AlertMessage(`${e}`);
-        } finally {
-            setLoading(false);
         }
     };
 

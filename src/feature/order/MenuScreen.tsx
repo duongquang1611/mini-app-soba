@@ -201,6 +201,7 @@ const MenuScreen = () => {
                 title={'order.menuTitle'}
                 iconRight={Images.icons.question}
                 hasBack={false}
+                largeTitleHeader
             />
             <View style={styles.categoryContainer}>
                 {list.length > 1 ? (

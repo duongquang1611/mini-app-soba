@@ -27,7 +27,7 @@ const styles = ScaledSheet.create({
     container: {
         width: '20@s',
         height: '20@s',
-        borderRadius: 50,
+        borderRadius: 100,
         overflow: 'hidden',
         borderWidth: 1.5,
         alignItems: 'center',

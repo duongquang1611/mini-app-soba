@@ -1,18 +1,15 @@
-import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import navigationConfigs from 'navigation/config/options';
-import { isIos } from 'utilities/helper';
-import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
+import ChangePassword from 'feature/authentication/ChangePassword';
+import ForgotPasswordScreen from 'feature/authentication/ForgotPwdScreen';
+import Information from 'feature/authentication/Information';
 import LoginScreen from 'feature/authentication/LoginScreen';
 import RegisterScreen from 'feature/authentication/RegisterScreen';
-import ForgotPasswordScreen from 'feature/authentication/ForgotPwdScreen';
 import SendOTP from 'feature/authentication/SendOtp';
-import ChangePassword from 'feature/authentication/ChangePassword';
-import Information from 'feature/authentication/Information';
-import RegisterStep1 from 'feature/authentication/RegisterStep1';
-import RegisterStep2 from 'feature/authentication/RegisterStep2';
-import RegisterStep3 from 'feature/authentication/RegisterStep3';
 import SendOtpForgotPass from 'feature/authentication/SendOtpForgotPass';
+import navigationConfigs from 'navigation/config/options';
+import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
+import React from 'react';
+import { isIos } from 'utilities/helper';
 
 const MainStack = createStackNavigator();
 
@@ -24,9 +21,6 @@ const AuthStack = () => (
         <MainStack.Screen name={AUTHENTICATE_ROUTE.SEND_OTP} component={SendOTP} />
         <MainStack.Screen name={AUTHENTICATE_ROUTE.CHANGE_PASS} component={ChangePassword} />
         <MainStack.Screen name={AUTHENTICATE_ROUTE.INFORMATION} component={Information} />
-        <MainStack.Screen name={AUTHENTICATE_ROUTE.REGISTER_STEP_1} component={RegisterStep1} />
-        <MainStack.Screen name={AUTHENTICATE_ROUTE.REGISTER_STEP_2} component={RegisterStep2} />
-        <MainStack.Screen name={AUTHENTICATE_ROUTE.REGISTER_STEP_3} component={RegisterStep3} />
         <MainStack.Screen name={AUTHENTICATE_ROUTE.SEND_OTP_FORGOT_PASS} component={SendOtpForgotPass} />
     </MainStack.Navigator>
 );

@@ -15,8 +15,11 @@ import yupValidate from 'utilities/yupValidate';
 import * as yup from 'yup';
 
 const DEFAULT_FORM: any = {
-    email: 'phong.trieu@amela.vn',
-    password: '123456',
+    email: 'yeuquaimo@love.you',
+    password: '12345678',
+
+    // email: 'phong.trieu@amela.vn',
+    // password: '123456',
 };
 
 const LoginScreen: FunctionComponent = () => {

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { getMobileOrder } from 'api/modules/api-app/home';
 import { RootState } from 'app-redux/hooks';
 import Images from 'assets/images';
