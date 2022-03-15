@@ -39,7 +39,6 @@ const ContactScreen = () => {
                 <FormProvider {...form}>
                     <StyledInputForm
                         label={'setting.position'}
-                        labelRequire={'*'}
                         name={'position'}
                         placeholder={t('setting.position')}
                         keyboardType="email-address"
@@ -47,7 +46,6 @@ const ContactScreen = () => {
                         onSubmitEditing={() => contentRef.current.focus()}
                     />
                     <StyledInputForm
-                        labelRequire={'*'}
                         label={'setting.content'}
                         name={'content'}
                         returnKeyType={'done'}

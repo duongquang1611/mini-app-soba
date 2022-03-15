@@ -1,38 +1,23 @@
-import i18next from 'i18next';
 import * as yup from 'yup';
-import { requireField } from './format';
-import {
-    PASSWORD_MAX_LENGTH,
-    PASSWORD_MIN_LENGTH,
-    REGEX_EMAIL,
-    REGEX_PASSWORD,
-    REGEX_PHONE,
-    USERNAME_MAX_LENGTH,
-    USERNAME_MIN_LENGTH,
-} from './validate';
+import { PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH, REGEX_PHONE, SPECIAL_CHAR, USERNAME_MAX_LENGTH } from './validate';
 
 const yupValidate = {
-    name: () =>
+    fullName: () =>
         yup
             .string()
-            .required(() => requireField('name'))
-            .trim(i18next.t('error.trimSpace'))
+            .required('common.required')
+            .trim('error.trimSpace')
             .strict(true)
-            .min(USERNAME_MIN_LENGTH, i18next.t('error.nameLength'))
-            .max(USERNAME_MAX_LENGTH, i18next.t('error.nameLength')),
+            .max(USERNAME_MAX_LENGTH, 'error.maxFullName')
+            .matches(SPECIAL_CHAR, 'error.errorSpecialCharacter'),
 
-    email: () =>
-        yup
-            .string()
-            .required(() => requireField('email'))
-            .email(i18next.t('error.emailInvalid'))
-            .matches(REGEX_EMAIL, i18next.t('error.emailInvalid')),
+    email: () => yup.string().required('common.required').trim('error.trimSpace').email('error.emailInvalid'),
 
-    phone: () =>
-        yup
-            .string()
-            .required(() => requireField('phone'))
-            .matches(REGEX_PHONE, i18next.t('error.phoneInvalid')),
+    birthday: () => yup.string().required('common.required'),
+
+    gender: () => yup.string().required('common.required'),
+
+    phone: () => yup.string().required('common.required').matches(REGEX_PHONE, 'error.phoneInvalid'),
 
     /**
      * @param ref : the name of StyledInputForm want to compare
@@ -45,23 +30,23 @@ const yupValidate = {
         if (ref) {
             // NEW PASSWORD
             if (!isMatchCurrentPassword)
-                return yupValidate.password().not([yup.ref(ref), null], i18next.t('error.duplicatePassword'));
+                return yupValidate.password().not([yup.ref(ref), null], 'error.duplicatePassword');
 
             // CONFIRM PASSWORD
             return yup
                 .string()
-                .required(() => requireField('passwordConfirm'))
-                .oneOf([yup.ref(ref), null], i18next.t('error.passwordNotMatch'));
+                .required('common.required')
+                .oneOf([yup.ref(ref), null], 'error.passwordNotMatch');
         }
 
         return yup
             .string()
-            .required(() => requireField('password'))
-            .trim(i18next.t('error.trimSpace'))
+            .required('common.required')
+            .trim('error.trimSpace')
             .strict(true)
-            .min(PASSWORD_MIN_LENGTH, i18next.t('error.passwordLength'))
-            .max(PASSWORD_MAX_LENGTH, i18next.t('error.passwordLength'))
-            .matches(REGEX_PASSWORD, i18next.t('error.validatePassword'));
+            .min(PASSWORD_MIN_LENGTH, 'error.passwordMinLength')
+            .max(PASSWORD_MAX_LENGTH, 'error.passwordMaxLength');
+        // .matches(REGEX_PASSWORD, ('error.validatePassword'));
     },
 };
 

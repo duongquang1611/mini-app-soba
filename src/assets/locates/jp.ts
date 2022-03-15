@@ -20,6 +20,7 @@ export default {
         cancel: 'キャンセル',
         confirm: '決定',
         save: '保存',
+        next: '次へ',
         sendOTP: {
             title: '認証コード',
             titleForgotPassword: 'パスワードを忘れた',
@@ -48,6 +49,11 @@ export default {
         birthday: '生年月日',
         gender: '性別',
         changePass: 'パスワード変更',
+        cancelCamera: 'キャンセル',
+        chooseCamera: '選択',
+        chooseImgTitle: '写真を選択',
+        optionCamera: '写真を撮る',
+        optionFolder: 'フォトライブラリ',
     },
 
     // screens
@@ -71,7 +77,7 @@ export default {
             noAccountText: 'アカウントを持っていない方？',
         },
         register: {
-            title: '新規会員登録はこちら',
+            title: '新規登録',
             emailPlaceholder: 'sample@demo.webcom',
             namePlaceholder: 'name',
             birthdayPlaceholder: 'birthday',
@@ -82,6 +88,23 @@ export default {
             photo: '画像',
             camera: 'カメラ',
             cancel: 'キャンセル',
+            note: 'アカウントを持っている方？',
+            login: 'ログイン',
+        },
+        hintRegister: {
+            email: 'メールを入力してください',
+            password: 'パスワード',
+            confirmPassword: 'パスワード再入力',
+            fullName: '名前を入力してください',
+            birthday: '年/月/日',
+        },
+        labelRegister: {
+            email: 'メールアドレス',
+            password: 'パスワード',
+            confirmPassword: 'パスワード再入力',
+            fullName: '名前',
+            birthday: '生年月日',
+            gender: '性別',
         },
         sendEmail: {
             title: 'パスワードを忘れた',
@@ -127,11 +150,13 @@ export default {
 
     // error
     error: {
+        required: 'This field is required.',
         signIn: '入力されたイメルまたはパスワードが正しくありません。',
         infoInvalid: '情報は正しくありません。',
         notCompleted: '全ての項目に入力してください。',
         validatePassword: 'パスワードは半角英数字で6文字以上入力する必要があります。',
-        passwordLength: 'パスワードは8文字以上で入力してください。',
+        passwordMinLength: 'パスワードは8文字以上で入力してください。',
+        passwordMaxLength: 'パスワードは8文字以上で入力してください。',
         confirmPasswordLength: '確認パスワードは文字以上を入力してください。',
         passwordNotMatch: '入力された新パスワードが一致しません。ご確認ください。',
         duplicatePassword: 'パスワードは二重されました。',
@@ -140,7 +165,7 @@ export default {
         emailEmpty: '全ての項目を入力してください。',
         emailNotRegister: '入力したメールアドレスがまだ登録されていません。',
         phoneInvalid: '電話番号は正しくありません。',
-        nameLength: '5文字から8文字までに入力してください。',
+        maxFullName: '15文字から8文字までに入力してください。',
         trimSpace: '文頭や文末には空白文字を入力しないでください。',
         messageLength: '1文字以上 255文字以内。',
         require: '{{field}}は記入必須の項目です。',
@@ -197,5 +222,8 @@ export default {
             title: '注意',
             content: '交換可能スタンプ残数が足りません。',
         },
+    },
+    coupon: {
+        title: 'クーポンリスト',
     },
 };

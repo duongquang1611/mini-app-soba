@@ -4,10 +4,14 @@ import { generatePersistConfig } from 'utilities/helper';
 
 interface IGlobalDataState {
     isPushDisabled: boolean;
+    skipOrderDefault: boolean;
+    viewedOrderDefault: boolean;
 }
 
 const initialState: IGlobalDataState = {
     isPushDisabled: false,
+    skipOrderDefault: false,
+    viewedOrderDefault: false,
 };
 
 const globalDataSlice = createSlice({
@@ -24,7 +28,7 @@ const globalDataSlice = createSlice({
     },
 });
 
-const persistConfig = generatePersistConfig('globalData', ['isPushDisabled']);
+const persistConfig = generatePersistConfig('globalData', ['isPushDisabled', 'viewedOrderDefault']);
 
 export const { updateGlobalData, clearGlobalData } = globalDataSlice.actions;
 export default persistReducer<IGlobalDataState>(persistConfig, globalDataSlice.reducer);

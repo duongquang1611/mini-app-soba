@@ -15,11 +15,11 @@ const UpLoadAvatar = (props: UpLoadAvatarProps) => {
     const [image, setImage] = useState(props?.avatar || null);
     const changeImage = (img: string) => {
         setImage(img);
-        props.setValue('avatar', img);
+        props.setValue(img);
     };
     return (
         <View style={styles.container}>
-            <ImagePicker image={image} setImage={changeImage}>
+            <ImagePicker image={image} setImage={changeImage} customStyle={styles.wrapImagePicker}>
                 <StyledImage customStyle={styles.avatar} source={image ? { uri: image } : Images.photo.avatarDefault} />
                 <View style={styles.camera}>
                     <View style={styles.cameraContent}>
@@ -37,11 +37,20 @@ const styles = ScaledSheet.create({
         alignItems: 'center',
         width: '90@s',
         height: '90@s',
+        borderRadius: '90@s',
+        justifyContent: 'center',
+        alignSelf: 'center',
+    },
+    wrapImagePicker: {
+        borderRadius: '100@s',
+        width: '100%',
+        height: '100%',
+        overflow: 'hidden',
     },
     avatar: {
-        width: '90@s',
-        height: '90@s',
-        borderRadius: 90,
+        width: '100%',
+        height: '100%',
+        borderRadius: '90@s',
         borderWidth: 1,
         borderColor: Themes.COLORS.white,
     },
@@ -58,7 +67,7 @@ const styles = ScaledSheet.create({
     },
     cameraContent: {
         width: '90@s',
-        height: '35@s',
+        height: '42@s',
         backgroundColor: 'rgba(34, 34, 34, 0.3)',
         borderBottomRightRadius: 190,
         borderBottomLeftRadius: 190,

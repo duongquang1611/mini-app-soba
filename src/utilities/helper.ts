@@ -79,3 +79,9 @@ export const getCodePushInfo = () => {
 
 export const throttlePress = (callback: any) =>
     throttle(callback, staticValue.THROTTLE_TIME, staticValue.CONFIG_THROTTLE);
+
+export const getYesterday = () => {
+    const date = new Date();
+    date.setDate(date.getDate() - 1);
+    return date;
+};

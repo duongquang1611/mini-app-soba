@@ -1,8 +1,9 @@
 import { uploadImage } from 'api/modules/api-app/general';
+import Config from 'react-native-config';
 import ImagePicker from 'react-native-image-crop-picker';
-import { logger } from 'utilities/helper';
 import i18next from 'utilities/i18next';
 import { checkCamera, checkPhoto } from 'utilities/permissions';
+import { staticValue } from 'utilities/staticData';
 
 const MAX_WIDTH = 800;
 const MAX_HEIGHT = 800;
@@ -21,7 +22,7 @@ const ImageUploaded = {
             const uri = (localPath && (await ImageUploaded.uploader(localPath))) || null;
             return uri;
         } catch (err) {
-            logger(err);
+            console.log('pickImage: -> err', err);
             return null;
         }
     },
@@ -65,8 +66,7 @@ const ImageUploaded = {
         formData.append('files', formatImage);
         const uri = await uploadImage(formData);
         if (uri?.data?.length > 0) {
-            return uri[0];
-            // return `${Config.Image_URL}${uri.data[0]}`;
+            return `${Config.AWS_DOMAIN || staticValue.AWS_DOMAIN}${uri.data[0]}`;
         }
         return null;
     },

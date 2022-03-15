@@ -4,7 +4,7 @@ import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components
 import React from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
-import { formatDate, toLocalStringBirthday } from 'utilities/format';
+import { toLocalStringBirthday } from 'utilities/format';
 
 export const CouponItem = (props: any) => {
     const { item, canUse, goToDetail, handleUseCoupon } = props;

@@ -38,7 +38,7 @@ const TabCouponListScreen = () => {
     });
     return (
         <View style={styles.container}>
-            <StyledHeader title={'クーポンリスト'} hasBack={false} largeTitleHeader />
+            <StyledHeader title={'coupon.title'} hasBack={false} largeTitleHeader />
             <TabView
                 navigationState={{ index, routes }}
                 renderScene={renderScene}

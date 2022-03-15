@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { updateGlobalData } from 'app-redux/slices/globalDataSlice';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
@@ -7,10 +8,11 @@ import LinearView from 'components/common/LinearView';
 import StyledHeader from 'components/common/StyledHeader';
 import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { scale, ScaledSheet } from 'react-native-size-matters';
+import { useDispatch } from 'react-redux';
 
 const list = [
     { category: 'all' },
@@ -54,17 +56,23 @@ const listImage = [
     },
 ];
 const RegisterStep1 = () => {
+    const dispatch = useDispatch();
     const goToRegis = () => {
         navigate(AUTHENTICATE_ROUTE.REGISTER_STEP_2);
     };
     const [categoryRef, setCategoryRef] = useState(useRef());
     const [category, setCategory] = useState('');
     const [selected, setSelected] = useState();
-    const onPressCategory = (item) => {
+    const onPressCategory = (item: any) => {
         setCategory(item.category);
         setSelected(item.category);
     };
-    const renderCategoryItems = ({ item, index }) => {
+
+    useEffect(() => {
+        dispatch(updateGlobalData({ viewedOrderDefault: true }));
+    }, []);
+
+    const renderCategoryItems = ({ item, index }: any) => {
         return (
             <LinearView
                 style={[styles.linear, { borderWidth: selected === item.category ? 0 : 1 }]}
@@ -92,7 +100,7 @@ const RegisterStep1 = () => {
     };
     return (
         <View style={styles.container}>
-            <StyledHeader title={'register'} />
+            <StyledHeader title={'register'} hasBack={false} />
             <View style={styles.contentView}>
                 <StyledIcon source={Images.icons.selected} size={15} />
                 <StyledText customStyle={styles.contentText} i18nText={'text'} />

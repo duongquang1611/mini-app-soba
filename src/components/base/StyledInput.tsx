@@ -6,18 +6,19 @@ import {
     ColorValue,
     ReturnKeyTypeOptions,
     StyleProp,
+    Text,
     TextInput,
     TextInputProps,
     TextStyle,
     View,
     ViewStyle,
-    Text,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { ScaledSheet } from 'react-native-size-matters';
 import { autoCompleteType, textContentType } from 'utilities/CommonInterface';
-import { toLocalStringBirthday } from 'utilities/format';
+import { formatDate, YYYYMMDD } from 'utilities/format';
+import { getYesterday } from 'utilities/helper';
 import { StyledIcon, StyledTouchable } from '.';
 import StyledText from './StyledText';
 
@@ -41,7 +42,28 @@ export interface StyledInputProps extends TextInputProps {
     icYeyOn?: any;
     icBirthday?: any;
     valueInput?: string;
+    onPress?: any;
+    handleConfirm?: any;
 }
+
+export const LabelInput = ({ label, labelRequire = '*', customStyle }: any) => {
+    return (
+        <Text style={[styles.label, customStyle]}>
+            {label}
+            {!!labelRequire && <Text style={styles.labelRequire}>{labelRequire}</Text>}
+        </Text>
+    );
+};
+
+const WrapInput = ({ onPress, children, customStyle }: any) => {
+    return onPress ? (
+        <StyledTouchable customStyle={customStyle} onPress={onPress}>
+            {children}
+        </StyledTouchable>
+    ) : (
+        <View style={customStyle}>{children}</View>
+    );
+};
 
 const StyledInput = (props: StyledInputProps, ref: any) => {
     const {
@@ -51,13 +73,14 @@ const StyledInput = (props: StyledInputProps, ref: any) => {
         icBirthday,
         valueInput,
         customPlaceHolder,
-        labelRequire = '',
+        labelRequire = '*',
         label,
         customLabelStyle,
+        onPress,
+        handleConfirm,
     } = props;
 
     const [isFocused, setIsFocused] = useState(false);
-    const [date, changeDate] = useState('');
     const [isTextEntry, SetTextEntry] = useState(isSecureTextEntry);
     const changeEntryText = () => {
         SetTextEntry(!isTextEntry);
@@ -74,35 +97,37 @@ const StyledInput = (props: StyledInputProps, ref: any) => {
         setDatePickerVisibility(false);
     };
 
-    const handleConfirm = (date: any) => {
-        changeDate(toLocalStringBirthday(date));
+    const handleConfirmDate = (date: any) => {
+        handleConfirm?.(date.toISOString());
         hideDatePicker();
     };
     return (
         <View style={[styles.container, props.containerStyle]}>
-            <DateTimePickerModal
-                isVisible={isDatePickerVisible}
-                mode="date"
-                onConfirm={handleConfirm}
-                onCancel={hideDatePicker}
-            />
-            {!!label && (
-                <Text style={[styles.label, customLabelStyle]}>
-                    {t(label)}
-                    {!!labelRequire && <Text style={styles.labelRequire}>{labelRequire}</Text>}
-                </Text>
+            {!!icBirthday && (
+                <DateTimePickerModal
+                    isVisible={isDatePickerVisible}
+                    mode="date"
+                    date={valueInput ? new Date(valueInput) : new Date()}
+                    onConfirm={handleConfirmDate}
+                    onCancel={hideDatePicker}
+                    maximumDate={getYesterday()}
+                />
             )}
-            <View style={[styles.containerInput, styles.textInput]}>
+            {!!label && <LabelInput labelRequire={labelRequire} label={t(label)} customStyle={customLabelStyle} />}
+            <WrapInput
+                customStyle={[
+                    styles.containerInput,
+                    styles.textInput,
+                    !isFocused && !!props?.errorMessage && { borderColor: Themes.COLORS.borderInputError },
+                ]}
+                onPress={icBirthday ? showDatePicker : onPress}
+            >
                 <TextInput
                     ref={ref || input}
                     onFocus={() => setIsFocused(true)}
                     onBlur={() => setIsFocused(false)}
-                    style={[
-                        { width: '100%' },
-                        props.customStyle,
-                        !isFocused && !!props?.errorMessage && { borderColor: Themes.COLORS.borderInputError },
-                    ]}
-                    value={icBirthday ? date : valueInput}
+                    style={[styles.input, props.customStyle]}
+                    value={icBirthday ? formatDate(valueInput || '', YYYYMMDD) : valueInput}
                     placeholderTextColor={props.placeholderTextColor || Themes.COLORS.grey}
                     placeholder={customPlaceHolder ? (t(customPlaceHolder as any) as string) : ''}
                     underlineColorAndroid={props.customUnderlineColor || 'transparent'}
@@ -129,8 +154,8 @@ const StyledInput = (props: StyledInputProps, ref: any) => {
                         <StyledIcon customStyle={styles.icEntry} size={15} source={icBirthday} />
                     </TouchableOpacity>
                 )}
-            </View>
-            {!!props?.errorMessage && !isFocused && (
+            </WrapInput>
+            {!!props?.errorMessage && (
                 <StyledText i18nText={props.errorMessage} customStyle={[styles.errorMessage, props.customErrorStyle]} />
             )}
         </View>
@@ -145,10 +170,15 @@ const styles = ScaledSheet.create({
         borderColor: Themes.COLORS.silver,
         backgroundColor: Themes.COLORS.backGroundInput,
     },
+    input: {
+        paddingVertical: 0,
+        width: '100%',
+    },
     errorMessage: {
-        fontSize: 12,
+        fontSize: '12@ms0.3',
         color: Themes.COLORS.borderInputError,
-        marginTop: 5,
+        marginTop: '5@vs',
+        marginLeft: '2@s',
     },
     container: {
         marginVertical: '8@vs',
@@ -159,6 +189,7 @@ const styles = ScaledSheet.create({
         width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-between',
+        alignItems: 'center',
     },
     label: {
         marginVertical: '10@vs',
