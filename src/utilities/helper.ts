@@ -2,7 +2,7 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import AlertMessage from 'components/base/AlertMessage';
 import i18next from 'i18next';
-import { DevSettings, Platform } from 'react-native';
+import { DevSettings, Linking, Platform } from 'react-native';
 import Picker from 'react-native-picker';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import codePush from 'react-native-code-push';
@@ -84,4 +84,15 @@ export const getYesterday = () => {
     const date = new Date();
     date.setDate(date.getDate() - 1);
     return date;
+};
+
+export const openURL = (url: string, cbNotSupport?: any) => {
+    Linking.canOpenURL(url).then((supported) => {
+        if (supported) {
+            Linking.openURL(url);
+        } else {
+            cbNotSupport?.();
+            __DEV__ && console.log(`Don't know how to open URI: ${url}`);
+        }
+    });
 };

@@ -178,10 +178,12 @@ const styles = ScaledSheet.create({
         fontSize: '18@ms0.3',
         color: Themes.COLORS.textPrimary,
         fontWeight: 'bold',
+        lineHeight: '24@vs',
         width: '100%',
     },
     largeTitleHeader: {
         fontSize: '24@ms0.3',
+        lineHeight: '32@vs',
     },
     containerRight: {
         marginLeft: 'auto',

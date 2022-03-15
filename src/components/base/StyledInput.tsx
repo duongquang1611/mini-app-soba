@@ -48,10 +48,10 @@ export interface StyledInputProps extends TextInputProps {
 
 export const LabelInput = ({ label, labelRequire = '*', customStyle }: any) => {
     return (
-        <Text style={[styles.label, customStyle]}>
-            {label}
-            {!!labelRequire && <Text style={styles.labelRequire}>{labelRequire}</Text>}
-        </Text>
+        <View style={styles.wrapLabel}>
+            <StyledText i18nText={label} customStyle={customStyle} />
+            {!!labelRequire && <Text style={[styles.label, styles.labelRequire, customStyle]}>{labelRequire}</Text>}
+        </View>
     );
 };
 
@@ -73,7 +73,7 @@ const StyledInput = (props: StyledInputProps, ref: any) => {
         icBirthday,
         valueInput,
         customPlaceHolder,
-        labelRequire = '*',
+        labelRequire,
         label,
         customLabelStyle,
         onPress,
@@ -113,7 +113,7 @@ const StyledInput = (props: StyledInputProps, ref: any) => {
                     maximumDate={getYesterday()}
                 />
             )}
-            {!!label && <LabelInput labelRequire={labelRequire} label={t(label)} customStyle={customLabelStyle} />}
+            {!!label && <LabelInput labelRequire={labelRequire} label={label} customStyle={customLabelStyle} />}
             <WrapInput
                 customStyle={[
                     styles.containerInput,
@@ -176,6 +176,7 @@ const styles = ScaledSheet.create({
     },
     errorMessage: {
         fontSize: '12@ms0.3',
+        lineHeight: '16@vs',
         color: Themes.COLORS.borderInputError,
         marginTop: '5@vs',
         marginLeft: '2@s',
@@ -192,8 +193,8 @@ const styles = ScaledSheet.create({
         alignItems: 'center',
     },
     label: {
-        marginVertical: '10@vs',
         fontWeight: 'bold',
+        lineHeight: '18@vs',
         fontSize: '14@ms0.3',
         color: Themes.COLORS.mineShaft,
     },
@@ -202,6 +203,11 @@ const styles = ScaledSheet.create({
     },
     icEntry: {
         tintColor: Themes.COLORS.silver,
+    },
+    wrapLabel: {
+        flexDirection: 'row',
+        marginVertical: '10@vs',
+        alignItems: 'center',
     },
 });
 

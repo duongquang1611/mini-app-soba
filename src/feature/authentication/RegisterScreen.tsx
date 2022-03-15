@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet } from 'react-native-size-matters';
+import { openURL } from 'utilities/helper';
 import { GENDER_DATA, staticValue, VerifiedCodeType } from 'utilities/staticData';
 import { PASSWORD_MAX_LENGTH, USERNAME_MAX_LENGTH } from 'utilities/validate';
 import yupValidate from 'utilities/yupValidate';
@@ -104,9 +105,12 @@ const RegisTerScreen = () => {
             </StyledTouchable>
         );
     };
-
     const goToLogin = () => {
         navigate(AUTHENTICATE_ROUTE.LOGIN);
+    };
+
+    const openPolicy = () => {
+        openURL('https://fb.com');
     };
 
     return (
@@ -189,11 +193,11 @@ const RegisTerScreen = () => {
                             />
                         </StyledTouchable>
                         <Text style={styles.textRule}>
-                            <Text onPress={() => alert(1)} style={styles.textRuleCanPress}>
+                            <Text onPress={openPolicy} style={styles.textRuleCanPress}>
                                 {'利用規約、'}
                             </Text>
                             {'および'}
-                            <Text onPress={() => alert(1)} style={styles.textRuleCanPress}>
+                            <Text onPress={openPolicy} style={styles.textRuleCanPress}>
                                 {'プライバシーポリシー\n'}
                             </Text>
                             {'に同意する'}
@@ -232,6 +236,7 @@ const styles = ScaledSheet.create({
         fontWeight: 'bold',
         marginLeft: '20@s',
         marginVertical: '30@vs',
+        lineHeight: '32@vs',
     },
     inputPassword: {
         flex: 1,
