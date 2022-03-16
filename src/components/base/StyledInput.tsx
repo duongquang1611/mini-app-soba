@@ -46,10 +46,10 @@ export interface StyledInputProps extends TextInputProps {
     handleConfirm?: any;
 }
 
-export const LabelInput = ({ label, labelRequire = '*', customStyle }: any) => {
+export const LabelInput = ({ label, labelRequire = '*', customStyle, containerStyle }: any) => {
     return (
-        <View style={styles.wrapLabel}>
-            <StyledText i18nText={label} customStyle={customStyle} />
+        <View style={[styles.wrapLabel, containerStyle]}>
+            <StyledText i18nText={label} customStyle={[styles.label, customStyle]} />
             {!!labelRequire && <Text style={[styles.label, styles.labelRequire, customStyle]}>{labelRequire}</Text>}
         </View>
     );
@@ -194,8 +194,8 @@ const styles = ScaledSheet.create({
     },
     label: {
         fontWeight: 'bold',
-        lineHeight: '18@vs',
-        fontSize: '14@ms0.3',
+        lineHeight: '24@vs',
+        fontSize: '16@ms0.3',
         color: Themes.COLORS.mineShaft,
     },
     labelRequire: {
@@ -206,7 +206,7 @@ const styles = ScaledSheet.create({
     },
     wrapLabel: {
         flexDirection: 'row',
-        marginVertical: '10@vs',
+        marginVertical: '8@vs',
         alignItems: 'center',
     },
 });

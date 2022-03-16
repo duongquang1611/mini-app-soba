@@ -68,12 +68,16 @@ export default {
     },
     authen: {
         login: {
+            label: {
+                email: 'メールアドレス',
+                password: 'パスワード',
+            },
             placeholderEmail: 'メールアドレス',
             placeholderPassword: 'パスワード',
             buttonLogin: 'ログイン',
             rememberText: 'ログイン状態を保持',
-            forgotPasswordText: 'パスワードを忘れた方はこちら',
-            registerText: '新規会員登録はこちら',
+            forgotPasswordText: 'パスワードを忘れた方',
+            registerText: '新規登録',
             noAccountText: 'アカウントを持っていない方？',
         },
         register: {
@@ -225,5 +229,16 @@ export default {
     },
     coupon: {
         title: 'クーポンリスト',
+    },
+    otp: {
+        register: {
+            title: '認証',
+            titleInputOtp: '認証コードを入力',
+            note: '入力していただいたメールアドレス宛に認証コードを送信しました。\n届いた認証コードを入力してください。',
+            resendOtp: '認証コード再送信',
+            noteResend: '{{countdown}}秒後にもう一度お試しください',
+            maxResend: '認証コードは5回を再送信しました、まだ問題があれば、最初から登録してください。',
+            alertInvalidOtpMax: '5回を入力したから、再登録してください',
+        },
     },
 };

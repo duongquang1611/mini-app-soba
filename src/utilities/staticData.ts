@@ -22,6 +22,10 @@ export const staticValue = {
         shouldDirty: true,
     },
     OTP_LENGTH: 6,
+    COUNT_DOWN_OTP: 60,
+    MAX_RETRY_OTP: 5,
+    MAX_WRONG_OTP: 5,
+    OTP_INVALID_MESSAGE: 'Verified_Code_Invalid',
 };
 
 export const IMG_URL = {
@@ -599,5 +603,29 @@ export const OPTION_SELECT_IMAGE = [
         id: 1,
         icon: Images.icons.arrowLeftPrimary,
         name: 'common.optionFolder',
+    },
+];
+
+export const TEXT_OTP = [
+    {
+        id: VerifiedCodeType.REGISTER,
+        title: 'otp.register.title',
+        titleInputOtp: 'otp.register.titleInputOtp',
+        note: 'otp.register.note',
+        confirm: 'common.next',
+    },
+    {
+        id: VerifiedCodeType.RESET_PASSWORD,
+        title: 'otp.register.title',
+        titleInputOtp: 'otp.register.titleInputOtp',
+        note: 'otp.register.note',
+        confirm: 'common.next',
+    },
+    {
+        id: VerifiedCodeType.CHANGE_EMAIL,
+        title: 'otp.register.title',
+        titleInputOtp: 'otp.register.titleInputOtp',
+        note: 'otp.register.note',
+        confirm: 'common.next',
     },
 ];

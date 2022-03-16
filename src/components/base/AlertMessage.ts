@@ -5,7 +5,7 @@ const AlertMessage = (message: any, title?: string, onPressOk?: any, cancel?: bo
     if (!(checkNetworkError && message === i18next.t('common.error.network'))) {
         Alert.alert(
             title || '',
-            `${message}`,
+            i18next.t(`${message}`),
             cancel
                 ? [
                       {

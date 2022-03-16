@@ -25,7 +25,7 @@ import UpLoadAvatar from './components/UpLoadAvatar';
 
 const REGISTER_DEFAULT_FORM = __DEV__
     ? {
-          email: 'yeuquaimo@love.you',
+          email: 'yeuquaimo002@love.you',
           password: '12345678',
           confirmPassword: '12345678',
           fullName: 'DuongQuang',
@@ -182,7 +182,11 @@ const RegisTerScreen = () => {
                         pointerEvents={'none'}
                         handleConfirm={(text: string) => setValueForm('birthday', text)}
                     />
-                    <LabelInput label={t('authen.labelRegister.birthday')} customStyle={styles.titleGender} />
+                    <LabelInput
+                        label={t('authen.labelRegister.birthday')}
+                        customStyle={styles.titleGender}
+                        containerStyle={styles.containerStyleTitleGender}
+                    />
                     {GENDER_DATA.map(renderItemGender)}
                     <View style={styles.buttonRule}>
                         <StyledTouchable onPress={() => setRule(!rule)}>
@@ -283,7 +287,6 @@ const styles = ScaledSheet.create({
         marginLeft: '15@s',
     },
     titleGender: {
-        marginLeft: '20@s',
         marginTop: '10@vs',
     },
     ruleButton: {
@@ -318,5 +321,9 @@ const styles = ScaledSheet.create({
     },
     textRuleCanPress: {
         color: Themes.COLORS.primary,
+    },
+    containerStyleTitleGender: {
+        marginLeft: '20@s',
+        marginBottom: 0,
     },
 });

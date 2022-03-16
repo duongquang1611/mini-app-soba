@@ -1,11 +1,12 @@
 import { login } from 'api/modules/api-app/authenticate';
 import request from 'api/request';
-import { clearGlobalData } from 'app-redux/slices/globalDataSlice';
+import { clearGlobalData, updateGlobalData } from 'app-redux/slices/globalDataSlice';
 import { userInfoActions } from 'app-redux/slices/userInfoSlice';
 import { store } from 'app-redux/store';
 import { AxiosRequestConfig } from 'axios';
 import AlertMessage from 'components/base/AlertMessage';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { deleteTagOneSignal, pushTagMember } from 'utilities/notification';
 
 const AUTH_URL_REFRESH_TOKEN = '/refreshToken';
@@ -43,12 +44,15 @@ const AuthenticateService = {
 
 export const useLogin = (): LoginRequest => {
     const [loading, setLoading] = useState(false);
+    const dispatch = useDispatch();
+
     const requestLogin = async (options: LoginRequestParams) => {
         try {
             setLoading(true);
             const response = await login(options);
             setLoading(false);
-            store.dispatch(userInfoActions.getUserInfoRequest(response?.data?.token));
+            dispatch(updateGlobalData({ skipOrderDefault: true }));
+            dispatch(userInfoActions.getUserInfoRequest(response?.data?.token));
             AuthenticateService.handlerLogin({ ...response.data });
         } catch (e) {
             setLoading(false);

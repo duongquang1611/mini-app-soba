@@ -40,6 +40,7 @@ const Light = {
         opacityThunderbird: (opacity: number) => `rgba(222, 30, 19, ${opacity})`,
         disabled: '#DEDEDE',
         redOxide: '#720303',
+        error: '#E42B2B',
     },
     FONTS: {
         defaultFont: 'Montserrat-Regular',
