@@ -1,16 +1,18 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
-import { StyledButton, StyledIcon, StyledImage, StyledInputForm, StyledText, StyledTouchable } from 'components/base';
+import { StyledButton, StyledIcon, StyledImage, StyledInputForm, StyledText } from 'components/base';
 import StyledOverlayLoading from 'components/base/StyledOverlayLoading';
+import TextUnderline from 'components/common/TextUnderline';
 import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { FunctionComponent, useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { SafeAreaView, View } from 'react-native';
+import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet } from 'react-native-size-matters';
 import { useLogin } from 'utilities/authenticate/AuthenticateService';
+import { EMAIL_MAX_LENGTH, PASSWORD_MAX_LENGTH } from 'utilities/validate';
 import yupValidate from 'utilities/yupValidate';
 import * as yup from 'yup';
 
@@ -51,7 +53,6 @@ const LoginScreen: FunctionComponent = () => {
 
     return (
         <KeyboardAwareScrollView
-            contentContainerStyle={styles.container}
             keyboardShouldPersistTaps="handled"
             enableOnAndroid={true}
             showsVerticalScrollIndicator={false}
@@ -63,23 +64,23 @@ const LoginScreen: FunctionComponent = () => {
                 <StyledIcon source={Images.photo.ptLogin} size={200} customStyle={styles.img} />
             </View>
             <StyledText customStyle={styles.title} i18nText={'authen.login.buttonLogin'} />
-            <SafeAreaView style={styles.body}>
+            <View style={styles.body}>
                 <FormProvider {...form}>
                     <StyledInputForm
-                        label="email"
+                        label="authen.login.label.email"
                         name="email"
                         customPlaceHolder="authen.login.placeholderEmail"
                         keyboardType="email-address"
-                        maxLength={32}
+                        maxLength={EMAIL_MAX_LENGTH}
                         onSubmitEditing={() => passwordRef.current.focus()}
                     />
                     <StyledInputForm
-                        label="password"
+                        label="authen.login.label.password"
                         name="password"
                         customPlaceHolder="authen.login.placeholderPassword"
                         ref={passwordRef}
                         returnKeyType="done"
-                        maxLength={20}
+                        maxLength={PASSWORD_MAX_LENGTH}
                         isSecureTextEntry={true}
                         icYeyOff={Images.icons.eyeOff}
                         icYeyOn={Images.icons.eyeOn}
@@ -87,53 +88,55 @@ const LoginScreen: FunctionComponent = () => {
                     />
                 </FormProvider>
                 <View style={styles.buttonView}>
-                    <StyledTouchable onPress={goToForgotPassword} customStyle={styles.forgotButton}>
-                        <StyledText customStyle={styles.forgotText} i18nText="authen.login.forgotPasswordText" />
-                    </StyledTouchable>
+                    <TextUnderline
+                        onPress={goToForgotPassword}
+                        customStyle={styles.forgotButton}
+                        title={'authen.login.forgotPasswordText'}
+                        customStyleText={styles.forgotText}
+                        color={Themes.COLORS.primary}
+                    />
                     <StyledButton
                         onPress={handleSubmit(requestLogin)}
                         title="authen.login.buttonLogin"
                         disabled={!isValid}
-                        customStyle={[
-                            styles.loginButton,
-                            // { backgroundColor: isValid ? Themes.COLORS.primary : Themes.COLORS.primary },
-                        ]}
+                        customStyle={[styles.loginButton]}
                     />
-
-                    <StyledTouchable onPress={doRegister} customStyle={styles.registerButton}>
-                        <StyledText i18nText="authen.login.noAccountText" isBlack />
-                        <StyledText customStyle={styles.forgotText} i18nText="authen.login.registerText" />
-                    </StyledTouchable>
+                    <StyledText i18nText="authen.login.noAccountText" isBlack />
+                    <TextUnderline
+                        onPress={doRegister}
+                        customStyle={styles.registerButton}
+                        title={'authen.login.registerText'}
+                        color={Themes.COLORS.primary}
+                        customStyleText={styles.registerText}
+                    />
                 </View>
-            </SafeAreaView>
+            </View>
         </KeyboardAwareScrollView>
     );
 };
 
 const styles = ScaledSheet.create({
-    container: {
-        flex: 1,
-    },
     body: {
         flex: 1,
         marginTop: '20@vs',
-        // paddingHorizontal: '20@s',
     },
     loginButton: {
-        marginTop: 20,
+        marginTop: '20@vs',
+        marginBottom: '20@vs',
     },
     registerButton: {
-        marginTop: 20,
         alignItems: 'center',
     },
     forgotButton: {
         alignSelf: 'flex-end',
-        marginTop: 20,
+        marginTop: '12@vs',
+        marginBottom: '40@vs',
     },
     title: {
         fontWeight: 'bold',
         fontSize: '20@ms0.3',
         marginLeft: '20@s',
+        marginTop: '15@vs',
     },
     errorMessage: {
         color: Themes.COLORS.borderInputError,
@@ -152,9 +155,9 @@ const styles = ScaledSheet.create({
         alignItems: 'center',
     },
     forgotText: {
-        color: Themes.COLORS.primary,
-        textDecorationLine: 'underline',
+        fontSize: '16@ms0.3',
     },
+    registerText: {},
     header: {
         width: '100%',
         height: '225@vs',

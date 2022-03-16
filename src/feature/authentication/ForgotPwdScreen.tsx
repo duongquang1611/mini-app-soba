@@ -29,7 +29,7 @@ const SendEmailScreen: FunctionComponent = ({ route }: any) => {
     } = form;
     const confirm = async ({ email }: any) => {
         try {
-            await getVerifyCode(email);
+            // await getVerifyCode(email);
             navigate(AUTHENTICATE_ROUTE.SEND_OTP, { email });
         } catch (error) {
             AlertMessage(error);

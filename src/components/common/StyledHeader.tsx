@@ -164,7 +164,7 @@ const styles = ScaledSheet.create({
         flexShrink: 1,
     },
     containerBack: {
-        marginLeft: '20@s',
+        marginLeft: '18@s',
         justifyContent: 'center',
         alignItems: 'center',
         height: '24@s',
