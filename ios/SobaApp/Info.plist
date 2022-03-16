@@ -41,8 +41,18 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>App need the location permission</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>App need the location permission</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>App need the location permission</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>App need the library permission</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>App need the library permission</string>
+	<key>PHPhotoLibraryPreventAutomaticLimitedAccessAlert</key>
+	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
