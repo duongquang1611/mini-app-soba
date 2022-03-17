@@ -4,6 +4,7 @@ import ForgotPasswordScreen from 'feature/authentication/ForgotPwdScreen';
 import Information from 'feature/authentication/Information';
 import LoginScreen from 'feature/authentication/LoginScreen';
 import RegisterScreen from 'feature/authentication/RegisterScreen';
+import ResetPasswordScreen from 'feature/authentication/ResetPasswordScreen';
 import SendOTP from 'feature/authentication/SendOtp';
 import SendOtpForgotPass from 'feature/authentication/SendOtpForgotPass';
 import navigationConfigs from 'navigation/config/options';
@@ -22,6 +23,7 @@ const AuthStack = () => (
         <MainStack.Screen name={AUTHENTICATE_ROUTE.CHANGE_PASS} component={ChangePassword} />
         <MainStack.Screen name={AUTHENTICATE_ROUTE.INFORMATION} component={Information} />
         <MainStack.Screen name={AUTHENTICATE_ROUTE.SEND_OTP_FORGOT_PASS} component={SendOtpForgotPass} />
+        <MainStack.Screen name={AUTHENTICATE_ROUTE.RESET_PASSWORD} component={ResetPasswordScreen} />
     </MainStack.Navigator>
 );
 

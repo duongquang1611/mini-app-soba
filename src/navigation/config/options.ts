@@ -5,10 +5,9 @@ import transition from './transition';
 const navigationConfigs = {
     cardStyle: {
         backgroundColor: Themes.COLORS.white,
-        // paddingBottom: Metrics.safeBottomPadding,
     },
     headerShown: false,
-    gestureEnabled: true,
+    gestureEnabled: false,
     // gestureDirection: 'default',
     cardShadowEnabled: true,
     cardOverlayEnabled: true,

@@ -5,19 +5,19 @@ const yupValidate = {
     fullName: () =>
         yup
             .string()
-            .required('common.required')
+            .required('error.required')
             .trim('error.trimSpace')
             .strict(true)
             .max(USERNAME_MAX_LENGTH, 'error.maxFullName')
             .matches(SPECIAL_CHAR, 'error.errorSpecialCharacter'),
 
-    email: () => yup.string().required('common.required').trim('error.trimSpace').email('error.emailInvalid'),
+    email: () => yup.string().required('error.required').trim('error.trimSpace').email('error.emailInvalid'),
 
-    birthday: () => yup.string().required('common.required'),
+    birthday: () => yup.string().required('error.required'),
 
-    gender: () => yup.string().required('common.required'),
+    gender: () => yup.string().required('error.required'),
 
-    phone: () => yup.string().required('common.required').matches(REGEX_PHONE, 'error.phoneInvalid'),
+    phone: () => yup.string().required('error.required').matches(REGEX_PHONE, 'error.phoneInvalid'),
 
     /**
      * @param ref : the name of StyledInputForm want to compare
@@ -35,17 +35,17 @@ const yupValidate = {
             // CONFIRM PASSWORD
             return yup
                 .string()
-                .required('common.required')
+                .required('error.required')
                 .oneOf([yup.ref(ref), null], 'error.passwordNotMatch');
         }
 
         return yup
             .string()
-            .required('common.required')
+            .required('error.required')
             .trim('error.trimSpace')
             .strict(true)
-            .min(PASSWORD_MIN_LENGTH, 'error.passwordMinLength')
-            .max(PASSWORD_MAX_LENGTH, 'error.passwordMaxLength');
+            .min(PASSWORD_MIN_LENGTH, 'error.passwordLength')
+            .max(PASSWORD_MAX_LENGTH, 'error.passwordLength');
         // .matches(REGEX_PASSWORD, ('error.validatePassword'));
     },
 };

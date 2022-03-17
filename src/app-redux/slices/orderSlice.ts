@@ -15,7 +15,7 @@ const initialState: IOrderState = {
 };
 
 const orderSlice = createSlice({
-    name: 'init',
+    name: 'order',
     initialState,
     reducers: {
         updateSaveOrder: (state, action: PayloadAction<any>) => {

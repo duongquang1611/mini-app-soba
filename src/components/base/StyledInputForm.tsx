@@ -9,7 +9,7 @@ interface FormInputProps extends StyledInputProps {
     name: string;
     rules?: RegisterOptions;
     defaultValue?: string;
-    form?: UseFormReturn;
+    form?: UseFormReturn<any>;
 }
 
 const StyledInputForm = forwardRef((props: FormInputProps, ref: any) => {
