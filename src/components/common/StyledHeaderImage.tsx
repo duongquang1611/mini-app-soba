@@ -63,18 +63,13 @@ const StyledHeaderImage = (props: HeaderProps) => {
     const renderItem = (data: any) => {
         return (
             <View>
-                <StyledImage source={{ uri: data?.item }} customStyle={styles.img} />
+                <StyledImage source={{ uri: data?.item?.image || data?.item }} customStyle={styles.img} />
             </View>
         );
     };
 
     return (
         <View style={[styles.container, customStyle, isShadow && styles.shadow]}>
-            {/* <ImageBackground
-                source={img || Images.photo.defaultImage}
-                resizeMode="cover"
-                style={[styles.container, customStyle, isShadow && styles.shadow]}
-            > */}
             <View style={styles.slide}>
                 <Carousel
                     data={images}
@@ -82,7 +77,6 @@ const StyledHeaderImage = (props: HeaderProps) => {
                     onSnapToItem={setIndex}
                     sliderWidth={Metrics.screenWidth}
                     itemWidth={Metrics.screenWidth}
-                    // ref={carouselRef}
                     loop={true}
                     loopClonesPerSide={images.length}
                     removeClippedSubviews={false}
@@ -105,7 +99,6 @@ const StyledHeaderImage = (props: HeaderProps) => {
                         ]}
                         inactiveDotOpacity={1}
                         inactiveDotScale={1}
-                        // containerStyle={styles.containerDot}
                         dotContainerStyle={{
                             marginHorizontal:
                                 images.length <= 6
@@ -128,9 +121,6 @@ const StyledHeaderImage = (props: HeaderProps) => {
                 <StyledText i18nText={title || ' '} customStyle={styles.title} numberOfLines={1} />
                 {(iconQr || iconNoti) && (
                     <View style={styles.iconView}>
-                        {/* <StyledTouchable onPress={onPressQr} customStyle={styles.buttonAction}>
-                            <StyledIcon source={iconQr} size={15} customStyle={styles.iconAction} />
-                        </StyledTouchable> */}
                         <StyledTouchable onPress={onPressNoti} customStyle={styles.buttonActionNoti}>
                             <StyledIcon source={iconNoti} size={17} customStyle={styles.iconAction} />
                         </StyledTouchable>
@@ -143,7 +133,6 @@ const StyledHeaderImage = (props: HeaderProps) => {
                 )}
                 {!iconQr && !iconNoti && !iconAction && <View style={styles.buttonAction} />}
             </View>
-            {/* </ImageBackground> */}
         </View>
     );
 };

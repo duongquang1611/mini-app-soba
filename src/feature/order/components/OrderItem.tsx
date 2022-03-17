@@ -5,11 +5,12 @@ import React, { useState } from 'react';
 import { View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { scale, ScaledSheet } from 'react-native-size-matters';
+import { staticValue } from 'utilities/staticData';
 
 export const OrderChild = (data: any) => {
     const { isRequired, item, subDishDetail, setSubDishDetail } = data;
     const { dish } = item;
-    const checkOrder = subDishDetail?.find((item: any) => item.id === dish.id)?.value;
+    const checkOrder = subDishDetail?.find((item: any) => item.subDishId === dish.id)?.amount;
     let checkChoose = isRequired;
     if (checkOrder === 1) {
         checkChoose = true;
@@ -20,14 +21,15 @@ export const OrderChild = (data: any) => {
         const chooseValue = choose;
         setChoose(!chooseValue);
         if (chooseValue) {
-            setSubDishDetail(subDishDetail.filter((item: any) => item.id !== dish.id));
+            setSubDishDetail(subDishDetail.filter((item: any) => item.subDishId !== dish.id));
         } else {
             setSubDishDetail([
                 ...subDishDetail,
                 {
-                    id: dish.id,
+                    subDishId: dish.id,
                     title: dish.title,
-                    value: 1,
+                    selected: 1,
+                    amount: 1,
                 },
             ]);
         }
@@ -45,7 +47,7 @@ export const OrderChild = (data: any) => {
                         styles.chooseButton,
                         {
                             backgroundColor: choose ? Themes.COLORS.primary : Themes.COLORS.white,
-                            borderColor: choose ? '#FBA29D' : Themes.COLORS.silver,
+                            borderColor: choose ? Themes.COLORS.sweetPink : Themes.COLORS.silver,
                         },
                     ]}
                 />
@@ -55,21 +57,21 @@ export const OrderChild = (data: any) => {
 };
 const OrderChildCanChange = (data: any) => {
     const { isRequired, item, subDishDetail, setSubDishDetail } = data;
-    const { dish, defaultValue } = item;
-    const checkOrder = subDishDetail?.find((item: any) => item.id === dish.id)?.value;
+    const { dish } = item;
+    const checkOrder = subDishDetail?.find((item: any) => item.subDishId === dish.id)?.amount;
     const checkChoose = checkOrder || 0;
-    const [num, setNum] = useState(checkChoose || defaultValue);
+    const [num, setNum] = useState(checkChoose);
     const onChoose = (numChoose: number) => {
         setNum(numChoose);
         if (numChoose === 0) {
-            setSubDishDetail(subDishDetail.filter((item: any) => item.id !== dish.id));
+            setSubDishDetail(subDishDetail.filter((item: any) => item.subDishId !== dish.id));
         } else {
             setSubDishDetail([
-                ...subDishDetail.filter((item: any) => item.id !== dish.id),
+                ...subDishDetail.filter((item: any) => item.subDishId !== dish.id),
                 {
-                    id: dish.id,
+                    subDishId: dish.id,
                     title: dish.title,
-                    value: numChoose,
+                    amount: numChoose,
                 },
             ]);
         }
@@ -93,7 +95,7 @@ const OrderChildCanChange = (data: any) => {
                     <StyledText originValue={dish.title} customStyle={styles.nameOrder} />
                 </View>
                 <View style={styles.itemRow}>
-                    <TouchableOpacity onPress={minus}>
+                    <TouchableOpacity onPress={minus} disabled={num === 0}>
                         <StyledIcon
                             source={Images.icons.minus}
                             size={20}
@@ -101,8 +103,14 @@ const OrderChildCanChange = (data: any) => {
                         />
                     </TouchableOpacity>
                     <StyledText originValue={`${num}`} customStyle={styles.quantitySideText} />
-                    <TouchableOpacity onPress={add}>
-                        <StyledIcon source={Images.icons.add} size={20} />
+                    <TouchableOpacity onPress={add} disabled={num >= staticValue.MAX_ORDER}>
+                        <StyledIcon
+                            source={Images.icons.add}
+                            size={20}
+                            customStyle={{
+                                tintColor: num < staticValue.MAX_ORDER ? Themes.COLORS.primary : Themes.COLORS.silver,
+                            }}
+                        />
                     </TouchableOpacity>
                 </View>
             </View>
@@ -116,7 +124,7 @@ const OrderItem = (data: any) => {
         <View style={[styles.containerItem, { paddingHorizontal: scale(20) }]}>
             <StyledText originValue={title} customStyle={styles.name} />
             {subDish?.map((item: any, index: number) => (
-                <>
+                <View key={index}>
                     {type === 1 ? (
                         <OrderChild
                             key={index}
@@ -134,7 +142,7 @@ const OrderItem = (data: any) => {
                             setSubDishDetail={setSubDishDetail}
                         />
                     )}
-                </>
+                </View>
             ))}
         </View>
     );

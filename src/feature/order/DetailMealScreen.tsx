@@ -1,33 +1,35 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { getDish } from 'api/modules/api-app/order';
 import { RootState } from 'app-redux/hooks';
-import { updateGlobalData } from 'app-redux/slices/globalDataSlice';
 import { updateSaveOrder } from 'app-redux/slices/orderSlice';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
-import { StyledIcon, StyledImage, StyledText } from 'components/base';
+import { StyledIcon, StyledText } from 'components/base';
 import StyledHeaderImage from 'components/common/StyledHeaderImage';
-import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
-import { goBack, navigate } from 'navigation/NavigationService';
-import React, { useEffect, useState } from 'react';
-import { ImageBackground, View } from 'react-native';
+import { goBack } from 'navigation/NavigationService';
+import React, { useEffect, useRef, useState } from 'react';
+import { ImageBackground, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
-import { dataFakeDetailMeal, dataFakeOderDefault, imagesList, listSideMenu } from 'utilities/staticData';
+import { toLocalStringTime } from 'utilities/format';
+import { sumAmount } from 'utilities/helper';
+import { dataFakeDetailMeal, staticValue } from 'utilities/staticData';
+import ButtonCart from './components/ButtonCart';
 import OrderItem from './components/OrderItem';
 
 const DetailMealScreen = (props: any) => {
-    const { id } = props?.route?.params;
+    const { id, isNew, createDate } = props?.route?.params;
     const { saveOrder } = useSelector((state: RootState) => state.order);
-    const findIdStore = saveOrder?.dishes?.find((item: any) => item.id === id);
-
-    const [num, setNum] = useState(findIdStore?.amount || 1);
+    const findIdStore = isNew ? null : saveOrder?.dishes?.find((item: any) => item.createDate === createDate);
+    const [num, setNum] = useState(findIdStore?.mainDish?.amount || 1);
     const [dish, setDish] = useState(dataFakeDetailMeal);
-    const { dishOptions, title, description } = dish;
-    const [subDishDetail, setSubDishDetail] = useState(findIdStore?.subDish || []);
+
+    const { title, description } = dish;
+    const { dishOptions } = dataFakeDetailMeal;
+    const [subDishDetail, setSubDishDetail] = useState(findIdStore?.subDishes || []);
     const dispatch = useDispatch();
     useEffect(() => {
         getMenuDetail();
@@ -46,34 +48,55 @@ const DetailMealScreen = (props: any) => {
     const minus = () => {
         if (num > 0) setNum(num - 1);
     };
+    const amountValue = sumAmount({
+        mainDish: {
+            amount: num,
+        },
+        subDishes: subDishDetail,
+    });
+    let numOrder = useRef(0).current;
+    saveOrder?.dishes?.forEach(async (rating: any) => {
+        numOrder += rating?.totalAmount;
+    });
+    const newAmountOrder = createDate ? amountValue - findIdStore?.totalAmount + numOrder : amountValue + numOrder;
     const goToSaveOrder = () => {
         const orderChooseItem = { id };
-        const dishesStore = saveOrder?.dishes?.filter((item: any) => item.id !== id) || [];
+        const dishesStore = isNew
+            ? saveOrder?.dishes || []
+            : saveOrder?.dishes?.filter((item: any) => item.createDate !== createDate) || [];
+
         const paramOrder =
-            num > 0
+            amountValue > 0
                 ? {
                       dishes: [
                           ...dishesStore,
                           {
-                              id,
-                              name: dish?.title,
-                              size: 1,
-                              image: dish?.thumbnail,
-                              amount: num,
-                              subDish: subDishDetail,
+                              createDate: toLocalStringTime(new Date()),
+                              totalAmount: amountValue,
+                              mainDish: {
+                                  id,
+                                  name: dish?.title,
+                                  image: dish?.thumbnail,
+                                  amount: num,
+                              },
+                              subDishes: subDishDetail,
                           },
                       ],
                       coupons: [],
                   }
                 : {};
-        // setSubDishDetail(paramOrder);
         dispatch(updateSaveOrder(paramOrder));
         goBack();
     };
     return (
         <View style={styles.container}>
-            <StyledHeaderImage images={dish.images} content={title} />
-            <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
+            <StyledHeaderImage images={dish?.images} content={title} />
+            <KeyboardAwareScrollView
+                contentContainerStyle={{ flex: 1 }}
+                style={{ flex: 1 }}
+                enableOnAndroid={true}
+                showsVerticalScrollIndicator={false}
+            >
                 <StyledText originValue={description} isBlack customStyle={styles.contentText} />
                 <View style={styles.body}>
                     {dishOptions.map((item) => (
@@ -86,28 +109,30 @@ const DetailMealScreen = (props: any) => {
                     ))}
                 </View>
             </KeyboardAwareScrollView>
-            <View style={styles.quantity}>
-                <TouchableOpacity onPress={minus}>
-                    <StyledIcon
-                        source={Images.icons.minus}
-                        size={20}
-                        customStyle={{ tintColor: num > 0 ? Themes.COLORS.primary : Themes.COLORS.silver }}
-                    />
-                </TouchableOpacity>
-                <StyledText originValue={`${num}`} customStyle={styles.quantityText} />
-                <TouchableOpacity onPress={add}>
-                    <StyledIcon source={Images.icons.add} size={20} />
-                </TouchableOpacity>
+            <View style={styles.quantityView}>
+                <View style={styles.quantity}>
+                    <TouchableOpacity onPress={minus}>
+                        <StyledIcon
+                            source={Images.icons.minus}
+                            size={20}
+                            customStyle={{ tintColor: num > 0 ? Themes.COLORS.primary : Themes.COLORS.silver }}
+                        />
+                    </TouchableOpacity>
+                    <StyledText originValue={`${num}`} customStyle={styles.quantityText} />
+                    <TouchableOpacity onPress={add}>
+                        <StyledIcon source={Images.icons.add} size={20} />
+                    </TouchableOpacity>
+                </View>
+                {newAmountOrder > staticValue.MAX_ORDER && (
+                    <StyledText i18nText={'order.canNotAdd'} customStyle={styles.quantityErr} />
+                )}
             </View>
-            <View style={styles.secondaryView}>
-                <ImageBackground source={Images.icons.rectangle} style={styles.rectangle}>
-                    <StyledIcon source={Images.icons.bag_happy} size={35} customStyle={styles.icBag} />
-                </ImageBackground>
-                <TouchableOpacity style={styles.rowCart} onPress={goToSaveOrder}>
-                    <StyledText i18nText={'order.changeCart'} customStyle={styles.textCart} />
-                    {/* <StyledText originValue={'（4）'} customStyle={styles.textCart} /> */}
-                </TouchableOpacity>
-            </View>
+            <ButtonCart
+                checkDisable={newAmountOrder > staticValue.MAX_ORDER}
+                goToSaveOrder={goToSaveOrder}
+                amountValue={amountValue}
+                numOrder={newAmountOrder}
+            />
         </View>
     );
 };
@@ -208,6 +233,8 @@ const styles = ScaledSheet.create({
         fontWeight: 'bold',
         color: Themes.COLORS.white,
         fontSize: '18@ms0.3',
+        width: '200@s',
+        textAlign: 'center',
     },
     rowCart: {
         flexDirection: 'row',
@@ -230,12 +257,21 @@ const styles = ScaledSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    quantityView: {
+        alignItems: 'center',
+        justifyContent: 'center',
         backgroundColor: Themes.COLORS.white,
-        paddingVertical: '5@vs',
     },
     quantityText: {
         marginHorizontal: '20@s',
-        fontSize: '38@ms0.3',
+        marginVertical: 20,
+        fontSize: '28@ms0.3',
+        lineHeight: '30@vs',
+    },
+    quantityErr: {
+        color: Themes.COLORS.primary,
+        marginBottom: '10@vs',
     },
     quantitySideText: {
         marginHorizontal: '10@s',
