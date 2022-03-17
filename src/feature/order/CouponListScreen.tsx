@@ -52,9 +52,7 @@ const CouponListScreen = () => {
             AlertMessage(error);
         }
     };
-    const goToCouponDetail = () => {
-        navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.COUPON_DETAIL);
-    };
+
     const numberItemListCoupon = 3;
     const showApplyCoupon = () => {
         modalize.show(
@@ -75,7 +73,7 @@ const CouponListScreen = () => {
             <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
                 <View style={styles.body}>
                     {listCoupon.map((item, index) => (
-                        <CouponItem canUse={true} key={index} item={item} goToDetail={goToCouponDetail} />
+                        <CouponItem canUse={true} key={index} item={item} />
                     ))}
                 </View>
             </KeyboardAwareScrollView>

@@ -46,6 +46,7 @@ const Images: any = {
         add: require('./icon/ic_add.png'),
         minus: require('./icon/ic_minus.png'),
         next: require('./icon/ic_next.png'),
+        arrowNext: require('./icon/ic_arrow_next.png'),
         calendar: require('./icon/ic_calendar.png'),
         gold: require('./icon/ic_gold.png'),
         edit: require('./icon/ic_edit.png'),

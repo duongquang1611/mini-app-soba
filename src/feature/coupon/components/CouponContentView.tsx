@@ -5,11 +5,14 @@ import React from 'react';
 import { ImageBackground, StyleProp, View, ViewStyle } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet } from 'react-native-size-matters';
+import { toLocalStringBirthday } from 'utilities/format';
+import { checkCanUse } from 'utilities/helper';
 
 interface IProps {
     canUse?: boolean;
     customStyle?: StyleProp<ViewStyle>;
     isModal?: boolean;
+    data: any;
 }
 
 const WrapComponent = ({ children, isModal, customStyle }: any) => {
@@ -23,7 +26,8 @@ const WrapComponent = ({ children, isModal, customStyle }: any) => {
 };
 
 const CouponContentView = (props: IProps) => {
-    const { canUse, customStyle, isModal = false } = props;
+    const { customStyle, isModal = false, data = {} } = props;
+    const { image, title, startDate, endDate, description, id } = data;
 
     return (
         <WrapComponent customStyle={[styles.container, customStyle]} isModal={isModal}>
@@ -35,11 +39,11 @@ const CouponContentView = (props: IProps) => {
                             <StyledText originValue={'3つクーポンをGETできます'} customStyle={styles.textGetCoupon} />
                         </View>
                     ) : (
-                        <StyledText originValue={'クーポンＩＤ：CP690001'} customStyle={styles.time} />
+                        <StyledText originValue={id} customStyle={styles.time} />
                     )}
-                    <StyledText originValue={'【リリース記念ＳＣ用】香味１杯　無料'} customStyle={styles.title} />
-                    <ImageBackground style={styles.img} source={Images.photo.ptCouponDetail}>
-                        {!canUse && (
+                    <StyledText originValue={title} customStyle={styles.title} />
+                    <ImageBackground style={styles.img} source={{ uri: image }}>
+                        {!checkCanUse && (
                             <View style={styles.transparent}>
                                 <StyledImage source={Images.photo.used} customStyle={styles.imgQr} />
                             </View>
@@ -47,15 +51,17 @@ const CouponContentView = (props: IProps) => {
                     </ImageBackground>
                     <View style={styles.rowView}>
                         <StyledIcon source={Images.icons.calendar} size={20} customStyle={styles.iconDate} />
-                        <StyledText i18nText={'有効期限：無制限'} customStyle={styles.title} />
+                        <StyledText
+                            i18nText={'order.rangeDate'}
+                            i18nParams={{
+                                start: toLocalStringBirthday(startDate),
+                                end: toLocalStringBirthday(endDate),
+                            }}
+                            customStyle={styles.title}
+                        />
                     </View>
-                    <StyledText i18nText={'有効期限：無制限'} customStyle={styles.contentTitle} />
-                    <StyledText
-                        originValue={
-                            'リリース記念ＳＣ用】香味１杯　無料【リリース記念ＳＣ用】香味１杯　無料【リリース記念ＳＣ用】\n香味１杯　無料【リリース記念ＳＣ用】香味１杯　無料【リリース記念ＳＣ用】香味１杯　無料【リリース記念ＳＣ用】香味１杯　無料【リリース記念ＳＣ用】香味１杯　無料【リリース記念ＳＣ用】香味１杯　無料【リリース記念ＳＣ用】香味１杯　無料【リリース記念ＳＣ用】香味１杯　無料【リリース記念ＳＣ用】香味\n１杯　無料【リリース記念ＳＣ用】香味１杯　無料【リリース記念ＳＣ用】香味１杯　無料【リリース記念ＳＣ用】香味１杯　無料【リリース記念ＳＣ用】香味１杯　無料【リリース記念ＳＣ用】香味１杯　無料【リリース記念ＳＣ用】香味１杯　無料【リリース記念ＳＣ用】香味１杯　無料【リリース記念ＳＣ用】香味１杯　無料【リリース記念ＳＣ用】香味１杯　無料【リリース記念ＳＣ用】香味１杯　無料【リリース記念ＳＣ用】香味１杯　無料【リリース記念ＳＣ用】香味１杯　無料【リリース記念ＳＣ用】香味１杯　無料【リリース記念ＳＣ用】香味１杯　無料'
-                        }
-                        isBlack
-                    />
+                    <StyledText originValue={'有効期限：無制限'} customStyle={styles.contentTitle} />
+                    <StyledText originValue={description} isBlack />
                 </View>
             </View>
         </WrapComponent>

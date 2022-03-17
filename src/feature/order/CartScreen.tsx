@@ -4,7 +4,7 @@ import { RootState } from 'app-redux/hooks';
 import { clearSaveOrder, updateSaveOrder } from 'app-redux/slices/orderSlice';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
-import { StyledButton, StyledIcon, StyledText } from 'components/base';
+import { StyledButton, StyledIcon, StyledText, StyledTouchable } from 'components/base';
 import DashView from 'components/common/DashView';
 import StyledHeader from 'components/common/StyledHeader';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
@@ -30,7 +30,7 @@ const ItemCoupon = (data: any) => {
 };
 export const OrderItemCart = (data: any) => {
     const { image, name, amount, subDish, id } = data?.data;
-    const { onCancel, canChange } = data;
+    const { onCancel, canChange, goDetailMenu } = data;
     const [num, setNum] = useState(amount);
     const add = () => {
         setNum(num + 1);
@@ -44,15 +44,17 @@ export const OrderItemCart = (data: any) => {
     };
 
     return (
-        <>
+        <StyledTouchable disabled={!goDetailMenu} onPress={goDetailMenu}>
             <View style={styles.orderItemView}>
                 <TouchableOpacity onPress={goToDetail}>
                     <StyledIcon source={{ uri: image }} size={70} />
                 </TouchableOpacity>
                 <View style={styles.orderTextView}>
-                    <TouchableOpacity onPress={onCancel}>
-                        <StyledIcon source={Images.icons.cancel} size={17} customStyle={styles.icCancel} />
-                    </TouchableOpacity>
+                    {onCancel && (
+                        <TouchableOpacity onPress={onCancel}>
+                            <StyledIcon source={Images.icons.cancel} size={17} customStyle={styles.icCancel} />
+                        </TouchableOpacity>
+                    )}
                     <StyledText originValue={name} customStyle={styles.titleOrder} />
                     {subDish?.map((item: any, index: number) => (
                         <View key={index} style={styles.rowSub}>
@@ -93,7 +95,7 @@ export const OrderItemCart = (data: any) => {
                 </View>
             </View>
             <DashView />
-        </>
+        </StyledTouchable>
     );
 };
 const CartScreen = () => {

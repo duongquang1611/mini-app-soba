@@ -1,4 +1,5 @@
 import Images from 'assets/images';
+import { Themes } from 'assets/themes';
 
 export const staticValue = {
     DEFAULT: 1,
@@ -26,6 +27,10 @@ export const staticValue = {
     MAX_RETRY_OTP: 5,
     MAX_WRONG_OTP: 5,
     OTP_INVALID_MESSAGE: 'Verified_Code_Invalid',
+};
+export const LINEAR_COLOR = {
+    CATEGORY: [Themes.COLORS.thunderbird, Themes.COLORS.primary],
+    NO_CHOOSE_CATEGORY: [Themes.COLORS.white, Themes.COLORS.white],
 };
 
 export const IMG_URL = {
@@ -248,58 +253,56 @@ export const listOrderDefault = [
         quantity: 1,
     },
 ];
-export const listCouponFake =
-    //  [
-    //     {
-    //         id: 1,
-    //         name: '新年会クーポンt',
-    //         time: '2022/03/01～2022/03/31',
-    //         expired: true,
-    //         img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQb4km6pqiEE1QzzbLxzOOeHSqawgslw-wX5Q&usqp=CAU',
-    //     },
-    // ]
-    [
-        {
-            id: 1,
-            title: 'string',
-            image: exLinkImageSquare,
-            startDate: '2022-03-10',
-            endDate: '2022-03-10',
-        },
-        {
-            id: 2,
-            title: 'string',
-            image: exLinkImageSquare,
-            startDate: '2022-03-10',
-            endDate: '2022-03-10',
-        },
-        {
-            id: 3,
-            title: 'string',
-            image: exLinkImageSquare,
-            startDate: '2022-03-10',
-            endDate: '2022-03-10',
-        },
-        {
-            id: 4,
-            title: 'string',
-            image: exLinkImageSquare,
-            startDate: '2022-03-10',
-            endDate: '2022-03-10',
-        },
-        {
-            id: 5,
-            title: 'string',
-            image: exLinkImageSquare,
-            startDate: '2022-03-10',
-            endDate: '2022-03-10',
-        },
-    ];
+export const listCouponFake = [
+    {
+        id: 1,
+        title: 'string',
+        image: exLinkImageSquare,
+        startDate: '2022-03-10',
+        endDate: '2022-03-10',
+    },
+    {
+        id: 2,
+        title: 'string',
+        image: exLinkImageSquare,
+        startDate: '2022-03-10',
+        endDate: '2022-03-10',
+    },
+    {
+        id: 3,
+        title: 'string',
+        image: exLinkImageSquare,
+        startDate: '2022-03-10',
+        endDate: '2022-03-10',
+    },
+    {
+        id: 4,
+        title: 'string',
+        image: exLinkImageSquare,
+        startDate: '2022-03-10',
+        endDate: '2022-03-10',
+    },
+    {
+        id: 5,
+        title: 'string',
+        image: exLinkImageSquare,
+        startDate: '2022-03-10',
+        endDate: '2022-03-10',
+    },
+];
 export const coupon = [
     { id: 1, name: '80％割引' },
     { id: 2, name: '新年会クーポン' },
     { id: 3, name: '新年会クーポン' },
 ];
+export const detailCouponFake = {
+    id: 1,
+    title: 'string',
+    image: exLinkImageSquare,
+    startDate: '2022-03-11',
+    endDate: '2022-07-11',
+    description: 'string',
+};
 export const listCouponCanUse = [
     {
         id: 1,
@@ -443,6 +446,7 @@ export const MODAL_ID = {
     ORDER_GUIDE: 58,
     LIST_COUPON: 59,
     IMG_PICKER: 60,
+    DETAIL_MENU: 61,
 };
 
 export const INFORMATION = [
@@ -458,6 +462,47 @@ export const listImage = [
         title: 'きつね',
         status: 0,
         description: 'string',
+        category: [
+            {
+                categoryId: 1,
+            },
+            {
+                categoryId: 2,
+            },
+            {
+                categoryId: 3,
+            },
+            {
+                categoryId: 4,
+            },
+            {
+                categoryId: 5,
+            },
+            {
+                categoryId: 6,
+            },
+        ],
+
+        subCategory: [
+            {
+                subCategoryId: 1,
+            },
+            {
+                subCategoryId: 2,
+            },
+            {
+                subCategoryId: 3,
+            },
+            {
+                subCategoryId: 4,
+            },
+            {
+                subCategoryId: 5,
+            },
+            {
+                subCategoryId: 6,
+            },
+        ],
         thumbnail:
             'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
     },
@@ -466,6 +511,35 @@ export const listImage = [
         title: 'きつね',
         status: 0,
         description: 'string',
+        category: [
+            {
+                categoryId: 1,
+            },
+            {
+                categoryId: 2,
+            },
+            {
+                categoryId: 5,
+            },
+            {
+                categoryId: 6,
+            },
+        ],
+
+        subCategory: [
+            {
+                subCategoryId: 1,
+            },
+            {
+                subCategoryId: 4,
+            },
+            {
+                subCategoryId: 5,
+            },
+            {
+                subCategoryId: 6,
+            },
+        ],
         thumbnail:
             'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
     },
@@ -474,6 +548,44 @@ export const listImage = [
         title: 'きつね',
         status: 0,
         description: 'string',
+        category: [
+            {
+                categoryId: 1,
+            },
+            {
+                categoryId: 2,
+            },
+            {
+                categoryId: 3,
+            },
+            {
+                categoryId: 4,
+            },
+            {
+                categoryId: 5,
+            },
+            {
+                categoryId: 6,
+            },
+        ],
+
+        subCategory: [
+            {
+                subCategoryId: 1,
+            },
+            {
+                subCategoryId: 2,
+            },
+            {
+                subCategoryId: 3,
+            },
+            {
+                subCategoryId: 4,
+            },
+            {
+                subCategoryId: 5,
+            },
+        ],
         thumbnail:
             'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
     },
@@ -482,6 +594,35 @@ export const listImage = [
         title: 'きつね',
         status: 0,
         description: 'string',
+        category: [
+            {
+                categoryId: 1,
+            },
+            {
+                categoryId: 2,
+            },
+            {
+                categoryId: 5,
+            },
+            {
+                categoryId: 6,
+            },
+        ],
+
+        subCategory: [
+            {
+                subCategoryId: 3,
+            },
+            {
+                subCategoryId: 4,
+            },
+            {
+                subCategoryId: 5,
+            },
+            {
+                subCategoryId: 6,
+            },
+        ],
         thumbnail:
             'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
     },
@@ -489,6 +630,41 @@ export const listImage = [
         id: 5,
         title: 'きつね',
         status: 0,
+        category: [
+            {
+                categoryId: 1,
+            },
+            {
+                categoryId: 2,
+            },
+            {
+                categoryId: 3,
+            },
+            {
+                categoryId: 5,
+            },
+            {
+                categoryId: 6,
+            },
+        ],
+
+        subCategory: [
+            {
+                subCategoryId: 1,
+            },
+            {
+                subCategoryId: 2,
+            },
+            {
+                subCategoryId: 3,
+            },
+            {
+                subCategoryId: 4,
+            },
+            {
+                subCategoryId: 6,
+            },
+        ],
         description: 'string',
         thumbnail:
             'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
@@ -498,6 +674,26 @@ export const listImage = [
         title: 'きつね',
         status: 0,
         description: 'string',
+        category: [
+            {
+                categoryId: 1,
+            },
+            {
+                categoryId: 2,
+            },
+            {
+                categoryId: 3,
+            },
+        ],
+
+        subCategory: [
+            {
+                subCategoryId: 1,
+            },
+            {
+                subCategoryId: 6,
+            },
+        ],
         thumbnail:
             'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
     },
@@ -505,6 +701,47 @@ export const listImage = [
         id: 7,
         title: 'きつね',
         status: 0,
+        category: [
+            {
+                categoryId: 1,
+            },
+            {
+                categoryId: 2,
+            },
+            {
+                categoryId: 3,
+            },
+            {
+                categoryId: 4,
+            },
+            {
+                categoryId: 5,
+            },
+            {
+                categoryId: 6,
+            },
+        ],
+
+        subCategory: [
+            {
+                subCategoryId: 1,
+            },
+            {
+                subCategoryId: 2,
+            },
+            {
+                subCategoryId: 3,
+            },
+            {
+                subCategoryId: 4,
+            },
+            {
+                subCategoryId: 5,
+            },
+            {
+                subCategoryId: 6,
+            },
+        ],
         description: 'string',
         thumbnail:
             'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
@@ -603,6 +840,70 @@ export const OPTION_SELECT_IMAGE = [
         id: 1,
         icon: Images.icons.arrowLeftPrimary,
         name: 'common.optionFolder',
+    },
+];
+export const listCategoryResource = [
+    {
+        title: 'おすすめ',
+        id: 1,
+        listSub: [
+            { title: 'おすすめセット', id: 1 },
+            { title: 'おすすめ季節商品', id: 2 },
+        ],
+    },
+    {
+        title: 'おすすめ季節商品',
+        id: 2,
+        listSub: [
+            { title: 'おすすめセット', id: 1 },
+            { title: 'おすすめ季節商品', id: 2 },
+            { title: 'おすすめセット', id: 3 },
+        ],
+    },
+    {
+        title: 'おすすめ季節商品',
+        id: 3,
+        listSub: [
+            { title: 'おすすめ季節商品', id: 4 },
+            { title: 'おすすめセット', id: 5 },
+            { title: 'おすすめ季節商品', id: 6 },
+        ],
+    },
+    {
+        title: 'おすすめ季節商品',
+        id: 4,
+        listSub: [
+            { title: 'おすすめセット', id: 1 },
+            { title: 'おすすめ季節商品', id: 2 },
+            { title: 'おすすめセット', id: 5 },
+            { title: 'おすすめ季節商品', id: 6 },
+        ],
+    },
+    {
+        title: 'おすすめ季節商品おすすめ季節商品',
+        id: 5,
+        listSub: [
+            { title: 'おすすめセット', id: 1 },
+            { title: 'おすすめ季節商品', id: 2 },
+            { title: 'おすすめセット', id: 3 },
+            { title: 'おすすめ季節商品', id: 4 },
+            { title: 'おすすめセット', id: 5 },
+            { title: 'おすすめ季節商品', id: 6 },
+        ],
+    },
+];
+export const fakeDataEditMenu = [
+    {
+        id: 1,
+        name: 'string',
+        size: 1,
+        image: 'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
+        amount: 1,
+        subDish: [
+            { id: 0, title: 'string', value: 1 },
+            { id: 2, title: 'string', value: 2 },
+            { id: 3, title: 'string', value: 3 },
+        ],
     },
 ];
 

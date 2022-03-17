@@ -1,19 +1,24 @@
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
+import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
+import { navigate } from 'navigation/NavigationService';
 import React from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import { toLocalStringBirthday } from 'utilities/format';
 
 export const CouponItem = (props: any) => {
-    const { item, canUse, goToDetail, handleUseCoupon } = props;
+    const { item, canUse, handleUseCoupon, id } = props;
+    const goToDetail = () => {
+        navigate(TAB_NAVIGATION_ROOT.COUPON_ROUTE.DETAIL_COUPON, { id });
+    };
 
     return (
         <StyledTouchable customStyle={styles.couponItem} onPress={goToDetail}>
             <StyledImage source={{ uri: item?.image }} customStyle={styles.couponImage} />
             <View style={styles.couponName}>
-                <StyledText originValue={item.title} customStyle={styles.title} />
+                <StyledText originValue={item?.title} customStyle={styles.title} />
                 <View style={styles.row}>
                     <StyledText
                         i18nText={'stamp.rangeDate'}
