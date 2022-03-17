@@ -15,7 +15,7 @@ const initialState: IGlobalDataState = {
 };
 
 const globalDataSlice = createSlice({
-    name: 'init',
+    name: 'globalData',
     initialState,
     reducers: {
         updateGlobalData: (state, action: PayloadAction<any>) => {
@@ -28,7 +28,7 @@ const globalDataSlice = createSlice({
     },
 });
 
-const persistConfig = generatePersistConfig('globalData', ['isPushDisabled', 'viewedOrderDefault']);
+const persistConfig = generatePersistConfig('globalData', ['isPushDisabled', 'viewedOrderDefault', 'skipOrderDefault']);
 
 export const { updateGlobalData, clearGlobalData } = globalDataSlice.actions;
 export default persistReducer<IGlobalDataState>(persistConfig, globalDataSlice.reducer);

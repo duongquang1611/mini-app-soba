@@ -917,9 +917,9 @@ export const TEXT_OTP = [
     },
     {
         id: VerifiedCodeType.RESET_PASSWORD,
-        title: 'otp.register.title',
-        titleInputOtp: 'otp.register.titleInputOtp',
-        note: 'otp.register.note',
+        title: 'otp.resetPassword.title',
+        titleInputOtp: 'otp.resetPassword.titleInputOtp',
+        note: 'otp.resetPassword.note',
         confirm: 'common.next',
     },
     {

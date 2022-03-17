@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { useIsFocused } from '@react-navigation/native';
 import { checkVerifyCode, forgotPassword, getVerifyCode, register } from 'api/modules/api-app/authenticate';
 import { userInfoActions } from 'app-redux/slices/userInfoSlice';
 import { Themes } from 'assets/themes';
@@ -21,9 +22,10 @@ const SendOTP: FunctionComponent = ({ route }: any) => {
     const dispatch = useDispatch();
     const codeInputRef = useRef<any>(null);
     const { countdown, resetCountdown, clearCountdown } = useCountdown(staticValue.COUNT_DOWN_OTP);
+    const isFirstRun = useRef<any>(true);
+    const isFocused = useIsFocused();
     const [retryOtpCount, setRetryOtpCount] = useState(0);
     const [wrongOtpCount, setWrongOtpCount] = useState(0);
-    const { t } = useTranslation();
     const [code, setCode] = useState('');
     const { user = {}, type = VerifiedCodeType.REGISTER } = route?.params || {};
     const { email, password } = user;
@@ -32,21 +34,72 @@ const SendOTP: FunctionComponent = ({ route }: any) => {
     const disabledResend = useMemo(() => countdown > 0 || maxResend, [countdown, maxResend]);
 
     const [props, getCellOnLayoutHandler] = useClearByFocusCell({ value: code, setValue: setCode });
+    const isResetPassword = useMemo(() => type === VerifiedCodeType.RESET_PASSWORD, [type]);
     const isRegister = useMemo(() => type === VerifiedCodeType.REGISTER, [type]);
 
     useEffect(() => {
         codeInputRef?.current?.focus?.();
     }, []);
 
+    useEffect(() => {
+        if (isFirstRun?.current) {
+            isFirstRun.current = false;
+            return;
+        }
+        setCode('');
+        clearCountdown();
+    }, [isFocused]);
+
     const onCodeChange = (codeVer: string) => {
         if (codeVer.length === staticValue.OTP_LENGTH) Keyboard.dismiss();
         setCode(codeVer);
     };
 
+    const handleConfirmResetPassword = async () => {
+        try {
+            // reset password
+            const res = await checkVerifyCode({ email, verifiedCode: code, type });
+            if (res?.data?.isValid) {
+                navigate(AUTHENTICATE_ROUTE.RESET_PASSWORD, { email });
+            } else {
+                handleWrongOtpMax();
+                wrongOtpCount + 1 < staticValue.MAX_WRONG_OTP && AlertMessage('otp.error.otpInvalid');
+            }
+        } catch (error) {
+            console.log('handleConfirmResetPassword -> error', error);
+            AlertMessage(error);
+        }
+    };
+
+    const handleConfirmChangePassword = async () => {
+        // change password
+        const res = await checkVerifyCode({ email, verifiedCode: code });
+        if (res?.data?.isValid) {
+            navigate(AUTHENTICATE_ROUTE.CHANGE_PASS, { email, code });
+        } else {
+            AlertMessage('alert.invalidOTP');
+        }
+    };
+
+    const handleWrongOtpMax = async (error?: any) => {
+        wrongOtpCount + 1 >= staticValue.MAX_WRONG_OTP
+            ? AlertMessage('otp.register.alertInvalidOtpMax', undefined, () =>
+                  navigate(
+                      isRegister
+                          ? AUTHENTICATE_ROUTE.REGISTER
+                          : isResetPassword
+                          ? AUTHENTICATE_ROUTE.FORGOT_PASS
+                          : AUTHENTICATE_ROUTE.CHANGE_PASS,
+                  ),
+              )
+            : error && AlertMessage(error);
+        setWrongOtpCount(wrongOtpCount + 1);
+    };
+
     const confirm = async () => {
         try {
             if (code?.length < staticValue.OTP_LENGTH) {
-                AlertMessage(t('alert.invalidOTP'));
+                AlertMessage('alert.invalidOTP');
                 return;
             }
             if (isRegister) {
@@ -55,22 +108,14 @@ const SendOTP: FunctionComponent = ({ route }: any) => {
                     verifiedCode: code,
                 });
                 dispatch(userInfoActions.updateToken(response.data));
+            } else if (isResetPassword) {
+                handleConfirmResetPassword();
             } else {
-                const verifyCode = await checkVerifyCode(email, code);
-                if (verifyCode?.data?.isValid) {
-                    navigate(AUTHENTICATE_ROUTE.CHANGE_PASS, { email, code });
-                } else {
-                    AlertMessage(t('alert.invalidOTP'));
-                }
+                handleConfirmChangePassword();
             }
         } catch (error: any) {
             if (error?.includes?.(staticValue.OTP_INVALID_MESSAGE)) {
-                wrongOtpCount + 1 >= staticValue.MAX_WRONG_OTP
-                    ? AlertMessage('otp.register.alertInvalidOtpMax', undefined, () =>
-                          navigate(isRegister ? AUTHENTICATE_ROUTE.REGISTER : AUTHENTICATE_ROUTE.FORGOT_PASS),
-                      )
-                    : AlertMessage(error);
-                setWrongOtpCount(wrongOtpCount + 1);
+                handleWrongOtpMax(error);
             } else AlertMessage(error);
         }
     };
@@ -86,12 +131,8 @@ const SendOTP: FunctionComponent = ({ route }: any) => {
     const resendOTP = async () => {
         setRetryOtpCount(retryOtpCount + 1);
         try {
-            if (isRegister) {
-                await getVerifyCode({ email, type });
-                actionResendSuccess();
-                return;
-            }
-            await forgotPassword(email);
+            await getVerifyCode({ email, type });
+            actionResendSuccess();
         } catch (error) {
             AlertMessage(error);
         }
