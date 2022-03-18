@@ -17,7 +17,7 @@ import { PASSWORD_MAX_LENGTH } from 'utilities/validate';
 import yupValidate from 'utilities/yupValidate';
 import * as yup from 'yup';
 
-const REGISTER_DEFAULT_FORM = !__DEV__
+const REGISTER_DEFAULT_FORM = __DEV__
     ? {
           password: '12345678',
           confirmPassword: '12345678',

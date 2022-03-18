@@ -19,7 +19,7 @@ const AuthStack = () => (
         headerMode={'none'}
         screenOptions={navigationConfigs}
         keyboardHandlingEnabled={isIos}
-        initialRouteName={AUTHENTICATE_ROUTE.RESET_PASSWORD}
+        initialRouteName={AUTHENTICATE_ROUTE.LOGIN}
     >
         <MainStack.Screen name={AUTHENTICATE_ROUTE.LOGIN} component={LoginScreen} />
         <MainStack.Screen name={AUTHENTICATE_ROUTE.REGISTER} component={RegisterScreen} />
