@@ -63,6 +63,7 @@ const Images: any = {
         order: require('./icon/ic_order.png'),
         bag_happy: require('./icon/ic_bag_happy.png'),
         rectangle: require('./icon/ic_rectangle.png'),
+        rectangleDisable: require('./icon/ic_rectangle_disable.png'),
         tick: require('./icon/ic_tick.png'),
         giftOpenSmall: require('./icon/gift_open_small.png'),
         giftOpen3: require('./icon/gift_open_3.png'),

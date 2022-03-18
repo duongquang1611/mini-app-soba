@@ -101,3 +101,11 @@ export const checkCanUse = (endDate: any) => {
     const d2 = new Date();
     return d1 >= d2;
 };
+export const sumAmount = (item: any) => {
+    let resultAmount = 0;
+    const { mainDish, subDishes } = item;
+    subDishes?.forEach(async (rating: any) => {
+        resultAmount += rating?.amount;
+    });
+    return (resultAmount + 1) * mainDish.amount;
+};

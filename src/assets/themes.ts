@@ -19,6 +19,7 @@ const common = {
     seaGreen: '#34835E',
     backgroundButton: 'rgba(34, 34, 34, 0.5)',
     thunderbird: '#DF2115',
+    sweetPink: '#FBA29D',
 };
 
 const Light = {

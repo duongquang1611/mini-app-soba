@@ -10,31 +10,37 @@ import AlertMessage from 'components/base/AlertMessage';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledHeader from 'components/common/StyledHeader';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ImageBackground, Text, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
 import { logger } from 'utilities/helper';
-import { MODAL_ID, stepGuide } from 'utilities/staticData';
+import { MODAL_ID, staticValue, stepGuide } from 'utilities/staticData';
+import ButtonCart from './components/ButtonCart';
 import ListViewSelect from './components/ListViewSelect';
 import ModalDetailMenu from './components/ModalDetailMenu';
 
-const ItemMenu = (item: any) => {
+const ItemMenu = (props: any) => {
     const { saveOrder } = useSelector((state: RootState) => state.order);
-    const num = saveOrder?.dishes?.find((itemId: any) => itemId?.id === item?.item?.id)?.amount || 0;
+    let num = useRef(0).current;
+    saveOrder?.dishes
+        ?.filter((itemOrder: any) => itemOrder?.mainDish?.id === props?.item?.id)
+        ?.forEach(async (rating: any) => {
+            num += rating?.totalAmount;
+        });
     const isSetting = false;
     const gotoNew = () => {
-        item?.navigation.navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.DETAIL_MEAL, { id: item?.item?.id });
+        props?.navigation.navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.DETAIL_MEAL, { id: props?.item?.id, isNew: true });
     };
     return (
-        <StyledTouchable onPress={num > 0 ? item?.goToDetailModal : gotoNew}>
+        <StyledTouchable onPress={num > 0 ? props?.goToDetailModal : gotoNew}>
             <ImageBackground
                 imageStyle={styles.imageBorder}
-                source={{ uri: item?.item?.thumbnail }}
+                source={{ uri: props?.item?.thumbnail }}
                 style={[styles.image, { borderColor: num > 0 ? Themes.COLORS.primary : Themes.COLORS.white }]}
             >
-                <StyledText originValue={item?.item?.title} customStyle={styles.name} />
+                <StyledText originValue={props?.item?.title} customStyle={styles.name} />
                 {num > 0 && isSetting ? <StyledIcon source={Images.icons.tick} size={20} /> : null}
                 {num && !isSetting ? (
                     <View style={styles.numberChooseView}>
@@ -74,10 +80,9 @@ const ModalGuide = () => (
 const MenuScreen = () => {
     const { saveOrder } = useSelector((state: RootState) => state.order);
     const { dishes } = saveOrder || [];
-    let numOrder = 0;
-    dishes?.map((item: any) => {
-        numOrder += item.amount;
-        return item;
+    let numOrder = useRef(0).current;
+    saveOrder?.dishes?.forEach(async (rating: any) => {
+        numOrder += rating?.totalAmount;
     });
     const { resource } = store.getState();
     const { categories, menu } = resource?.resource?.data;
@@ -121,16 +126,16 @@ const MenuScreen = () => {
                     contentContainerStyle: { flexGrow: 1 },
                 },
             },
-            { title: 'order.orderGuide' },
+            { title: 'order.editCouponTitle' },
         );
     };
-    const numberItemListCoupon = 1;
+    const numberItemListCoupon = dishes?.length;
     const showModalDetail = (id: any) => {
         modalize.show(
             MODAL_ID.DETAIL_MENU,
-            <ModalDetailMenu id={id} closeModal={() => modalize.dismiss(MODAL_ID.DETAIL_MENU)} />,
+            <ModalDetailMenu dishes={dishes} id={id} closeModal={() => modalize.dismiss(MODAL_ID.DETAIL_MENU)} />,
             {
-                modalHeight: verticalScale(numberItemListCoupon * 60 + 250),
+                modalHeight: verticalScale(numberItemListCoupon * 60 + 300),
                 scrollViewProps: {
                     contentContainerStyle: { flexGrow: 1 },
                 },
@@ -192,15 +197,13 @@ const MenuScreen = () => {
                     )}
                 />
             </View>
-            <View style={styles.secondaryView}>
-                <ImageBackground source={Images.icons.rectangle} style={styles.rectangle}>
-                    <StyledIcon source={Images.icons.bag_happy} size={35} customStyle={styles.icBag} />
-                </ImageBackground>
-                <StyledTouchable customStyle={styles.rowCart} onPress={gotoCart}>
-                    <StyledText i18nText={'setting.viewCart'} customStyle={styles.textCart} />
-                    {numOrder > 0 && <StyledText originValue={`( ${numOrder} )`} customStyle={styles.textCart} />}
-                </StyledTouchable>
-            </View>
+            <ButtonCart
+                checkDisable={numOrder > staticValue.MAX_ORDER}
+                goToSaveOrder={gotoCart}
+                amountValue={numOrder}
+                numOrder={numOrder}
+                isMenu
+            />
         </View>
     );
 };

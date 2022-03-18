@@ -27,6 +27,7 @@ export const staticValue = {
     MAX_RETRY_OTP: 5,
     MAX_WRONG_OTP: 5,
     OTP_INVALID_MESSAGE: 'Verified_Code_Invalid',
+    MAX_ORDER: 10,
 };
 export const LINEAR_COLOR = {
     CATEGORY: [Themes.COLORS.thunderbird, Themes.COLORS.primary],
@@ -83,7 +84,7 @@ const exLinkImage =
     'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg';
 const exLinkImageSquare = 'https://kenh14cdn.com/203336854389633024/2021/9/1/photo-1-16304832141231584345047.jpg';
 export const dataFakeDetailMeal = {
-    id: 1,
+    id: 4,
     title: 'string',
     thumbnail: exLinkImage,
     description: 'string',
