@@ -1,6 +1,6 @@
 /* App config for images
  */
-const Images: any = {
+const Images = {
     icons: {
         selected: require('./icon/ic_select.png'),
         back: require('./icon/ic_back.png'),
@@ -46,6 +46,7 @@ const Images: any = {
         add: require('./icon/ic_add.png'),
         minus: require('./icon/ic_minus.png'),
         next: require('./icon/ic_next.png'),
+        nextGrey: require('./icon/ic_next_grey.png'),
         arrowNext: require('./icon/ic_arrow_next.png'),
         calendar: require('./icon/ic_calendar.png'),
         gold: require('./icon/ic_gold.png'),

@@ -44,6 +44,7 @@ export interface StyledInputProps extends TextInputProps {
     valueInput?: string;
     onPress?: any;
     handleConfirm?: any;
+    customErrorMessage?: any;
 }
 
 export const LabelInput = ({ label, labelRequire = '*', customStyle, containerStyle }: any) => {
@@ -78,6 +79,8 @@ const StyledInput = (props: StyledInputProps, ref: any) => {
         customLabelStyle,
         onPress,
         handleConfirm,
+        customErrorMessage,
+        errorMessage,
     } = props;
 
     const [isFocused, setIsFocused] = useState(false);
@@ -118,7 +121,8 @@ const StyledInput = (props: StyledInputProps, ref: any) => {
                 customStyle={[
                     styles.containerInput,
                     styles.textInput,
-                    !isFocused && !!props?.errorMessage && { borderColor: Themes.COLORS.borderInputError },
+                    !isFocused &&
+                        !!(errorMessage || customErrorMessage) && { borderColor: Themes.COLORS.borderInputError },
                 ]}
                 onPress={icBirthday ? showDatePicker : onPress}
             >
@@ -155,8 +159,11 @@ const StyledInput = (props: StyledInputProps, ref: any) => {
                     </TouchableOpacity>
                 )}
             </WrapInput>
-            {!!props?.errorMessage && (
-                <StyledText i18nText={props.errorMessage} customStyle={[styles.errorMessage, props.customErrorStyle]} />
+            {!!(errorMessage || customErrorMessage) && (
+                <StyledText
+                    i18nText={errorMessage || customErrorMessage}
+                    customStyle={[styles.errorMessage, props.customErrorStyle]}
+                />
             )}
         </View>
     );

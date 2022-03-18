@@ -15,7 +15,12 @@ import { isIos } from 'utilities/helper';
 const MainStack = createStackNavigator();
 
 const AuthStack = () => (
-    <MainStack.Navigator headerMode={'none'} screenOptions={navigationConfigs} keyboardHandlingEnabled={isIos}>
+    <MainStack.Navigator
+        headerMode={'none'}
+        screenOptions={navigationConfigs}
+        keyboardHandlingEnabled={isIos}
+        initialRouteName={AUTHENTICATE_ROUTE.RESET_PASSWORD}
+    >
         <MainStack.Screen name={AUTHENTICATE_ROUTE.LOGIN} component={LoginScreen} />
         <MainStack.Screen name={AUTHENTICATE_ROUTE.REGISTER} component={RegisterScreen} />
         <MainStack.Screen name={AUTHENTICATE_ROUTE.FORGOT_PASS} component={ForgotPasswordScreen} />

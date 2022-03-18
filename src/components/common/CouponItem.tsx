@@ -1,46 +1,59 @@
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
-import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
-import { navigate } from 'navigation/NavigationService';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
-import { toLocalStringBirthday } from 'utilities/format';
+import { formatDate, YYYYMMDD } from 'utilities/format';
+import { DateType, MemberCouponStatus, staticValue } from 'utilities/staticData';
+import DashView from './DashView';
 
 export const CouponItem = (props: any) => {
-    const { item, canUse, handleUseCoupon, id } = props;
-    const goToDetail = () => {
-        navigate(TAB_NAVIGATION_ROOT.COUPON_ROUTE.DETAIL_COUPON, { id });
+    const { item = {}, canUse, handleUseCoupon, goToDetail } = props;
+    const { coupon, usedDate, status } = item;
+    const { image, title, startDate, endDate, dateType } = coupon;
+    const isInCart = useMemo(() => status === MemberCouponStatus.IN_CART, [status]);
+
+    const handleGoToDetail = () => {
+        goToDetail?.(item);
     };
 
     return (
-        <StyledTouchable customStyle={styles.couponItem} onPress={goToDetail}>
-            <StyledImage source={{ uri: item?.image }} customStyle={styles.couponImage} />
-            <View style={styles.couponName}>
-                <StyledText originValue={item?.title} customStyle={styles.title} />
-                <View style={styles.row}>
-                    <StyledText
-                        i18nText={'stamp.rangeDate'}
-                        i18nParams={{
-                            start: toLocalStringBirthday(item?.startDate),
-                            end: toLocalStringBirthday(item?.startDate),
-                        }}
-                        customStyle={styles.time}
-                    />
-                    {!canUse && item?.expired && <StyledText originValue={'有効期限切れ'} customStyle={styles.time} />}
-                    {canUse && (
-                        <StyledTouchable customStyle={styles.row} onPress={handleUseCoupon}>
-                            <StyledText originValue={'クーポン使用'} customStyle={styles.useText} />
-                            <StyledIcon source={Images.icons.next} size={20} />
-                        </StyledTouchable>
-                    )}
+        <>
+            <StyledTouchable customStyle={styles.couponItem} onPress={handleGoToDetail}>
+                <StyledImage source={{ uri: image }} customStyle={styles.couponImage} />
+                <View style={styles.content}>
+                    <StyledText originValue={title} numberOfLines={2} customStyle={styles.title} />
+                    <View style={styles.row}>
+                        <StyledText
+                            i18nText={dateType === DateType.EXPIRED_DATE ? 'coupon.rangeDate' : 'coupon.noExpiredDate'}
+                            i18nParams={{
+                                start: formatDate(startDate, YYYYMMDD),
+                                end: formatDate(endDate, YYYYMMDD),
+                            }}
+                            customStyle={styles.time}
+                        />
+                        {!!canUse && (
+                            <StyledTouchable
+                                customStyle={styles.btnCanUSe}
+                                onPress={handleUseCoupon}
+                                disabled={isInCart}
+                                hitSlop={staticValue.DEFAULT_HIT_SLOP}
+                            >
+                                <StyledText
+                                    i18nText={'coupon.btnUse'}
+                                    customStyle={styles.useText}
+                                    disabled={isInCart}
+                                />
+                                <StyledIcon source={isInCart ? Images.icons.nextGrey : Images.icons.next} size={20} />
+                            </StyledTouchable>
+                        )}
+                    </View>
                 </View>
-                {!canUse && !item?.expired && (
-                    <StyledIcon source={Images.icons.couponUsed} size={70} customStyle={styles.stampUsed} />
-                )}
-            </View>
-        </StyledTouchable>
+                {!!usedDate && <StyledIcon source={Images.icons.couponUsed} size={70} customStyle={styles.stampUsed} />}
+            </StyledTouchable>
+            <DashView />
+        </>
     );
 };
 
@@ -52,33 +65,30 @@ const styles = ScaledSheet.create({
         backgroundColor: Themes.COLORS.lightGray,
     },
     couponItem: {
-        width: '100%',
-        marginVertical: '2@vs',
         flexDirection: 'row',
-        justifyContent: 'space-between',
         paddingVertical: '10@vs',
-        marginBottom: '3@vs',
         backgroundColor: Themes.COLORS.white,
-        paddingHorizontal: '20@s',
+        paddingLeft: '20@s',
+        paddingRight: '10@s',
     },
     couponImage: {
         width: '60@s',
         height: '60@s',
     },
-    couponName: {
-        width: '80%',
+    content: {
+        flexShrink: 1,
         justifyContent: 'space-between',
+        marginLeft: '10@s',
     },
     time: {
-        fontSize: '12@ms0.3',
+        fontSize: '11@ms0.3',
         color: Themes.COLORS.silver,
-        marginBottom: '10@vs',
     },
     useText: {
         color: Themes.COLORS.primary,
         fontWeight: 'bold',
-        marginRight: '5@s',
-        fontSize: '12@ms0.3',
+        fontSize: '11@ms0.3',
+        marginRight: '2@s',
     },
     title: {
         fontSize: '16@ms0.3',
@@ -89,10 +99,14 @@ const styles = ScaledSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        width: '100%',
+    },
+    btnCanUSe: {
+        flexDirection: 'row',
     },
     stampUsed: {
         position: 'absolute',
-        top: '-12@s',
-        right: '-20@s',
+        top: '-2@vs',
+        right: 0,
     },
 });

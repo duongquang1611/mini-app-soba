@@ -1,13 +1,14 @@
-import axios from 'axios';
-import Config from 'react-native-config';
-import TokenProvider from 'utilities/authenticate/TokenProvider';
-import AuthenticateService from 'utilities/authenticate/AuthenticateService';
-import { logger, renderAlert } from 'utilities/helper';
 import NetInfo from '@react-native-community/netinfo';
+import { store } from 'app-redux/store';
+import axios from 'axios';
+import AlertMessage from 'components/base/AlertMessage';
+import Config from 'react-native-config';
+import AuthenticateService from 'utilities/authenticate/AuthenticateService';
+import TokenProvider from 'utilities/authenticate/TokenProvider';
+import { logger } from 'utilities/helper';
+import i18next from 'utilities/i18next';
 import { apiLogger } from 'utilities/logger';
 import { apiLocal, ERRORS } from 'utilities/staticData';
-import i18next from 'utilities/i18next';
-import { store } from 'app-redux/store';
 
 const AUTH_URL_REFRESH_TOKEN = `${Config.API_URL}auth/request-access-token`;
 let hasAnyNetworkDialogShown = false;
@@ -79,9 +80,15 @@ request.interceptors.response.use(
             const getKey = apiLocal.find((item) => item.url === url)?.key;
             const dataResult: any = store.getState();
             if (!(getKey && dataResult[getKey])) {
-                renderAlert(i18next.t(ERRORS.network), () => {
-                    hasAnyNetworkDialogShown = false;
-                });
+                AlertMessage(
+                    ERRORS.network,
+                    {
+                        onClosedModalize: () => {
+                            hasAnyNetworkDialogShown = false;
+                        },
+                    },
+                    false,
+                );
             }
         }
         // Any status codes that falls outside the range of 2xx cause this function to trigger

@@ -1,13 +1,11 @@
-/* eslint-disable no-console */
 import AsyncStorage from '@react-native-community/async-storage';
-import AlertMessage from 'components/base/AlertMessage';
 import i18next from 'i18next';
+import { throttle } from 'lodash';
 import { DevSettings, Linking, Platform } from 'react-native';
-import Picker from 'react-native-picker';
-import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import codePush from 'react-native-code-push';
 import Config from 'react-native-config';
-import { throttle } from 'lodash';
+import Picker from 'react-native-picker';
+import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import { staticValue } from './staticData';
 
 export const isAndroid = Platform.OS === 'android';
@@ -60,10 +58,6 @@ export function generatePersistConfig(key: string, whitelist: string[]) {
     };
 }
 
-export const renderAlert = (message: string, callback: () => void) => {
-    AlertMessage(i18next.t(message), '', callback, undefined, false);
-};
-
 export const getCodePushInfo = () => {
     if (!__DEV__) {
         codePush.sync({
@@ -96,11 +90,13 @@ export const openURL = (url: string, cbNotSupport?: any) => {
         }
     });
 };
+
 export const checkCanUse = (endDate: any) => {
     const d1 = new Date(endDate);
     const d2 = new Date();
     return d1 >= d2;
 };
+
 export const sumAmount = (item: any) => {
     let resultAmount = 0;
     const { mainDish, subDishes } = item;
@@ -108,4 +104,12 @@ export const sumAmount = (item: any) => {
         resultAmount += rating?.amount;
     });
     return (resultAmount + 1) * mainDish.amount;
+};
+
+export const checkPasswordMatch = ({ password, confirmPassword }: any) => {
+    console.log(password, confirmPassword);
+    if (confirmPassword && password && password !== confirmPassword) {
+        return 'error.passwordNotMatch';
+    }
+    return '';
 };

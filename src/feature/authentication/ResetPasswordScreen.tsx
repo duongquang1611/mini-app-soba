@@ -1,19 +1,18 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { yupResolver } from '@hookform/resolvers/yup';
-import { checkIsExistEmail, getVerifyCode, resetPassword } from 'api/modules/api-app/authenticate';
+import { resetPassword } from 'api/modules/api-app/authenticate';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
-import { StyledButton, StyledInputForm, StyledText } from 'components/base';
+import { StyledButton, StyledInputForm } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
 import StyledHeader from 'components/common/StyledHeader';
 import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet } from 'react-native-size-matters';
-import { VerifiedCodeType } from 'utilities/staticData';
+import { checkPasswordMatch } from 'utilities/helper';
 import { PASSWORD_MAX_LENGTH } from 'utilities/validate';
 import yupValidate from 'utilities/yupValidate';
 import * as yup from 'yup';
@@ -32,7 +31,7 @@ const ResetPasswordScreen = ({ route }: any) => {
 
     const yupSchema = yup.object().shape({
         password: yupValidate.password(),
-        confirmPassword: yupValidate.password('password'),
+        confirmPassword: yupValidate.password(),
     });
 
     const form = useForm({
@@ -40,10 +39,14 @@ const ResetPasswordScreen = ({ route }: any) => {
         resolver: yupResolver(yupSchema),
         defaultValues: REGISTER_DEFAULT_FORM,
     });
+
     const {
         formState: { isValid },
         handleSubmit,
+        watch,
     } = form;
+
+    const checkPassword = useCallback(() => checkPasswordMatch(watch()), [watch]);
 
     const submit = async (form: any) => {
         const { password: newPassword } = form;
@@ -77,6 +80,7 @@ const ResetPasswordScreen = ({ route }: any) => {
                             icYeyOff={Images.icons.eyeOff}
                             icYeyOn={Images.icons.eyeOn}
                             customStyle={styles.inputPassword}
+                            customErrorMessage={checkPassword()}
                         />
                         <StyledInputForm
                             ref={passwordConfirmRef}
@@ -89,10 +93,11 @@ const ResetPasswordScreen = ({ route }: any) => {
                             icYeyOff={Images.icons.eyeOff}
                             icYeyOn={Images.icons.eyeOn}
                             customStyle={styles.inputPassword}
+                            customErrorMessage={checkPassword()}
                         />
                     </FormProvider>
                     <StyledButton
-                        disabled={!isValid}
+                        disabled={!(isValid && !checkPassword())}
                         title={'common.next'}
                         onPress={handleSubmit(submit)}
                         customStyle={styles.buttonSave}

@@ -931,3 +931,18 @@ export const TEXT_OTP = [
         confirm: 'common.next',
     },
 ];
+
+export enum MemberCouponStatus {
+    IN_CART = 1,
+    AVAILABLE = 2,
+}
+
+export enum TabCouponStatus {
+    CAN_USE = 1,
+    USED = 0,
+}
+
+export enum DateType {
+    EXPIRED_DATE = 1,
+    NO_EXPIRED_DATE = 2,
+}

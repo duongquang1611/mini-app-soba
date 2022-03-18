@@ -62,7 +62,6 @@ const AppStack = () => {
     return (
         <Host>
             <MainStack.Navigator
-                // initialRouteName={APP_ROUTE.MAIN_TAB}
                 initialRouteName={
                     skipOrderDefault
                         ? APP_ROUTE.MAIN_TAB
