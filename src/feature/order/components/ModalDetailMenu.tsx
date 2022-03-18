@@ -8,7 +8,7 @@ import { navigate } from 'navigation/NavigationService';
 import DashView from 'components/common/DashView';
 import Images from 'assets/images';
 
-export const OrderItemCart = (props: any) => {
+const OrderItemCart = (props: any) => {
     const { mainDish, subDishes } = props?.data;
     const { goDetailMenu } = props;
 

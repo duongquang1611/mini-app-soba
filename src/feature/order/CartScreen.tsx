@@ -3,21 +3,24 @@ import { getCart } from 'api/modules/api-app/order';
 import { RootState } from 'app-redux/hooks';
 import { clearSaveOrder, updateSaveOrder } from 'app-redux/slices/orderSlice';
 import Images from 'assets/images';
+import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledIcon, StyledText, StyledTouchable } from 'components/base';
+import AlertMessage from 'components/base/AlertMessage';
 import DashView from 'components/common/DashView';
 import StyledHeader from 'components/common/StyledHeader';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
 import { logger } from 'utilities/helper';
-import { coupon, listOrderDefault } from 'utilities/staticData';
+import { coupon, POPUP_TYPE, staticValue } from 'utilities/staticData';
 import AmountOrder from './components/AmountOrder';
+import OrderItemCart from './components/OrderItemCart';
 
 const ItemCoupon = (data: any) => {
     return (
@@ -28,96 +31,27 @@ const ItemCoupon = (data: any) => {
         </View>
     );
 };
-export const OrderItemCart = (data: any) => {
-    const { image, name, amount, subDish, id } = data?.data;
-    const { onCancel, canChange, goDetailMenu } = data;
-    const [num, setNum] = useState(amount);
-    const add = () => {
-        setNum(num + 1);
-    };
-    const minus = () => {
-        if (num > 0) setNum(num - 1);
-    };
-
-    const goToDetail = () => {
-        navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.DETAIL_MEAL, { id });
-    };
-
-    return (
-        <StyledTouchable disabled={!goDetailMenu} onPress={goDetailMenu}>
-            <View style={styles.orderItemView}>
-                <TouchableOpacity onPress={goToDetail}>
-                    <StyledIcon source={{ uri: image }} size={70} />
-                </TouchableOpacity>
-                <View style={styles.orderTextView}>
-                    {onCancel && (
-                        <TouchableOpacity onPress={onCancel}>
-                            <StyledIcon source={Images.icons.cancel} size={17} customStyle={styles.icCancel} />
-                        </TouchableOpacity>
-                    )}
-                    <StyledText originValue={name} customStyle={styles.titleOrder} />
-                    {subDish?.map((item: any, index: number) => (
-                        <View key={index} style={styles.rowSub}>
-                            <StyledText originValue={`+ ${item?.title}`} isBlack customStyle={styles.addValue} />
-                            {item?.value > 1 && (
-                                <View style={styles.numView}>
-                                    <StyledText
-                                        originValue={`x ${item?.value}`}
-                                        isBlack
-                                        customStyle={styles.addValueText}
-                                    />
-                                </View>
-                            )}
-                        </View>
-                    ))}
-                    <View style={styles.quantity}>
-                        <StyledText i18nText={'個数'} customStyle={styles.changeText} />
-                        <View style={styles.row}>
-                            {canChange && (
-                                <TouchableOpacity onPress={minus}>
-                                    <StyledIcon
-                                        source={Images.icons.minus}
-                                        size={20}
-                                        customStyle={{
-                                            tintColor: num > 0 ? Themes.COLORS.primary : Themes.COLORS.silver,
-                                        }}
-                                    />
-                                </TouchableOpacity>
-                            )}
-                            <StyledText originValue={`${num}`} customStyle={styles.quantityText} />
-                            {canChange && (
-                                <TouchableOpacity onPress={add}>
-                                    <StyledIcon source={Images.icons.add} size={20} />
-                                </TouchableOpacity>
-                            )}
-                        </View>
-                    </View>
-                </View>
-            </View>
-            <DashView />
-        </StyledTouchable>
-    );
-};
 const CartScreen = () => {
     const { saveOrder } = useSelector((state: RootState) => state.order);
     const dispatch = useDispatch();
-    const [cart, setCart] = useState(saveOrder);
+    const [cartOrder, setCartOrder] = useState(saveOrder);
+    let num = useRef(0).current;
+    cartOrder?.dishes?.forEach(async (rating: any) => {
+        num += rating?.totalAmount;
+    });
     useEffect(() => {
-        getCartData();
-    }, []);
-    const getCartData = async () => {
-        try {
-            const res = await getCart();
-            setCart(res?.data);
-        } catch (error) {
-            console.log('file: CartScreen.tsx -> line 69 -> getCartData -> error', error);
-        }
-    };
+        setCartOrder(saveOrder);
+    }, [saveOrder]);
     const cancelCart = () => {
-        dispatch(clearSaveOrder());
+        AlertMessage('order.deleteCart', {
+            textButtonCancel: 'common.cancel',
+            onOk: () => dispatch(clearSaveOrder()),
+            type: POPUP_TYPE.CONFIRM,
+        });
     };
-    const cancelItem = (id: number) => {
-        const newDishes = saveOrder?.dishes?.filter((item: any) => item?.id !== id);
+
+    const cancelItem = (createDate: string) => {
+        const newDishes = saveOrder?.dishes?.filter((item: any) => item?.createDate !== createDate);
         dispatch(updateSaveOrder({ ...saveOrder, dishes: newDishes }));
     };
     const confirm = () => {
@@ -127,17 +61,28 @@ const CartScreen = () => {
         navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.COUPON_LIST);
     };
     const createORCode = () => {
+        updateCart();
         navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.MOBILE_ORDER);
+    };
+    const updateCart = () => {
+        dispatch(updateSaveOrder(cartOrder));
     };
     return (
         <View style={styles.container}>
-            <StyledHeader title={'カート'} textRight={'注文キャンセル'} onPressRight={cancelCart} />
+            <StyledHeader title={'order.cartTitle'} textRight={'order.cancelOrder'} onPressRight={cancelCart} />
             <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
                 <View style={styles.body}>
-                    <AmountOrder />
+                    <AmountOrder cartOrder={cartOrder} />
                     <View style={styles.orderView}>
-                        {cart?.dishes?.map((item: any, index: number) => (
-                            <OrderItemCart onCancel={cancelItem} key={index} data={item} canChange={true} />
+                        {saveOrder?.dishes?.map((item: any, index: number) => (
+                            <OrderItemCart
+                                cartOrder={cartOrder}
+                                cancelItem={cancelItem}
+                                key={index}
+                                data={item}
+                                canChange={true}
+                                setCartOrder={setCartOrder}
+                            />
                         ))}
                     </View>
                     <View style={styles.contentView}>
@@ -157,10 +102,18 @@ const CartScreen = () => {
                         </TouchableOpacity>
                     </View>
                     <View style={styles.contentView}>
-                        <StyledButton title={'ＱＲコード発行'} onPress={createORCode} />
+                        {num > staticValue.MAX_ORDER && (
+                            <StyledText i18nText={'order.errorMaxOrder'} customStyle={styles.errText} />
+                        )}
+
+                        <StyledButton
+                            disabled={num > staticValue.MAX_ORDER}
+                            title={'order.qrButton'}
+                            onPress={createORCode}
+                        />
                         <StyledButton
                             isNormal={true}
-                            title={'商品追加'}
+                            title={'order.editCartButton'}
                             onPress={confirm}
                             customStyle={styles.productAddition}
                             customStyleText={styles.textProduct}
@@ -178,6 +131,7 @@ const styles = ScaledSheet.create({
     container: {
         flex: 1,
         backgroundColor: Themes.COLORS.lightGray,
+        paddingBottom: Metrics.safeBottomPadding,
     },
     body: {
         flex: 1,
@@ -187,7 +141,8 @@ const styles = ScaledSheet.create({
         backgroundColor: Themes.COLORS.white,
         borderWidth: 1,
         borderColor: Themes.COLORS.primary,
-        paddingVertical: 15,
+        paddingVertical: '10@vs',
+        marginBottom: '10@vs',
     },
     orderItemView: {
         width: '100%',
@@ -233,9 +188,6 @@ const styles = ScaledSheet.create({
     row: {
         flexDirection: 'row',
     },
-    quantityText: {
-        marginHorizontal: '10@s',
-    },
     textProduct: {
         color: Themes.COLORS.secondary,
     },
@@ -277,17 +229,6 @@ const styles = ScaledSheet.create({
     icBag: {
         tintColor: Themes.COLORS.secondary,
     },
-    icCancel: {
-        position: 'absolute',
-        right: 0,
-        top: '5@vs',
-    },
-    addValue: {
-        marginVertical: '3@vs',
-    },
-    changeText: {
-        fontWeight: 'bold',
-    },
     icCoupon: {
         tintColor: Themes.COLORS.primary,
     },
@@ -311,20 +252,8 @@ const styles = ScaledSheet.create({
         color: Themes.COLORS.silver,
         marginTop: '10@vs',
     },
-    numView: {
-        backgroundColor: Themes.COLORS.headerBackground,
-        borderRadius: 5,
-        paddingHorizontal: '5@s',
-        paddingVertical: '2@vs',
-        marginLeft: '5@s',
-    },
-    addValueText: {
+    errText: {
         color: Themes.COLORS.primary,
-        fontSize: '12@ms0.3',
-    },
-    rowSub: {
-        flexDirection: 'row',
-        marginVertical: '2@vs',
-        alignItems: 'center',
+        alignSelf: 'center',
     },
 });

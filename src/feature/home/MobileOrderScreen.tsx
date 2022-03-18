@@ -17,8 +17,8 @@ import { logger } from 'utilities/helper';
 import { coupon } from 'utilities/staticData';
 import QRCode from 'react-native-qrcode-svg';
 import { clearSaveOrder, updateSaveOrder } from 'app-redux/slices/orderSlice';
-import { OrderItemCart } from 'feature/order/CartScreen';
 import AmountOrder from 'feature/order/components/AmountOrder';
+import OrderItemCart from 'feature/order/components/OrderItemCart';
 
 const ItemCoupon = (data: any) => {
     return (

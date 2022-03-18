@@ -203,6 +203,8 @@ const styles = ScaledSheet.create({
     textRight: {
         color: Themes.COLORS.primary,
         fontSize: '14@ms0.3',
+        width: '200@s',
+        alignSelf: 'flex-start',
     },
 });
 
