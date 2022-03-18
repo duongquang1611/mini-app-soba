@@ -2,28 +2,32 @@ import { RootState } from 'app-redux/hooks';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledText } from 'components/base';
-import React from 'react';
+import React, { useRef } from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
 
-const AmountOrder = () => {
+interface AmountOrderProps {
+    cartOrder?: any;
+}
+const AmountOrder = (props: AmountOrderProps) => {
+    const { cartOrder } = props;
     const { saveOrder } = useSelector((state: RootState) => state.order);
-    const { dishes } = saveOrder || [];
-    let numOrder = 0;
+    const { dishes } = cartOrder || saveOrder || [];
+    let numOrder = useRef(0).current;
     dishes?.map((item: any) => {
-        numOrder += item.amount;
+        numOrder += item.totalAmount;
         return item;
     });
     return (
         <View style={styles.numOrderView}>
             <View style={styles.row}>
                 <StyledIcon source={Images.icons.bag} size={17} customStyle={styles.icBag} />
-                <StyledText originValue={'content'} customStyle={styles.contentText} />
+                <StyledText i18nText={'order.numOrder'} customStyle={styles.contentText} />
             </View>
             <View style={styles.row}>
                 <StyledText originValue={`${numOrder}`} customStyle={styles.contentText} />
-                <StyledText i18nText={'点'} customStyle={styles.contentText} />
+                <StyledText i18nText={'order.point'} customStyle={styles.contentText} />
             </View>
         </View>
     );

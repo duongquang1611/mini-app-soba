@@ -54,11 +54,12 @@ const DetailMealScreen = (props: any) => {
         },
         subDishes: subDishDetail,
     });
-    let numOrder = useRef(0).current;
+    const numOrder = createDate ? findIdStore?.mainDish?.amount : 1;
+    let totalNum = useRef(0).current;
     saveOrder?.dishes?.forEach(async (rating: any) => {
-        numOrder += rating?.totalAmount;
+        totalNum += rating?.totalAmount;
     });
-    const newAmountOrder = createDate ? amountValue - findIdStore?.totalAmount + numOrder : amountValue + numOrder;
+    const newAmountOrder = createDate ? totalNum + amountValue - findIdStore?.totalAmount : totalNum + amountValue;
     const goToSaveOrder = () => {
         const orderChooseItem = { id };
         const dishesStore = isNew
@@ -92,8 +93,7 @@ const DetailMealScreen = (props: any) => {
         <View style={styles.container}>
             <StyledHeaderImage images={dish?.images} content={title} />
             <KeyboardAwareScrollView
-                contentContainerStyle={{ flex: 1 }}
-                style={{ flex: 1 }}
+                style={styles.container}
                 enableOnAndroid={true}
                 showsVerticalScrollIndicator={false}
             >
@@ -128,7 +128,7 @@ const DetailMealScreen = (props: any) => {
                 )}
             </View>
             <ButtonCart
-                checkDisable={newAmountOrder > staticValue.MAX_ORDER}
+                checkDisable={numOrder === 0 || newAmountOrder > staticValue.MAX_ORDER}
                 goToSaveOrder={goToSaveOrder}
                 amountValue={amountValue}
                 numOrder={newAmountOrder}

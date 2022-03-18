@@ -84,7 +84,7 @@ const exLinkImage =
     'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg';
 const exLinkImageSquare = 'https://kenh14cdn.com/203336854389633024/2021/9/1/photo-1-16304832141231584345047.jpg';
 export const dataFakeDetailMeal = {
-    id: 4,
+    id: 6,
     title: 'string',
     thumbnail: exLinkImage,
     description: 'string',
