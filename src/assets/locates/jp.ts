@@ -241,6 +241,13 @@ export default {
         useCoupon: 'クーポン使用',
         canUse: '【リリース記念ＳＣ用】...',
         canNotUse: '新年会クーポン',
+        topTab: {
+            canUse: '使用可',
+            used: '使用済み',
+        },
+        rangeDate: '{{start}}－{{end}}',
+        btnUse: 'クーポン使用',
+        noExpiredDate: '有効期間：無制限',
     },
     otp: {
         register: {

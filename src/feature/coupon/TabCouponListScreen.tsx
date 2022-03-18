@@ -1,64 +1,31 @@
-import { getCouponList } from 'api/modules/api-app/coupon';
-import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
-import { StyledText } from 'components/base';
-import AlertMessage from 'components/base/AlertMessage';
 import StyledHeader from 'components/common/StyledHeader';
-import React, { useEffect, useState } from 'react';
+import StyledTabTopView from 'components/common/StyledTabTopView';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
-import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
-import { logger } from 'utilities/helper';
+import { SceneMap } from 'react-native-tab-view';
+import { TabCouponStatus } from 'utilities/staticData';
 import CouponTab from './components/CouponTab';
 
 const TabCouponListScreen = () => {
-    const [index, setIndex] = useState(0);
-    const [ListCoupon, setListCoupon] = useState({ canUse: [], used: [] });
+    const { t } = useTranslation();
 
-    useEffect(() => {
-        getListCoupon();
-    }, []);
-
-    const getListCoupon = async () => {
-        try {
-            const res = await getCouponList();
-            setListCoupon(res?.data);
-        } catch (error) {
-            logger(error);
-            AlertMessage(error);
-        }
-    };
     const routes = [
-        { key: 'stampCanUse', title: 'coupon.canUse' },
-        { key: 'stampUsed', title: 'coupon.used' },
+        { key: 'stampCanUse', title: t('coupon.topTab.canUse') },
+        { key: 'stampUsed', title: t('coupon.topTab.used') },
     ];
+
     const renderScene = SceneMap({
-        stampCanUse: () => <CouponTab canUse={true} data={ListCoupon?.canUse} />,
-        stampUsed: () => <CouponTab data={ListCoupon?.used} />,
+        stampCanUse: () => <CouponTab status={TabCouponStatus.CAN_USE} />,
+        stampUsed: () => <CouponTab status={TabCouponStatus.USED} />,
     });
+
     return (
         <View style={styles.container}>
             <StyledHeader title={'coupon.title'} hasBack={false} largeTitleHeader />
-            <TabView
-                navigationState={{ index, routes }}
-                renderScene={renderScene}
-                onIndexChange={setIndex}
-                initialLayout={{ width: Metrics.screenWidth }}
-                sceneContainerStyle={styles.contentContainerTabBar}
-                renderTabBar={(props) => (
-                    <TabBar
-                        style={styles.tabBar}
-                        inactiveColor={Themes.COLORS.silver}
-                        activeColor={Themes.COLORS.white}
-                        tabStyle={styles.tabStyle}
-                        indicatorStyle={styles.indicatorTabBar}
-                        renderLabel={({ route, color }) => (
-                            <StyledText customStyle={[styles.label, { color }]} originValue={route?.title || ''} />
-                        )}
-                        {...props}
-                    />
-                )}
-            />
+            <StyledTabTopView routes={routes} renderScene={renderScene} />
         </View>
     );
 };
@@ -68,6 +35,7 @@ export default TabCouponListScreen;
 const styles = ScaledSheet.create({
     container: {
         flex: 1,
+        backgroundColor: Themes.COLORS.backgroundPrimary,
     },
     body: {
         justifyContent: 'center',

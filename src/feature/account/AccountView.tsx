@@ -40,7 +40,7 @@ const AccountView = () => {
     } = form;
 
     const onSubmit = (formData: any) => {
-        AlertMessage(JSON.stringify(formData), 'Form Data');
+        AlertMessage(JSON.stringify(formData));
     };
 
     const onHandleReset = () => {

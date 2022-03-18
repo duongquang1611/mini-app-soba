@@ -30,21 +30,23 @@ const DetailCouponScreen = (props: any) => {
         titleButton,
         exchangeCoupon,
         disabled: disabledProps = false,
-        id,
-    } = props?.route?.params;
+        item = {},
+    } = props?.route?.params || {};
+    const { id } = item;
     const [disabled, setDisabled] = useState(disabledProps);
     const [coupon, setCoupon] = useState(detailCouponFake);
-    const { endDate } = coupon;
+    const { endDate } = coupon || {};
 
     useEffect(() => {
         getCoupon();
     }, []);
+
     const getCoupon = async () => {
         try {
             const res = await getCouponDetail(itemStamp?.id || id);
             setCoupon(res?.data);
         } catch (error) {
-            logger(error);
+            console.log('getCoupon -> error', error);
             AlertMessage(error);
         }
     };
@@ -72,7 +74,7 @@ const DetailCouponScreen = (props: any) => {
                 );
                 navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.CART);
             } catch (error) {
-                logger(error);
+                console.log('handleUseCoupon -> error', error);
                 AlertMessage(error);
             }
         }
@@ -87,7 +89,7 @@ const DetailCouponScreen = (props: any) => {
                     <SeparatorView />
                 </>
             )}
-            <CouponContentView canUse={canUse} data={coupon} />
+            <CouponContentView canUse={canUse} data={item} />
             {checkCanUse(endDate) && (
                 <View style={styles.buttonView}>
                     <StyledButton

@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from 'axios';
 import { useEffect, useRef, useState } from 'react';
 
-const SIZE_LIMIT = 10;
+export const SIZE_LIMIT = 20;
 
 const usePaging = (requestPaging: (config: AxiosRequestConfig) => Promise<any>, initialParams?: any) => {
     const [pagingData, setPagingData] = useState({

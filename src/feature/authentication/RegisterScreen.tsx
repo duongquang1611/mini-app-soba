@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { yupResolver } from '@hookform/resolvers/yup';
 import { checkIsExistEmail, getVerifyCode } from 'api/modules/api-app/authenticate';
 import Images from 'assets/images';
@@ -10,13 +9,13 @@ import RadioCheckView from 'components/common/RadioCheckView';
 import StyledHeader from 'components/common/StyledHeader';
 import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet } from 'react-native-size-matters';
-import { openURL } from 'utilities/helper';
+import { checkPasswordMatch, openURL } from 'utilities/helper';
 import { GENDER_DATA, staticValue, VerifiedCodeType } from 'utilities/staticData';
 import { PASSWORD_MAX_LENGTH, USERNAME_MAX_LENGTH } from 'utilities/validate';
 import yupValidate from 'utilities/yupValidate';
@@ -44,7 +43,7 @@ const RegisTerScreen = () => {
     const registerSchema = yup.object().shape({
         email: yupValidate.email(),
         password: yupValidate.password(),
-        confirmPassword: yupValidate.password('password'),
+        confirmPassword: yupValidate.password(),
         fullName: yupValidate.fullName(),
         birthday: yupValidate.birthday(),
         gender: yupValidate.gender(),
@@ -62,9 +61,7 @@ const RegisTerScreen = () => {
         watch,
     } = form;
 
-    const goToRegis = () => {
-        navigate(AUTHENTICATE_ROUTE.REGISTER_STEP_1);
-    };
+    const checkPassword = useCallback(() => checkPasswordMatch(watch()), [watch]);
 
     const submit = async (user: any) => {
         try {
@@ -152,6 +149,7 @@ const RegisTerScreen = () => {
                         icYeyOff={Images.icons.eyeOff}
                         icYeyOn={Images.icons.eyeOn}
                         customStyle={styles.inputPassword}
+                        customErrorMessage={checkPassword()}
                     />
                     <StyledInputForm
                         ref={passwordConfirmRef}
@@ -164,6 +162,7 @@ const RegisTerScreen = () => {
                         icYeyOff={Images.icons.eyeOff}
                         icYeyOn={Images.icons.eyeOn}
                         customStyle={styles.inputPassword}
+                        customErrorMessage={checkPassword()}
                     />
                     <StyledInputForm
                         ref={fullNameRef}
@@ -209,7 +208,7 @@ const RegisTerScreen = () => {
                     </View>
                 </FormProvider>
                 <StyledButton
-                    disabled={!isValid || !rule}
+                    disabled={!(isValid && rule && !checkPassword())}
                     title={'common.next'}
                     onPress={handleSubmit(submit)}
                     customStyle={styles.buttonSave}

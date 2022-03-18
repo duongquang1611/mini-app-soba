@@ -27,9 +27,10 @@ const HOME_URL = {
     mobile: 'mobile-order',
     orderDefault: 'default-order',
 };
+
 const COUPON_URL = {
-    list: 'coupon-list',
-    coupon: (id: string | number) => `coupon-list/${id}`,
+    list: 'coupon',
+    coupon: (id: string | number) => `coupon/${id}`,
 };
 
 export { COMMON_URL, STAMP_URL, NOTIFICATION_URL, COUPON_URL, HOME_URL, MENU_URL };

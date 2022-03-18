@@ -12,6 +12,7 @@ interface StyledTextProps extends TextProps {
     customStyle?: StyleProp<TextStyle>;
     i18nParams?: any;
     isBlack?: any;
+    disabled?: boolean;
 }
 
 interface StyledTextWithOriginValue extends StyledTextProps {
@@ -28,7 +29,7 @@ type StyledTextCombineProps = StyledTextWithOriginValue | StyledTextWithI18nValu
 
 const StyledText = (props: StyledTextCombineProps) => {
     const { t } = useTranslation();
-    const { style, originValue, i18nText, i18nParams, isBlack } = props;
+    const { style, originValue, i18nText, i18nParams, isBlack, disabled } = props;
     let value;
 
     if (style) {
@@ -47,8 +48,11 @@ const StyledText = (props: StyledTextCombineProps) => {
         <Text
             style={[
                 styles.text,
-                { color: isBlack ? Themes.COLORS.mineShaft : Themes.COLORS.textPrimary },
+                {
+                    color: isBlack ? Themes.COLORS.mineShaft : Themes.COLORS.textPrimary,
+                },
                 props.customStyle,
+                disabled && { color: Themes.COLORS.silver },
             ]}
             {...props}
         >
