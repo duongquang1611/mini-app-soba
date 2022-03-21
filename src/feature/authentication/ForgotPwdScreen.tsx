@@ -4,6 +4,7 @@ import { checkIsExistEmail, getVerifyCode } from 'api/modules/api-app/authentica
 import { StyledButton } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
 import StyledInputForm from 'components/base/StyledInputForm';
+import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeader from 'components/common/StyledHeader';
 import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
@@ -54,7 +55,7 @@ const SendEmailScreen: FunctionComponent = ({ route }: any) => {
     return (
         <>
             <StyledHeader title={'forgotPass.title'} />
-            <View style={styles.container}>
+            <StyledKeyboardAware customStyle={styles.container} scrollEnabled={false}>
                 <StyledInputForm
                     label={'forgotPass.email.label'}
                     name={'email'}
@@ -71,7 +72,7 @@ const SendEmailScreen: FunctionComponent = ({ route }: any) => {
                     customStyle={styles.buttonSave}
                     disabled={!isValid}
                 />
-            </View>
+            </StyledKeyboardAware>
         </>
     );
 };

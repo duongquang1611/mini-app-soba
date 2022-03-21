@@ -1,24 +1,21 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { getCart } from 'api/modules/api-app/order';
 import { RootState } from 'app-redux/hooks';
 import { clearSaveOrder, updateSaveOrder } from 'app-redux/slices/orderSlice';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
-import { StyledButton, StyledIcon, StyledText, StyledTouchable } from 'components/base';
+import { StyledButton, StyledIcon, StyledText } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
-import DashView from 'components/common/DashView';
+import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeader from 'components/common/StyledHeader';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useEffect, useRef, useState } from 'react';
 import { View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
-import { logger } from 'utilities/helper';
-import { coupon, POPUP_TYPE, staticValue } from 'utilities/staticData';
+import { POPUP_TYPE, staticValue } from 'utilities/staticData';
 import AmountOrder from './components/AmountOrder';
 import OrderItemCart from './components/OrderItemCart';
 
@@ -70,7 +67,7 @@ const CartScreen = () => {
     return (
         <View style={styles.container}>
             <StyledHeader title={'order.cartTitle'} textRight={'order.cancelOrder'} onPressRight={cancelCart} />
-            <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
+            <StyledKeyboardAware>
                 <View style={styles.body}>
                     <AmountOrder cartOrder={cartOrder} />
                     <View style={styles.orderView}>
@@ -120,7 +117,7 @@ const CartScreen = () => {
                         />
                     </View>
                 </View>
-            </KeyboardAwareScrollView>
+            </StyledKeyboardAware>
         </View>
     );
 };

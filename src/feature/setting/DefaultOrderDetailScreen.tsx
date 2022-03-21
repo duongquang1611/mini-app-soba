@@ -1,16 +1,16 @@
+import Images from 'assets/images';
+import Metrics from 'assets/metrics';
+import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText } from 'components/base';
+import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
+import StyledHeaderImage from 'components/common/StyledHeaderImage';
+import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
+import { navigate } from 'navigation/NavigationService';
 import React, { useState } from 'react';
 import { ImageBackground, View } from 'react-native';
-import { scale, ScaledSheet } from 'react-native-size-matters';
-import Images from 'assets/images';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Themes } from 'assets/themes';
+import { scale, ScaledSheet } from 'react-native-size-matters';
 import { dataFakeOderDefault, imagesList } from 'utilities/staticData';
-import StyledHeaderImage from 'components/common/StyledHeaderImage';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import Metrics from 'assets/metrics';
-import { navigate } from 'navigation/NavigationService';
-import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 
 const OrderChild = (data: any) => {
     const [choose, setChoose] = useState(false);
@@ -61,14 +61,14 @@ const DefaultOrderDetailScreen = () => {
     return (
         <View style={styles.container}>
             <StyledHeaderImage images={imagesList} content={'たぬきそば'} />
-            <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
+            <StyledKeyboardAware>
                 <StyledText originValue={'content'} isBlack customStyle={styles.contentText} />
                 <View style={styles.body}>
                     {dataFakeOderDefault.map((item) => (
                         <OrderItem key={item.id} data={item} />
                     ))}
                 </View>
-            </KeyboardAwareScrollView>
+            </StyledKeyboardAware>
             <View style={styles.quantity}>
                 <TouchableOpacity onPress={minus}>
                     <StyledIcon

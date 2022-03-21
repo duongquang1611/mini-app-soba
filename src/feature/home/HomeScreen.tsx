@@ -6,6 +6,7 @@ import { store } from 'app-redux/store';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText } from 'components/base';
+import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import DashView from 'components/common/DashView';
 import StyledHeaderImage from 'components/common/StyledHeaderImage';
 import StyledTabTopView from 'components/common/StyledTabTopView';
@@ -15,7 +16,6 @@ import { navigate } from 'navigation/NavigationService';
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import { ImageBackground, View } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet } from 'react-native-size-matters';
 import { SceneMap } from 'react-native-tab-view';
 import { useOnesignal } from 'utilities/notification';
@@ -170,7 +170,7 @@ const HomeScreen: FunctionComponent = () => {
                 images={imagesList}
                 logo
             />
-            <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
+            <StyledKeyboardAware>
                 <View style={styles.contScreen}>
                     <View style={styles.qrView}>
                         <View style={styles.logoView}>
@@ -213,7 +213,7 @@ const HomeScreen: FunctionComponent = () => {
                         <ListNewsItem key={index} data={news} navigation={navigation} />
                     ))}
                 </View>
-            </KeyboardAwareScrollView>
+            </StyledKeyboardAware>
         </View>
     );
 };

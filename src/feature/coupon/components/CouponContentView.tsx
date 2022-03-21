@@ -1,10 +1,10 @@
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText } from 'components/base';
+import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import { isArray } from 'lodash';
 import React from 'react';
 import { ImageBackground, StyleProp, View, ViewStyle } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet } from 'react-native-size-matters';
 import { formatDate } from 'utilities/format';
 import { CouponDishType, DateType, DiscountType } from 'utilities/staticData';
@@ -31,9 +31,7 @@ const WrapComponent = ({ children, isModal, customStyle }: any) => {
     return isModal ? (
         <View style={customStyle}>{children}</View>
     ) : (
-        <KeyboardAwareScrollView style={customStyle} enableOnAndroid={true} showsVerticalScrollIndicator={false}>
-            {children}
-        </KeyboardAwareScrollView>
+        <StyledKeyboardAware style={customStyle}>{children}</StyledKeyboardAware>
     );
 };
 

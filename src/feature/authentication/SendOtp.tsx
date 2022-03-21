@@ -5,6 +5,7 @@ import { userInfoActions } from 'app-redux/slices/userInfoSlice';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledText } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
+import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeader from 'components/common/StyledHeader';
 import TextUnderline from 'components/common/TextUnderline';
 import useCountdown from 'hooks/useCountDown';
@@ -154,10 +155,12 @@ const SendOTP: FunctionComponent = ({ route }: any) => {
         );
     };
 
+    console.log({ type, title: TEXT_OTP[type - 1].title });
+
     return (
         <>
             <StyledHeader title={TEXT_OTP[type - 1].title} />
-            <View style={styles.container}>
+            <StyledKeyboardAware customStyle={styles.container} scrollEnabled={false}>
                 <StyledText customStyle={styles.titleInputOtp} i18nText={TEXT_OTP[type - 1].titleInputOtp} />
                 <StyledText customStyle={styles.textNote} i18nText={TEXT_OTP[type - 1].note} />
                 <View style={styles.content}>
@@ -199,7 +202,7 @@ const SendOTP: FunctionComponent = ({ route }: any) => {
                         disabled={code?.length < staticValue.OTP_LENGTH || maxWrongOtp}
                     />
                 </View>
-            </View>
+            </StyledKeyboardAware>
         </>
     );
 };
@@ -217,7 +220,6 @@ const styles = ScaledSheet.create({
     titleInputOtp: {
         fontWeight: 'bold',
         fontSize: '24@ms0.3',
-        lineHeight: '35@vs',
     },
     otpInput: {},
     containerResend: {
@@ -233,7 +235,7 @@ const styles = ScaledSheet.create({
         lineHeight: '18@vs',
     },
     bthNext: {
-        marginTop: '20@vs',
+        marginTop: '25@vs',
     },
     otpInputBox: {
         marginTop: '25@vs',
@@ -249,7 +251,7 @@ const styles = ScaledSheet.create({
         justifyContent: 'center',
     },
     codeInputText: {
-        fontSize: '36@ms0.3',
+        fontSize: '36@vs',
         textAlign: 'center',
         lineHeight: '45@vs',
         fontWeight: 'bold',

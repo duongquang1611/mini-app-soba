@@ -2,12 +2,12 @@ import { useNavigation } from '@react-navigation/native';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledText } from 'components/base';
+import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeader from 'components/common/StyledHeader';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import React from 'react';
 import { View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet } from 'react-native-size-matters';
 import { orderHistoryListFake } from 'utilities/staticData';
 
@@ -37,13 +37,13 @@ const OrderHistoryScreen = () => {
     return (
         <View style={styles.container}>
             <StyledHeader title={'setting.orderHistoryTitle'} />
-            <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
+            <StyledKeyboardAware>
                 <View style={styles.body}>
                     {orderHistoryListFake?.map((item) => (
                         <OrderItem key={item.id} item={item} navigation={navigation} />
                     ))}
                 </View>
-            </KeyboardAwareScrollView>
+            </StyledKeyboardAware>
         </View>
     );
 };

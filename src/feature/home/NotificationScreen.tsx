@@ -4,12 +4,12 @@ import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledText } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
+import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeader from 'components/common/StyledHeader';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet } from 'react-native-size-matters';
 import { logger } from 'utilities/helper';
 
@@ -60,13 +60,13 @@ const NotificationScreen = () => {
     return (
         <View style={styles.container}>
             <StyledHeader title={'通知一覧 '} textRight="すべて既読" />
-            <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
+            <StyledKeyboardAware>
                 <View style={styles.body}>
                     {listNoti?.map((item, index) => (
                         <NotificationItem key={index} item={item} navigation={navigation} />
                     ))}
                 </View>
-            </KeyboardAwareScrollView>
+            </StyledKeyboardAware>
         </View>
     );
 };

@@ -5,6 +5,7 @@ import { Themes } from 'assets/themes';
 import { StyledButton } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
 import StyledInputForm from 'components/base/StyledInputForm';
+import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeader from 'components/common/StyledHeader';
 import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
@@ -12,9 +13,7 @@ import React, { FunctionComponent, useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView, TextInput, View } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet } from 'react-native-size-matters';
-import { isIos } from 'utilities/helper';
 import yupValidate from 'utilities/yupValidate';
 import * as yup from 'yup';
 
@@ -51,13 +50,7 @@ const ChangePassword: FunctionComponent = ({ route }: any) => {
         <SafeAreaView style={styles.flex1}>
             <StyledHeader title={'changePass'} />
             <View style={styles.container}>
-                <KeyboardAwareScrollView
-                    style={styles.content}
-                    contentContainerStyle={styles.contentContainer}
-                    enableOnAndroid={true}
-                    enableAutomaticScroll={isIos}
-                    showsVerticalScrollIndicator={false}
-                >
+                <StyledKeyboardAware style={styles.content} customStyle={styles.contentContainer}>
                     <FormProvider {...form}>
                         {/* <StyledInputForm
                             label={'oldPassword'}
@@ -96,7 +89,7 @@ const ChangePassword: FunctionComponent = ({ route }: any) => {
                         disabled={!isValid}
                         customStyle={[styles.buttonSave, !isValid && { backgroundColor: 'lightgray' }]}
                     />
-                </KeyboardAwareScrollView>
+                </StyledKeyboardAware>
             </View>
         </SafeAreaView>
     );

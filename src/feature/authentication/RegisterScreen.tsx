@@ -5,6 +5,7 @@ import { Themes } from 'assets/themes';
 import { StyledButton, StyledImage, StyledInputForm, StyledText, StyledTouchable } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
 import { LabelInput } from 'components/base/StyledInput';
+import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import RadioCheckView from 'components/common/RadioCheckView';
 import StyledHeader from 'components/common/StyledHeader';
 import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
@@ -12,8 +13,7 @@ import { navigate } from 'navigation/NavigationService';
 import React, { useCallback, useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Text, View } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { Keyboard, Text, View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import { checkPasswordMatch, openURL } from 'utilities/helper';
 import { GENDER_DATA, staticValue, VerifiedCodeType } from 'utilities/staticData';
@@ -70,6 +70,7 @@ const RegisTerScreen = () => {
                 AlertMessage('error.emailExisted');
                 return;
             }
+            Keyboard.dismiss();
             await getVerifyCode({ email: user?.email, type: VerifiedCodeType.REGISTER });
             const newUser = { ...user };
             delete newUser.confirmPassword;
@@ -118,12 +119,7 @@ const RegisTerScreen = () => {
                 customContainer={styles.customContainerHeader}
             />
 
-            <KeyboardAwareScrollView
-                style={styles.scrollView}
-                contentContainerStyle={styles.contentScrollView}
-                enableOnAndroid={true}
-                showsVerticalScrollIndicator={false}
-            >
+            <StyledKeyboardAware style={styles.scrollView} customStyle={styles.contentScrollView}>
                 <StyledText customStyle={styles.title} i18nText={'authen.register.title'} />
                 <FormProvider {...form}>
                     <View style={styles.fakeRegisterInput}>
@@ -217,7 +213,7 @@ const RegisTerScreen = () => {
                 <StyledTouchable customStyle={styles.btnLogin} onPress={goToLogin}>
                     <StyledText customStyle={styles.textLogin} i18nText={'authen.register.login'} />
                 </StyledTouchable>
-            </KeyboardAwareScrollView>
+            </StyledKeyboardAware>
         </View>
     );
 };

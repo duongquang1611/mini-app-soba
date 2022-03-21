@@ -1,14 +1,14 @@
+import { getNotificationCoupon } from 'api/modules/api-app/notification';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText } from 'components/base';
+import AlertMessage from 'components/base/AlertMessage';
+import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
+import DashView from 'components/common/DashView';
 import StyledHeader from 'components/common/StyledHeader';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet } from 'react-native-size-matters';
-import DashView from 'components/common/DashView';
-import { getNotificationCoupon } from 'api/modules/api-app/notification';
-import AlertMessage from 'components/base/AlertMessage';
 import { logger } from 'utilities/helper';
 
 const CouponItemNotification = (item: any) => {
@@ -43,7 +43,7 @@ const NotificationDetailScreen = () => {
     return (
         <View style={styles.container}>
             <StyledHeader title={'通知'} />
-            <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
+            <StyledKeyboardAware>
                 <View style={styles.body}>
                     <View style={styles.contentContainer}>
                         <StyledText originValue={'2021年11月2日'} customStyle={styles.time} />
@@ -67,7 +67,7 @@ const NotificationDetailScreen = () => {
                         ))}
                     </View>
                 </View>
-            </KeyboardAwareScrollView>
+            </StyledKeyboardAware>
         </View>
     );
 };

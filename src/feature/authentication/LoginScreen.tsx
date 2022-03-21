@@ -2,6 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledIcon, StyledImage, StyledInputForm, StyledText } from 'components/base';
+import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledOverlayLoading from 'components/base/StyledOverlayLoading';
 import TextUnderline from 'components/common/TextUnderline';
 import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
@@ -9,7 +10,6 @@ import { navigate } from 'navigation/NavigationService';
 import React, { FunctionComponent, useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { View } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet } from 'react-native-size-matters';
 import { useLogin } from 'utilities/authenticate/AuthenticateService';
 import { EMAIL_MAX_LENGTH, PASSWORD_MAX_LENGTH } from 'utilities/validate';
@@ -54,12 +54,7 @@ const LoginScreen: FunctionComponent = () => {
     };
 
     return (
-        <KeyboardAwareScrollView
-            keyboardShouldPersistTaps="handled"
-            enableOnAndroid={true}
-            showsVerticalScrollIndicator={false}
-            enableResetScrollToCoords={false}
-        >
+        <StyledKeyboardAware customStyle={styles.scrollView}>
             <StyledOverlayLoading visible={loading} />
             <View style={styles.header}>
                 <StyledImage source={Images.photo.logo} customStyle={styles.logo} />
@@ -113,7 +108,7 @@ const LoginScreen: FunctionComponent = () => {
                     />
                 </View>
             </View>
-        </KeyboardAwareScrollView>
+        </StyledKeyboardAware>
     );
 };
 
@@ -121,6 +116,9 @@ const styles = ScaledSheet.create({
     body: {
         flex: 1,
         marginTop: '20@vs',
+    },
+    scrollView: {
+        paddingBottom: '30@vs',
     },
     loginButton: {
         marginTop: '20@vs',

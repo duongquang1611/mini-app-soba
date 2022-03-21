@@ -6,12 +6,12 @@ import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledText } from 'components/base';
+import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeaderImage from 'components/common/StyledHeaderImage';
 import { goBack } from 'navigation/NavigationService';
 import React, { useEffect, useRef, useState } from 'react';
-import { ImageBackground, Text, View } from 'react-native';
+import { View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
 import { toLocalStringTime } from 'utilities/format';
@@ -92,11 +92,7 @@ const DetailMealScreen = (props: any) => {
     return (
         <View style={styles.container}>
             <StyledHeaderImage images={dish?.images} content={title} />
-            <KeyboardAwareScrollView
-                style={styles.container}
-                enableOnAndroid={true}
-                showsVerticalScrollIndicator={false}
-            >
+            <StyledKeyboardAware style={styles.container}>
                 <StyledText originValue={description} isBlack customStyle={styles.contentText} />
                 <View style={styles.body}>
                     {dishOptions.map((item) => (
@@ -108,7 +104,7 @@ const DetailMealScreen = (props: any) => {
                         />
                     ))}
                 </View>
-            </KeyboardAwareScrollView>
+            </StyledKeyboardAware>
             <View style={styles.quantityView}>
                 <View style={styles.quantity}>
                     <TouchableOpacity onPress={minus}>

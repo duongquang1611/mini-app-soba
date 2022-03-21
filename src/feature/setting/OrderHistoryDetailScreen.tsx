@@ -1,12 +1,12 @@
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledText } from 'components/base';
+import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import DashView from 'components/common/DashView';
 import StyledHeader from 'components/common/StyledHeader';
 import AmountOrder from 'feature/order/components/AmountOrder';
 import React from 'react';
 import { View } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { listOrderDefault } from 'utilities/staticData';
 
@@ -46,7 +46,7 @@ const OrderHistoryDetailScreen = () => {
     return (
         <View style={styles.container}>
             <StyledHeader title={'setting.orderHistoryDetailTitle'} />
-            <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
+            <StyledKeyboardAware>
                 <View style={styles.body}>
                     <View style={styles.timeView}>
                         <StyledText i18nText={'setting.timeOrder'} isBlack />
@@ -85,7 +85,7 @@ const OrderHistoryDetailScreen = () => {
                         </View>
                     </View>
                 </View>
-            </KeyboardAwareScrollView>
+            </StyledKeyboardAware>
         </View>
     );
 };

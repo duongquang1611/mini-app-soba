@@ -3,12 +3,12 @@ import { Themes } from 'assets/themes';
 import { StyledText, StyledTouchable } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
 import StyledInputForm from 'components/base/StyledInputForm';
+import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { ScaledSheet } from 'react-native-size-matters';
 import yupValidate from 'utilities/yupValidate';
 import * as yup from 'yup';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const DEFAULT_FORM: any = {
     username: 'test',
@@ -51,13 +51,7 @@ const AccountView = () => {
     };
 
     return (
-        <KeyboardAwareScrollView
-            contentContainerStyle={styles.container}
-            keyboardShouldPersistTaps="handled"
-            enableOnAndroid={true}
-            showsVerticalScrollIndicator={false}
-            enableResetScrollToCoords={false}
-        >
+        <StyledKeyboardAware customStyle={styles.container}>
             <FormProvider {...form}>
                 <StyledInputForm name={'username'} label="Username" returnKeyType="next" />
                 <StyledInputForm name={'email'} label="Email" />
@@ -76,7 +70,7 @@ const AccountView = () => {
             <StyledTouchable onPress={onHandleReset} customStyle={styles.button}>
                 <StyledText i18nText={'Reset'} customStyle={styles.textButton} />
             </StyledTouchable>
-        </KeyboardAwareScrollView>
+        </StyledKeyboardAware>
     );
 };
 
