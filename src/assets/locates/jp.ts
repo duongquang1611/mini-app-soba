@@ -302,4 +302,9 @@ export default {
         confirmPassPlaceholder: 'パスワード再入力',
         success: 'パスワードが変更しました',
     },
+    popup: {
+        titleConfirm: '確認',
+        titleSuccess: 'おめでとう',
+        titleError: 'おめでとう',
+    },
 };

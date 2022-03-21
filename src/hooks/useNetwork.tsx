@@ -7,7 +7,6 @@ const useNetwork = () => {
 
     useEffect(() => {
         const unsubscribe = NetInfo.addEventListener((state) => {
-            console.log({ state });
             if (state.isConnected && isFirstRun?.current) {
                 isFirstRun.current = false;
             }

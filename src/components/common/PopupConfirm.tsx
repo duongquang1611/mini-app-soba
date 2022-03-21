@@ -1,6 +1,6 @@
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
-import { StyledButton, StyledIcon, StyledText } from 'components/base';
+import { StyledButton, StyledIcon, StyledText, StyledTouchable } from 'components/base';
 import React from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
@@ -16,9 +16,11 @@ interface IProps {
     onOk?: any;
     onCancel?: any;
     nonPaddingVertical?: boolean;
+    onPressIconClose?: any;
 }
 const IMAGE_SIZE = [177, 130, 100];
 const IMAGE_PATH = [Images.icons.confirm, Images.icons.success, Images.icons.error];
+const COLORS_CANCEL = [Themes.COLORS.white, Themes.COLORS.white];
 
 const PopupConfirm = (props: IProps) => {
     const {
@@ -30,11 +32,15 @@ const PopupConfirm = (props: IProps) => {
         textButtonOk = 'common.yes',
         onCancel,
         onOk,
-        nonPaddingVertical,
+        // nonPaddingVertical,
+        onPressIconClose,
     } = props;
 
     return (
         <View style={[styles.container, customStyle]}>
+            <StyledTouchable customStyle={styles.icClose} onPress={onPressIconClose}>
+                <StyledIcon source={Images.icons.closeCircle} size={20} />
+            </StyledTouchable>
             <View style={styles.wrapImg}>
                 <StyledIcon source={IMAGE_PATH[type]} size={IMAGE_SIZE[type]} />
             </View>
@@ -45,11 +51,14 @@ const PopupConfirm = (props: IProps) => {
                     <>
                         <StyledButton
                             title={textButtonCancel}
-                            colors={['white', 'white']}
+                            colors={COLORS_CANCEL}
                             customStyle={styles.cancelBtn}
                             onPress={onCancel}
-                            customStyleText={[styles.cancelBtnText, nonPaddingVertical && styles.lineHeightText]}
-                            customContentStyle={nonPaddingVertical && styles.nonPaddingVer}
+                            customStyleText={[
+                                styles.cancelBtnText,
+                                //  nonPaddingVertical && styles.lineHeightText
+                            ]}
+                            // customContentStyle={nonPaddingVertical && styles.nonPaddingVer}
                         />
                         <View style={styles.separator} />
                     </>
@@ -58,8 +67,11 @@ const PopupConfirm = (props: IProps) => {
                     title={textButtonOk}
                     customStyle={styles.okBtn}
                     onPress={onOk}
-                    customStyleText={[styles.okBtnText, nonPaddingVertical && styles.lineHeightText]}
-                    customContentStyle={nonPaddingVertical && styles.nonPaddingVer}
+                    customStyleText={[
+                        styles.okBtnText,
+                        // nonPaddingVertical && styles.lineHeightText
+                    ]}
+                    // customContentStyle={nonPaddingVertical && styles.nonPaddingVer}
                 />
             </View>
         </View>
@@ -123,6 +135,12 @@ const styles = ScaledSheet.create({
         textAlign: 'center',
         color: Themes.COLORS.textSecondary,
         marginBottom: '50@vs',
+    },
+    icClose: {
+        position: 'absolute',
+        top: '17@vs',
+        right: '12@vs',
+        zIndex: 1,
     },
 });
 

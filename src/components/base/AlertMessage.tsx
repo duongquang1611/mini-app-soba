@@ -24,6 +24,7 @@ export const dismissModal = (id: any) => {
 };
 
 export const MODAL_POPUP_ID = [MODAL_ID.CONFIRM, MODAL_ID.SUCCESS, MODAL_ID.ERROR];
+export const TITLE_POPUP_ID = ['popup.titleConfirm', 'popup.titleSuccess', 'popup.titleError'];
 
 const AlertMessage = (message: any, popupProps?: IProps, checkNetworkError = true) => {
     if (!(checkNetworkError && (message || popupProps?.content) === ERRORS.network)) {
@@ -39,6 +40,7 @@ const AlertMessage = (message: any, popupProps?: IProps, checkNetworkError = tru
         } = popupProps || {};
 
         const modalIdByType = MODAL_POPUP_ID[type];
+        const titleByType = TITLE_POPUP_ID[type];
 
         const handleOk = () => {
             dismissModalOnOk && dismissModal(modalIdByType);
@@ -50,6 +52,10 @@ const AlertMessage = (message: any, popupProps?: IProps, checkNetworkError = tru
             onCancel?.();
         };
 
+        const handlePressIconClose = () => {
+            dismissModal(modalIdByType);
+        };
+
         modalize.show(
             modalIdByType,
             <PopupConfirm
@@ -58,6 +64,8 @@ const AlertMessage = (message: any, popupProps?: IProps, checkNetworkError = tru
                 onCancel={handleCancel}
                 nonPaddingVertical={type === POPUP_TYPE.SUCCESS}
                 content={message || content}
+                title={titleByType}
+                onPressIconClose={handlePressIconClose}
                 {...otherPopupProps}
             />,
             {

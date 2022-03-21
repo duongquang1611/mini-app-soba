@@ -90,7 +90,6 @@ const Images = {
         used: require('./photo/pt_used.png'),
         line: require('./photo/pt_line.png'),
         ptLogin: require('./photo/pt_login.png'),
-        couponExpired: require('./photo/img_expired.png'),
     },
 };
 

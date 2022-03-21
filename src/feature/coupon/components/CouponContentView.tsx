@@ -40,7 +40,7 @@ const WrapComponent = ({ children, isModal, customStyle }: any) => {
 const CouponContentView = (props: IProps) => {
     const { customStyle, isModal = false, data = {}, canUse } = props;
     const { coupon = {}, usedDate } = data;
-    const { id, title, image, startDate, endDate, description, dateType, couponDish, discountType } = coupon;
+    const { id, title, image, startDate, endDate, description, dateType, couponDish, discountType, discount } = coupon;
 
     return (
         <WrapComponent customStyle={[styles.container, customStyle]} isModal={isModal}>
@@ -89,19 +89,19 @@ const CouponContentView = (props: IProps) => {
                             customStyle={styles.textDate}
                         />
                     </View>
-                    {isArray(couponDish) && couponDish.length > 0 && (
-                        <View>
-                            {discountType === DiscountType.ALL_ORDER ? (
-                                <StyledText
-                                    i18nText={'coupon.detail.discountAllOrder'}
-                                    i18nParams={{}}
-                                    customStyle={styles.discountText}
-                                />
-                            ) : (
-                                couponDish.map((item: any) => <CouponDishItem item={item} key={item.toString()} />)
-                            )}
-                        </View>
-                    )}
+                    <View>
+                        {discountType === DiscountType.ALL_ORDER ? (
+                            <StyledText
+                                i18nText={'coupon.detail.discountAllOrder'}
+                                i18nParams={{ discount }}
+                                customStyle={styles.discountText}
+                            />
+                        ) : (
+                            isArray(couponDish) &&
+                            couponDish.length > 0 &&
+                            couponDish.map((item: any) => <CouponDishItem item={item} key={item.toString()} />)
+                        )}
+                    </View>
                     <StyledText originValue={description} isBlack />
                 </View>
             </View>
