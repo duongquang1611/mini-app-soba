@@ -305,7 +305,7 @@ export default {
     popup: {
         titleConfirm: '確認',
         titleSuccess: 'おめでとう',
-        titleError: 'おめでとう',
+        titleError: 'エラー',
     },
     permissions: {
         camera: 'カメラへのアクセス権限をオフされているようです。スマホの設定でオンにしてください。',

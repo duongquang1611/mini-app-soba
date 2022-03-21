@@ -16,7 +16,7 @@ import { EMAIL_MAX_LENGTH, PASSWORD_MAX_LENGTH } from 'utilities/validate';
 import yupValidate from 'utilities/yupValidate';
 import * as yup from 'yup';
 
-const DEFAULT_FORM: any = !__DEV__
+const DEFAULT_FORM: any = __DEV__
     ? {
           email: 'yeuquaimo@love.you',
           password: 'loveyou3000',

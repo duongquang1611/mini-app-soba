@@ -52,8 +52,8 @@ const yupValidate = {
             .trim('error.passwordInvalid')
             .strict(true)
             .min(PASSWORD_MIN_LENGTH, 'error.passwordInvalid')
-            .max(PASSWORD_MAX_LENGTH, 'error.passwordInvalid');
-        // .matches(REGEX_PASSWORD, 'error.passwordInvalid');
+            .max(PASSWORD_MAX_LENGTH, 'error.passwordInvalid')
+            .matches(REGEX_PASSWORD, 'error.passwordInvalid');
     },
 };
 
