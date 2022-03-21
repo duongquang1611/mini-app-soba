@@ -1,3 +1,4 @@
+import { COUPON_URL } from 'api/urls';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 
@@ -59,8 +60,9 @@ export const dataPicker = [
 export const apiLocal = [
     { url: 'common/menu', key: 'menu' },
     { url: 'profile/info', key: 'info' },
-    { url: 'common/listCoupon', key: 'listCoupon' },
+    { url: COUPON_URL.list, key: 'listCoupon' },
 ];
+
 export const dataFakeOderDefault = [
     {
         id: 1,
@@ -440,9 +442,9 @@ export const MODAL_ID = {
     GUIDE_STAMP: 51,
     HISTORY_STAMP: 52,
     GET_COUPON_STAMP: 53,
-    EXCHANGE_COUPON_CONFIRM: 54,
-    EXCHANGE_COUPON_SUCCESS: 55,
-    EXCHANGE_COUPON_ERROR: 56,
+    CONFIRM: 54,
+    SUCCESS: 55,
+    ERROR: 56,
     APPLY_COUPON: 57,
     ORDER_GUIDE: 58,
     LIST_COUPON: 59,
@@ -938,11 +940,23 @@ export enum MemberCouponStatus {
 }
 
 export enum TabCouponStatus {
-    CAN_USE = 1,
     USED = 0,
+    CAN_USE = 1,
 }
+
+export const CouponStoreKeyByStatus = ['couponsUsed', 'couponsCanUse'];
 
 export enum DateType {
     EXPIRED_DATE = 1,
     NO_EXPIRED_DATE = 2,
+}
+
+export enum DiscountType {
+    ALL_ORDER = 1,
+    EACH_DISH = 2,
+}
+
+export enum CouponDishType {
+    SETTING_DISCOUNT = 1,
+    FREE = 2,
 }

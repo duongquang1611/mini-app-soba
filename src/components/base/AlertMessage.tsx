@@ -7,7 +7,6 @@ import { ERRORS, MODAL_ID, POPUP_TYPE } from 'utilities/staticData';
 const modalize = ModalizeManager();
 
 interface IProps {
-    id?: number;
     type?: POPUP_TYPE;
     onOk?: any;
     onCancel?: any;
@@ -24,10 +23,11 @@ export const dismissModal = (id: any) => {
     modalize.dismiss(id);
 };
 
+export const MODAL_POPUP_ID = [MODAL_ID.CONFIRM, MODAL_ID.SUCCESS, MODAL_ID.ERROR];
+
 const AlertMessage = (message: any, popupProps?: IProps, checkNetworkError = true) => {
     if (!(checkNetworkError && (message || popupProps?.content) === ERRORS.network)) {
         const {
-            id = MODAL_ID.EXCHANGE_COUPON_ERROR,
             type = POPUP_TYPE.ERROR,
             content,
             onOk,
@@ -38,18 +38,20 @@ const AlertMessage = (message: any, popupProps?: IProps, checkNetworkError = tru
             ...otherPopupProps
         } = popupProps || {};
 
+        const modalIdByType = MODAL_POPUP_ID[type];
+
         const handleOk = () => {
-            dismissModalOnOk && dismissModal(id);
+            dismissModalOnOk && dismissModal(modalIdByType);
             onOk?.();
         };
 
         const handleCancel = () => {
-            dismissModalOnCancel && dismissModal(id);
+            dismissModalOnCancel && dismissModal(modalIdByType);
             onCancel?.();
         };
 
         modalize.show(
-            id,
+            modalIdByType,
             <PopupConfirm
                 onOk={handleOk}
                 type={type}

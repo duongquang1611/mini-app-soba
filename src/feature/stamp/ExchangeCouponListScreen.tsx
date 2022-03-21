@@ -61,11 +61,8 @@ const ExchangeCouponListScreen = () => {
 
     const exchangeCoupon = (item: any, cb?: () => any) => {
         console.log(item);
-        showPopUpConfirm(
-            MODAL_ID.EXCHANGE_COUPON_CONFIRM,
-            POPUP_TYPE.CONFIRM,
-            languageText?.default?.exchangeCoupon?.confirm,
-            () => onConfirmOk(cb),
+        showPopUpConfirm(MODAL_ID.CONFIRM, POPUP_TYPE.CONFIRM, languageText?.default?.exchangeCoupon?.confirm, () =>
+            onConfirmOk(cb),
         );
     };
 
@@ -81,25 +78,22 @@ const ExchangeCouponListScreen = () => {
             cb?.();
             console.log('file: ExchangeCouponListScreen.tsx -> line 77 -> onConfirmOk -> error', error);
         }
-        modalize.dismiss(MODAL_ID.EXCHANGE_COUPON_CONFIRM, () => {
+        modalize.dismiss(MODAL_ID.CONFIRM, () => {
             if (Math.round(Math.random())) {
                 showPopUpConfirm(
-                    MODAL_ID.EXCHANGE_COUPON_SUCCESS,
+                    MODAL_ID.SUCCESS,
                     POPUP_TYPE.SUCCESS,
                     languageText?.default?.exchangeCoupon?.success,
                     () => {
-                        dismissModal(MODAL_ID.EXCHANGE_COUPON_SUCCESS);
+                        dismissModal(MODAL_ID.SUCCESS);
                         if (typeof cb !== 'function') {
                             goToDetail({}, true);
                         }
                     },
                 );
             } else
-                showPopUpConfirm(
-                    MODAL_ID.EXCHANGE_COUPON_ERROR,
-                    POPUP_TYPE.ERROR,
-                    languageText?.default?.exchangeCoupon?.error,
-                    () => dismissModal(MODAL_ID.EXCHANGE_COUPON_ERROR),
+                showPopUpConfirm(MODAL_ID.ERROR, POPUP_TYPE.ERROR, languageText?.default?.exchangeCoupon?.error, () =>
+                    dismissModal(MODAL_ID.ERROR),
                 );
         });
     };

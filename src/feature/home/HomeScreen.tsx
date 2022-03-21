@@ -1,11 +1,16 @@
 import { useNavigation } from '@react-navigation/native';
+import { getCouponList } from 'api/modules/api-app/coupon';
 import { getNewsList } from 'api/modules/api-app/home';
+import { updateCoupon } from 'app-redux/slices/couponSlice';
+import { store } from 'app-redux/store';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText } from 'components/base';
+import AlertMessage from 'components/base/AlertMessage';
 import DashView from 'components/common/DashView';
 import StyledHeaderImage from 'components/common/StyledHeaderImage';
 import StyledTabTopView from 'components/common/StyledTabTopView';
+import { SIZE_LIMIT } from 'hooks/usePaging';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { FunctionComponent, useEffect, useState } from 'react';
@@ -15,7 +20,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { ScaledSheet } from 'react-native-size-matters';
 import { SceneMap } from 'react-native-tab-view';
 import { useOnesignal } from 'utilities/notification';
-import { imagesList, netWorkList } from 'utilities/staticData';
+import { CouponStoreKeyByStatus, imagesList, netWorkList, TabCouponStatus } from 'utilities/staticData';
 import ShowQrTab from './components/ShowQrTab';
 
 const netWorkItem = (data: any) => {
@@ -79,6 +84,29 @@ const visitQr = {
     qrColor: Themes.COLORS.headerBackground,
     qrCode: Images.photo.qrCode,
 };
+
+export const getCouponData = async (status?: TabCouponStatus) => {
+    try {
+        if (status) {
+            const res = await getCouponList({ params: { take: SIZE_LIMIT, status } });
+            store.dispatch(updateCoupon({ [CouponStoreKeyByStatus[status]]: res?.data }));
+        } else {
+            const res = await Promise.all([
+                getCouponList({ params: { take: SIZE_LIMIT, status: TabCouponStatus.CAN_USE } }),
+                getCouponList({ params: { take: SIZE_LIMIT, status: TabCouponStatus.USED } }),
+            ]);
+            store.dispatch(
+                updateCoupon({
+                    couponsCanUse: res[0].data,
+                    couponsUsed: res[1].data,
+                }),
+            );
+        }
+    } catch (error) {
+        AlertMessage(error);
+    }
+};
+
 const HomeScreen: FunctionComponent = () => {
     useOnesignal();
     const navigation = useNavigation();
@@ -87,6 +115,7 @@ const HomeScreen: FunctionComponent = () => {
 
     useEffect(() => {
         getNotification();
+        getCouponData();
     }, []);
 
     const getNotification = async () => {
