@@ -67,7 +67,7 @@ const RegisTerScreen = () => {
         try {
             const res = await checkIsExistEmail({ email: user?.email });
             if (res?.data?.isExisted) {
-                AlertMessage(t('error.emailExisted'));
+                AlertMessage('error.emailExisted');
                 return;
             }
             await getVerifyCode({ email: user?.email, type: VerifiedCodeType.REGISTER });

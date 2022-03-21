@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useIsFocused } from '@react-navigation/native';
-import { checkVerifyCode, forgotPassword, getVerifyCode, register } from 'api/modules/api-app/authenticate';
+import { checkVerifyCode, getVerifyCode, register } from 'api/modules/api-app/authenticate';
 import { userInfoActions } from 'app-redux/slices/userInfoSlice';
 import { Themes } from 'assets/themes';
-import { StyledButton, StyledText, StyledTouchable } from 'components/base';
+import { StyledButton, StyledText } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
 import StyledHeader from 'components/common/StyledHeader';
 import TextUnderline from 'components/common/TextUnderline';
@@ -11,11 +11,11 @@ import useCountdown from 'hooks/useCountDown';
 import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { FunctionComponent, useEffect, useMemo, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Keyboard, Text, View } from 'react-native';
 import { CodeField, Cursor, useClearByFocusCell } from 'react-native-confirmation-code-field';
 import { ScaledSheet } from 'react-native-size-matters';
 import { useDispatch } from 'react-redux';
+import { wait } from 'utilities/helper';
 import { staticValue, TEXT_OTP, VerifiedCodeType } from 'utilities/staticData';
 
 const SendOTP: FunctionComponent = ({ route }: any) => {
@@ -38,7 +38,9 @@ const SendOTP: FunctionComponent = ({ route }: any) => {
     const isRegister = useMemo(() => type === VerifiedCodeType.REGISTER, [type]);
 
     useEffect(() => {
-        codeInputRef?.current?.focus?.();
+        wait(500).then(() => {
+            codeInputRef?.current?.focus?.();
+        });
     }, []);
 
     useEffect(() => {
@@ -83,15 +85,17 @@ const SendOTP: FunctionComponent = ({ route }: any) => {
 
     const handleWrongOtpMax = async (error?: any) => {
         wrongOtpCount + 1 >= staticValue.MAX_WRONG_OTP
-            ? AlertMessage('otp.register.alertInvalidOtpMax', undefined, () =>
-                  navigate(
-                      isRegister
-                          ? AUTHENTICATE_ROUTE.REGISTER
-                          : isResetPassword
-                          ? AUTHENTICATE_ROUTE.FORGOT_PASS
-                          : AUTHENTICATE_ROUTE.CHANGE_PASS,
-                  ),
-              )
+            ? AlertMessage('otp.register.alertInvalidOtpMax', {
+                  onClosedModalize: () => {
+                      navigate(
+                          isRegister
+                              ? AUTHENTICATE_ROUTE.REGISTER
+                              : isResetPassword
+                              ? AUTHENTICATE_ROUTE.FORGOT_PASS
+                              : AUTHENTICATE_ROUTE.CHANGE_PASS,
+                      );
+                  },
+              })
             : error && AlertMessage(error);
         setWrongOtpCount(wrongOtpCount + 1);
     };
