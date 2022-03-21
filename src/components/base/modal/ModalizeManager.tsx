@@ -162,7 +162,7 @@ const styles = ScaledSheet.create({
     },
     iconClose: {
         position: 'absolute',
-        top: '12@vs',
+        alignSelf: 'center',
         right: '12@s',
     },
 });

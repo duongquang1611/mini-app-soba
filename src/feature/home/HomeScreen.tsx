@@ -6,7 +6,6 @@ import { store } from 'app-redux/store';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText } from 'components/base';
-import AlertMessage from 'components/base/AlertMessage';
 import DashView from 'components/common/DashView';
 import StyledHeaderImage from 'components/common/StyledHeaderImage';
 import StyledTabTopView from 'components/common/StyledTabTopView';
@@ -103,7 +102,7 @@ export const getCouponData = async (status?: TabCouponStatus) => {
             );
         }
     } catch (error) {
-        AlertMessage(error);
+        console.log('getCouponData -> error', error);
     }
 };
 

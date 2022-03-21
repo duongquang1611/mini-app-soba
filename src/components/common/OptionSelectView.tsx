@@ -1,16 +1,12 @@
-import Images from 'assets/images';
 import { StyledIcon, StyledText, StyledTouchable } from 'components/base';
 import React from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import { OPTION_SELECT_IMAGE, staticValue } from 'utilities/staticData';
 
-const OptionSelectView = ({ onPress, onClose, data = OPTION_SELECT_IMAGE }: any) => {
+const OptionSelectView = ({ onPress, data = OPTION_SELECT_IMAGE }: any) => {
     return (
         <View style={{ flex: 1 }}>
-            <StyledTouchable customStyle={styles.closeButton} onPress={onClose}>
-                <StyledIcon size={16} source={Images.icons.closePhotoModal} />
-            </StyledTouchable>
             {data.map((item: any) => {
                 return (
                     <StyledTouchable

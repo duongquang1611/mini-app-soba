@@ -37,7 +37,6 @@ const ImagePicker = (props: ImagePickerProp) => {
                           modalize.dismiss(MODAL_ID.IMG_PICKER);
                           pickMainImage(index);
                       }}
-                      onClose={() => modalize.dismiss(MODAL_ID.IMG_PICKER)}
                   />,
                   {
                       modalHeight: verticalScale(250),

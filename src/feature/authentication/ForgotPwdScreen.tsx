@@ -44,6 +44,7 @@ const SendEmailScreen: FunctionComponent = ({ route }: any) => {
                 AlertMessage('error.emailNotExisted');
                 return;
             }
+            Keyboard.dismiss();
             await getVerifyCode({ email, type: VerifiedCodeType.RESET_PASSWORD });
             navigate(AUTHENTICATE_ROUTE.SEND_OTP, { user: { email }, type: VerifiedCodeType.RESET_PASSWORD });
         } catch (error) {

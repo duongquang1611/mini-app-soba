@@ -5,6 +5,7 @@ import { Themes } from 'assets/themes';
 import { StyledButton, StyledInputForm } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
 import StyledHeader from 'components/common/StyledHeader';
+import useBackHandler from 'hooks/useBackHandler';
 import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useCallback, useRef } from 'react';
@@ -13,6 +14,7 @@ import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet } from 'react-native-size-matters';
 import { checkPasswordMatch } from 'utilities/helper';
+import { POPUP_TYPE } from 'utilities/staticData';
 import { PASSWORD_MAX_LENGTH } from 'utilities/validate';
 import yupValidate from 'utilities/yupValidate';
 import * as yup from 'yup';
@@ -52,16 +54,25 @@ const ResetPasswordScreen = ({ route }: any) => {
         const { password: newPassword } = form;
         try {
             await resetPassword({ email, newPassword });
-            AlertMessage('resetPass.success');
-            navigate(AUTHENTICATE_ROUTE.LOGIN);
+            AlertMessage('resetPass.success', {
+                onClosedModalize: () => navigate(AUTHENTICATE_ROUTE.LOGIN),
+                type: POPUP_TYPE.SUCCESS,
+            });
         } catch (error) {
             AlertMessage(error);
         }
     };
 
+    const handleBack = () => {
+        navigate(AUTHENTICATE_ROUTE.LOGIN);
+        return true;
+    };
+
+    useBackHandler(handleBack);
+
     return (
         <>
-            <StyledHeader title={'resetPass.title'} />
+            <StyledHeader title={'resetPass.title'} onPressBack={handleBack} />
             <View style={styles.container}>
                 <KeyboardAwareScrollView
                     contentContainerStyle={styles.contentScrollView}
