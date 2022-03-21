@@ -1,20 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { StyledButton, StyledIcon, StyledImage, StyledText } from 'components/base';
-import { navigate } from 'navigation/NavigationService';
+import { Themes } from 'assets/themes';
+import { StyledButton } from 'components/base';
+import AlertMessage from 'components/base/AlertMessage';
+import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
+import StyledHeader from 'components/common/StyledHeader';
+import { OrderItem } from 'feature/home/EditOrderScreen';
+import AmountOrder from 'feature/order/components/AmountOrder';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
-import StyledHeader from 'components/common/StyledHeader';
-import AlertMessage from 'components/base/AlertMessage';
 import { logger } from 'utilities/logger';
-import { useTranslation } from 'react-i18next';
-import Images from 'assets/images';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Themes } from 'assets/themes';
-import { OrderItem } from 'feature/home/EditOrderScreen';
 import { listOrderDefault } from 'utilities/staticData';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import AmountOrder from 'feature/order/components/AmountOrder';
 
 const OrderSave = () => {
     const { t } = useTranslation();
@@ -30,13 +27,13 @@ const OrderSave = () => {
     return (
         <View style={styles.container}>
             <StyledHeader title={'setting.orderSaveTitle'} textRight={'キャンセル'} />
-            <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
+            <StyledKeyboardAware>
                 <View style={styles.body}>
                     {listOrderDefault.map((item, index) => (
                         <OrderItem key={index} data={item} />
                     ))}
                 </View>
-            </KeyboardAwareScrollView>
+            </StyledKeyboardAware>
             <View style={styles.viewSave}>
                 <AmountOrder />
                 <StyledButton title={'common.save'} onPress={confirm} customStyle={styles.buttonSave} />

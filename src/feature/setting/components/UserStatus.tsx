@@ -2,12 +2,12 @@ import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledText } from 'components/base';
+import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import LinearView from 'components/common/LinearView';
 import React from 'react';
 import { Text, View } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet } from 'react-native-size-matters';
 import { statusUser } from 'utilities/staticData';
 
@@ -36,13 +36,7 @@ const UserStatusItem = (item: any) => {
 const UserStatus = () => {
     const fillNumber = 60;
     return (
-        <KeyboardAwareScrollView
-            contentContainerStyle={styles.container}
-            keyboardShouldPersistTaps="handled"
-            enableOnAndroid={true}
-            showsVerticalScrollIndicator={false}
-            enableResetScrollToCoords={false}
-        >
+        <StyledKeyboardAware customStyle={styles.container} enableResetScrollToCoords={false}>
             <View>
                 <View style={styles.closeView}>
                     <TouchableOpacity>
@@ -86,7 +80,7 @@ const UserStatus = () => {
                     <UserStatusItem key={index} item={item} />
                 ))}
             </View>
-        </KeyboardAwareScrollView>
+        </StyledKeyboardAware>
     );
 };
 

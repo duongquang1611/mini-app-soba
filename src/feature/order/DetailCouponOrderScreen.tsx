@@ -2,10 +2,10 @@
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledIcon, StyledImage, StyledText } from 'components/base';
+import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeader from 'components/common/StyledHeader';
 import React from 'react';
 import { ImageBackground, View } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet } from 'react-native-size-matters';
 
 const DetailCouponOrderScreen = (props: any) => {
@@ -14,11 +14,7 @@ const DetailCouponOrderScreen = (props: any) => {
     return (
         <View style={styles.container}>
             <StyledHeader title={canUse ? '【リリース記念ＳＣ用】...' : '新年会クーポン'} />
-            <KeyboardAwareScrollView
-                style={styles.container}
-                enableOnAndroid={true}
-                showsVerticalScrollIndicator={false}
-            >
+            <StyledKeyboardAware style={styles.container}>
                 <View style={styles.body}>
                     <View style={styles.contentContainer}>
                         <StyledText originValue={'クーポンＩＤ：CP690001'} customStyle={styles.time} />
@@ -39,7 +35,7 @@ const DetailCouponOrderScreen = (props: any) => {
                         <StyledText originValue={'content'} isBlack />
                     </View>
                 </View>
-            </KeyboardAwareScrollView>
+            </StyledKeyboardAware>
             {canUse && (
                 <View style={styles.buttonView}>
                     <StyledButton title={'クーポン使用'} />

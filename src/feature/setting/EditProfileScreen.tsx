@@ -43,6 +43,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledInputForm, StyledText } from 'components/base';
+import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeader from 'components/common/StyledHeader';
 import UpLoadAvatar from 'feature/authentication/components/UpLoadAvatar';
 import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
@@ -52,7 +53,6 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import * as yup from 'yup';
@@ -104,7 +104,7 @@ const EditProfileScreen = () => {
     return (
         <View style={styles.container}>
             <StyledHeader title={'setting.editProfileTitle'} />
-            <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
+            <StyledKeyboardAware>
                 <SafeAreaView style={styles.body}>
                     <FormProvider {...form}>
                         <UpLoadAvatar setValue={setValue} />
@@ -219,7 +219,7 @@ const EditProfileScreen = () => {
                         />
                     </View>
                 </SafeAreaView>
-            </KeyboardAwareScrollView>
+            </StyledKeyboardAware>
         </View>
     );
 };

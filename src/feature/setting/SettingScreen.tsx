@@ -4,6 +4,7 @@ import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
+import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import DashView from 'components/common/DashView';
 import LinearView from 'components/common/LinearView';
 import { SETTING_ROUTE } from 'navigation/config/routes';
@@ -11,7 +12,6 @@ import { navigate } from 'navigation/NavigationService';
 import React from 'react';
 import { ImageBackground, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import AuthenticateService from 'utilities/authenticate/AuthenticateService';
 import { INFORMATION, listButton } from 'utilities/staticData';
@@ -165,14 +165,14 @@ const SettingScreen = () => {
                     </View>
                 </ImageBackground>
             </View>
-            <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
+            <StyledKeyboardAware>
                 <View style={styles.wrapListOptionSetting}>{listButton.map(renderItemSetting)}</View>
                 <View style={styles.infoContainerView}>
                     {INFORMATION.map((item, index) => (
                         <InfoItem key={index} data={item} />
                     ))}
                 </View>
-            </KeyboardAwareScrollView>
+            </StyledKeyboardAware>
         </View>
     );
 };

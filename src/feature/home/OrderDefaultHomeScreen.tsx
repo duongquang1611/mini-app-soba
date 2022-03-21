@@ -1,20 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { StyledButton, StyledIcon, StyledImage, StyledText } from 'components/base';
-import React, { useEffect, useState } from 'react';
-import { View } from 'react-native';
-import { ScaledSheet } from 'react-native-size-matters';
-import StyledHeader from 'components/common/StyledHeader';
+import { getOrderDefault } from 'api/modules/api-app/home';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { listOrderDefault } from 'utilities/staticData';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { StyledButton, StyledIcon, StyledImage, StyledText } from 'components/base';
+import AlertMessage from 'components/base/AlertMessage';
+import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
+import StyledHeader from 'components/common/StyledHeader';
+import AmountOrder from 'feature/order/components/AmountOrder';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
-import { getMobileOrder, getOrderDefault } from 'api/modules/api-app/home';
-import AlertMessage from 'components/base/AlertMessage';
+import React, { useEffect, useState } from 'react';
+import { View } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { ScaledSheet } from 'react-native-size-matters';
 import { logger } from 'utilities/helper';
-import AmountOrder from 'feature/order/components/AmountOrder';
+import { listOrderDefault } from 'utilities/staticData';
 
 const OrderDefaultItem = (data: any) => {
     return (
@@ -61,7 +61,7 @@ const OrderDefaultHomeScreen = () => {
     return (
         <View style={styles.container}>
             <StyledHeader title={'いつもの！注文'} iconRight={Images.icons.question} />
-            <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
+            <StyledKeyboardAware>
                 <View style={styles.body}>
                     <View style={styles.qrView}>
                         <StyledImage source={Images.photo.qrCode} customStyle={styles.img} />
@@ -74,7 +74,7 @@ const OrderDefaultHomeScreen = () => {
                         ))}
                     </View>
                 </View>
-            </KeyboardAwareScrollView>
+            </StyledKeyboardAware>
         </View>
     );
 };

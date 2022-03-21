@@ -1,24 +1,24 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { getMobileOrder } from 'api/modules/api-app/home';
 import { RootState } from 'app-redux/hooks';
+import { clearSaveOrder, updateSaveOrder } from 'app-redux/slices/orderSlice';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledIcon, StyledText } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
+import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeader from 'components/common/StyledHeader';
+import AmountOrder from 'feature/order/components/AmountOrder';
+import OrderItemCart from 'feature/order/components/OrderItemCart';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import QRCode from 'react-native-qrcode-svg';
 import { ScaledSheet } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
 import { logger } from 'utilities/helper';
 import { coupon } from 'utilities/staticData';
-import QRCode from 'react-native-qrcode-svg';
-import { clearSaveOrder, updateSaveOrder } from 'app-redux/slices/orderSlice';
-import AmountOrder from 'feature/order/components/AmountOrder';
-import OrderItemCart from 'feature/order/components/OrderItemCart';
 
 const ItemCoupon = (data: any) => {
     return (
@@ -57,7 +57,7 @@ const MobileOrderScreen = () => {
     return (
         <View style={styles.container}>
             <StyledHeader title={'事前注文QRコード'} iconRight={Images.icons.question} />
-            <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
+            <StyledKeyboardAware>
                 <View style={styles.body}>
                     <View style={styles.qrView}>
                         <QRCode value={JSON.stringify(saveOrder)} size={180} />
@@ -83,7 +83,7 @@ const MobileOrderScreen = () => {
                         ))}
                     </View>
                 </View>
-            </KeyboardAwareScrollView>
+            </StyledKeyboardAware>
         </View>
     );
 };

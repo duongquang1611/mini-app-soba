@@ -159,7 +159,7 @@ const styles = ScaledSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         width: '100%',
-        paddingVertical: '15@vs',
+        paddingVertical: '20@vs',
         backgroundColor: Themes.COLORS.headerBackground,
         flexShrink: 1,
     },
@@ -194,9 +194,7 @@ const styles = ScaledSheet.create({
         maxWidth: '80@s',
     },
     iconRight: {},
-    iconBack: {
-        marginBottom: '-2@s',
-    },
+    iconBack: {},
     iconCenter: {
         tintColor: Themes.COLORS.primary,
     },

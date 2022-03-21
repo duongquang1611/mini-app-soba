@@ -4,11 +4,11 @@ import { Themes } from 'assets/themes';
 import { StyledButton, StyledText } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
+import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import CouponItem from 'components/common/CouponItem';
 import StyledHeader from 'components/common/StyledHeader';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { logger } from 'utilities/helper';
 import { listCouponFake, MODAL_ID } from 'utilities/staticData';
@@ -68,13 +68,13 @@ const CouponListScreen = () => {
     return (
         <View style={styles.container}>
             <StyledHeader title={'order.couponTitle'} />
-            <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
+            <StyledKeyboardAware>
                 <View style={styles.body}>
                     {listCoupon.map((item, index) => (
                         <CouponItem canUse={true} key={index} item={item} />
                     ))}
                 </View>
-            </KeyboardAwareScrollView>
+            </StyledKeyboardAware>
             <View style={styles.buttonView}>
                 <StyledButton title={'order.useCoupon'} onPress={showApplyCoupon} customStyle={styles.buttonSave} />
             </View>

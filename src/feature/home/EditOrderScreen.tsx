@@ -1,17 +1,17 @@
+import Images from 'assets/images';
+import { Themes } from 'assets/themes';
 import { StyledButton, StyledIcon, StyledText } from 'components/base';
+import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
+import DashView from 'components/common/DashView';
+import StyledHeader from 'components/common/StyledHeader';
+import AmountOrder from 'feature/order/components/AmountOrder';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React from 'react';
 import { View } from 'react-native';
-import { ScaledSheet } from 'react-native-size-matters';
-import StyledHeader from 'components/common/StyledHeader';
-import { Themes } from 'assets/themes';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { ScaledSheet } from 'react-native-size-matters';
 import { coupon, listOrderDefault } from 'utilities/staticData';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import Images from 'assets/images';
-import DashView from 'components/common/DashView';
-import AmountOrder from 'feature/order/components/AmountOrder';
 
 const ItemCoupon = (data: any) => {
     return (
@@ -62,7 +62,7 @@ const EditOrderScreen = () => {
     return (
         <View style={styles.container}>
             <StyledHeader title={'カート'} textRight={'注文キャンセル'} />
-            <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false}>
+            <StyledKeyboardAware>
                 <View style={styles.body}>
                     <AmountOrder />
                     <View style={styles.orderView}>
@@ -91,7 +91,7 @@ const EditOrderScreen = () => {
                         />
                     </View>
                 </View>
-            </KeyboardAwareScrollView>
+            </StyledKeyboardAware>
         </View>
     );
 };

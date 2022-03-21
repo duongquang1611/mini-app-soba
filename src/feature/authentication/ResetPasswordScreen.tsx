@@ -4,6 +4,7 @@ import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledInputForm } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
+import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeader from 'components/common/StyledHeader';
 import useBackHandler from 'hooks/useBackHandler';
 import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
@@ -11,7 +12,6 @@ import { navigate } from 'navigation/NavigationService';
 import React, { useCallback, useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { View } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ScaledSheet } from 'react-native-size-matters';
 import { checkPasswordMatch } from 'utilities/helper';
 import { POPUP_TYPE } from 'utilities/staticData';
@@ -74,11 +74,7 @@ const ResetPasswordScreen = ({ route }: any) => {
         <>
             <StyledHeader title={'resetPass.title'} onPressBack={handleBack} />
             <View style={styles.container}>
-                <KeyboardAwareScrollView
-                    contentContainerStyle={styles.contentScrollView}
-                    enableOnAndroid={true}
-                    showsVerticalScrollIndicator={false}
-                >
+                <StyledKeyboardAware customStyle={styles.contentScrollView}>
                     <FormProvider {...form}>
                         <StyledInputForm
                             ref={passwordRef}
@@ -113,7 +109,7 @@ const ResetPasswordScreen = ({ route }: any) => {
                         onPress={handleSubmit(submit)}
                         customStyle={styles.buttonSave}
                     />
-                </KeyboardAwareScrollView>
+                </StyledKeyboardAware>
             </View>
         </>
     );
