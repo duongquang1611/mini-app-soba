@@ -177,8 +177,8 @@ export default {
         validatePassword: 'パスワードは半角英数字で6文字以上入力する必要があります。',
         passwordMinLength: 'パスワードは8桁以上でご入力ください。',
         passwordMaxLength: 'パスワードは20桁以下でご入力ください。',
-        passwordLength: 'パスワードは8～20桁の半角文字、半角数字の2種類を組み合わせてください。',
-        confirmPasswordLength: '確認パスワードは文字以上を入力してください。',
+        passwordInvalid: 'パスワードは8～20桁の半角文字、半角数字の2種類を組み合わせてください。',
+        confirmPasswordInvalid: '確認パスワードは文字以上を入力してください。',
         passwordNotMatch: 'パスワードとパスワード再入力が異なっています。',
         duplicatePassword: 'パスワードは二重されました。',
         emailExisted: 'このメールアドレスは既に使用されています',
@@ -305,7 +305,7 @@ export default {
     popup: {
         titleConfirm: '確認',
         titleSuccess: 'おめでとう',
-        titleError: 'おめでとう',
+        titleError: 'エラー',
     },
     permissions: {
         camera: 'カメラへのアクセス権限をオフされているようです。スマホの設定でオンにしてください。',
