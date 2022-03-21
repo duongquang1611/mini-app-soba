@@ -21,8 +21,8 @@ import * as yup from 'yup';
 
 const REGISTER_DEFAULT_FORM = __DEV__
     ? {
-          password: '12345678',
-          confirmPassword: '12345678',
+          password: 'loveyou3000',
+          confirmPassword: 'loveyou3000',
       }
     : {};
 

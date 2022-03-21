@@ -1,5 +1,12 @@
 import * as yup from 'yup';
-import { PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH, REGEX_PHONE, SPECIAL_CHAR, USERNAME_MAX_LENGTH } from './validate';
+import {
+    PASSWORD_MAX_LENGTH,
+    PASSWORD_MIN_LENGTH,
+    REGEX_PASSWORD,
+    REGEX_PHONE,
+    SPECIAL_CHAR,
+    USERNAME_MAX_LENGTH,
+} from './validate';
 
 const yupValidate = {
     fullName: () =>
@@ -42,11 +49,11 @@ const yupValidate = {
         return yup
             .string()
             .required('error.required')
-            .trim('error.trimSpace')
+            .trim('error.passwordInvalid')
             .strict(true)
-            .min(PASSWORD_MIN_LENGTH, 'error.passwordLength')
-            .max(PASSWORD_MAX_LENGTH, 'error.passwordLength');
-        // .matches(REGEX_PASSWORD, ('error.validatePassword'));
+            .min(PASSWORD_MIN_LENGTH, 'error.passwordInvalid')
+            .max(PASSWORD_MAX_LENGTH, 'error.passwordInvalid');
+        // .matches(REGEX_PASSWORD, 'error.passwordInvalid');
     },
 };
 
