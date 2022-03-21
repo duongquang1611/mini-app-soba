@@ -1,13 +1,14 @@
-import { getCouponList } from 'api/modules/api-app/coupon';
+import { RootState } from 'app-redux/hooks';
 import { Themes } from 'assets/themes';
 import { StyledList } from 'components/base';
 import CouponItem from 'components/common/CouponItem';
-import usePaging from 'hooks/usePaging';
+import { getCouponData } from 'feature/home/HomeScreen';
 import { COUPON_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
+import { useSelector } from 'react-redux';
 import { TabCouponStatus } from 'utilities/staticData';
 
 interface CouponTabProps {
@@ -16,12 +17,11 @@ interface CouponTabProps {
 
 const CouponTab = (props: CouponTabProps) => {
     const { status } = props;
-    const { pagingData, onRefresh, onLoadMore } = usePaging(getCouponList, {
-        status,
-    });
+    const { coupon } = useSelector((state: RootState) => state);
+    const { couponsCanUse, couponsUsed } = coupon;
 
     const goToDetail = (item: any) => {
-        navigate(COUPON_ROUTE.DETAIL_COUPON, { item });
+        navigate(COUPON_ROUTE.DETAIL_COUPON, { item, status });
     };
 
     const renderItem = ({ item }: any) => {
@@ -31,12 +31,11 @@ const CouponTab = (props: CouponTabProps) => {
     return (
         <View style={styles.container}>
             <StyledList
-                data={pagingData.list}
+                data={status ? couponsCanUse : couponsUsed}
                 renderItem={renderItem}
                 customStyle={styles.listCoupon}
-                onRefresh={onRefresh}
-                onEndReached={onLoadMore}
-                refreshing={pagingData.refreshing}
+                onRefresh={() => getCouponData(status)}
+                refreshing={false}
             />
         </View>
     );

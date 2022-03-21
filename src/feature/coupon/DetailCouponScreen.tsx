@@ -15,7 +15,7 @@ import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import { useSelector, useDispatch } from 'react-redux';
 import { checkCanUse, logger } from 'utilities/helper';
-import { detailCouponFake } from 'utilities/staticData';
+import { detailCouponFake, TabCouponStatus } from 'utilities/staticData';
 import CouponContentView from './components/CouponContentView';
 
 const SeparatorView = () => <View style={styles.separator} />;
@@ -31,11 +31,12 @@ const DetailCouponScreen = (props: any) => {
         exchangeCoupon,
         disabled: disabledProps = false,
         item = {},
+        status,
     } = props?.route?.params || {};
-    const { id } = item;
     const [disabled, setDisabled] = useState(disabledProps);
-    const [coupon, setCoupon] = useState(detailCouponFake);
-    const { endDate } = coupon || {};
+    const [detailMemberCoupon, setDetailMemberCoupon] = useState(item);
+    const { coupon } = detailMemberCoupon;
+    const { endDate, title = '', id } = coupon || {};
 
     useEffect(() => {
         getCoupon();
@@ -43,13 +44,13 @@ const DetailCouponScreen = (props: any) => {
 
     const getCoupon = async () => {
         try {
-            const res = await getCouponDetail(itemStamp?.id || id);
-            setCoupon(res?.data);
+            const res = await getCouponDetail(coupon?.id);
+            setDetailMemberCoupon(res.data);
         } catch (error) {
             console.log('getCoupon -> error', error);
-            AlertMessage(error);
         }
     };
+
     const handleUseCoupon = async () => {
         if (exchangeCoupon) {
             exchangeCoupon?.({}, () => {
@@ -58,7 +59,6 @@ const DetailCouponScreen = (props: any) => {
         } else {
             try {
                 const res = await couponUse(itemStamp?.id, itemStamp?.orderType);
-                setCoupon(res?.data);
                 const newCoupons = saveOrder?.coupons?.filter((item: any) => item?.id !== id);
                 dispatch(
                     updateSaveOrder({
@@ -81,7 +81,7 @@ const DetailCouponScreen = (props: any) => {
     };
     return (
         <View style={styles.container}>
-            <StyledHeader title={checkCanUse(endDate) ? 'coupon.canUse' : 'coupon.canNotUse'} />
+            <StyledHeader title={title} />
             {!!itemStamp && (
                 <>
                     <SeparatorView />
@@ -89,8 +89,8 @@ const DetailCouponScreen = (props: any) => {
                     <SeparatorView />
                 </>
             )}
-            <CouponContentView canUse={canUse} data={item} />
-            {checkCanUse(endDate) && (
+            <CouponContentView canUse={status} data={item} />
+            {status === TabCouponStatus.CAN_USE && (
                 <View style={styles.buttonView}>
                     <StyledButton
                         title={titleButton || 'coupon.useCoupon'}
@@ -108,7 +108,6 @@ export default DetailCouponScreen;
 const styles = ScaledSheet.create({
     container: {
         flex: 1,
-        backgroundColor: Themes.COLORS.lightGray,
     },
     title: {
         fontSize: '16@ms0.3',

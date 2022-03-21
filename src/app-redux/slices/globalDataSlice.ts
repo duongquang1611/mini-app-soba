@@ -28,7 +28,7 @@ const globalDataSlice = createSlice({
     },
 });
 
-const persistConfig = generatePersistConfig('globalData', ['isPushDisabled', 'viewedOrderDefault', 'skipOrderDefault']);
+const persistConfig = generatePersistConfig('globalData', Object.keys(initialState));
 
 export const { updateGlobalData, clearGlobalData } = globalDataSlice.actions;
 export default persistReducer<IGlobalDataState>(persistConfig, globalDataSlice.reducer);

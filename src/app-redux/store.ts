@@ -9,6 +9,7 @@ import userInfoReducer from './slices/userInfoSlice';
 import languageReducer from './slices/languageSlice';
 import globalDataReducer from './slices/globalDataSlice';
 import orderReducer from './slices/orderSlice';
+import couponReducer from './slices/couponSlice';
 
 const rootReducer = {
     resource: resourceReducer,
@@ -16,6 +17,7 @@ const rootReducer = {
     globalData: globalDataReducer,
     languageKey: languageReducer,
     order: orderReducer,
+    coupon: couponReducer,
 };
 
 const sagaMiddleware = createSagaMiddleware();

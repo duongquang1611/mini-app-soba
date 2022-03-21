@@ -180,6 +180,7 @@ const styles = ScaledSheet.create({
     input: {
         paddingVertical: 0,
         width: '100%',
+        color: Themes.COLORS.textPrimary,
     },
     errorMessage: {
         fontSize: '12@ms0.3',

@@ -255,8 +255,18 @@ export default {
             used: '使用済み',
         },
         rangeDate: '{{start}}－{{end}}',
+        expiredDate: '有効期限：{{start}}－{{end}}',
+        usedDate: '使用日付：{{date}}',
         btnUse: 'クーポン使用',
         noExpiredDate: '有効期間：無制限',
+        detail: {
+            id: 'クーポンＩＤ：{{id}}',
+            expired: '有効期限切れ',
+            getCoupon: '3つクーポンをGETできます',
+            discount: '{{title}}：{{discount}}割引',
+            free: '{{title}}：無料',
+            discountAllOrder: '注文全体用のクーポン:{{discount}}￥割引',
+        },
     },
     otp: {
         register: {
@@ -291,5 +301,10 @@ export default {
         confirmPassLabel: 'パスワード再入力',
         confirmPassPlaceholder: 'パスワード再入力',
         success: 'パスワードが変更しました',
+    },
+    popup: {
+        titleConfirm: '確認',
+        titleSuccess: 'おめでとう',
+        titleError: 'おめでとう',
     },
 };
