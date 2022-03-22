@@ -4,7 +4,7 @@ import { StyledIcon, StyledText, StyledTouchable } from 'components/base';
 import DashView from 'components/common/DashView';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
-import React, { useState } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import { staticValue } from 'utilities/staticData';
@@ -13,34 +13,27 @@ const OrderItemCart = (props: any) => {
     const { subDishes, createDate, mainDish, totalAmount } = props?.data;
     const { name, image } = mainDish;
     const { cancelItem, canChange, goDetailMenu, cartOrder, setCartOrder } = props;
-
-    const [num, setNum] = useState(mainDish?.amount);
+    const num = mainDish?.amount;
     const updateOrder = (currentNum: number) => {
-        const dishesStore = cartOrder?.dishes?.filter((item: any) => item.createDate !== createDate) || [];
+        const cartDishOrder = cartOrder?.dishes || [];
+        const findIndexDishEdit = cartOrder?.dishes?.findIndex((item: any) => item.createDate === createDate);
         const orderEdit = cartOrder?.dishes?.find((item: any) => item.createDate === createDate);
-        const paramDishes =
-            currentNum > 0
-                ? [
-                      ...dishesStore,
-                      {
-                          ...orderEdit,
-                          mainDish: { ...orderEdit.mainDish, amount: currentNum },
-                          totalAmount: (totalAmount / mainDish.amount) * currentNum,
-                      },
-                  ]
-                : dishesStore;
-
-        setCartOrder({ ...cartOrder, dishes: paramDishes });
+        const orderChange = {
+            ...orderEdit,
+            mainDish: { ...orderEdit.mainDish, amount: currentNum },
+            totalAmount: (totalAmount / mainDish.amount) * currentNum,
+        };
+        const newCartDishOrder = [...cartDishOrder];
+        newCartDishOrder?.splice(findIndexDishEdit, 1, orderChange);
+        setCartOrder({ ...cartOrder, dishes: newCartDishOrder });
     };
     const add = () => {
         const currentNum = num;
-        setNum(num + 1);
         updateOrder(currentNum + 1);
     };
     const minus = () => {
         if (num > 0) {
             const currentNum = num;
-            setNum(num - 1);
             updateOrder(currentNum - 1);
         }
     };

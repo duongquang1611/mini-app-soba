@@ -141,7 +141,10 @@ export default {
         deleteCart: 'すべての注文をキャンセルしますか？',
         errorMaxOrder: '最大10つアイテムを選択してください',
         qrButton: 'ＱＲコード発行',
+        rangeCartMenu: '(注文数：{{numOrder}}/{{max}}アイテム）',
         editCartButton: '商品追加',
+        couponUse: '適用する商品: {{dish}}',
+        allDish: '適用する商品: もりそば',
     },
     setting: {
         editProfileTitle: 'マイページ編集',
@@ -257,7 +260,8 @@ export default {
         rangeDate: '{{start}}－{{end}}',
         expiredDate: '有効期限：{{start}}－{{end}}',
         usedDate: '使用日付：{{date}}',
-        btnUse: 'クーポン使用',
+        btnUse: 'クーポン選択',
+        btnUnUse: '選択している',
         noExpiredDate: '有効期間：無制限',
         detail: {
             id: 'クーポンＩＤ：{{id}}',
@@ -267,6 +271,9 @@ export default {
             free: '{{title}}：無料',
             discountAllOrder: '注文全体用のクーポン:{{discount}}￥割引',
         },
+        chooseDish: 'クーポンを適用する商品を選択してください',
+        moreCoupon: 'クーポン追加',
+        noCoupon: 'なし',
     },
     otp: {
         register: {

@@ -9,13 +9,17 @@ import { DateType, MemberCouponStatus, staticValue } from 'utilities/staticData'
 import DashView from './DashView';
 
 export const CouponItem = (props: any) => {
-    const { item = {}, canUse, handleUseCoupon, goToDetail } = props;
-    const { coupon, usedDate, status } = item;
+    const { item = {}, canUse, handleUseCoupon, goToDetail, cartOrder } = props;
+    const { coupon, usedDate, status, id } = item;
     const { image, title, startDate, endDate, dateType } = coupon;
     const isInCart = useMemo(() => status === MemberCouponStatus.IN_CART, [status]);
-
+    const checkChoose = cartOrder?.coupons?.find((itemCart: any) => itemCart?.id === id);
     const handleGoToDetail = () => {
         goToDetail?.(item);
+    };
+    const getIcon = () => {
+        if (isInCart) return Images.icons.nextGrey;
+        return !checkChoose ? Images.icons.next : Images.icons.nextSecondary;
     };
 
     return (
@@ -41,11 +45,14 @@ export const CouponItem = (props: any) => {
                                 hitSlop={staticValue.DEFAULT_HIT_SLOP}
                             >
                                 <StyledText
-                                    i18nText={'coupon.btnUse'}
-                                    customStyle={styles.useText}
+                                    i18nText={!checkChoose ? 'coupon.btnUse' : 'coupon.btnUnUse'}
+                                    customStyle={[
+                                        styles.useText,
+                                        { color: !checkChoose ? Themes.COLORS.primary : Themes.COLORS.secondary },
+                                    ]}
                                     disabled={isInCart}
                                 />
-                                <StyledIcon source={isInCart ? Images.icons.nextGrey : Images.icons.next} size={20} />
+                                <StyledIcon source={getIcon()} size={20} />
                             </StyledTouchable>
                         )}
                     </View>
@@ -103,6 +110,7 @@ const styles = ScaledSheet.create({
     },
     btnCanUSe: {
         flexDirection: 'row',
+        alignItems: 'center',
     },
     stampUsed: {
         position: 'absolute',

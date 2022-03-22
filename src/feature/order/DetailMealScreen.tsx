@@ -27,8 +27,7 @@ const DetailMealScreen = (props: any) => {
     const [num, setNum] = useState(findIdStore?.mainDish?.amount || 1);
     const [dish, setDish] = useState(dataFakeDetailMeal);
 
-    const { title, description } = dish;
-    const { dishOptions } = dataFakeDetailMeal;
+    const { title, description, dishOptions } = dish;
     const [subDishDetail, setSubDishDetail] = useState(findIdStore?.subDishes || []);
     const dispatch = useDispatch();
     useEffect(() => {
@@ -95,9 +94,9 @@ const DetailMealScreen = (props: any) => {
             <StyledKeyboardAware style={styles.container}>
                 <StyledText originValue={description} isBlack customStyle={styles.contentText} />
                 <View style={styles.body}>
-                    {dishOptions.map((item) => (
+                    {dishOptions.map((item, index) => (
                         <OrderItem
-                            key={item.id}
+                            key={index}
                             data={item}
                             subDishDetail={subDishDetail}
                             setSubDishDetail={setSubDishDetail}
@@ -109,13 +108,14 @@ const DetailMealScreen = (props: any) => {
                 <View style={styles.quantity}>
                     <TouchableOpacity onPress={minus}>
                         <StyledIcon
+                            disabled={num <= 1}
                             source={Images.icons.minus}
                             size={20}
                             customStyle={{ tintColor: num > 0 ? Themes.COLORS.primary : Themes.COLORS.silver }}
                         />
                     </TouchableOpacity>
                     <StyledText originValue={`${num}`} customStyle={styles.quantityText} />
-                    <TouchableOpacity onPress={add}>
+                    <TouchableOpacity onPress={add} disabled={num >= staticValue.MAX_ORDER}>
                         <StyledIcon source={Images.icons.add} size={20} />
                     </TouchableOpacity>
                 </View>

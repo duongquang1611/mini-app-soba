@@ -1,7 +1,7 @@
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
-import { StyledIcon, StyledText } from 'components/base';
+import { StyledIcon, StyledText, StyledTouchable } from 'components/base';
 import React from 'react';
 import { ImageBackground, TouchableOpacity, View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
@@ -10,11 +10,13 @@ import { staticValue } from 'utilities/staticData';
 const ButtonCart = (props: any) => {
     const { checkDisable, goToSaveOrder, amountValue, numOrder, isMenu } = props;
     return (
-        <View
-            style={[
+        <StyledTouchable
+            customStyle={[
                 styles.secondaryView,
                 { backgroundColor: checkDisable ? Themes.COLORS.silver : Themes.COLORS.secondary },
             ]}
+            onPress={goToSaveOrder}
+            disabled={numOrder > staticValue.MAX_ORDER}
         >
             <ImageBackground
                 source={!checkDisable ? Images.icons.rectangle : Images.icons.rectangleDisable}
@@ -31,9 +33,16 @@ const ButtonCart = (props: any) => {
             </ImageBackground>
             <TouchableOpacity style={[styles.rowCart]} onPress={goToSaveOrder} disabled={numOrder > 10}>
                 {isMenu ? (
-                    <View style={styles.menuCart}>
+                    <View>
                         <StyledText i18nText={'setting.viewCart'} customStyle={styles.textCart} />
-                        {numOrder > 0 && <StyledText originValue={`( ${numOrder} )`} customStyle={styles.textCart} />}
+                        <StyledText
+                            i18nText={'order.rangeCartMenu'}
+                            i18nParams={{
+                                numOrder,
+                                max: staticValue.MAX_ORDER,
+                            }}
+                            customStyle={[styles.textCart, styles.smallView]}
+                        />
                     </View>
                 ) : (
                     <StyledText
@@ -47,7 +56,7 @@ const ButtonCart = (props: any) => {
                     />
                 )}
             </TouchableOpacity>
-        </View>
+        </StyledTouchable>
     );
 };
 
@@ -70,9 +79,6 @@ const styles = ScaledSheet.create({
         color: Themes.COLORS.white,
         fontSize: '18@ms0.3',
         textAlign: 'center',
-    },
-    menuCart: {
-        flexDirection: 'row',
     },
     rowCart: {
         flexDirection: 'row',
