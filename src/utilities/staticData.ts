@@ -88,9 +88,9 @@ const exLinkImageSquare = 'https://kenh14cdn.com/203336854389633024/2021/9/1/pho
 export const dataFakeDetailMeal = {
     id: 6,
     title: 'string',
-    thumbnail: exLinkImage,
-    description: 'string',
-    images: [exLinkImage, exLinkImage, exLinkImage],
+    thumbnail: '',
+    description: '',
+    images: [],
     dishOptions: [
         {
             id: 0,
@@ -103,32 +103,6 @@ export const dataFakeDetailMeal = {
                     defaultValue: 0,
                     dish: {
                         id: 0,
-                        title: 'string',
-                        thumbnail: exLinkImageSquare,
-                    },
-                },
-            ],
-        },
-        {
-            id: 1,
-            title: 'string',
-            isRequired: 0,
-            type: 0,
-            subDish: [
-                {
-                    id: 1,
-                    defaultValue: 0,
-                    dish: {
-                        id: 2,
-                        title: 'string',
-                        thumbnail: exLinkImageSquare,
-                    },
-                },
-                {
-                    id: 2,
-                    defaultValue: 1,
-                    dish: {
-                        id: 3,
                         title: 'string',
                         thumbnail: exLinkImageSquare,
                     },
@@ -960,3 +934,7 @@ export enum CouponDishType {
     SETTING_DISCOUNT = 1,
     FREE = 2,
 }
+export const dataFakeDishCoupon = [
+    { title: 'mon 1', image: exLinkImageSquare, id: 1 },
+    { title: 'mon 2', image: exLinkImageSquare, id: 2 },
+];

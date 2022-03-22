@@ -20,7 +20,7 @@ const OrderItemCart = (props: any) => {
                 </TouchableOpacity>
                 <View style={styles.orderTextView}>
                     <View style={styles.rowDetail}>
-                        <StyledText originValue={mainDish?.name} customStyle={styles.titleOrder} />
+                        <StyledText numberOfLines={1} originValue={mainDish?.name} customStyle={styles.titleOrder} />
                         <View style={styles.detailIconView}>
                             <StyledText i18nText={'order.goToEdit'} customStyle={styles.nextOrder} />
                             <StyledIcon size={20} source={Images.icons.arrowLeftPrimary} />
@@ -42,7 +42,6 @@ const OrderItemCart = (props: any) => {
                     ))}
                 </View>
             </View>
-            <DashView />
         </StyledTouchable>
     );
 };
@@ -101,16 +100,16 @@ const styles = ScaledSheet.create({
     },
     orderTextView: {
         width: '75%',
-        justifyContent: 'space-between',
     },
     titleOrder: {
-        fontSize: '16@ms0.3',
         fontWeight: 'bold',
         marginBottom: '5@vs',
+        width: '150@s',
     },
     nextOrder: {
         color: Themes.COLORS.primary,
         marginRight: '10@s',
+        fontSize: '12@ms0.3',
     },
     numView: {
         backgroundColor: Themes.COLORS.headerBackground,
@@ -132,6 +131,7 @@ const styles = ScaledSheet.create({
     },
     addValue: {
         marginVertical: '3@vs',
+        fontSize: '12@ms0.3',
     },
     rowDetail: {
         flexDirection: 'row',

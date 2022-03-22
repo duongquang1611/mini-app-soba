@@ -185,6 +185,8 @@ const styles = ScaledSheet.create({
         marginVertical: '10@vs',
     },
     quantitySideText: {
-        marginHorizontal: '10@s',
+        marginHorizontal: '5@s',
+        width: '15@s',
+        textAlign: 'center',
     },
 });

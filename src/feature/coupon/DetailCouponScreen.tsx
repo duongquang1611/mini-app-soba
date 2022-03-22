@@ -9,7 +9,7 @@ import AlertMessage from 'components/base/AlertMessage';
 import StyledHeader from 'components/common/StyledHeader';
 import StampItem from 'feature/stamp/components/StampItem';
 import { AUTHENTICATE_ROUTE, TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
-import { navigate } from 'navigation/NavigationService';
+import { goBack, navigate } from 'navigation/NavigationService';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
@@ -32,12 +32,16 @@ const DetailCouponScreen = (props: any) => {
         disabled: disabledProps = false,
         item = {},
         status,
+        handleUseCoupon,
+        cartOrder,
     } = props?.route?.params || {};
     const [disabled, setDisabled] = useState(disabledProps);
     const [detailMemberCoupon, setDetailMemberCoupon] = useState(item);
     const { coupon } = detailMemberCoupon;
     const { endDate, title = '', id } = coupon || {};
 
+    const findInCart = cartOrder?.coupons?.find((itemCouponCart: any) => item?.id === itemCouponCart?.id);
+    const [inCart, setInCart] = useState(!!findInCart);
     useEffect(() => {
         getCoupon();
     }, []);
@@ -51,7 +55,7 @@ const DetailCouponScreen = (props: any) => {
         }
     };
 
-    const handleUseCoupon = async () => {
+    const handleUseCouponDefault = async () => {
         if (exchangeCoupon) {
             exchangeCoupon?.({}, () => {
                 setDisabled(true);
@@ -79,6 +83,11 @@ const DetailCouponScreen = (props: any) => {
             }
         }
     };
+    const handleUseCouponDetail = () => {
+        handleUseCoupon(item) || handleUseCouponDefault();
+        setInCart(!inCart);
+        goBack();
+    };
     return (
         <View style={styles.container}>
             <StyledHeader title={title} />
@@ -94,8 +103,12 @@ const DetailCouponScreen = (props: any) => {
                 <View style={styles.buttonView}>
                     <StyledButton
                         title={titleButton || 'coupon.useCoupon'}
-                        onPress={handleUseCoupon}
+                        onPress={handleUseCouponDetail}
                         disabled={disabled}
+                        colors={
+                            inCart ? [Themes.COLORS.secondary, Themes.COLORS.secondary] : Themes.COLORS.defaultLinear
+                        }
+                        // customStyle={!!findInCart && { co: Themes.COLORS.secondary }}
                     />
                 </View>
             )}

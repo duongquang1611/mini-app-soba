@@ -13,19 +13,30 @@ import { TabCouponStatus } from 'utilities/staticData';
 
 interface CouponTabProps {
     status?: TabCouponStatus;
+    cartOrder?: any;
+    handleUseCoupon?: any;
 }
 
 const CouponTab = (props: CouponTabProps) => {
-    const { status } = props;
+    const { status, cartOrder, handleUseCoupon } = props;
     const { coupon } = useSelector((state: RootState) => state);
     const { couponsCanUse, couponsUsed } = coupon;
 
     const goToDetail = (item: any) => {
-        navigate(COUPON_ROUTE.DETAIL_COUPON, { item, status });
+        navigate(COUPON_ROUTE.DETAIL_COUPON, { item, status, handleUseCoupon, cartOrder });
     };
-
     const renderItem = ({ item }: any) => {
-        return <CouponItem canUse={status} item={item} goToDetail={goToDetail} />;
+        return (
+            <CouponItem
+                canUse={status}
+                item={item}
+                goToDetail={goToDetail}
+                cartOrder={cartOrder}
+                handleUseCoupon={() => {
+                    handleUseCoupon(item);
+                }}
+            />
+        );
     };
 
     return (

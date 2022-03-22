@@ -27,7 +27,7 @@ const ItemMenu = (props: any) => {
     saveOrder?.dishes
         ?.filter((itemOrder: any) => itemOrder?.mainDish?.id === props?.item?.id)
         ?.forEach(async (rating: any) => {
-            num += rating?.totalAmount;
+            num += rating?.mainDish?.amount;
         });
     const isSetting = false;
     const gotoNew = () => {
@@ -140,7 +140,7 @@ const MenuScreen = () => {
                     contentContainerStyle: { flexGrow: 1 },
                 },
             },
-            { title: 'order.orderGuide' },
+            { title: 'order.editCouponTitle' },
         );
     };
 
