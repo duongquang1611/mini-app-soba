@@ -1,5 +1,5 @@
 import { RootState } from 'app-redux/hooks';
-import { updateCartOrder, updateMobileOrder } from 'app-redux/slices/orderSlice';
+import { clearCartOrder, updateCartOrder, updateMobileOrder } from 'app-redux/slices/orderSlice';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
@@ -320,6 +320,3 @@ const styles = ScaledSheet.create({
         marginTop: '10@vs',
     },
 });
-function clearCartOrder(): any {
-    throw new Error('Function not implemented.');
-}

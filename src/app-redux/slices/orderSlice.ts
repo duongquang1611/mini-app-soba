@@ -61,7 +61,13 @@ const orderSlice = createSlice({
 
 const persistConfig = generatePersistConfig('order', ['cartOrder', 'mobileOrder']);
 
-export const { updateMobileOrder, clearMobileOrder, updateCartOrder, updateCouponMobileOrder, updateCouponCartOrder } =
-    orderSlice.actions;
+export const {
+    updateMobileOrder,
+    clearMobileOrder,
+    updateCartOrder,
+    updateCouponMobileOrder,
+    updateCouponCartOrder,
+    clearCartOrder,
+} = orderSlice.actions;
 
 export default persistReducer<IOrderState>(persistConfig, orderSlice.reducer);
