@@ -19,6 +19,7 @@ const OrderItemCart = (props: any) => {
     const { name, image } = mainDish;
     const { cancelItem, canChange, goDetailMenu } = props;
     const num = mainDish?.amount;
+
     const updateOrder = (currentNum: number) => {
         const cartDishOrder = cartOrder?.dishes || [];
         const findIndexDishEdit = cartOrder?.dishes?.findIndex((item: any) => item.createDate === createDate);
@@ -32,10 +33,12 @@ const OrderItemCart = (props: any) => {
         newCartDishOrder?.splice(findIndexDishEdit, 1, orderChange);
         dispatch(updateCartOrder({ ...cartOrder, dishes: newCartDishOrder }));
     };
+
     const add = () => {
         const currentNum = num;
         updateOrder(currentNum + 1);
     };
+
     const minus = () => {
         if (num > 0) {
             const currentNum = num;

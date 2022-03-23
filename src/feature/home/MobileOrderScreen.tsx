@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { getMobileOrder } from 'api/modules/api-app/home';
 import { RootState } from 'app-redux/hooks';
-import { clearSaveOrder, updateSaveOrder } from 'app-redux/slices/orderSlice';
+import { clearMobileOrder, updateMobileOrder } from 'app-redux/slices/orderSlice';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledIcon, StyledText } from 'components/base';
@@ -14,10 +14,8 @@ import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
-import QRCode from 'react-native-qrcode-svg';
 import { ScaledSheet } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
-import { logger } from 'utilities/helper';
 import { coupon } from 'utilities/staticData';
 
 const ItemCoupon = (data: any) => {
@@ -29,7 +27,7 @@ const ItemCoupon = (data: any) => {
     );
 };
 const MobileOrderScreen = () => {
-    const { saveOrder } = useSelector((state: RootState) => state.order);
+    const { mobileOrder } = useSelector((state: RootState) => state.order);
     const [data, setData] = useState<any>();
     const dispatch = useDispatch();
     useEffect(() => {
@@ -40,19 +38,19 @@ const MobileOrderScreen = () => {
             const res = await getMobileOrder();
             setData(res?.data);
         } catch (error) {
-            logger(error);
+            console.log('getData -> error', error);
             AlertMessage(error);
         }
     };
     const edit = () => {
         navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.CART);
     };
-    const cancelCart = () => {
-        dispatch(clearSaveOrder());
+    const cancelOrderMobile = () => {
+        dispatch(clearMobileOrder());
     };
     const cancelItem = (id: number) => {
-        const newDishes = saveOrder?.dishes?.filter((item: any) => item?.id !== id);
-        dispatch(updateSaveOrder({ ...saveOrder, dishes: newDishes }));
+        const newDishes = mobileOrder?.dishes?.filter((item: any) => item?.id !== id);
+        dispatch(updateMobileOrder({ ...mobileOrder, dishes: newDishes }));
     };
     return (
         <View style={styles.container}>
@@ -60,19 +58,19 @@ const MobileOrderScreen = () => {
             <StyledKeyboardAware>
                 <View style={styles.body}>
                     <View style={styles.qrView}>
-                        {/* <QRCode value={JSON.stringify(saveOrder)} size={180} /> */}
+                        {/* <QRCode value={JSON.stringify(mobileOrder)} size={180} /> */}
                         <StyledButton title={'注文編集'} onPress={edit} customStyle={styles.buttonSave} />
                         <StyledButton
                             isNormal={true}
                             title={'注文キャンセル'}
-                            onPress={cancelCart}
+                            onPress={cancelOrderMobile}
                             customStyle={styles.cancelButton}
                             customStyleText={styles.cancelText}
                         />
                     </View>
                     <AmountOrder />
                     <View style={styles.qrView}>
-                        {saveOrder?.dishes?.map((item: any, index: number) => (
+                        {mobileOrder?.dishes?.map((item: any, index: number) => (
                             <OrderItemCart canChange={false} key={index} data={item} onCancel={cancelItem} />
                         ))}
                     </View>

@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useNavigation } from '@react-navigation/native';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledIcon, StyledText } from 'components/base';
 import LinearView from 'components/common/LinearView';
 import StyledHeader from 'components/common/StyledHeader';
-import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
+import { SETTING_ROUTE, TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
+import { navigate } from 'navigation/NavigationService';
 import React, { useRef, useState } from 'react';
 import { ImageBackground, View } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
@@ -25,7 +25,7 @@ const ItemOrder = (item: any) => {
     const [choose, setChoose] = useState(false);
     const gotoDetail = () => {
         setChoose(!choose);
-        item?.navigation.navigate(TAB_NAVIGATION_ROOT.SETTING_ROUTE.DEFAULT_ORDER_DETAIL);
+        navigate(SETTING_ROUTE.DEFAULT_ORDER_DETAIL);
     };
     return (
         <TouchableOpacity onPress={gotoDetail}>
@@ -75,7 +75,7 @@ const OrderDefaultSettingScreen = () => {
             </LinearView>
         );
     };
-    const navigation = useNavigation();
+
     return (
         <View style={styles.container}>
             <StyledHeader title={'setting.orderDefaultTitle'} iconRight={Images.icons.question} />
@@ -100,7 +100,7 @@ const OrderDefaultSettingScreen = () => {
                     numColumns={2}
                     data={listImage}
                     keyExtractor={(item) => item.id}
-                    renderItem={({ item }) => <ItemOrder navigation={navigation} key={item.id} item={item} />}
+                    renderItem={({ item }) => <ItemOrder key={item.id} item={item} />}
                 />
             </View>
             <View style={styles.secondaryView}>

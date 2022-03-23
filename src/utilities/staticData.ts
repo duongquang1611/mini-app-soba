@@ -29,6 +29,7 @@ export const staticValue = {
     MAX_WRONG_OTP: 5,
     OTP_INVALID_MESSAGE: 'Verified_Code_Invalid',
     MAX_ORDER: 10,
+    NUMBER_ITEM_LIST_COUPON_MODAL: 3,
 };
 export const LINEAR_COLOR = {
     CATEGORY: [Themes.COLORS.thunderbird, Themes.COLORS.primary],
@@ -82,9 +83,11 @@ export const dataFakeOderDefault = [
         ],
     },
 ];
-const exLinkImage =
+export const exLinkImage =
     'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg';
-const exLinkImageSquare = 'https://kenh14cdn.com/203336854389633024/2021/9/1/photo-1-16304832141231584345047.jpg';
+export const exLinkImageSquare =
+    'https://kenh14cdn.com/203336854389633024/2021/9/1/photo-1-16304832141231584345047.jpg';
+
 export const dataFakeDetailMeal = {
     id: 6,
     title: 'string',

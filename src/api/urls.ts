@@ -31,6 +31,7 @@ const HOME_URL = {
 const COUPON_URL = {
     list: 'coupon',
     coupon: (id: string | number) => `coupon/${id}`,
+    memberCoupon: (id: string | number) => `coupon/member-coupon/${id}`,
 };
 
 export { COMMON_URL, STAMP_URL, NOTIFICATION_URL, COUPON_URL, HOME_URL, MENU_URL };

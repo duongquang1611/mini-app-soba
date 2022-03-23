@@ -1,4 +1,3 @@
-import { useNavigation } from '@react-navigation/native';
 import { Themes } from 'assets/themes';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeader from 'components/common/StyledHeader';
@@ -9,14 +8,13 @@ import { ListNewsItem } from './HomeScreen';
 
 const NewsListScreen = (props: any) => {
     const { listNews } = props?.route?.params;
-    const navigation = useNavigation();
     return (
         <View style={styles.container}>
             <StyledKeyboardAware>
                 <StyledHeader title={'ニュース一覧'} />
                 <View style={styles.body}>
                     {listNews.map((news: any, index: number) => (
-                        <ListNewsItem key={index} data={news} navigation={navigation} />
+                        <ListNewsItem key={index} data={news} />
                     ))}
                 </View>
             </StyledKeyboardAware>

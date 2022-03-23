@@ -38,7 +38,18 @@ const WrapComponent = ({ children, isModal, customStyle }: any) => {
 const CouponContentView = (props: IProps) => {
     const { customStyle, isModal = false, data = {}, canUse } = props;
     const { coupon = {}, usedDate } = data;
-    const { id, title, image, startDate, endDate, description, dateType, couponDish, discountType, discount } = coupon;
+    const {
+        title,
+        image,
+        startDate,
+        endDate,
+        description,
+        dateType,
+        couponDish,
+        discountType,
+        discount,
+        stringId = '',
+    } = coupon;
 
     return (
         <WrapComponent customStyle={[styles.container, customStyle]} isModal={isModal}>
@@ -50,7 +61,11 @@ const CouponContentView = (props: IProps) => {
                             <StyledText i18nText={'coupon.detail.getCoupon'} customStyle={styles.textGetCoupon} />
                         </View>
                     ) : (
-                        <StyledText i18nText={'coupon.detail.id'} i18nParams={{ id }} customStyle={styles.textId} />
+                        <StyledText
+                            i18nText={'coupon.detail.id'}
+                            i18nParams={{ id: stringId }}
+                            customStyle={styles.textId}
+                        />
                     )}
                     <StyledText originValue={title} customStyle={styles.title} />
                     <ImageBackground style={styles.img} source={{ uri: image }}>
@@ -97,7 +112,9 @@ const CouponContentView = (props: IProps) => {
                         ) : (
                             isArray(couponDish) &&
                             couponDish.length > 0 &&
-                            couponDish.map((item: any) => <CouponDishItem item={item} key={item.toString()} />)
+                            couponDish.map((item: any, index: number) => (
+                                <CouponDishItem item={item} key={index.toString()} />
+                            ))
                         )}
                     </View>
                     <StyledText originValue={description} isBlack />

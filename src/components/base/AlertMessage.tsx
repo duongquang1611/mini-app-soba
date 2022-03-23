@@ -27,6 +27,7 @@ export const MODAL_POPUP_ID = [MODAL_ID.CONFIRM, MODAL_ID.SUCCESS, MODAL_ID.ERRO
 export const TITLE_POPUP_ID = ['popup.titleConfirm', 'popup.titleSuccess', 'popup.titleError'];
 
 const AlertMessage = (message: any, popupProps?: IProps, checkNetworkError = true) => {
+    console.log('AlertMessage -> message', message || popupProps?.content);
     if (!(checkNetworkError && (message || popupProps?.content) === ERRORS.network)) {
         const {
             type = POPUP_TYPE.ERROR,

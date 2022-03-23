@@ -12,8 +12,8 @@ interface AmountOrderProps {
 }
 const AmountOrder = (props: AmountOrderProps) => {
     const { cartOrder } = props;
-    const { saveOrder } = useSelector((state: RootState) => state.order);
-    const { dishes, coupons } = cartOrder || saveOrder || [];
+    const { cartOrder: cartOrderStore } = useSelector((state: RootState) => state.order);
+    const { dishes, coupons } = cartOrder || cartOrderStore || [];
     let numOrder = useRef(0).current;
     dishes?.map((item: any) => {
         numOrder += item.totalAmount;

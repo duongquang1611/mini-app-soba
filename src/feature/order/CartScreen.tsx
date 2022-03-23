@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { RootState } from 'app-redux/hooks';
-import { clearSaveOrder, updateCartOrder, updateSaveOrder } from 'app-redux/slices/orderSlice';
-import { store } from 'app-redux/store';
+import { updateCartOrder, updateMobileOrder } from 'app-redux/slices/orderSlice';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
@@ -10,26 +8,23 @@ import AlertMessage from 'components/base/AlertMessage';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeader from 'components/common/StyledHeader';
-import { orderBy } from 'lodash';
-import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
+import { HOME_ROUTE, TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { goBack, navigate } from 'navigation/NavigationService';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
 import { DiscountType, MODAL_ID, POPUP_TYPE, staticValue } from 'utilities/staticData';
 import AmountOrder from './components/AmountOrder';
-import OrderItemCart from './components/OrderItemCart';
 import ModalCoupon from './components/ModalCoupon';
+import OrderItemCart from './components/OrderItemCart';
 
 const ItemCoupon = (props: any) => {
     const { cancelCouponItem, data } = props;
-    const { cartOrder } = store.getState()?.order || {};
+    const { cartOrder } = useSelector((state: RootState) => state.order);
     const { coupon, id, choose } = data || {};
     const modalize = ModalizeManager();
     const dispatch = useDispatch();
-    const numberItemListCoupon = 3;
     const updateCouponsCart = (coupons: any) => {
         dispatch(updateCartOrder({ ...cartOrder, coupons }));
         modalize.dismiss(MODAL_ID.APPLY_COUPON);
@@ -51,6 +46,7 @@ const ItemCoupon = (props: any) => {
             { title: 'order.applyCoupon' },
         );
     };
+
     const onPressCoupon = () => {
         const listCouponsModal = coupon?.discountType === DiscountType.EACH_DISH ? [data] : [];
         const listCouponsNoChange = cartOrder?.coupons?.filter((item: any) => item?.id !== id);
@@ -58,7 +54,7 @@ const ItemCoupon = (props: any) => {
             showApplyCoupon(listCouponsModal, listCouponsNoChange);
         }
     };
-
+    console.log({ choose });
     return (
         <StyledTouchable onPress={onPressCoupon} customStyle={styles.rowItem}>
             <StyledIcon source={Images.icons.coupon} size={20} customStyle={styles.icCoupon} />
@@ -68,7 +64,7 @@ const ItemCoupon = (props: any) => {
                     <StyledText
                         i18nText={'order.couponUse'}
                         i18nParams={{
-                            dish: choose?.title,
+                            dish: choose?.dish?.title,
                         }}
                         customStyle={styles.dishUse}
                         isBlack
@@ -84,21 +80,20 @@ const ItemCoupon = (props: any) => {
     );
 };
 const CartScreen = () => {
-    const { saveOrder, cartOrder } = useSelector((state: RootState) => state.order);
+    const { cartOrder } = useSelector((state: RootState) => state.order);
     const dispatch = useDispatch();
     let num = useRef(0).current;
     cartOrder?.dishes?.forEach(async (rating: any) => {
         num += rating?.totalAmount;
     });
     num += cartOrder?.coupons?.length || 0;
-    useEffect(() => {
-        dispatch(updateCartOrder(saveOrder));
-    }, [saveOrder]);
+
+    const onClear = () => {
+        dispatch(clearCartOrder());
+        goBack();
+    };
+
     const cancelCart = () => {
-        const onClear = () => {
-            dispatch(clearSaveOrder());
-            goBack();
-        };
         AlertMessage('order.deleteCart', {
             textButtonCancel: 'common.cancel',
             onOk: onClear,
@@ -110,20 +105,22 @@ const CartScreen = () => {
         const newDishes = cartOrder?.dishes?.filter((item: any) => item?.createDate !== createDate);
         dispatch(updateCartOrder({ ...cartOrder, dishes: newDishes }));
     };
+
     const cancelCouponItem = (id: number) => {
         const newCoupons = cartOrder?.coupons?.filter((item: any) => item?.id !== id);
         dispatch(updateCartOrder({ ...cartOrder, coupons: newCoupons }));
     };
+
     const goToCouponList = () => {
         navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.COUPON_LIST);
     };
-    const createORCode = () => {
-        updateCart();
-        navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.MOBILE_ORDER);
+
+    const createQRCode = () => {
+        // update mobile order
+        dispatch(updateMobileOrder(cartOrder));
+        navigate(HOME_ROUTE.MOBILE_ORDER);
     };
-    const updateCart = () => {
-        dispatch(updateSaveOrder(cartOrder));
-    };
+
     return (
         <View style={styles.container}>
             <StyledHeader title={'order.cartTitle'} textRight={'order.cancelOrder'} onPressRight={cancelCart} />
@@ -157,10 +154,10 @@ const CartScreen = () => {
                                 <StyledText customStyle={styles.noCoupon} i18nText={'coupon.noCoupon'} />
                             </View>
                         )}
-                        <TouchableOpacity onPress={goToCouponList} style={styles.moreCouponView}>
+                        <StyledTouchable onPress={goToCouponList} customStyle={styles.moreCouponView}>
                             <StyledText customStyle={styles.moreCoupon} i18nText={'coupon.moreCoupon'} />
                             <StyledIcon source={Images.icons.add} size={20} />
-                        </TouchableOpacity>
+                        </StyledTouchable>
                     </View>
                     <View style={styles.contentView}>
                         {num > staticValue.MAX_ORDER && (
@@ -170,7 +167,7 @@ const CartScreen = () => {
                         <StyledButton
                             disabled={num <= 0 || num > staticValue.MAX_ORDER}
                             title={'order.qrButton'}
-                            onPress={createORCode}
+                            onPress={createQRCode}
                         />
                         <StyledButton
                             isNormal={true}
@@ -323,3 +320,6 @@ const styles = ScaledSheet.create({
         marginTop: '10@vs',
     },
 });
+function clearCartOrder(): any {
+    throw new Error('Function not implemented.');
+}

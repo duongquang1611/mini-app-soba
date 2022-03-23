@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
@@ -13,13 +14,13 @@ const ButtonCart = (props: any) => {
         <StyledTouchable
             customStyle={[
                 styles.secondaryView,
-                { backgroundColor: checkDisable ? Themes.COLORS.silver : Themes.COLORS.secondary },
+                // { backgroundColor: checkDisable ? Themes.COLORS.silver : Themes.COLORS.secondary },
             ]}
             onPress={goToSaveOrder}
-            disabled={numOrder > staticValue.MAX_ORDER}
         >
             <ImageBackground
-                source={!checkDisable ? Images.icons.rectangle : Images.icons.rectangleDisable}
+                // source={!checkDisable ? Images.icons.rectangle : Images.icons.rectangleDisable}
+                source={Images.icons.rectangle}
                 style={[styles.rectangle]}
             >
                 <StyledIcon
@@ -27,7 +28,7 @@ const ButtonCart = (props: any) => {
                     size={35}
                     customStyle={[
                         styles.icBag,
-                        { tintColor: checkDisable ? Themes.COLORS.silver : Themes.COLORS.secondary },
+                        // { tintColor: checkDisable ? Themes.COLORS.silver : Themes.COLORS.secondary },
                     ]}
                 />
             </ImageBackground>

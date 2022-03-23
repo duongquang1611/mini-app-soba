@@ -1,33 +1,42 @@
-import { store } from 'app-redux/store';
+import { RootState } from 'app-redux/hooks';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
+import { useSelector } from 'react-redux';
 import { formatDate, YYYYMMDD } from 'utilities/format';
 import { DateType, MemberCouponStatus, staticValue } from 'utilities/staticData';
 import DashView from './DashView';
 
 export const CouponItem = (props: any) => {
-    const { order } = store.getState();
-    const { item = {}, canUse, handleUseCoupon, goToDetail, cartOrder } = props;
-    const { coupon, usedDate, status, id } = item;
-    const { image, title, startDate, endDate, dateType } = coupon || {};
-    const isInCart = useMemo(() => status === MemberCouponStatus.IN_CART, [status]);
-    const checkChoose = cartOrder?.coupons?.find((itemCart: any) => itemCart?.id === id);
+    const { order } = useSelector((state: RootState) => state);
+    const { item = {}, canUse, handleUseCoupon, goToDetail, cartOrder: cartOrderState } = props;
+    const { coupon, usedDate, status, id: idMemberCoupon } = item;
+    const { image, title, startDate, endDate, dateType } = coupon;
+    const isInCartAPI = useMemo(() => status === MemberCouponStatus.IN_CART, [status]);
+    const checkChooseTemp = cartOrderState?.coupons?.find((itemCoupon: any) => itemCoupon?.id === idMemberCoupon);
+    const checkChooseInCart = order.cartOrder?.coupons?.find((itemCoupon: any) => itemCoupon?.id === idMemberCoupon);
+    const checkChooseInOrderMobile = order.mobileOrder?.coupons?.find(
+        (itemCoupon: any) => itemCoupon?.id === idMemberCoupon,
+    );
+    const disabledUse = isInCartAPI || checkChooseInOrderMobile || checkChooseInCart;
+
     const handleGoToDetail = () => {
         goToDetail?.(item);
     };
-    const checkCouponInStore = order?.saveOrder?.coupons?.find((itemSaveOrder: any) => itemSaveOrder?.id === item?.id);
+
     const getIcon = () => {
-        if (checkCouponInStore) return Images.icons.nextGrey;
-        return !checkChoose ? Images.icons.next : Images.icons.nextSecondary;
+        if (disabledUse) return Images.icons.nextGrey;
+        return checkChooseTemp ? Images.icons.nextSecondary : Images.icons.next;
     };
+
     const getText = () => {
-        if (checkCouponInStore) return 'coupon.btnInCart';
-        return !checkChoose ? 'coupon.btnUse' : 'coupon.btnUnUse';
+        if (disabledUse) return 'coupon.btnInCart';
+        return checkChooseTemp ? 'coupon.btnUnUse' : 'coupon.btnUse';
     };
+
     return (
         <>
             <StyledTouchable customStyle={styles.couponItem} onPress={handleGoToDetail}>
@@ -47,16 +56,18 @@ export const CouponItem = (props: any) => {
                             <StyledTouchable
                                 customStyle={styles.btnCanUSe}
                                 onPress={handleUseCoupon}
-                                disabled={isInCart}
+                                disabled={disabledUse}
                                 hitSlop={staticValue.DEFAULT_HIT_SLOP}
                             >
                                 <StyledText
                                     i18nText={getText()}
                                     customStyle={[
                                         styles.useText,
-                                        { color: !checkChoose ? Themes.COLORS.primary : Themes.COLORS.secondary },
+                                        {
+                                            color: checkChooseTemp ? Themes.COLORS.secondary : Themes.COLORS.primary,
+                                        },
                                     ]}
-                                    disabled={checkCouponInStore}
+                                    disabled={disabledUse}
                                 />
                                 <StyledIcon source={getIcon()} size={20} />
                             </StyledTouchable>

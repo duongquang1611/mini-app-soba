@@ -12,29 +12,32 @@ import { useSelector } from 'react-redux';
 import { TabCouponStatus } from 'utilities/staticData';
 
 interface CouponTabProps {
-    status?: TabCouponStatus;
+    canUse?: TabCouponStatus;
     cartListCouponOrder?: any;
     handleUseCoupon?: any;
 }
 
 const CouponTab = (props: CouponTabProps) => {
-    const { status, handleUseCoupon, cartListCouponOrder } = props;
+    const { canUse, handleUseCoupon, cartListCouponOrder } = props;
     const { coupon } = useSelector((state: RootState) => state);
     const { couponsCanUse, couponsUsed } = coupon;
 
     const goToDetail = (item: any) => {
-        navigate(COUPON_ROUTE.DETAIL_COUPON, { item, status, handleUseCoupon, cartOrder: cartListCouponOrder });
+        navigate(COUPON_ROUTE.DETAIL_COUPON, { item, canUse, handleUseCoupon, cartOrder: cartListCouponOrder });
     };
+
+    const handleUseCouponItem = (item: any) => {
+        handleUseCoupon?.(item);
+    };
+
     const renderItem = ({ item }: any) => {
         return (
             <CouponItem
-                canUse={status}
+                canUse={canUse}
                 item={item}
                 goToDetail={goToDetail}
                 cartOrder={cartListCouponOrder}
-                handleUseCoupon={() => {
-                    handleUseCoupon?.(item);
-                }}
+                handleUseCoupon={() => handleUseCouponItem(item)}
             />
         );
     };
@@ -42,10 +45,10 @@ const CouponTab = (props: CouponTabProps) => {
     return (
         <View style={styles.container}>
             <StyledList
-                data={status ? couponsCanUse : couponsUsed}
+                data={canUse ? couponsCanUse : couponsUsed}
                 renderItem={renderItem}
                 customStyle={styles.listCoupon}
-                onRefresh={() => getCouponData(status)}
+                onRefresh={() => getCouponData(canUse)}
                 refreshing={false}
             />
         </View>
