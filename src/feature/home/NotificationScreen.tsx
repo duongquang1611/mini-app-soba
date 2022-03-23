@@ -1,4 +1,3 @@
-import { useNavigation } from '@react-navigation/native';
 import { getNotificationList } from 'api/modules/api-app/notification';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
@@ -6,7 +5,8 @@ import { StyledIcon, StyledText } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeader from 'components/common/StyledHeader';
-import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
+import { HOME_ROUTE } from 'navigation/config/routes';
+import { navigate } from 'navigation/NavigationService';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -15,10 +15,7 @@ import { logger } from 'utilities/helper';
 
 const NotificationItem = (item: any) => {
     return (
-        <TouchableOpacity
-            style={styles.notificationItem}
-            onPress={() => item?.navigation.navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.NOTIFICATION_DETAIL)}
-        >
+        <TouchableOpacity style={styles.notificationItem} onPress={() => navigate(HOME_ROUTE.NOTIFICATION_DETAIL)}>
             <StyledIcon source={getIcon(item.item?.img)} size={30} customStyle={styles.notificationImage} />
             <View style={styles.contentText}>
                 <StyledText originValue={item.item.content} customStyle={styles.content} />
@@ -43,7 +40,6 @@ const getIcon = (key: string) => {
     }
 };
 const NotificationScreen = () => {
-    const navigation = useNavigation();
     const [listNoti, setListNoti] = useState([]);
     useEffect(() => {
         getNotification();
@@ -63,7 +59,7 @@ const NotificationScreen = () => {
             <StyledKeyboardAware>
                 <View style={styles.body}>
                     {listNoti?.map((item, index) => (
-                        <NotificationItem key={index} item={item} navigation={navigation} />
+                        <NotificationItem key={index} item={item} />
                     ))}
                 </View>
             </StyledKeyboardAware>

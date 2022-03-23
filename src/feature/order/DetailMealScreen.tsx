@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { getDish } from 'api/modules/api-app/order';
 import { RootState } from 'app-redux/hooks';
-import { updateSaveOrder } from 'app-redux/slices/orderSlice';
+import { updateCartOrder } from 'app-redux/slices/orderSlice';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
@@ -22,8 +22,8 @@ import OrderItem from './components/OrderItem';
 
 const DetailMealScreen = (props: any) => {
     const { id, isNew, createDate } = props?.route?.params;
-    const { saveOrder } = useSelector((state: RootState) => state.order);
-    const findIdStore = isNew ? null : saveOrder?.dishes?.find((item: any) => item.createDate === createDate);
+    const { cartOrder } = useSelector((state: RootState) => state.order);
+    const findIdStore = isNew ? null : cartOrder?.dishes?.find((item: any) => item.createDate === createDate);
     const [num, setNum] = useState(findIdStore?.mainDish?.amount || 1);
     const [dish, setDish] = useState<any>({});
 
@@ -55,15 +55,16 @@ const DetailMealScreen = (props: any) => {
     });
     const numOrder = createDate ? findIdStore?.mainDish?.amount : 1;
     let totalNum = useRef(0).current;
-    saveOrder?.dishes?.forEach(async (rating: any) => {
+    cartOrder?.dishes?.forEach(async (rating: any) => {
         totalNum += rating?.totalAmount;
     });
+
     const newAmountOrder = createDate ? totalNum + amountValue - findIdStore?.totalAmount : totalNum + amountValue;
     const goToSaveOrder = () => {
         const orderChooseItem = { id };
         const dishesStore = isNew
-            ? saveOrder?.dishes || []
-            : saveOrder?.dishes?.filter((item: any) => item.createDate !== createDate) || [];
+            ? cartOrder?.dishes || []
+            : cartOrder?.dishes?.filter((item: any) => item.createDate !== createDate) || [];
 
         const paramOrder =
             amountValue > 0
@@ -85,7 +86,7 @@ const DetailMealScreen = (props: any) => {
                       coupons: [],
                   }
                 : {};
-        dispatch(updateSaveOrder(paramOrder));
+        dispatch(updateCartOrder(paramOrder));
         goBack();
     };
     return (

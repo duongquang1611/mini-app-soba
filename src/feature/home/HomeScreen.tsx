@@ -1,4 +1,3 @@
-import { useNavigation } from '@react-navigation/native';
 import { getCouponList } from 'api/modules/api-app/coupon';
 import { getNewsList } from 'api/modules/api-app/home';
 import { updateCoupon } from 'app-redux/slices/couponSlice';
@@ -11,7 +10,7 @@ import DashView from 'components/common/DashView';
 import StyledHeaderImage from 'components/common/StyledHeaderImage';
 import StyledTabTopView from 'components/common/StyledTabTopView';
 import { SIZE_LIMIT } from 'hooks/usePaging';
-import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
+import { HOME_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import { ImageBackground, View } from 'react-native';
@@ -47,9 +46,7 @@ export const ListNewsItem = (data: any) => {
         <View>
             <TouchableOpacity
                 style={styles.listNewsView}
-                onPress={() =>
-                    data?.navigation.navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.NEW_DETAIL, { id: data?.data?.id })
-                }
+                onPress={() => navigate(HOME_ROUTE.NEW_DETAIL, { id: data?.data?.id })}
             >
                 <StyledIcon source={{ uri: data?.data?.img }} size={70} />
                 <View style={styles.newsTextView}>
@@ -108,7 +105,6 @@ export const getCouponData = async (status?: TabCouponStatus) => {
 
 const HomeScreen: FunctionComponent = () => {
     useOnesignal();
-    const navigation = useNavigation();
     const [indexTab, setIndexTab] = useState(1);
     const [listNews, setListNews] = useState([]);
 
@@ -128,11 +124,11 @@ const HomeScreen: FunctionComponent = () => {
     };
 
     const goToQrScreen = () => {
-        navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.CHECK_IN);
+        navigate(HOME_ROUTE.CHECK_IN);
     };
 
-    const goToNotiScreen = () => {
-        navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.NOTIFICATION);
+    const goToNotifyScreen = () => {
+        navigate(HOME_ROUTE.NOTIFICATION);
     };
 
     const routes = [
@@ -142,21 +138,9 @@ const HomeScreen: FunctionComponent = () => {
     ];
 
     const renderScene = SceneMap({
-        qr1: () => (
-            <ShowQrTab
-                data={dataOder}
-                onClick={() => navigation.navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.ORDER_DEFAULT_HOME)}
-            />
-        ),
-        qr2: () => (
-            <ShowQrTab
-                data={preOder}
-                onClick={() => navigation.navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.MOBILE_ORDER)}
-            />
-        ),
-        qr3: () => (
-            <ShowQrTab data={visitQr} onClick={() => navigation.navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.CHECK_IN)} />
-        ),
+        qr1: () => <ShowQrTab data={dataOder} onClick={() => navigate(HOME_ROUTE.ORDER_DEFAULT_HOME)} />,
+        qr2: () => <ShowQrTab data={preOder} onClick={() => navigate(HOME_ROUTE.MOBILE_ORDER)} />,
+        qr3: () => <ShowQrTab data={visitQr} onClick={() => navigate(HOME_ROUTE.CHECK_IN)} />,
     });
 
     return (
@@ -165,7 +149,7 @@ const HomeScreen: FunctionComponent = () => {
                 iconQr={Images.icons.tab.notification}
                 iconNoti={Images.icons.tab.notification}
                 onPressQr={goToQrScreen}
-                onPressNoti={goToNotiScreen}
+                onPressNoti={goToNotifyScreen}
                 isBack={false}
                 images={imagesList}
                 logo
@@ -204,13 +188,13 @@ const HomeScreen: FunctionComponent = () => {
                         </View>
                         <TouchableOpacity
                             style={styles.buttonMobile}
-                            onPress={() => navigation.navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.NEW_LIST, { listNews })}
+                            onPress={() => navigate(HOME_ROUTE.NEW_LIST, { listNews })}
                         >
                             <StyledText i18nText={'全て見る'} customStyle={styles.textNews} />
                         </TouchableOpacity>
                     </ImageBackground>
                     {listNews.map((news, index) => (
-                        <ListNewsItem key={index} data={news} navigation={navigation} />
+                        <ListNewsItem key={index} data={news} />
                     ))}
                 </View>
             </StyledKeyboardAware>

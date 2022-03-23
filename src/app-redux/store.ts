@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { persistStore, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
-// import logger from 'redux-logger';
+import logger from 'redux-logger';
 import createSagaMiddleware from 'redux-saga';
 import rootSaga from './sagas/rootSaga';
 
@@ -31,7 +31,7 @@ const store = configureStore({
                 ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
             },
         })
-            // .concat(logger)
+            .concat(logger)
             .prepend(sagaMiddleware),
     devTools: __DEV__,
 });

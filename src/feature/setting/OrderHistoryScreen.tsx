@@ -1,22 +1,18 @@
-import { useNavigation } from '@react-navigation/native';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
-import { StyledIcon, StyledText } from 'components/base';
+import { StyledIcon, StyledText, StyledTouchable } from 'components/base';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeader from 'components/common/StyledHeader';
-import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
+import { SETTING_ROUTE } from 'navigation/config/routes';
+import { navigate } from 'navigation/NavigationService';
 import React from 'react';
 import { View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { ScaledSheet } from 'react-native-size-matters';
 import { orderHistoryListFake } from 'utilities/staticData';
 
 const OrderItem = (item: any) => {
     return (
-        <TouchableOpacity
-            style={styles.orderItem}
-            onPress={() => item?.navigation.navigate(TAB_NAVIGATION_ROOT.SETTING_ROUTE.ORDER_HISTORY_DETAIL)}
-        >
+        <StyledTouchable customStyle={styles.orderItem} onPress={() => navigate(SETTING_ROUTE.ORDER_HISTORY_DETAIL)}>
             <View style={styles.nameOrderRow}>
                 <StyledIcon source={Images.icons.order} size={25} />
                 <View style={styles.viewInfo}>
@@ -29,18 +25,17 @@ const OrderItem = (item: any) => {
                 </View>
             </View>
             <View style={styles.line} />
-        </TouchableOpacity>
+        </StyledTouchable>
     );
 };
 const OrderHistoryScreen = () => {
-    const navigation = useNavigation();
     return (
         <View style={styles.container}>
             <StyledHeader title={'setting.orderHistoryTitle'} />
             <StyledKeyboardAware>
                 <View style={styles.body}>
                     {orderHistoryListFake?.map((item) => (
-                        <OrderItem key={item.id} item={item} navigation={navigation} />
+                        <OrderItem key={item.id} item={item} />
                     ))}
                 </View>
             </StyledKeyboardAware>

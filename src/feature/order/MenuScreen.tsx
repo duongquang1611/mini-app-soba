@@ -1,4 +1,3 @@
-import { useNavigation } from '@react-navigation/native';
 import { getMenu } from 'api/modules/api-app/order';
 import { RootState } from 'app-redux/hooks';
 import { store } from 'app-redux/store';
@@ -9,29 +8,29 @@ import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components
 import AlertMessage from 'components/base/AlertMessage';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledHeader from 'components/common/StyledHeader';
-import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
+import { ORDER_ROUTE } from 'navigation/config/routes';
+import { navigate } from 'navigation/NavigationService';
 import React, { useEffect, useRef, useState } from 'react';
 import { ImageBackground, Text, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
-import { logger } from 'utilities/helper';
 import { MenuType, MODAL_ID, staticValue, stepGuide } from 'utilities/staticData';
 import ButtonCart from './components/ButtonCart';
 import ListViewSelect from './components/ListViewSelect';
 import ModalDetailMenu from './components/ModalDetailMenu';
 
 const ItemMenu = (props: any) => {
-    const { saveOrder } = useSelector((state: RootState) => state.order);
+    const { cartOrder } = useSelector((state: RootState) => state.order);
     let num = useRef(0).current;
-    saveOrder?.dishes
+    cartOrder?.dishes
         ?.filter((itemOrder: any) => itemOrder?.mainDish?.id === props?.item?.id)
         ?.forEach(async (rating: any) => {
             num += rating?.mainDish?.amount;
         });
     const isSetting = false;
     const gotoNew = () => {
-        props?.navigation.navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.DETAIL_MEAL, { id: props?.item?.id, isNew: true });
+        navigate(ORDER_ROUTE.DETAIL_MEAL, { id: props?.item?.id, isNew: true });
     };
     return (
         <StyledTouchable onPress={num > 0 ? props?.goToDetailModal : gotoNew}>
@@ -78,12 +77,13 @@ const ModalGuide = () => (
     </View>
 );
 const MenuScreen = () => {
-    const { saveOrder } = useSelector((state: RootState) => state.order);
-    const { dishes } = saveOrder || [];
+    const { cartOrder } = useSelector((state: RootState) => state.order);
+    const { dishes } = cartOrder || [];
     let numOrder = useRef(0).current;
-    saveOrder?.dishes?.forEach(async (rating: any) => {
+    cartOrder?.dishes?.forEach(async (rating: any) => {
         numOrder += rating?.totalAmount;
     });
+    numOrder += cartOrder?.coupons?.length || 0;
     const { resource } = store.getState();
     const { categories, menu } = resource?.resource?.data || {};
     const listEnableCategory = categories?.filter((item: any) => item?.status === MenuType.ENABLE);
@@ -104,7 +104,7 @@ const MenuScreen = () => {
             const res = await getMenu();
             setMenu(res?.data?.filter((item: any) => item?.status === MenuType.ENABLE));
         } catch (error) {
-            logger(error);
+            console.log('getMenuList -> error', error);
             AlertMessage(error);
         }
     };
@@ -118,7 +118,7 @@ const MenuScreen = () => {
         setRecommendSelected(item.id);
     };
     const gotoCart = () => {
-        navigation.navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.CART);
+        navigate(ORDER_ROUTE.CART);
     };
     const showModal = () => {
         modalize.show(
@@ -148,7 +148,6 @@ const MenuScreen = () => {
         );
     };
 
-    const navigation = useNavigation();
     const menuFilter = menuList.filter((item: any) => {
         if (category) {
             const check = item?.category?.find((itemCate: any) => itemCate?.categoryId === category);
@@ -197,12 +196,7 @@ const MenuScreen = () => {
                     data={menuFilter}
                     keyExtractor={(item) => item.id}
                     renderItem={({ item }) => (
-                        <ItemMenu
-                            goToDetailModal={() => showModalDetail(item?.id)}
-                            navigation={navigation}
-                            key={item.id}
-                            item={item}
-                        />
+                        <ItemMenu goToDetailModal={() => showModalDetail(item?.id)} key={item.id} item={item} />
                     )}
                 />
             </View>

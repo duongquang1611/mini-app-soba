@@ -1,8 +1,8 @@
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
-import { StyledText, StyledButton, StyledImage } from 'components/base';
+import { StyledButton, StyledImage, StyledText, StyledTouchable } from 'components/base';
 import React, { useState } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 
 const OrderDish = (props: any) => {
@@ -21,9 +21,9 @@ const OrderDish = (props: any) => {
                     <StyledImage source={{ uri: item?.dish?.thumbnail }} customStyle={styles.imgItem} />
                     <StyledText originValue={item?.dish?.title} customStyle={styles.nameOrder} />
                 </View>
-                <TouchableOpacity
+                <StyledTouchable
                     onPress={onChoose}
-                    style={[
+                    customStyle={[
                         styles.chooseButton,
                         {
                             backgroundColor: choose ? Themes.COLORS.primary : Themes.COLORS.white,
@@ -57,7 +57,7 @@ const OneCoupon = (props: any) => {
     );
 };
 const ModalCoupon = (props: any) => {
-    const { listCouponsModal, setCartListCouponOrder, updateCouponsCart, cartListCouponAll } = props;
+    const { listCouponsModal, setCartListCouponOrder, updateCouponsCart, cartListCouponAll, applyChooseDish } = props;
     const [enableButton, setEnableButton] = useState(listCouponsModal?.map((item: any) => ({ ...item })));
     const checkDisableButton = enableButton?.filter((item: any) => !item?.choose);
     return (
@@ -68,8 +68,12 @@ const ModalCoupon = (props: any) => {
             <StyledButton
                 title={'order.keep'}
                 onPress={() => {
-                    setCartListCouponOrder?.([...cartListCouponAll, ...enableButton]);
-                    updateCouponsCart([...cartListCouponAll, ...enableButton]);
+                    if (applyChooseDish) {
+                        applyChooseDish?.(enableButton);
+                    } else {
+                        setCartListCouponOrder?.([...cartListCouponAll, ...enableButton]);
+                        updateCouponsCart([...cartListCouponAll, ...enableButton]);
+                    }
                 }}
                 disabled={checkDisableButton.length > 0}
                 customStyle={styles.saveButton}

@@ -29,7 +29,7 @@ type StyledTextCombineProps = StyledTextWithOriginValue | StyledTextWithI18nValu
 
 const StyledText = (props: StyledTextCombineProps) => {
     const { t } = useTranslation();
-    const { style, originValue, i18nText, i18nParams, isBlack, disabled } = props;
+    const { style, originValue, i18nText, i18nParams, isBlack, disabled, customStyle, ...otherProps } = props;
     let value;
 
     if (style) {
@@ -51,10 +51,10 @@ const StyledText = (props: StyledTextCombineProps) => {
                 {
                     color: isBlack ? Themes.COLORS.mineShaft : Themes.COLORS.textPrimary,
                 },
-                props.customStyle,
+                customStyle,
                 disabled && { color: Themes.COLORS.silver },
             ]}
-            {...props}
+            {...otherProps}
         >
             {value}
         </Text>

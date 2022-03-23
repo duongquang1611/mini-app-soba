@@ -11,7 +11,7 @@ import React, { useState } from 'react';
 import { View } from 'react-native';
 import { ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
-import { DiscountType, MODAL_ID, TabCouponStatus } from 'utilities/staticData';
+import { DiscountType, MODAL_ID, staticValue, TabCouponStatus } from 'utilities/staticData';
 import ModalCoupon from './components/ModalCoupon';
 
 const CouponListScreen = () => {
@@ -24,11 +24,13 @@ const CouponListScreen = () => {
         modalize.dismiss(MODAL_ID.APPLY_COUPON);
         goBack();
     };
+
     const updateCouponsCart = (coupons: any) => {
         dispatch(updateCartOrder({ ...cartListCouponOrder, coupons }));
         modalize.dismiss(MODAL_ID.APPLY_COUPON);
         goBack();
     };
+
     const saveCartCoupon = () => {
         const listCouponsModal = cartListCouponOrder?.coupons?.filter(
             (item: any) => item?.coupon?.discountType === DiscountType.EACH_DISH,
@@ -40,7 +42,7 @@ const CouponListScreen = () => {
             showApplyCoupon(listCouponsModal, listCouponsAll);
         } else updateCart();
     };
-    const numberItemListCoupon = 3;
+
     const showApplyCoupon = (listCouponsModal: any, listCouponsAll: any) => {
         modalize.show(
             MODAL_ID.APPLY_COUPON,
@@ -51,7 +53,7 @@ const CouponListScreen = () => {
                 updateCouponsCart={updateCouponsCart}
             />,
             {
-                modalHeight: verticalScale(numberItemListCoupon * 60 + 250),
+                modalHeight: verticalScale(staticValue.NUMBER_ITEM_LIST_COUPON_MODAL * 60 + 250),
                 scrollViewProps: {
                     contentContainerStyle: { flexGrow: 1 },
                 },
@@ -59,12 +61,12 @@ const CouponListScreen = () => {
             { title: 'order.applyCoupon' },
         );
     };
+
     const handleUseCoupon = (itemCoupon: any) => {
         const findCouponCart = cartListCouponOrder?.coupons?.find((item: any) => item?.id === itemCoupon?.id);
         const newCoupons = cartListCouponOrder?.coupons?.filter((item: any) => item?.id !== itemCoupon?.id) || [];
         if (findCouponCart) {
             const newCoupons = cartListCouponOrder?.coupons?.filter((item: any) => item?.id !== itemCoupon?.id) || [];
-
             setCartListCouponOrder({ dishes: cartListCouponOrder?.dishes || [], coupons: newCoupons });
         } else {
             setCartListCouponOrder({
@@ -73,11 +75,12 @@ const CouponListScreen = () => {
             });
         }
     };
+
     return (
         <View style={styles.container}>
             <StyledHeader title={'order.couponTitle'} />
             <CouponTab
-                status={TabCouponStatus.CAN_USE}
+                canUse={TabCouponStatus.CAN_USE}
                 cartListCouponOrder={cartListCouponOrder}
                 handleUseCoupon={handleUseCoupon}
             />

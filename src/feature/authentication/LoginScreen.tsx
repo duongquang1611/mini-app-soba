@@ -9,7 +9,7 @@ import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { FunctionComponent, useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { View } from 'react-native';
+import { Keyboard, View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import { useLogin } from 'utilities/authenticate/AuthenticateService';
 import { EMAIL_MAX_LENGTH, PASSWORD_MAX_LENGTH } from 'utilities/validate';
@@ -23,6 +23,9 @@ const DEFAULT_FORM: any = __DEV__
 
           // email: 'phong.trieu@amela.vn',
           // password: '123456',
+
+          //   email: 'test2@gmail.com',
+          //   password: 'abc12345',
       }
     : {};
 
@@ -82,6 +85,7 @@ const LoginScreen: FunctionComponent = () => {
                         icYeyOff={Images.icons.eyeOff}
                         icYeyOn={Images.icons.eyeOn}
                         customStyle={styles.inputPass}
+                        onSubmitEditing={Keyboard.dismiss}
                     />
                 </FormProvider>
                 <View style={styles.buttonView}>
