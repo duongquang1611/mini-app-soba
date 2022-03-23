@@ -141,12 +141,7 @@ const CartScreen = () => {
                     <View style={styles.contentView}>
                         <StyledText customStyle={styles.title} i18nText={'coupon.title'} />
                         {cartOrder?.coupons?.map((item: any, index: number) => (
-                            <ItemCoupon
-                                key={index}
-                                data={item}
-                                cancelCouponItem={cancelCouponItem}
-                                // onPressCoupon={onPressCoupon}
-                            />
+                            <ItemCoupon key={index} data={item} cancelCouponItem={cancelCouponItem} />
                         ))}
                         {cartOrder?.coupons?.length === 0 && (
                             <View style={styles.noCouponView}>

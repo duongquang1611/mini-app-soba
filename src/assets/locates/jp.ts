@@ -140,7 +140,7 @@ export default {
         point: '点',
         quantity: '個数',
         deleteCart: 'すべての注文をキャンセルしますか？',
-        errorMaxOrder: '最大10つアイテムを選択してください',
+        errorMaxOrder: 'QRコードには最大10つアイテムが発行できます',
         qrButton: 'ＱＲコード発行',
         rangeCartMenu: '(注文数：{{numOrder}}/{{max}}アイテム）',
         editCartButton: '商品追加',

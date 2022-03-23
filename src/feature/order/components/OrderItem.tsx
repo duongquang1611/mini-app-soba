@@ -9,22 +9,24 @@ import { scale, ScaledSheet } from 'react-native-size-matters';
 import { staticValue } from 'utilities/staticData';
 
 export const OrderChild = (data: any) => {
-    const { isRequired, item, subDishDetail, setSubDishDetail } = data;
+    const { isRequired, item, subDishDetail, setSubDishDetail, dishOptionsId } = data;
     const { dish } = item;
-    const checkOrder = subDishDetail?.find((item: any) => item.subDishId === dish.id)?.amount;
+    const checkChooseItem = subDishDetail?.find((item: any) => item.subDishId === dish.id)?.amount;
+    const checkChooseDishOption = subDishDetail?.find((item: any) => item.dishOptionsId === dishOptionsId)?.amount;
+    const listSubNotChange = subDishDetail?.filter((item: any) => item.dishOptionsId !== dishOptionsId);
     const onChoose = () => {
-        setSubDishDetail(
-            checkOrder
-                ? []
-                : [
-                      {
-                          subDishId: dish.id,
-                          title: dish.title,
-                          selected: 1,
-                          amount: 1,
-                      },
-                  ],
-        );
+        if (!checkChooseDishOption || !checkChooseItem) {
+            setSubDishDetail([
+                ...listSubNotChange,
+                {
+                    dishOptionsId,
+                    subDishId: dish.id,
+                    title: dish.title,
+                    selected: 1,
+                    amount: 1,
+                },
+            ]);
+        } else setSubDishDetail(listSubNotChange);
     };
     return (
         <View style={styles.containerItem}>
@@ -38,8 +40,8 @@ export const OrderChild = (data: any) => {
                     style={[
                         styles.chooseButton,
                         {
-                            backgroundColor: checkOrder ? Themes.COLORS.primary : Themes.COLORS.white,
-                            borderColor: checkOrder ? Themes.COLORS.sweetPink : Themes.COLORS.silver,
+                            backgroundColor: checkChooseItem ? Themes.COLORS.primary : Themes.COLORS.white,
+                            borderColor: checkChooseItem ? Themes.COLORS.sweetPink : Themes.COLORS.silver,
                         },
                     ]}
                 />
@@ -110,7 +112,7 @@ const OrderChildCanChange = (data: any) => {
 };
 const OrderItem = (data: any) => {
     const { subDishDetail, setSubDishDetail } = data;
-    const { subDish, title, isRequired, type } = data?.data || {};
+    const { subDish, title, isRequired, type, id } = data?.data || {};
     return (
         <View style={[styles.containerItem, { paddingHorizontal: scale(20) }]}>
             <StyledText originValue={title} customStyle={styles.name} />
@@ -123,6 +125,7 @@ const OrderItem = (data: any) => {
                             isRequired={isRequired}
                             subDishDetail={subDishDetail}
                             setSubDishDetail={setSubDishDetail}
+                            dishOptionsId={id}
                         />
                     ) : (
                         <OrderChildCanChange

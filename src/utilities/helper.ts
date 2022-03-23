@@ -113,3 +113,10 @@ export const checkPasswordMatch = ({ password, confirmPassword }: any) => {
     }
     return '';
 };
+export const sumTotalAmount = (order: any) => {
+    let numOrder = order?.coupons?.length;
+    order?.dishes?.forEach(async (rating: any) => {
+        numOrder += rating?.totalAmount;
+    });
+    return numOrder;
+};

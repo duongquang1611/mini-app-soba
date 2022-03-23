@@ -17,7 +17,7 @@ const OrderItemCart = (props: any) => {
     const { cartOrder } = useSelector((state: RootState) => state.order);
     const dispatch = useDispatch();
     const { name, image } = mainDish;
-    const { cancelItem, canChange, goDetailMenu } = props;
+    const { cancelItem, canChange, goDetailMenu, notGoDetail } = props;
     const num = mainDish?.amount;
 
     const updateOrder = (currentNum: number) => {
@@ -47,24 +47,24 @@ const OrderItemCart = (props: any) => {
     };
 
     const goToDetail = () => {
-        navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.DETAIL_MEAL, { id: mainDish?.id, createDate });
+        if (goDetailMenu) {
+            goDetailMenu();
+        } else {
+            navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.DETAIL_MEAL, { id: mainDish?.id, createDate });
+        }
     };
 
     return (
-        <StyledTouchable disabled={!goDetailMenu} onPress={goDetailMenu}>
+        <StyledTouchable disabled={notGoDetail} onPress={goToDetail}>
             <View style={styles.orderItemView}>
-                <StyledTouchable onPress={goToDetail}>
-                    <StyledIcon source={{ uri: image }} size={70} />
-                </StyledTouchable>
+                <StyledIcon source={{ uri: image }} size={70} />
                 <View style={styles.orderTextView}>
                     {cancelItem && (
                         <StyledTouchable onPress={() => cancelItem(createDate)}>
                             <StyledIcon source={Images.icons.cancel} size={17} customStyle={styles.icCancel} />
                         </StyledTouchable>
                     )}
-                    <StyledTouchable onPress={goToDetail} customStyle={styles.buttonName}>
-                        <StyledText originValue={name} customStyle={styles.titleOrder} />
-                    </StyledTouchable>
+                    <StyledText originValue={name} customStyle={styles.titleOrder} />
                     {subDishes?.map((item: any, index: number) => (
                         <View key={index} style={styles.rowSub}>
                             <StyledText originValue={`+ ${item?.title}`} isBlack customStyle={styles.addValue} />

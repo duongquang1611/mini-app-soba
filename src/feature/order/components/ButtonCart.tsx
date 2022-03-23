@@ -42,7 +42,7 @@ const ButtonCart = (props: any) => {
                                 numOrder,
                                 max: staticValue.MAX_ORDER,
                             }}
-                            customStyle={[styles.textCart, styles.smallView]}
+                            customStyle={styles.textCart}
                         />
                     </View>
                 ) : (
@@ -53,7 +53,7 @@ const ButtonCart = (props: any) => {
                             numOrder,
                             max: staticValue.MAX_ORDER,
                         }}
-                        customStyle={[styles.textCart, styles.smallView]}
+                        customStyle={styles.textCart}
                     />
                 )}
             </TouchableOpacity>
@@ -68,7 +68,7 @@ const styles = ScaledSheet.create({
         backgroundColor: Themes.COLORS.secondary,
         alignItems: 'center',
         justifyContent: 'center',
-        height: '56@vs',
+        paddingVertical: '10@vs',
         marginBottom: Metrics.safeBottomPadding,
     },
     icBag: {
@@ -91,8 +91,5 @@ const styles = ScaledSheet.create({
         position: 'absolute',
         left: 0,
         top: 0,
-    },
-    smallView: {
-        width: '200@s',
     },
 });

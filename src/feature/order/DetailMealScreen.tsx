@@ -15,7 +15,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
 import { toLocalStringTime } from 'utilities/format';
-import { sumAmount } from 'utilities/helper';
+import { sumAmount, sumTotalAmount } from 'utilities/helper';
 import { staticValue } from 'utilities/staticData';
 import ButtonCart from './components/ButtonCart';
 import OrderItem from './components/OrderItem';
@@ -54,10 +54,7 @@ const DetailMealScreen = (props: any) => {
         subDishes: subDishDetail,
     });
     const numOrder = createDate ? findIdStore?.mainDish?.amount : 1;
-    let totalNum = useRef(0).current;
-    cartOrder?.dishes?.forEach(async (rating: any) => {
-        totalNum += rating?.totalAmount;
-    });
+    const totalNum = sumTotalAmount(cartOrder);
 
     const newAmountOrder = createDate ? totalNum + amountValue - findIdStore?.totalAmount : totalNum + amountValue;
     const goToSaveOrder = () => {
@@ -83,10 +80,9 @@ const DetailMealScreen = (props: any) => {
                               subDishes: subDishDetail,
                           },
                       ],
-                      coupons: [],
                   }
                 : {};
-        dispatch(updateCartOrder(paramOrder));
+        dispatch(updateCartOrder({ ...paramOrder, coupons: cartOrder?.coupons }));
         goBack();
     };
     return (
@@ -121,7 +117,7 @@ const DetailMealScreen = (props: any) => {
                     </TouchableOpacity>
                 </View>
                 {newAmountOrder > staticValue.MAX_ORDER && (
-                    <StyledText i18nText={'order.canNotAdd'} customStyle={styles.quantityErr} />
+                    <StyledText i18nText={'order.errorMaxOrder'} customStyle={styles.quantityErr} />
                 )}
             </View>
             <ButtonCart
