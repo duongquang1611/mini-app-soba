@@ -23,7 +23,7 @@ const CouponTab = (props: CouponTabProps) => {
     const { couponsCanUse, couponsUsed } = coupon;
 
     const goToDetail = (item: any) => {
-        navigate(COUPON_ROUTE.DETAIL_COUPON, { item, status, handleUseCoupon, cartOrder });
+        navigate(COUPON_ROUTE.DETAIL_COUPON, { item, status, handleUseCoupon, cartOrder: cartListCouponOrder });
     };
     const renderItem = ({ item }: any) => {
         return (
@@ -33,7 +33,7 @@ const CouponTab = (props: CouponTabProps) => {
                 goToDetail={goToDetail}
                 cartOrder={cartListCouponOrder}
                 handleUseCoupon={() => {
-                    handleUseCoupon(item);
+                    handleUseCoupon?.(item);
                 }}
             />
         );
