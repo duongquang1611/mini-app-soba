@@ -60,7 +60,7 @@ const MobileOrderScreen = () => {
             <StyledKeyboardAware>
                 <View style={styles.body}>
                     <View style={styles.qrView}>
-                        <QRCode value={JSON.stringify(saveOrder)} size={180} />
+                        {/* <QRCode value={JSON.stringify(saveOrder)} size={180} /> */}
                         <StyledButton title={'注文編集'} onPress={edit} customStyle={styles.buttonSave} />
                         <StyledButton
                             isNormal={true}

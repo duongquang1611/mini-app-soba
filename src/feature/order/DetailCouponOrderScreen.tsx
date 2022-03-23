@@ -9,7 +9,7 @@ import { ImageBackground, View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 
 const DetailCouponOrderScreen = (props: any) => {
-    const { canUse } = props?.route?.params;
+    const { canUse } = props?.route?.params || {};
     const useCoupon = () => null;
     return (
         <View style={styles.container}>

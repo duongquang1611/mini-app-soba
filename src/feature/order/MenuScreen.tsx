@@ -16,7 +16,7 @@ import { FlatList } from 'react-native-gesture-handler';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
 import { logger } from 'utilities/helper';
-import { MODAL_ID, staticValue, stepGuide } from 'utilities/staticData';
+import { MenuType, MODAL_ID, staticValue, stepGuide } from 'utilities/staticData';
 import ButtonCart from './components/ButtonCart';
 import ListViewSelect from './components/ListViewSelect';
 import ModalDetailMenu from './components/ModalDetailMenu';
@@ -40,7 +40,7 @@ const ItemMenu = (props: any) => {
                 source={{ uri: props?.item?.thumbnail }}
                 style={[styles.image, { borderColor: num > 0 ? Themes.COLORS.primary : Themes.COLORS.white }]}
             >
-                <StyledText originValue={props?.item?.title} customStyle={styles.name} />
+                <StyledText originValue={props?.item?.title} numberOfLines={1} customStyle={styles.name} />
                 {num > 0 && isSetting ? <StyledIcon source={Images.icons.tick} size={20} /> : null}
                 {num && !isSetting ? (
                     <View style={styles.numberChooseView}>
@@ -85,12 +85,15 @@ const MenuScreen = () => {
         numOrder += rating?.totalAmount;
     });
     const { resource } = store.getState();
-    const { categories, menu } = resource?.resource?.data;
+    const { categories, menu } = resource?.resource?.data || {};
+    const listEnableCategory = categories?.filter((item: any) => item?.status === MenuType.ENABLE);
     const modalize = ModalizeManager();
     const [menuList, setMenu] = useState(menu);
-    const [category, setCategory] = useState<any>();
-    const [listSubCategory, setListSubCategory] = useState<any>([]);
-    const [recommendSelected, setRecommendSelected] = useState(null);
+    const [category, setCategory] = useState<any>(listEnableCategory?.[0]?.id);
+    const [listSubCategory, setListSubCategory] = useState<any>(
+        listEnableCategory?.[0]?.subCategories?.filter((item: any) => item?.status === MenuType.ENABLE),
+    );
+    const [recommendSelected, setRecommendSelected] = useState(listSubCategory?.[0]?.id);
 
     useEffect(() => {
         getMenuList();
@@ -99,7 +102,7 @@ const MenuScreen = () => {
     const getMenuList = async () => {
         try {
             const res = await getMenu();
-            setMenu(res?.data);
+            setMenu(res?.data?.filter((item: any) => item?.status === MenuType.ENABLE));
         } catch (error) {
             logger(error);
             AlertMessage(error);
@@ -107,8 +110,9 @@ const MenuScreen = () => {
     };
     const onPressCategory = (item: any) => {
         setCategory(item.id);
-        setListSubCategory(item.subCategories);
-        setRecommendSelected(null);
+        const newListCategory = item?.subCategories?.filter((item: any) => item?.status === MenuType.ENABLE);
+        setListSubCategory(newListCategory);
+        setRecommendSelected(newListCategory?.[0]?.id);
     };
     const onPressRecommend = (item: any) => {
         setRecommendSelected(item.id);
@@ -169,7 +173,12 @@ const MenuScreen = () => {
                 largeTitleHeader
             />
             <View style={styles.categoryContainer}>
-                <ListViewSelect onPressCategory={onPressCategory} data={categories} category={category} isCategory />
+                <ListViewSelect
+                    onPressCategory={onPressCategory}
+                    data={categories?.filter((item: any) => item?.status === MenuType.ENABLE)}
+                    category={category}
+                    isCategory
+                />
             </View>
             {listSubCategory?.length > 0 && (
                 <View style={styles.recommendContainer}>
@@ -198,7 +207,7 @@ const MenuScreen = () => {
                 />
             </View>
             <ButtonCart
-                checkDisable={numOrder > staticValue.MAX_ORDER}
+                checkDisable={numOrder > staticValue.MAX_ORDER || numOrder <= 0}
                 goToSaveOrder={gotoCart}
                 amountValue={numOrder}
                 numOrder={numOrder}
@@ -315,10 +324,10 @@ const styles = ScaledSheet.create({
         marginVertical: '10@vs',
     },
     image: {
-        width: (Metrics.screenWidth - scale(60)) / 2,
-        height: (Metrics.screenWidth - scale(60)) / 2,
-        backgroundColor: Themes.COLORS.gray,
-        margin: '10@s',
+        width: (Metrics.screenWidth - scale(50)) / 2,
+        height: (Metrics.screenWidth - scale(50)) / 2,
+        backgroundColor: Themes.COLORS.white,
+        margin: '5@s',
         justifyContent: 'space-between',
         alignItems: 'flex-end',
         flexDirection: 'row',
@@ -326,6 +335,7 @@ const styles = ScaledSheet.create({
         paddingHorizontal: '6@s',
         borderWidth: 3,
         borderRadius: 5,
+        overflow: 'hidden',
     },
     secondaryView: {
         backgroundColor: Themes.COLORS.secondary,

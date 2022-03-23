@@ -16,7 +16,7 @@ import { scale, ScaledSheet } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
 import { toLocalStringTime } from 'utilities/format';
 import { sumAmount } from 'utilities/helper';
-import { dataFakeDetailMeal, staticValue } from 'utilities/staticData';
+import { staticValue } from 'utilities/staticData';
 import ButtonCart from './components/ButtonCart';
 import OrderItem from './components/OrderItem';
 
@@ -25,9 +25,9 @@ const DetailMealScreen = (props: any) => {
     const { saveOrder } = useSelector((state: RootState) => state.order);
     const findIdStore = isNew ? null : saveOrder?.dishes?.find((item: any) => item.createDate === createDate);
     const [num, setNum] = useState(findIdStore?.mainDish?.amount || 1);
-    const [dish, setDish] = useState(dataFakeDetailMeal);
+    const [dish, setDish] = useState<any>({});
 
-    const { title, description, dishOptions } = dish;
+    const { title, description, dishOptions } = dish || {};
     const [subDishDetail, setSubDishDetail] = useState(findIdStore?.subDishes || []);
     const dispatch = useDispatch();
     useEffect(() => {
@@ -90,11 +90,11 @@ const DetailMealScreen = (props: any) => {
     };
     return (
         <View style={styles.container}>
-            <StyledHeaderImage images={dish?.images} content={title} />
+            <StyledHeaderImage images={dish?.images || []} content={title} />
             <StyledKeyboardAware style={styles.container}>
                 <StyledText originValue={description} isBlack customStyle={styles.contentText} />
                 <View style={styles.body}>
-                    {dishOptions.map((item, index) => (
+                    {dishOptions?.map((item: any, index: number) => (
                         <OrderItem
                             key={index}
                             data={item}
@@ -128,6 +128,7 @@ const DetailMealScreen = (props: any) => {
                 goToSaveOrder={goToSaveOrder}
                 amountValue={amountValue}
                 numOrder={newAmountOrder}
+                createDate
             />
         </View>
     );

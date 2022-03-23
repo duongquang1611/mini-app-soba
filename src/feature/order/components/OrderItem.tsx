@@ -11,28 +11,19 @@ export const OrderChild = (data: any) => {
     const { isRequired, item, subDishDetail, setSubDishDetail } = data;
     const { dish } = item;
     const checkOrder = subDishDetail?.find((item: any) => item.subDishId === dish.id)?.amount;
-    let checkChoose = isRequired;
-    if (checkOrder === 1) {
-        checkChoose = true;
-    } else checkChoose = false;
-    const [choose, setChoose] = useState(checkChoose);
-
     const onChoose = () => {
-        const chooseValue = choose;
-        setChoose(!chooseValue);
-        if (chooseValue) {
-            setSubDishDetail(subDishDetail.filter((item: any) => item.subDishId !== dish.id));
-        } else {
-            setSubDishDetail([
-                ...subDishDetail,
-                {
-                    subDishId: dish.id,
-                    title: dish.title,
-                    selected: 1,
-                    amount: 1,
-                },
-            ]);
-        }
+        setSubDishDetail(
+            checkOrder
+                ? []
+                : [
+                      {
+                          subDishId: dish.id,
+                          title: dish.title,
+                          selected: 1,
+                          amount: 1,
+                      },
+                  ],
+        );
     };
     return (
         <View style={styles.containerItem}>
@@ -46,8 +37,8 @@ export const OrderChild = (data: any) => {
                     style={[
                         styles.chooseButton,
                         {
-                            backgroundColor: choose ? Themes.COLORS.primary : Themes.COLORS.white,
-                            borderColor: choose ? Themes.COLORS.sweetPink : Themes.COLORS.silver,
+                            backgroundColor: checkOrder ? Themes.COLORS.primary : Themes.COLORS.white,
+                            borderColor: checkOrder ? Themes.COLORS.sweetPink : Themes.COLORS.silver,
                         },
                     ]}
                 />
@@ -56,9 +47,9 @@ export const OrderChild = (data: any) => {
     );
 };
 const OrderChildCanChange = (data: any) => {
-    const { isRequired, item, subDishDetail, setSubDishDetail } = data;
+    const { item, subDishDetail, setSubDishDetail } = data || {};
     const { dish } = item;
-    const checkOrder = subDishDetail?.find((item: any) => item.subDishId === dish.id)?.amount;
+    const checkOrder = subDishDetail?.find((item: any) => item?.subDishId === dish.id)?.amount;
     const checkChoose = checkOrder || 0;
     const [num, setNum] = useState(checkChoose);
     const onChoose = (numChoose: number) => {
@@ -81,9 +72,8 @@ const OrderChildCanChange = (data: any) => {
         onChoose(numChoose);
     };
     const minus = () => {
-        if ((isRequired && num > 1) || (!isRequired && num > 0)) {
+        if (num > 0) {
             const numChoose = num - 1;
-
             onChoose(numChoose);
         }
     };
@@ -119,7 +109,7 @@ const OrderChildCanChange = (data: any) => {
 };
 const OrderItem = (data: any) => {
     const { subDishDetail, setSubDishDetail } = data;
-    const { subDish, title, isRequired, type } = data?.data;
+    const { subDish, title, isRequired, type } = data?.data || {};
     return (
         <View style={[styles.containerItem, { paddingHorizontal: scale(20) }]}>
             <StyledText originValue={title} customStyle={styles.name} />

@@ -133,6 +133,7 @@ export default {
         goToEdit: '商品編集',
         canNotAdd: '最大10つアイテムを選択してください',
         rangeCart: 'カートに {{amountValue}}アイテム追加 （注文数：{{numOrder}}/{{max}}アイテム）',
+        rangeEditCart: 'カートの変更\n（注文数：{{numOrder}}/{{max}}アイテム）',
         cartTitle: 'カート',
         cancelOrder: '注文キャンセル',
         numOrder: '注文数',
@@ -262,6 +263,7 @@ export default {
         usedDate: '使用日付：{{date}}',
         btnUse: 'クーポン選択',
         btnUnUse: '選択している',
+        btnInCart: 'カート追加した',
         noExpiredDate: '有効期間：無制限',
         detail: {
             id: 'クーポンＩＤ：{{id}}',

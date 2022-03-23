@@ -934,6 +934,10 @@ export enum CouponDishType {
     SETTING_DISCOUNT = 1,
     FREE = 2,
 }
+export enum MenuType {
+    ENABLE = 1,
+    DISABLE = 0,
+}
 export const dataFakeDishCoupon = [
     { title: 'mon 1', image: exLinkImageSquare, id: 1 },
     { title: 'mon 2', image: exLinkImageSquare, id: 2 },

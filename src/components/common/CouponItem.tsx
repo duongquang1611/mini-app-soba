@@ -1,3 +1,4 @@
+import { store } from 'app-redux/store';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
@@ -9,19 +10,24 @@ import { DateType, MemberCouponStatus, staticValue } from 'utilities/staticData'
 import DashView from './DashView';
 
 export const CouponItem = (props: any) => {
+    const { order } = store.getState();
     const { item = {}, canUse, handleUseCoupon, goToDetail, cartOrder } = props;
     const { coupon, usedDate, status, id } = item;
-    const { image, title, startDate, endDate, dateType } = coupon;
+    const { image, title, startDate, endDate, dateType } = coupon || {};
     const isInCart = useMemo(() => status === MemberCouponStatus.IN_CART, [status]);
     const checkChoose = cartOrder?.coupons?.find((itemCart: any) => itemCart?.id === id);
     const handleGoToDetail = () => {
         goToDetail?.(item);
     };
+    const checkCouponInStore = order?.saveOrder?.coupons?.find((itemSaveOrder: any) => itemSaveOrder?.id === item?.id);
     const getIcon = () => {
-        if (isInCart) return Images.icons.nextGrey;
+        if (checkCouponInStore) return Images.icons.nextGrey;
         return !checkChoose ? Images.icons.next : Images.icons.nextSecondary;
     };
-
+    const getText = () => {
+        if (checkCouponInStore) return 'coupon.btnInCart';
+        return !checkChoose ? 'coupon.btnUse' : 'coupon.btnUnUse';
+    };
     return (
         <>
             <StyledTouchable customStyle={styles.couponItem} onPress={handleGoToDetail}>
@@ -45,12 +51,12 @@ export const CouponItem = (props: any) => {
                                 hitSlop={staticValue.DEFAULT_HIT_SLOP}
                             >
                                 <StyledText
-                                    i18nText={!checkChoose ? 'coupon.btnUse' : 'coupon.btnUnUse'}
+                                    i18nText={getText()}
                                     customStyle={[
                                         styles.useText,
                                         { color: !checkChoose ? Themes.COLORS.primary : Themes.COLORS.secondary },
                                     ]}
-                                    disabled={isInCart}
+                                    disabled={checkCouponInStore}
                                 />
                                 <StyledIcon source={getIcon()} size={20} />
                             </StyledTouchable>
