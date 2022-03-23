@@ -112,6 +112,7 @@ const SendOTP: FunctionComponent = ({ route }: any) => {
                     ...user,
                     verifiedCode: code,
                 });
+                dispatch(userInfoActions.getUserInfoRequest(response?.data?.token));
                 dispatch(userInfoActions.updateToken(response.data));
             } else if (isResetPassword) {
                 handleConfirmResetPassword();

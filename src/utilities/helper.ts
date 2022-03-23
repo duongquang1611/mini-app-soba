@@ -6,7 +6,7 @@ import codePush from 'react-native-code-push';
 import Config from 'react-native-config';
 import Picker from 'react-native-picker';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
-import { staticValue } from './staticData';
+import { CouponDishType, DiscountType, staticValue } from './staticData';
 
 export const isAndroid = Platform.OS === 'android';
 
@@ -113,10 +113,34 @@ export const checkPasswordMatch = ({ password, confirmPassword }: any) => {
     }
     return '';
 };
+
 export const sumTotalAmount = (order: any) => {
     let numOrder = order?.coupons?.length;
     order?.dishes?.forEach(async (rating: any) => {
         numOrder += rating?.totalAmount;
     });
     return numOrder;
+};
+
+export const generateCouponQR = (coupon: any, user: any) => {
+    const isFullOrder = Number(coupon?.discountType === DiscountType.ALL_ORDER);
+    const isFree = Number(coupon?.couponDish?.[0]?.type === CouponDishType.FREE);
+    const price = (isFullOrder ? coupon?.discount : coupon?.couponDish?.[0]?.discount) || 0;
+
+    const qrData = {
+        user: {
+            id: user?.member?.id,
+            name: user?.member?.fullName,
+        },
+        coupon: {
+            id: coupon?.stringId,
+            isFullOrder,
+            foodId: coupon?.couponDish?.[0]?.id,
+            isFree,
+            price,
+            isAccounted: coupon?.isAccounted || 0,
+        },
+    };
+
+    return JSON.stringify(qrData);
 };

@@ -41,7 +41,7 @@ const DetailCouponScreen = (props: any) => {
     const checkChooseInOrderMobile = order.mobileOrder?.coupons?.find(
         (itemCoupon: any) => itemCoupon?.id === idMemberCoupon,
     );
-    const disabledUse = isInCartAPI || checkChooseInOrderMobile || checkChooseInCart || disabled;
+    const disabledUse = isInCartAPI || checkChooseInCart || disabled;
     const checkChooseTemp = cartOrderState?.coupons?.find((itemCouponCart: any) => item?.id === itemCouponCart?.id);
     const [isChooseTemp, setIsChooseTemp] = useState(!!checkChooseTemp);
 
@@ -105,6 +105,7 @@ const DetailCouponScreen = (props: any) => {
                 </>
             )}
             <CouponContentView canUse={canUse} data={detailMemberCoupon} />
+
             {canUse === TabCouponStatus.CAN_USE && (
                 <View style={styles.buttonView}>
                     <StyledButton
