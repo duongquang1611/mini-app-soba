@@ -71,7 +71,13 @@ const MobileOrderScreen = () => {
                     <AmountOrder />
                     <View style={styles.qrView}>
                         {mobileOrder?.dishes?.map((item: any, index: number) => (
-                            <OrderItemCart canChange={false} key={index} data={item} onCancel={cancelItem} />
+                            <OrderItemCart
+                                canChange={false}
+                                key={index}
+                                data={item}
+                                onCancel={cancelItem}
+                                notGoDetail={true}
+                            />
                         ))}
                     </View>
                     <View style={styles.contentView}>

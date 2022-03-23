@@ -15,6 +15,7 @@ import { ImageBackground, Text, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
+import { sumTotalAmount } from 'utilities/helper';
 import { MenuType, MODAL_ID, staticValue, stepGuide } from 'utilities/staticData';
 import ButtonCart from './components/ButtonCart';
 import ListViewSelect from './components/ListViewSelect';
@@ -79,11 +80,7 @@ const ModalGuide = () => (
 const MenuScreen = () => {
     const { cartOrder } = useSelector((state: RootState) => state.order);
     const { dishes } = cartOrder || [];
-    let numOrder = useRef(0).current;
-    cartOrder?.dishes?.forEach(async (rating: any) => {
-        numOrder += rating?.totalAmount;
-    });
-    numOrder += cartOrder?.coupons?.length || 0;
+    const numOrder = sumTotalAmount(cartOrder);
     const { resource } = store.getState();
     const { categories, menu } = resource?.resource?.data || {};
     const listEnableCategory = categories?.filter((item: any) => item?.status === MenuType.ENABLE);
