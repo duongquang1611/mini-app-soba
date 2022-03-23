@@ -24,9 +24,9 @@ import UpLoadAvatar from './components/UpLoadAvatar';
 
 const REGISTER_DEFAULT_FORM = __DEV__
     ? {
-          email: 'yeuquaimo002@love.you',
-          password: '12345678',
-          confirmPassword: '12345678',
+          email: 'yeuquaimo003@love.you',
+          password: 'loveyou3000',
+          confirmPassword: 'loveyou3000',
           fullName: 'DuongQuang',
           birthday: '2022-03-14T05:53:39.027Z',
           gender: '1',

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { RootState } from 'app-redux/hooks';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
@@ -21,7 +22,7 @@ export const CouponItem = (props: any) => {
     const checkChooseInOrderMobile = order.mobileOrder?.coupons?.find(
         (itemCoupon: any) => itemCoupon?.id === idMemberCoupon,
     );
-    const disabledUse = isInCartAPI || checkChooseInOrderMobile || checkChooseInCart;
+    const disabledUse = isInCartAPI || checkChooseInCart;
 
     const handleGoToDetail = () => {
         goToDetail?.(item);
