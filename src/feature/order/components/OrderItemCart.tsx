@@ -1,3 +1,5 @@
+import { RootState } from 'app-redux/hooks';
+import { updateCartOrder } from 'app-redux/slices/orderSlice';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledText, StyledTouchable } from 'components/base';
@@ -7,12 +9,15 @@ import { navigate } from 'navigation/NavigationService';
 import React from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
+import { useDispatch, useSelector } from 'react-redux';
 import { staticValue } from 'utilities/staticData';
 
 const OrderItemCart = (props: any) => {
     const { subDishes, createDate, mainDish, totalAmount } = props?.data;
+    const { cartOrder } = useSelector((state: RootState) => state.order);
+    const dispatch = useDispatch();
     const { name, image } = mainDish;
-    const { cancelItem, canChange, goDetailMenu, cartOrder, setCartOrder } = props;
+    const { cancelItem, canChange, goDetailMenu } = props;
     const num = mainDish?.amount;
     const updateOrder = (currentNum: number) => {
         const cartDishOrder = cartOrder?.dishes || [];
@@ -25,7 +30,7 @@ const OrderItemCart = (props: any) => {
         };
         const newCartDishOrder = [...cartDishOrder];
         newCartDishOrder?.splice(findIndexDishEdit, 1, orderChange);
-        setCartOrder({ ...cartOrder, dishes: newCartDishOrder });
+        dispatch(updateCartOrder({ ...cartOrder, dishes: newCartDishOrder }));
     };
     const add = () => {
         const currentNum = num;

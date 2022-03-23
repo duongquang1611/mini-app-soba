@@ -1,30 +1,66 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { RootState } from 'app-redux/hooks';
-import { clearSaveOrder, updateSaveOrder } from 'app-redux/slices/orderSlice';
+import { clearSaveOrder, updateCartOrder, updateSaveOrder } from 'app-redux/slices/orderSlice';
+import { store } from 'app-redux/store';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledIcon, StyledText, StyledTouchable } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
+import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeader from 'components/common/StyledHeader';
 import { orderBy } from 'lodash';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
-import { navigate } from 'navigation/NavigationService';
+import { goBack, navigate } from 'navigation/NavigationService';
 import React, { useEffect, useRef, useState } from 'react';
 import { View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { ScaledSheet } from 'react-native-size-matters';
+import { ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
-import { POPUP_TYPE, staticValue } from 'utilities/staticData';
+import { DiscountType, MODAL_ID, POPUP_TYPE, staticValue } from 'utilities/staticData';
 import AmountOrder from './components/AmountOrder';
 import OrderItemCart from './components/OrderItemCart';
+import ModalCoupon from './components/ModalCoupon';
 
 const ItemCoupon = (props: any) => {
-    const { cancelCouponItem } = props;
-    const { coupon, id, choose } = props?.data;
+    const { cancelCouponItem, data } = props;
+    const { cartOrder } = store.getState()?.order || {};
+    const { coupon, id, choose } = data || {};
+    const modalize = ModalizeManager();
+    const dispatch = useDispatch();
+    const numberItemListCoupon = 3;
+    const updateCouponsCart = (coupons: any) => {
+        dispatch(updateCartOrder({ ...cartOrder, coupons }));
+        modalize.dismiss(MODAL_ID.APPLY_COUPON);
+    };
+    const showApplyCoupon = (listCouponsModal: any, listCouponsNoChange: any) => {
+        modalize.show(
+            MODAL_ID.APPLY_COUPON,
+            <ModalCoupon
+                listCouponsModal={listCouponsModal}
+                cartListCouponAll={listCouponsNoChange}
+                updateCouponsCart={updateCouponsCart}
+            />,
+            {
+                modalHeight: verticalScale(470),
+                scrollViewProps: {
+                    contentContainerStyle: { flexGrow: 1 },
+                },
+            },
+            { title: 'order.applyCoupon' },
+        );
+    };
+    const onPressCoupon = () => {
+        const listCouponsModal = coupon?.discountType === DiscountType.EACH_DISH ? [data] : [];
+        const listCouponsNoChange = cartOrder?.coupons?.filter((item: any) => item?.id !== id);
+        if (listCouponsModal.length > 0) {
+            showApplyCoupon(listCouponsModal, listCouponsNoChange);
+        }
+    };
+
     return (
-        <View style={styles.rowItem}>
+        <StyledTouchable onPress={onPressCoupon} customStyle={styles.rowItem}>
             <StyledIcon source={Images.icons.coupon} size={20} customStyle={styles.icCoupon} />
             <View style={styles.nameCoupon}>
                 <StyledText originValue={coupon?.title} isBlack />
@@ -44,42 +80,42 @@ const ItemCoupon = (props: any) => {
             <StyledTouchable onPress={() => cancelCouponItem(id)}>
                 <StyledIcon source={Images.icons.cancel} size={15} />
             </StyledTouchable>
-        </View>
+        </StyledTouchable>
     );
 };
 const CartScreen = () => {
-    const { saveOrder } = useSelector((state: RootState) => state.order);
+    const { saveOrder, cartOrder } = useSelector((state: RootState) => state.order);
     const dispatch = useDispatch();
-    const [cartOrder, setCartOrder] = useState(saveOrder);
     let num = useRef(0).current;
     cartOrder?.dishes?.forEach(async (rating: any) => {
         num += rating?.totalAmount;
     });
     num += cartOrder?.coupons?.length || 0;
     useEffect(() => {
-        setCartOrder(saveOrder);
+        dispatch(updateCartOrder(saveOrder));
     }, [saveOrder]);
     const cancelCart = () => {
+        const onClear = () => {
+            dispatch(clearSaveOrder());
+            goBack();
+        };
         AlertMessage('order.deleteCart', {
             textButtonCancel: 'common.cancel',
-            onOk: () => dispatch(clearSaveOrder()),
+            onOk: onClear,
             type: POPUP_TYPE.CONFIRM,
         });
     };
 
     const cancelItem = (createDate: string) => {
         const newDishes = cartOrder?.dishes?.filter((item: any) => item?.createDate !== createDate);
-        setCartOrder({ ...cartOrder, dishes: newDishes });
+        dispatch(updateCartOrder({ ...cartOrder, dishes: newDishes }));
     };
     const cancelCouponItem = (id: number) => {
         const newCoupons = cartOrder?.coupons?.filter((item: any) => item?.id !== id);
-        setCartOrder({ ...cartOrder, coupons: newCoupons });
-    };
-    const confirm = () => {
-        navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.CART);
+        dispatch(updateCartOrder({ ...cartOrder, coupons: newCoupons }));
     };
     const goToCouponList = () => {
-        navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.COUPON_LIST, { cartOrder, setCartOrder });
+        navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.COUPON_LIST);
     };
     const createORCode = () => {
         updateCart();
@@ -102,14 +138,18 @@ const CartScreen = () => {
                                 key={index}
                                 data={item}
                                 canChange={true}
-                                setCartOrder={setCartOrder}
                             />
                         ))}
                     </View>
                     <View style={styles.contentView}>
                         <StyledText customStyle={styles.title} i18nText={'coupon.title'} />
                         {cartOrder?.coupons?.map((item: any, index: number) => (
-                            <ItemCoupon key={index} data={item} cancelCouponItem={cancelCouponItem} />
+                            <ItemCoupon
+                                key={index}
+                                data={item}
+                                cancelCouponItem={cancelCouponItem}
+                                // onPressCoupon={onPressCoupon}
+                            />
                         ))}
                         {cartOrder?.coupons?.length === 0 && (
                             <View style={styles.noCouponView}>
@@ -128,14 +168,14 @@ const CartScreen = () => {
                         )}
 
                         <StyledButton
-                            disabled={num > staticValue.MAX_ORDER}
+                            disabled={num <= 0 || num > staticValue.MAX_ORDER}
                             title={'order.qrButton'}
                             onPress={createORCode}
                         />
                         <StyledButton
                             isNormal={true}
                             title={'order.editCartButton'}
-                            onPress={confirm}
+                            onPress={goBack}
                             customStyle={styles.productAddition}
                             customStyleText={styles.textProduct}
                         />

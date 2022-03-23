@@ -95,7 +95,7 @@ const ListViewSelect = (props: ListViewSelectProps) => {
     }, [category]);
     return (
         <View style={styles.categoryContainer}>
-            {data.length > 1 ? (
+            {data.length > 0 ? (
                 <View style={styles.row}>
                     {showIconLeft ? (
                         <View style={[styles.buttonCategory, styles.buttonPre]}>

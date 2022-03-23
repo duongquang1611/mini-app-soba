@@ -13,12 +13,12 @@ import { TabCouponStatus } from 'utilities/staticData';
 
 interface CouponTabProps {
     status?: TabCouponStatus;
-    cartOrder?: any;
+    cartListCouponOrder?: any;
     handleUseCoupon?: any;
 }
 
 const CouponTab = (props: CouponTabProps) => {
-    const { status, cartOrder, handleUseCoupon } = props;
+    const { status, handleUseCoupon, cartListCouponOrder } = props;
     const { coupon } = useSelector((state: RootState) => state);
     const { couponsCanUse, couponsUsed } = coupon;
 
@@ -31,7 +31,7 @@ const CouponTab = (props: CouponTabProps) => {
                 canUse={status}
                 item={item}
                 goToDetail={goToDetail}
-                cartOrder={cartOrder}
+                cartOrder={cartListCouponOrder}
                 handleUseCoupon={() => {
                     handleUseCoupon(item);
                 }}

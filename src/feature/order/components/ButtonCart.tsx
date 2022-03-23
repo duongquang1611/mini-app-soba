@@ -8,7 +8,7 @@ import { ScaledSheet } from 'react-native-size-matters';
 import { staticValue } from 'utilities/staticData';
 
 const ButtonCart = (props: any) => {
-    const { checkDisable, goToSaveOrder, amountValue, numOrder, isMenu } = props;
+    const { checkDisable, goToSaveOrder, amountValue, numOrder, isMenu, createDate } = props;
     return (
         <StyledTouchable
             customStyle={[
@@ -46,7 +46,7 @@ const ButtonCart = (props: any) => {
                     </View>
                 ) : (
                     <StyledText
-                        i18nText={'order.rangeCart'}
+                        i18nText={createDate ? 'order.rangeEditCart' : 'order.rangeCart'}
                         i18nParams={{
                             amountValue,
                             numOrder,
@@ -81,7 +81,8 @@ const styles = ScaledSheet.create({
         textAlign: 'center',
     },
     rowCart: {
-        flexDirection: 'row',
+        width: '100%',
+        alignItems: 'center',
     },
     rectangle: {
         width: '45@s',
