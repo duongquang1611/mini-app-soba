@@ -2,25 +2,29 @@
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText } from 'components/base';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { scale, ScaledSheet } from 'react-native-size-matters';
-import { staticValue } from 'utilities/staticData';
+import { MenuType, staticValue } from 'utilities/staticData';
 
 export const OrderChild = (data: any) => {
     const { isRequired, item, subDishDetail, setSubDishDetail, dishOptionsId } = data;
-    const { dish } = item;
-    const checkChooseItem = subDishDetail?.find((item: any) => item.subDishId === dish.id)?.amount;
-    const checkChooseDishOption = subDishDetail?.find((item: any) => item.dishOptionsId === dishOptionsId)?.amount;
-    const listSubNotChange = subDishDetail?.filter((item: any) => item.dishOptionsId !== dishOptionsId);
+    const { dish, id } = item;
+    const checkChooseItem = subDishDetail?.find((item: any) => item.subDishId === id)?.amount;
+    const checkChooseDishOption = subDishDetail?.find(
+        (item: any) => item?.dishOption?.dishOptionsId === dishOptionsId,
+    )?.amount;
+    const listSubNotChange = subDishDetail?.filter((item: any) => item?.dishOption?.dishOptionsId !== dishOptionsId);
     const onChoose = () => {
         if (!checkChooseDishOption || !checkChooseItem) {
             setSubDishDetail([
                 ...listSubNotChange,
                 {
-                    dishOptionsId,
-                    subDishId: dish.id,
+                    dishOption: {
+                        dishOptionsId,
+                    },
+                    subDishId: id,
                     title: dish.title,
                     selected: 1,
                     amount: 1,
@@ -33,7 +37,7 @@ export const OrderChild = (data: any) => {
             <View style={styles.itemRow}>
                 <View style={styles.itemRow}>
                     <StyledImage source={{ uri: dish.thumbnail }} customStyle={styles.imgItem} />
-                    <StyledText originValue={dish.title} customStyle={styles.nameOrder} />
+                    <StyledText numberOfLines={1} originValue={dish.title} customStyle={styles.nameOrder} />
                 </View>
                 <TouchableOpacity
                     onPress={onChoose}
@@ -50,21 +54,27 @@ export const OrderChild = (data: any) => {
     );
 };
 const OrderChildCanChange = (data: any) => {
-    const { item, subDishDetail, setSubDishDetail } = data || {};
+    const { item, subDishDetail, setSubDishDetail, dishOptionsId } = data || {};
     const { dish } = item;
-    const checkOrder = subDishDetail?.find((item: any) => item?.subDishId === dish.id)?.amount;
-    const checkChoose = checkOrder || 0;
+    const checkChoose = subDishDetail?.find((itemSub: any) => itemSub?.subDishId === item?.id)?.amount || 0;
     const [num, setNum] = useState(checkChoose);
+    useEffect(() => {
+        setNum(checkChoose);
+    }, [checkChoose]);
     const onChoose = (numChoose: number) => {
         setNum(numChoose);
         if (numChoose === 0) {
-            setSubDishDetail(subDishDetail.filter((item: any) => item.subDishId !== dish.id));
+            setSubDishDetail(subDishDetail.filter((itemSub: any) => itemSub.subDishId !== item.id));
         } else {
             setSubDishDetail([
-                ...subDishDetail.filter((item: any) => item.subDishId !== dish.id),
+                ...subDishDetail.filter((itemSub: any) => itemSub.subDishId !== item.id),
                 {
-                    subDishId: dish.id,
+                    dishOption: {
+                        dishOptionsId,
+                    },
+                    subDishId: item?.id,
                     title: dish.title,
+                    selected: 1,
                     amount: numChoose,
                 },
             ]);
@@ -85,7 +95,7 @@ const OrderChildCanChange = (data: any) => {
             <View style={styles.itemRow}>
                 <View style={styles.itemRow}>
                     <StyledImage source={{ uri: dish.thumbnail }} customStyle={styles.imgItem} />
-                    <StyledText originValue={dish.title} customStyle={styles.nameOrder} />
+                    <StyledText numberOfLines={1} originValue={dish.title} customStyle={styles.nameOrder} />
                 </View>
                 <View style={styles.itemRow}>
                     <TouchableOpacity onPress={minus} disabled={num === 0}>
@@ -115,7 +125,14 @@ const OrderItem = (data: any) => {
     const { subDish, title, isRequired, type, id } = data?.data || {};
     return (
         <View style={[styles.containerItem, { paddingHorizontal: scale(20) }]}>
-            <StyledText originValue={title} customStyle={styles.name} />
+            <View style={styles.itemRow}>
+                <StyledText originValue={title} customStyle={styles.name} />
+                {isRequired === MenuType.ENABLE && (
+                    <View style={styles.require}>
+                        <StyledText i18nText={'order.require'} customStyle={styles.requireText} />
+                    </View>
+                )}
+            </View>
             {subDish?.map((item: any, index: number) => (
                 <View key={index}>
                     {type === 1 ? (
@@ -134,6 +151,7 @@ const OrderItem = (data: any) => {
                             isRequired={isRequired}
                             subDishDetail={subDishDetail}
                             setSubDishDetail={setSubDishDetail}
+                            dishOptionsId={id}
                         />
                     )}
                 </View>
@@ -171,16 +189,26 @@ const styles = ScaledSheet.create({
     },
     nameOrder: {
         fontWeight: 'bold',
+        width: '170@s',
     },
     name: {
         fontSize: '16@ms0.3',
         fontWeight: 'bold',
         color: Themes.COLORS.primary,
         marginVertical: '10@vs',
+        width: '80%',
     },
     quantitySideText: {
-        marginHorizontal: '5@s',
-        width: '15@s',
+        width: '30@s',
         textAlign: 'center',
+    },
+    require: {
+        padding: '5@s',
+        backgroundColor: Themes.COLORS.headerBackground,
+        borderRadius: 10,
+    },
+    requireText: {
+        color: Themes.COLORS.primary,
+        fontSize: '12@ms0.3',
     },
 });

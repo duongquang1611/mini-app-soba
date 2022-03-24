@@ -6,7 +6,7 @@ import codePush from 'react-native-code-push';
 import Config from 'react-native-config';
 import Picker from 'react-native-picker';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
-import { CouponDishType, DiscountType, staticValue } from './staticData';
+import { CouponDishType, MenuType, DiscountType, staticValue } from './staticData';
 
 export const isAndroid = Platform.OS === 'android';
 
@@ -143,4 +143,23 @@ export const generateCouponQR = (coupon: any, user: any) => {
     };
 
     return JSON.stringify(qrData);
+};
+export const getDefaultSubDish = (dishOptions: any) => {
+    const subDishDefault: Array<any> = [];
+    dishOptions?.forEach(async (itemDish: any) => {
+        itemDish?.subDish?.forEach(async (itemSub: any) => {
+            if (itemSub?.default === MenuType.ENABLE) {
+                subDishDefault.push({
+                    dishOption: {
+                        dishOptionsId: itemDish?.id,
+                    },
+                    subDishId: itemSub?.id,
+                    title: itemSub?.dish?.title,
+                    selected: 1,
+                    amount: 1,
+                });
+            }
+        });
+    });
+    return subDishDefault;
 };

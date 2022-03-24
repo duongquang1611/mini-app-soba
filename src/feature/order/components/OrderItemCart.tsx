@@ -56,14 +56,14 @@ const OrderItemCart = (props: any) => {
 
     return (
         <StyledTouchable disabled={notGoDetail} onPress={goToDetail}>
+            {cancelItem && (
+                <StyledTouchable customStyle={styles.buttonCancel} onPress={() => cancelItem(createDate)}>
+                    <StyledIcon source={Images.icons.cancel} size={17} customStyle={styles.icCancel} />
+                </StyledTouchable>
+            )}
             <View style={styles.orderItemView}>
                 <StyledIcon source={{ uri: image }} size={70} />
                 <View style={styles.orderTextView}>
-                    {cancelItem && (
-                        <StyledTouchable onPress={() => cancelItem(createDate)}>
-                            <StyledIcon source={Images.icons.cancel} size={17} customStyle={styles.icCancel} />
-                        </StyledTouchable>
-                    )}
                     <StyledText originValue={name} customStyle={styles.titleOrder} />
                     {subDishes?.map((item: any, index: number) => (
                         <View key={index} style={styles.rowSub}>
@@ -190,5 +190,12 @@ const styles = ScaledSheet.create({
     },
     buttonName: {
         alignSelf: 'flex-start',
+    },
+    buttonCancel: {
+        position: 'absolute',
+        right: '15@s',
+        width: '20@s',
+        height: '20@vs',
+        zIndex: 2,
     },
 });
