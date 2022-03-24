@@ -8,6 +8,8 @@ import { Themes } from 'assets/themes';
 import { StyledIcon, StyledText } from 'components/base';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeaderImage from 'components/common/StyledHeaderImage';
+import { SIZE_LIMIT } from 'hooks/usePaging';
+import { add } from 'lodash';
 import { goBack } from 'navigation/NavigationService';
 import React, { useEffect, useRef, useState } from 'react';
 import { View } from 'react-native';
@@ -15,11 +17,21 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
 import { toLocalStringTime } from 'utilities/format';
-import { sumAmount, sumTotalAmount } from 'utilities/helper';
-import { staticValue } from 'utilities/staticData';
+import { getDefaultSubDish, sumAmount, sumTotalAmount } from 'utilities/helper';
+import { MenuType, staticValue } from 'utilities/staticData';
 import ButtonCart from './components/ButtonCart';
 import OrderItem from './components/OrderItem';
 
+const checkDisable = (dishOptions: any, subDishDetail: any) => {
+    let result = false;
+    dishOptions?.forEach((item: any) => {
+        if (item?.isRequired === MenuType.ENABLE) {
+            const findSub = subDishDetail?.find((itemSub: any) => itemSub?.dishOption?.dishOptionsId === item?.id);
+            if (!findSub) result = true;
+        }
+    });
+    return result;
+};
 const DetailMealScreen = (props: any) => {
     const { id, isNew, createDate } = props?.route?.params;
     const { cartOrder } = useSelector((state: RootState) => state.order);
@@ -28,11 +40,19 @@ const DetailMealScreen = (props: any) => {
     const [dish, setDish] = useState<any>({});
 
     const { title, description, dishOptions } = dish || {};
-    const [subDishDetail, setSubDishDetail] = useState(findIdStore?.subDishes || []);
+    const [subDishDetail, setSubDishDetail] = useState<any>(
+        !createDate ? getDefaultSubDish(dishOptions) : findIdStore?.subDishes || [],
+    );
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (!createDate) setSubDishDetail(getDefaultSubDish(dishOptions));
+    }, [dishOptions]);
+
     useEffect(() => {
         getMenuDetail();
     }, []);
+
     const getMenuDetail = async () => {
         try {
             const res = await getDish(id);
@@ -45,7 +65,7 @@ const DetailMealScreen = (props: any) => {
         setNum(num + 1);
     };
     const minus = () => {
-        if (num > 0) setNum(num - 1);
+        if (num > 1) setNum(num - 1);
     };
     const amountValue = sumAmount({
         mainDish: {
@@ -113,7 +133,13 @@ const DetailMealScreen = (props: any) => {
                     </TouchableOpacity>
                     <StyledText originValue={`${num}`} customStyle={styles.quantityText} />
                     <TouchableOpacity onPress={add} disabled={num >= staticValue.MAX_ORDER}>
-                        <StyledIcon source={Images.icons.add} size={20} />
+                        <StyledIcon
+                            source={Images.icons.add}
+                            size={20}
+                            customStyle={{
+                                tintColor: num >= staticValue.MAX_ORDER ? Themes.COLORS.silver : Themes.COLORS.primary,
+                            }}
+                        />
                     </TouchableOpacity>
                 </View>
                 {newAmountOrder > staticValue.MAX_ORDER && (
@@ -121,11 +147,11 @@ const DetailMealScreen = (props: any) => {
                 )}
             </View>
             <ButtonCart
-                checkDisable={numOrder === 0 || newAmountOrder > staticValue.MAX_ORDER}
+                checkDisable={checkDisable(dishOptions, subDishDetail)}
                 goToSaveOrder={goToSaveOrder}
                 amountValue={amountValue}
                 numOrder={newAmountOrder}
-                createDate
+                createDate={createDate}
             />
         </View>
     );
@@ -261,7 +287,7 @@ const styles = ScaledSheet.create({
         marginHorizontal: '20@s',
         marginVertical: 20,
         fontSize: '28@ms0.3',
-        lineHeight: '30@vs',
+        lineHeight: '35@vs',
     },
     quantityErr: {
         color: Themes.COLORS.primary,

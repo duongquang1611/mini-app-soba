@@ -41,6 +41,10 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>UIAppFonts</key>
+	<array>
+		<string>ZenMaruGothic-Bold.ttf</string>
+	</array>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>App need the location permission</string>
 	<key>NSLocationAlwaysUsageDescription</key>

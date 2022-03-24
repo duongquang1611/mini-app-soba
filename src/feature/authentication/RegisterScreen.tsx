@@ -178,7 +178,7 @@ const RegisTerScreen = () => {
                         handleConfirm={(text: string) => setValueForm('birthday', text)}
                     />
                     <LabelInput
-                        label={t('authen.labelRegister.birthday')}
+                        label={'authen.labelRegister.gender'}
                         customStyle={styles.titleGender}
                         containerStyle={styles.containerStyleTitleGender}
                     />

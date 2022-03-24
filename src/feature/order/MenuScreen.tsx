@@ -197,13 +197,12 @@ const MenuScreen = () => {
                     )}
                 />
             </View>
-            <ButtonCart
-                checkDisable={numOrder > staticValue.MAX_ORDER || numOrder <= 0}
-                goToSaveOrder={gotoCart}
-                amountValue={numOrder}
-                numOrder={numOrder}
-                isMenu
-            />
+            {numOrder > staticValue.MAX_ORDER && (
+                <View style={styles.quantityErrView}>
+                    <StyledText i18nText={'order.errorMaxOrder'} customStyle={styles.quantityErr} />
+                </View>
+            )}
+            {numOrder > 0 && <ButtonCart goToSaveOrder={gotoCart} amountValue={numOrder} numOrder={numOrder} isMenu />}
         </View>
     );
 };
@@ -364,7 +363,7 @@ const styles = ScaledSheet.create({
         fontSize: '16@ms0.3',
     },
     numberChoose: {
-        color: Themes.COLORS.white,
+        color: Themes.COLORS.headerBackground,
     },
     numberChooseView: {
         position: 'absolute',
@@ -394,4 +393,14 @@ const styles = ScaledSheet.create({
         tintColor: Themes.COLORS.secondary,
     },
     imageBorder: { borderRadius: 5 },
+    quantityErr: {
+        color: Themes.COLORS.primary,
+    },
+    quantityErrView: {
+        color: Themes.COLORS.white,
+        padding: '10@vs',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+    },
 });

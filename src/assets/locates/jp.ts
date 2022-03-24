@@ -94,6 +94,7 @@ export default {
             cancel: 'キャンセル',
             note: 'アカウントを持っている方？',
             login: 'ログイン',
+            skipOrderDefault: 'スキップ',
         },
         hintRegister: {
             email: 'メールを入力してください',
@@ -132,7 +133,7 @@ export default {
         editCouponTitle: '商品編集',
         goToEdit: '商品編集',
         canNotAdd: '最大10つアイテムを選択してください',
-        rangeCart: 'カートに {{amountValue}}アイテム追加 （注文数：{{numOrder}}/{{max}}アイテム）',
+        rangeCart: 'カートに {{amountValue}}アイテム追加\n（注文数：{{numOrder}}/{{max}}アイテム）',
         rangeEditCart: 'カートの変更\n（注文数：{{numOrder}}/{{max}}アイテム）',
         cartTitle: 'カート',
         cancelOrder: '注文キャンセル',
@@ -146,6 +147,7 @@ export default {
         editCartButton: '商品追加',
         couponUse: '適用する商品: {{dish}}',
         allDish: '適用する商品: もりそば',
+        require: '必須',
     },
     setting: {
         editProfileTitle: 'マイページ編集',

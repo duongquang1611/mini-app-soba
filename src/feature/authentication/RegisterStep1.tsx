@@ -1,148 +1,170 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+import { getMenu } from 'api/modules/api-app/order';
+import { RootState } from 'app-redux/hooks';
 import { updateGlobalData } from 'app-redux/slices/globalDataSlice';
+import { store } from 'app-redux/store';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
-import { StyledButton, StyledIcon, StyledImage, StyledText } from 'components/base';
-import LinearView from 'components/common/LinearView';
+import { StyledButton, StyledIcon, StyledText, StyledTouchable } from 'components/base';
+import AlertMessage from 'components/base/AlertMessage';
+import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledHeader from 'components/common/StyledHeader';
-import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
+import ListViewSelect from 'feature/order/components/ListViewSelect';
+import ModalDetailMenu from 'feature/order/components/ModalDetailMenu';
+import { ORDER_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useEffect, useRef, useState } from 'react';
-import { View } from 'react-native';
-import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
-import { scale, ScaledSheet } from 'react-native-size-matters';
-import { useDispatch } from 'react-redux';
+import { ImageBackground, View } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
+import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
+import { useDispatch, useSelector } from 'react-redux';
+import { sumTotalAmount } from 'utilities/helper';
+import { MenuType, MODAL_ID, staticValue } from 'utilities/staticData';
 
-const list = [
-    { category: 'all' },
-    { category: 'category1' },
-    { category: 'category2' },
-    { category: 'category3' },
-    { category: 'category4' },
-];
-const listImage = [
-    {
-        id: 1,
-        img: 'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
-    },
-    {
-        id: 2,
-        img: 'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
-    },
-    {
-        id: 3,
-        img: 'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
-    },
-    {
-        id: 4,
-        img: 'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
-    },
-    {
-        id: 5,
-        img: 'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
-    },
-    {
-        id: 6,
-        img: 'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
-    },
-    {
-        id: 7,
-        img: 'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
-    },
-    {
-        id: 8,
-        img: 'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
-    },
-];
-const RegisterStep1 = () => {
-    const dispatch = useDispatch();
-    const goToRegis = () => {
-        navigate(AUTHENTICATE_ROUTE.REGISTER_STEP_2);
-    };
-    const [categoryRef, setCategoryRef] = useState(useRef());
-    const [category, setCategory] = useState('');
-    const [selected, setSelected] = useState();
-    const onPressCategory = (item: any) => {
-        setCategory(item.category);
-        setSelected(item.category);
-    };
-
-    useEffect(() => {
-        dispatch(updateGlobalData({ viewedOrderDefault: true }));
-    }, []);
-
-    const renderCategoryItems = ({ item, index }: any) => {
-        return (
-            <LinearView
-                style={[styles.linear, { borderWidth: selected === item.category ? 0 : 1 }]}
-                colors={selected === item.category ? ['#DF2115', '#A61F17'] : ['#fff', '#fff']}
-            >
-                <TouchableOpacity
-                    style={[styles.tabCategoryHeader]}
-                    disabled={selected === item.category}
-                    activeOpacity={0.7}
-                    onPress={() => {
-                        onPressCategory(item);
-                    }}
-                >
-                    <StyledText
-                        customStyle={{
-                            fontWeight: 'bold',
-                            color: selected === item.category ? Themes.COLORS.white : Themes.COLORS.primary,
-                            fontSize: 14,
-                        }}
-                        originValue={item.category}
-                    />
-                </TouchableOpacity>
-            </LinearView>
-        );
+const ItemMenu = (props: any) => {
+    const { orderDefault } = useSelector((state: RootState) => state.order);
+    let num = useRef(0).current;
+    orderDefault?.dishes
+        ?.filter((itemOrder: any) => itemOrder?.mainDish?.id === props?.item?.id)
+        ?.forEach(async (rating: any) => {
+            num += rating?.mainDish?.amount;
+        });
+    const isSetting = false;
+    const gotoNew = () => {
+        navigate(ORDER_ROUTE.DETAIL_MEAL, { id: props?.item?.id, isNew: true });
     };
     return (
-        <View style={styles.container}>
-            <StyledHeader title={'register'} hasBack={false} />
-            <View style={styles.contentView}>
-                <StyledIcon source={Images.icons.selected} size={15} />
-                <StyledText customStyle={styles.contentText} i18nText={'text'} />
-            </View>
-            <View style={styles.categoryContainer}>
-                {list.length > 1 ? (
-                    <FlatList
-                        // ref={(e) => {
-                        //     setCategoryRef(e);
-                        // }}
-                        horizontal
-                        data={list}
-                        showsHorizontalScrollIndicator={false}
-                        renderItem={renderCategoryItems}
-                        // ListFooterComponent={this.renderFooter}
-                        // refreshing={refreshing}
-                        // onEndReached={this.fetchMoreDay}
-                        onEndReachedThreshold={0.1}
-                        keyExtractor={(item) => item.category}
-                        // onScrollToIndexFailed={(info) => {
-                        //     wait(500).then(() => {
-                        //         categoryRef?.scrollToIndex({
-                        //             index: info.index,
-                        //             animated: true,
-                        //         });
-                        //     });
-                        // }}
-                    />
+        <StyledTouchable onPress={num > 0 ? props?.goToDetailModal : gotoNew}>
+            <ImageBackground
+                imageStyle={styles.imageBorder}
+                source={{ uri: props?.item?.thumbnail }}
+                style={[styles.image, { borderColor: num > 0 ? Themes.COLORS.primary : Themes.COLORS.white }]}
+            >
+                <StyledText originValue={props?.item?.title} numberOfLines={1} customStyle={styles.name} />
+                {num > 0 && isSetting ? <StyledIcon source={Images.icons.tick} size={20} /> : null}
+                {num && !isSetting ? (
+                    <View style={styles.numberChooseView}>
+                        <StyledText originValue={`${num}`} customStyle={styles.numberChoose} />
+                    </View>
                 ) : null}
+            </ImageBackground>
+        </StyledTouchable>
+    );
+};
+const RegisterStep1 = () => {
+    const { orderDefault } = useSelector((state: RootState) => state.order);
+    const { dishes } = orderDefault || [];
+    const numOrder = sumTotalAmount(orderDefault);
+    const { resource } = store.getState();
+    const { categories, menu } = resource?.resource?.data || {};
+    const listEnableCategory = categories?.filter((item: any) => item?.status === MenuType.ENABLE);
+    const modalize = ModalizeManager();
+    const [menuList, setMenu] = useState(menu);
+    const [category, setCategory] = useState<any>(listEnableCategory?.[0]?.id);
+    const [listSubCategory, setListSubCategory] = useState<any>(
+        listEnableCategory?.[0]?.subCategories?.filter((item: any) => item?.status === MenuType.ENABLE),
+    );
+    const [recommendSelected, setRecommendSelected] = useState(listSubCategory?.[0]?.id);
+    const dispatch = useDispatch();
+    useEffect(() => {
+        getMenuList();
+        dispatch(updateGlobalData({ viewedOrderDefault: true }));
+    }, []);
+    const getMenuList = async () => {
+        try {
+            const res = await getMenu();
+            setMenu(res?.data?.filter((item: any) => item?.status === MenuType.ENABLE));
+        } catch (error) {
+            console.log('getMenuList -> error', error);
+            AlertMessage(error);
+        }
+    };
+    const onPressCategory = (item: any) => {
+        setCategory(item.id);
+        const newListCategory = item?.subCategories?.filter((item: any) => item?.status === MenuType.ENABLE);
+        setListSubCategory(newListCategory);
+        setRecommendSelected(newListCategory?.[0]?.id);
+    };
+    const onPressRecommend = (item: any) => {
+        setRecommendSelected(item.id);
+    };
+    const numberItemListCoupon = dishes?.length;
+    const showModalDetail = (id: any) => {
+        modalize.show(
+            MODAL_ID.DETAIL_MENU,
+            <ModalDetailMenu dishes={dishes} id={id} closeModal={() => modalize.dismiss(MODAL_ID.DETAIL_MENU)} />,
+            {
+                modalHeight: verticalScale(numberItemListCoupon * 60 + 300),
+                scrollViewProps: {
+                    contentContainerStyle: { flexGrow: 1 },
+                },
+            },
+            { title: 'order.editCouponTitle' },
+        );
+    };
+
+    const menuFilter = menuList.filter((item: any) => {
+        if (category) {
+            const check = item?.category?.find((itemCate: any) => itemCate?.categoryId === category);
+            if (!check?.categoryId) return false;
+        }
+        if (recommendSelected) {
+            const check = item?.subCategory?.find(
+                (itemSubCate: any) => itemSubCate?.subCategoryId === recommendSelected,
+            );
+            if (!check?.subCategoryId) return false;
+        }
+        return item;
+    });
+    const skipOrderDefault = () => {
+        dispatch(updateGlobalData({ skipOrderDefault: true }));
+    };
+
+    return (
+        <View style={styles.container}>
+            <StyledHeader
+                onPressRight={skipOrderDefault}
+                title={'setting.orderDefaultTitle'}
+                textRight={'authen.register.skipOrderDefault'}
+                hasBack={false}
+                largeTitleHeader
+            />
+            <View style={styles.categoryContainer}>
+                <ListViewSelect
+                    onPressCategory={onPressCategory}
+                    data={categories?.filter((item: any) => item?.status === MenuType.ENABLE)}
+                    category={category}
+                    isCategory
+                />
             </View>
+            {listSubCategory?.length > 0 && (
+                <View style={styles.recommendContainer}>
+                    <ListViewSelect
+                        recommendSelected={recommendSelected}
+                        onPressCategory={onPressRecommend}
+                        data={listSubCategory}
+                        category={category}
+                    />
+                </View>
+            )}
+
             <View style={styles.body}>
                 <FlatList
                     numColumns={2}
-                    data={listImage}
+                    data={menuFilter}
                     keyExtractor={(item) => item.id}
                     renderItem={({ item }) => (
-                        <TouchableOpacity key={item.id}>
-                            <StyledImage source={{ uri: item.img }} customStyle={styles.image} />
-                        </TouchableOpacity>
+                        <ItemMenu goToDetailModal={() => showModalDetail(item?.id)} key={item.id} item={item} />
                     )}
                 />
-                <StyledButton title={'confirm'} onPress={goToRegis} customStyle={styles.buttonSave} />
+            </View>
+            {numOrder > staticValue.MAX_ORDER && (
+                <View style={styles.quantityErrView}>
+                    <StyledText i18nText={'order.errorMaxOrder'} customStyle={styles.quantityErr} />
+                </View>
+            )}
+            <View style={styles.buttonSave}>
+                <StyledButton title={'common.save'} />
             </View>
         </View>
     );
@@ -153,18 +175,28 @@ export default RegisterStep1;
 const styles = ScaledSheet.create({
     container: {
         flex: 1,
+        backgroundColor: Themes.COLORS.lightGray,
     },
     categoryContainer: {
-        paddingHorizontal: '20@s',
+        marginTop: '10@vs',
+        paddingVertical: '10@vs',
+        backgroundColor: Themes.COLORS.white,
+    },
+    recommendContainer: {
+        backgroundColor: Themes.COLORS.white,
+        marginTop: '-5@vs',
     },
     body: {
         justifyContent: 'center',
-        alignItems: 'center',
         flex: 1,
-        marginHorizontal: '10@s',
+        backgroundColor: Themes.COLORS.white,
+        paddingHorizontal: '10@s',
     },
     buttonSave: {
-        marginVertical: '20@vs',
+        paddingVertical: '20@vs',
+        marginBottom: Metrics.safeBottomPadding,
+        backgroundColor: Themes.COLORS.white,
+        alignItems: 'center',
     },
     contentView: {
         width: '100%',
@@ -176,22 +208,164 @@ const styles = ScaledSheet.create({
     linear: {
         paddingVertical: '8@vs',
         borderRadius: 5,
-        width: '90@s',
-        marginRight: '5@s',
+        marginRight: '15@s',
         borderColor: Themes.COLORS.primary,
-        marginTop: '10@vs',
     },
     contentText: {
         width: '90%',
+    },
+    title: {
+        color: Themes.COLORS.secondary,
+        fontWeight: 'bold',
+        fontSize: '16@ms0.3',
+    },
+    contentName: {
+        fontWeight: 'normal',
+        color: Themes.COLORS.textSecondary,
+        fontSize: '14@ms0.3',
+    },
+    containView: {
+        width: '200@s',
+        justifyContent: 'space-between',
+    },
+    icStep: {
+        marginRight: '20@s',
+    },
+    numberView: {
+        width: '24@s',
+        height: '24@s',
+        backgroundColor: Themes.COLORS.primary,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 24,
+    },
+    numberValue: {
+        color: Themes.COLORS.white,
+    },
+    rowStep: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: '100%',
+        paddingHorizontal: '20@s',
+        height: '100@s',
+        justifyContent: 'space-between',
+    },
+    line1: {
+        position: 'absolute',
+        width: 2,
+        height: '55@s',
+        left: '32@s',
+        top: '70@s',
+    },
+    line2: {
+        position: 'absolute',
+        width: 2,
+        height: '55@s',
+        left: '32@s',
+        top: '175@s',
     },
     tabCategoryHeader: {
         alignItems: 'center',
         width: '90@s',
     },
+    tabRecommendHeader: {
+        alignItems: 'center',
+        marginRight: '10@s',
+        padding: '10@vs',
+        paddingVertical: '8@vs',
+        borderWidth: 1,
+        borderColor: Themes.COLORS.secondary,
+        borderRadius: 50,
+        marginVertical: '10@vs',
+    },
     image: {
-        width: (Metrics.screenWidth - scale(60)) / 2,
-        height: (Metrics.screenWidth - scale(60)) / 2,
-        backgroundColor: Themes.COLORS.gray,
-        margin: '10@s',
+        width: (Metrics.screenWidth - scale(50)) / 2,
+        height: (Metrics.screenWidth - scale(50)) / 2,
+        backgroundColor: Themes.COLORS.white,
+        margin: '5@s',
+        justifyContent: 'space-between',
+        alignItems: 'flex-end',
+        flexDirection: 'row',
+        paddingBottom: '15@vs',
+        paddingHorizontal: '6@s',
+        borderWidth: 3,
+        borderRadius: 5,
+        overflow: 'hidden',
+    },
+    secondaryView: {
+        backgroundColor: Themes.COLORS.secondary,
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '56@vs',
+    },
+    rectangle: {
+        width: '45@s',
+        height: '45@s',
+        position: 'absolute',
+        left: 0,
+        top: 0,
+    },
+    icBag: {
+        marginTop: '3@vs',
+        marginLeft: '2@s',
+    },
+    textCart: {
+        fontWeight: 'bold',
+        color: Themes.COLORS.white,
+        fontSize: '18@ms0.3',
+    },
+    rowCart: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    saveView: {
+        width: '100%',
+        backgroundColor: Themes.COLORS.white,
+    },
+    name: {
+        color: Themes.COLORS.white,
+        fontWeight: 'bold',
+        fontSize: '16@ms0.3',
+    },
+    numberChoose: {
+        color: Themes.COLORS.headerBackground,
+    },
+    numberChooseView: {
+        position: 'absolute',
+        top: '10@s',
+        right: '10@s',
+        width: '20@s',
+        height: '20@s',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: Themes.COLORS.primary,
+        borderRadius: 15,
+    },
+    row: {
+        flexDirection: 'row',
+        width: '100%',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    buttonCategory: {
+        width: '20@s',
+        alignItems: 'center',
+    },
+    buttonPre: {
+        transform: [{ rotate: '180deg' }],
+    },
+    buttonSubCategory: {
+        tintColor: Themes.COLORS.secondary,
+    },
+    imageBorder: { borderRadius: 5 },
+    quantityErr: {
+        color: Themes.COLORS.primary,
+    },
+    quantityErrView: {
+        color: Themes.COLORS.white,
+        padding: '10@vs',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
     },
 });
