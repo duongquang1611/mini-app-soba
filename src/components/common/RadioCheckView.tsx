@@ -3,23 +3,18 @@ import React from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 
-const RadioCheckView = ({ check, customStyle, customContentStyle }: any) => {
+const RadioCheckView = ({ check, customStyle }: any) => {
     return (
         <View
             style={[
                 styles.container,
-                { borderColor: check ? Themes.COLORS.opacityPrimary(0.4) : Themes.COLORS.silver },
+                {
+                    borderColor: check ? Themes.COLORS.borderCheckbox : Themes.COLORS.silver,
+                    backgroundColor: check ? Themes.COLORS.primary : Themes.COLORS.transparent,
+                },
                 customStyle,
             ]}
-        >
-            <View
-                style={[
-                    styles.content,
-                    { backgroundColor: check ? Themes.COLORS.primary : Themes.COLORS.transparent },
-                    customContentStyle,
-                ]}
-            />
-        </View>
+        />
     );
 };
 
@@ -29,14 +24,9 @@ const styles = ScaledSheet.create({
         height: '20@s',
         borderRadius: 100,
         overflow: 'hidden',
-        borderWidth: 1.5,
+        borderWidth: 2,
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    content: {
-        width: '100%',
-        height: '100%',
-        borderRadius: 50,
     },
 });
 

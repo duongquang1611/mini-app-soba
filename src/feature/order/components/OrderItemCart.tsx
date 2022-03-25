@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { staticValue } from 'utilities/staticData';
 
 const OrderItemCart = (props: any) => {
-    const { subDishes, createDate, mainDish, totalAmount } = props?.data;
+    const { subDishes, createDate, mainDish, totalAmount, hideDashView = false } = props?.data;
     const { cartOrder } = useSelector((state: RootState) => state.order);
     const dispatch = useDispatch();
     const { name, image } = mainDish;
@@ -112,7 +112,7 @@ const OrderItemCart = (props: any) => {
                     </View>
                 </View>
             </View>
-            <DashView />
+            {!hideDashView && <DashView />}
         </StyledTouchable>
     );
 };

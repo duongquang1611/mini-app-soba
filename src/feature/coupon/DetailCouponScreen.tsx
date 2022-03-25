@@ -14,10 +14,11 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
+import { commonStyles } from 'utilities/commonStyles';
 import { MemberCouponStatus, TabCouponStatus } from 'utilities/staticData';
 import CouponContentView from './components/CouponContentView';
 
-const SeparatorView = () => <View style={styles.separator} />;
+const SeparatorView = ({ customStyle }: any) => <View style={[styles.separator, customStyle]} />;
 
 const DetailCouponScreen = (props: any) => {
     const { order } = useSelector((state: RootState) => state);
@@ -36,12 +37,12 @@ const DetailCouponScreen = (props: any) => {
     const [detailMemberCoupon, setDetailMemberCoupon] = useState(item);
     const { coupon, id: idMemberCoupon, status: statusCoupon } = detailMemberCoupon;
     const { title = '' } = coupon || {};
-    const isInCartAPI = useMemo(() => item?.status === MemberCouponStatus.IN_CART, [statusCoupon]);
+    const isInCartAPI = useMemo(() => statusCoupon === MemberCouponStatus.IN_CART, [statusCoupon]);
     const checkChooseInCart = order.cartOrder?.coupons?.find((itemCoupon: any) => itemCoupon?.id === idMemberCoupon);
     const checkChooseInOrderMobile = order.mobileOrder?.coupons?.find(
         (itemCoupon: any) => itemCoupon?.id === idMemberCoupon,
     );
-    const disabledUse = isInCartAPI || checkChooseInCart || disabled;
+    const disabledUse = checkChooseInCart || disabled;
     const checkChooseTemp = cartOrderState?.coupons?.find((itemCouponCart: any) => item?.id === itemCouponCart?.id);
     const [isChooseTemp, setIsChooseTemp] = useState(!!checkChooseTemp);
 
@@ -107,7 +108,7 @@ const DetailCouponScreen = (props: any) => {
             <CouponContentView canUse={canUse} data={detailMemberCoupon} />
 
             {canUse === TabCouponStatus.CAN_USE && (
-                <View style={styles.buttonView}>
+                <View style={[styles.wrapButton, commonStyles.shadow]}>
                     <StyledButton
                         title={
                             titleButton || disabledUse
@@ -123,8 +124,10 @@ const DetailCouponScreen = (props: any) => {
                                 ? [Themes.COLORS.secondary, Themes.COLORS.secondary]
                                 : Themes.COLORS.defaultLinear
                         }
-                        // customStyle={!!findInCart && { co: Themes.COLORS.secondary }}
+                        customStyle={styles.btnUse}
                     />
+                    <SeparatorView customStyle={styles.separatorBottom} />
+                    <View style={styles.bottomView} />
                 </View>
             )}
         </View>
@@ -142,15 +145,25 @@ const styles = ScaledSheet.create({
         fontWeight: 'bold',
         color: Themes.COLORS.secondary,
     },
-    buttonView: {
+    wrapButton: {
         backgroundColor: Themes.COLORS.white,
-        paddingVertical: '10@vs',
         alignItems: 'center',
-        paddingBottom: Metrics.safeBottomPadding,
+    },
+    btnUse: {
+        marginTop: '20@vs',
+        marginBottom: '25@vs',
     },
     separator: {
         height: '10@vs',
         width: '100%',
         backgroundColor: Themes.COLORS.backgroundPrimary,
+    },
+    separatorBottom: {
+        height: '5@vs',
+    },
+    bottomView: {
+        height: '30@vs',
+        width: '100%',
+        backgroundColor: Themes.COLORS.white,
     },
 });

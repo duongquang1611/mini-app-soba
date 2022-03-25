@@ -1,6 +1,5 @@
 import { RootState } from 'app-redux/hooks';
 import { updateCartOrder } from 'app-redux/slices/orderSlice';
-import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledButton } from 'components/base';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
@@ -11,6 +10,7 @@ import React, { useState } from 'react';
 import { View } from 'react-native';
 import { ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
+import { commonStyles } from 'utilities/commonStyles';
 import { DiscountType, MODAL_ID, staticValue, TabCouponStatus } from 'utilities/staticData';
 import ModalCoupon from './components/ModalCoupon';
 
@@ -84,8 +84,10 @@ const CouponListScreen = () => {
                 cartListCouponOrder={cartListCouponOrder}
                 handleUseCoupon={handleUseCoupon}
             />
-            <View style={styles.buttonView}>
+            <View style={[styles.buttonView, commonStyles.shadow]}>
                 <StyledButton title={'order.useCoupon'} onPress={saveCartCoupon} customStyle={styles.buttonSave} />
+                <View style={commonStyles.separatorBottom} />
+                <View style={commonStyles.bottomView} />
             </View>
         </View>
     );
@@ -104,10 +106,11 @@ const styles = ScaledSheet.create({
         backgroundColor: Themes.COLORS.white,
         alignItems: 'center',
         width: '100%',
-        marginVertical: '10@vs',
-        marginBottom: Metrics.safeBottomPadding,
     },
-    buttonSave: {},
+    buttonSave: {
+        marginTop: '22.5@vs',
+        marginBottom: '22.5@vs',
+    },
     couponName: {
         fontWeight: 'bold',
         fontSize: '16@ms0.3',

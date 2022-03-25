@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { RootState } from 'app-redux/hooks';
 import Images from 'assets/images';
+import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
-import { ScaledSheet } from 'react-native-size-matters';
+import { scale, ScaledSheet } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
 import { formatDate, YYYYMMDD } from 'utilities/format';
 import { DateType, MemberCouponStatus, staticValue } from 'utilities/staticData';
@@ -13,7 +14,7 @@ import DashView from './DashView';
 
 export const CouponItem = (props: any) => {
     const { order } = useSelector((state: RootState) => state);
-    const { item = {}, canUse, handleUseCoupon, goToDetail, cartOrder: cartOrderState } = props;
+    const { item = {}, canUse, handleUseCoupon, goToDetail, cartOrder: cartOrderState, isTabCoupon = false } = props;
     const { coupon, usedDate, status, id: idMemberCoupon } = item;
     const { image, title, startDate, endDate, dateType } = coupon;
     const isInCartAPI = useMemo(() => status === MemberCouponStatus.IN_CART, [status]);
@@ -22,7 +23,7 @@ export const CouponItem = (props: any) => {
     const checkChooseInOrderMobile = order.mobileOrder?.coupons?.find(
         (itemCoupon: any) => itemCoupon?.id === idMemberCoupon,
     );
-    const disabledUse = isInCartAPI || checkChooseInCart;
+    const disabledUse = checkChooseInCart;
 
     const handleGoToDetail = () => {
         goToDetail?.(item);
@@ -35,7 +36,7 @@ export const CouponItem = (props: any) => {
 
     const getText = () => {
         if (disabledUse) return 'coupon.btnInCart';
-        return checkChooseTemp ? 'coupon.btnUnUse' : 'coupon.btnUse';
+        return checkChooseTemp ? 'coupon.btnUnUse' : isTabCoupon ? 'coupon.btnUseTabCoupon' : 'coupon.btnUse';
     };
 
     return (
@@ -44,7 +45,7 @@ export const CouponItem = (props: any) => {
                 <StyledImage source={{ uri: image }} customStyle={styles.couponImage} />
                 <View style={styles.content}>
                     <StyledText originValue={title} numberOfLines={2} customStyle={styles.title} />
-                    <View style={styles.row}>
+                    <View style={styles.rowView}>
                         <StyledText
                             i18nText={dateType === DateType.EXPIRED_DATE ? 'coupon.rangeDate' : 'coupon.noExpiredDate'}
                             i18nParams={{
@@ -53,7 +54,7 @@ export const CouponItem = (props: any) => {
                             }}
                             customStyle={styles.time}
                         />
-                        {!!canUse && (
+                        {canUse ? (
                             <StyledTouchable
                                 customStyle={styles.btnCanUSe}
                                 onPress={handleUseCoupon}
@@ -72,6 +73,16 @@ export const CouponItem = (props: any) => {
                                 />
                                 <StyledIcon source={getIcon()} size={20} />
                             </StyledTouchable>
+                        ) : (
+                            !usedDate && (
+                                <View style={styles.btnCanUSe}>
+                                    <StyledText
+                                        i18nText={'coupon.btnExpired'}
+                                        customStyle={styles.textDisable}
+                                        disabled={true}
+                                    />
+                                </View>
+                            )
                         )}
                     </View>
                 </View>
@@ -104,31 +115,38 @@ const styles = ScaledSheet.create({
         flexShrink: 1,
         justifyContent: 'space-between',
         marginLeft: '10@s',
+        flexGrow: 1,
     },
     time: {
         fontSize: '11@ms0.3',
         color: Themes.COLORS.silver,
+        letterSpacing: '-0.5@ms0.3',
+        maxWidth: Metrics.screenWidth - scale(195),
     },
     useText: {
         color: Themes.COLORS.primary,
-        fontWeight: 'bold',
         fontSize: '11@ms0.3',
         marginRight: '2@s',
+    },
+    textDisable: {
+        fontSize: '11@ms0.3',
+        fontWeight: 'bold',
     },
     title: {
         fontSize: '16@ms0.3',
         fontWeight: 'bold',
         color: Themes.COLORS.secondary,
     },
-    row: {
+    rowView: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        width: '100%',
+        marginBottom: '10@vs',
     },
     btnCanUSe: {
         flexDirection: 'row',
         alignItems: 'center',
+        width: 'auto',
     },
     stampUsed: {
         position: 'absolute',

@@ -15,10 +15,11 @@ interface CouponTabProps {
     canUse?: TabCouponStatus;
     cartListCouponOrder?: any;
     handleUseCoupon?: any;
+    isTabCoupon?: boolean;
 }
 
 const CouponTab = (props: CouponTabProps) => {
-    const { canUse, handleUseCoupon, cartListCouponOrder } = props;
+    const { canUse, handleUseCoupon, cartListCouponOrder, isTabCoupon } = props;
     const { coupon } = useSelector((state: RootState) => state);
     const { couponsCanUse, couponsUsed } = coupon;
 
@@ -33,6 +34,7 @@ const CouponTab = (props: CouponTabProps) => {
     const renderItem = ({ item }: any) => {
         return (
             <CouponItem
+                isTabCoupon={isTabCoupon}
                 canUse={canUse}
                 item={item}
                 goToDetail={goToDetail}
@@ -57,11 +59,12 @@ const CouponTab = (props: CouponTabProps) => {
 const styles = ScaledSheet.create({
     container: {
         flex: 1,
+        paddingTop: '10@vs',
     },
     listCoupon: {
-        marginTop: '10@vs',
         backgroundColor: Themes.COLORS.white,
         flexGrow: 1,
+        paddingBottom: '10@vs',
     },
 });
 

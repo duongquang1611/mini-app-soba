@@ -79,6 +79,8 @@ const Images = {
         step2: require('./icon/ic_step_2.png'),
         step3: require('./icon/ic_step_3.png'),
         nextSecondary: require('./icon/next_secondary.png'),
+        tickSquare: require('./icon/ic_tick_square.png'),
+        untickSquare: require('./icon/ic_untick_square.png'),
     },
     photo: {
         defaultImage: require('./photo/img_default_image.png'),

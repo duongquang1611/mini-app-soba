@@ -57,7 +57,7 @@ const CouponContentView = (props: IProps) => {
     } = coupon;
 
     const couponDataQR = useMemo(() => {
-        return generateCouponQR(coupon, user);
+        return generateCouponQR(data, user);
     }, [coupon, user]);
 
     return (
@@ -114,7 +114,7 @@ const CouponContentView = (props: IProps) => {
                             customStyle={styles.textDate}
                         />
                     </View>
-                    <View>
+                    <View style={styles.wrapTextCoupon}>
                         {discountType === DiscountType.ALL_ORDER ? (
                             <StyledText
                                 i18nText={'coupon.detail.discountAllOrder'}
@@ -129,7 +129,7 @@ const CouponContentView = (props: IProps) => {
                             ))
                         )}
                     </View>
-                    <StyledText originValue={description} isBlack />
+                    <StyledText originValue={description} isBlack customStyle={styles.textDescription} />
                 </View>
             </View>
         </WrapComponent>
@@ -146,6 +146,7 @@ const styles = ScaledSheet.create({
         backgroundColor: Themes.COLORS.white,
         marginBottom: '10@vs',
         paddingHorizontal: '20@s',
+        paddingBottom: '15@vs',
         marginVertical: '10@vs',
     },
     body: {
@@ -170,12 +171,12 @@ const styles = ScaledSheet.create({
         fontSize: '16@ms0.3',
         fontWeight: 'bold',
         color: Themes.COLORS.primary,
-        marginVertical: '15@vs',
+        marginBottom: '5@vs',
     },
     img: {
         width: '100%',
         height: '335@vs',
-        marginTop: '10@vs',
+        marginTop: '20@vs',
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 10,
@@ -201,7 +202,7 @@ const styles = ScaledSheet.create({
         alignItems: 'center',
     },
     iconDate: {
-        marginRight: '10@s',
+        marginRight: '8@s',
     },
     textGetCoupon: {
         fontSize: '16@ms0.3',
@@ -228,7 +229,14 @@ const styles = ScaledSheet.create({
     wrapQR: {
         alignSelf: 'center',
         marginTop: '20@vs',
-        marginBottom: '30@vs',
+        marginBottom: '20@vs',
+    },
+    wrapTextCoupon: {
+        marginTop: '10@vs',
+        marginBottom: '15@vs',
+    },
+    textDescription: {
+        lineHeight: '21@vs',
     },
 });
 
