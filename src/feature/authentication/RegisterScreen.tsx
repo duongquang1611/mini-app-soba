@@ -23,7 +23,7 @@ import UpLoadAvatar from './components/UpLoadAvatar';
 
 const REGISTER_DEFAULT_FORM = __DEV__
     ? {
-          email: 'yeuquaimo003@love.you',
+          email: 'yeuquaimo005@love.you',
           password: 'loveyou3000',
           confirmPassword: 'loveyou3000',
           fullName: 'DuongQuang',

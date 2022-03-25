@@ -3,15 +3,11 @@ import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText } from 'components/base';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import { isArray } from 'lodash';
-import React, { useMemo } from 'react';
-import QRCode from 'react-native-qrcode-svg';
+import React from 'react';
 import { ImageBackground, StyleProp, View, ViewStyle } from 'react-native';
-import { scale, ScaledSheet } from 'react-native-size-matters';
+import { ScaledSheet } from 'react-native-size-matters';
 import { formatDate } from 'utilities/format';
 import { CouponDishType, DateType, DiscountType } from 'utilities/staticData';
-import { useSelector } from 'react-redux';
-import { generateCouponQR } from 'utilities/helper';
-import { RootState } from 'app-redux/hooks';
 
 interface IProps {
     canUse?: boolean;
@@ -41,7 +37,6 @@ const WrapComponent = ({ children, isModal, customStyle }: any) => {
 
 const CouponContentView = (props: IProps) => {
     const { customStyle, isModal = false, data = {}, canUse } = props;
-    const { user } = useSelector((state: RootState) => state.userInfo);
     const { coupon = {}, usedDate } = data;
     const {
         title,
@@ -55,10 +50,6 @@ const CouponContentView = (props: IProps) => {
         discount,
         stringId = '',
     } = coupon;
-
-    const couponDataQR = useMemo(() => {
-        return generateCouponQR(data, user);
-    }, [coupon, user]);
 
     return (
         <WrapComponent customStyle={[styles.container, customStyle]} isModal={isModal}>
@@ -93,9 +84,6 @@ const CouponContentView = (props: IProps) => {
                             </View>
                         )}
                     </ImageBackground>
-                    <View style={styles.wrapQR}>
-                        <QRCode value={couponDataQR} size={scale(163)} />
-                    </View>
                     <View style={styles.rowView}>
                         <StyledIcon source={Images.icons.calendar} size={20} customStyle={styles.iconDate} />
                         <StyledText
@@ -181,6 +169,7 @@ const styles = ScaledSheet.create({
         justifyContent: 'center',
         borderRadius: 10,
         overflow: 'hidden',
+        marginBottom: '28@vs',
     },
     transparent: {
         width: '100%',
@@ -225,11 +214,6 @@ const styles = ScaledSheet.create({
         backgroundColor: Themes.COLORS.mischka,
         borderRadius: 10,
         padding: '10@s',
-    },
-    wrapQR: {
-        alignSelf: 'center',
-        marginTop: '20@vs',
-        marginBottom: '20@vs',
     },
     wrapTextCoupon: {
         marginTop: '10@vs',
