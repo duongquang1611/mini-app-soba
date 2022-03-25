@@ -10,7 +10,8 @@ import { navigate } from 'navigation/NavigationService';
 import React, { FunctionComponent, useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Keyboard, View } from 'react-native';
-import { ScaledSheet } from 'react-native-size-matters';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useLogin } from 'utilities/authenticate/AuthenticateService';
 import { EMAIL_MAX_LENGTH, PASSWORD_MAX_LENGTH } from 'utilities/validate';
 import yupValidate from 'utilities/yupValidate';
@@ -32,6 +33,7 @@ const DEFAULT_FORM: any = __DEV__
 const LoginScreen: FunctionComponent = () => {
     const passwordRef = useRef<any>(null);
     const { requestLogin, loading } = useLogin();
+    const insets = useSafeAreaInsets();
 
     const yupSchema = yup.object().shape({
         email: yupValidate.email(),
@@ -60,8 +62,11 @@ const LoginScreen: FunctionComponent = () => {
         <StyledKeyboardAware customStyle={styles.scrollView}>
             <StyledOverlayLoading visible={loading} />
             <View style={styles.header}>
-                <StyledImage source={Images.photo.logo} customStyle={styles.logo} />
-                <StyledIcon source={Images.photo.ptLogin} size={200} customStyle={styles.img} />
+                <StyledImage
+                    source={Images.photo.logo}
+                    customStyle={[styles.logo, { marginTop: insets?.top || verticalScale(10) }]}
+                />
+                <StyledIcon source={Images.photo.ptLogin} size={188} customStyle={styles.img} />
             </View>
             <StyledText customStyle={styles.title} i18nText={'authen.login.buttonLogin'} />
             <View style={styles.body}>
@@ -146,12 +151,12 @@ const styles = ScaledSheet.create({
         color: Themes.COLORS.borderInputError,
     },
     img: {
-        marginTop: '10@vs',
+        position: 'absolute',
+        top: verticalScale(225) - scale(130),
     },
     logo: {
         width: '125@s',
         height: '65@s',
-        marginTop: '40@vs',
     },
     buttonView: {
         paddingHorizontal: '20@s',

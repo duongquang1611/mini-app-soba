@@ -916,7 +916,7 @@ export const QR_TAB = {
     },
     checkInQR: {
         button: '来店QRコードについて',
-        background: '#7B68EE',
+        background: Themes.COLORS.qrCheckIn,
         qrColor: Themes.COLORS.headerBackground,
         qrCode: Images.photo.qrCode,
     },

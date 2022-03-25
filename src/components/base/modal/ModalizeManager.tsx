@@ -41,7 +41,6 @@ const ModalizeManager = () => {
                 (
                     <Modalize
                         ref={modalRef}
-                        onClosed={() => dismiss(id)}
                         withHandle={false}
                         scrollViewProps={{
                             scrollEnabled: false,
@@ -60,6 +59,10 @@ const ModalizeManager = () => {
                             ) : undefined
                         }
                         {...props}
+                        onClosed={() => {
+                            dismiss(id);
+                            props?.onClosed?.();
+                        }}
                         modalStyle={{
                             minHeight: props?.isCenter ? '100%' : 0,
                             backgroundColor: props?.isCenter ? 'transparent' : Themes.COLORS.white,
