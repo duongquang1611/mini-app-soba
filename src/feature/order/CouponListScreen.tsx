@@ -32,11 +32,14 @@ const CouponListScreen = () => {
     };
 
     const saveCartCoupon = () => {
-        const listCouponsModal = cartListCouponOrder?.coupons?.filter(
+        const listCouponsEdit = cartListCouponOrder?.coupons?.filter(
             (item: any) => item?.coupon?.discountType === DiscountType.EACH_DISH,
         );
+        const listCouponsModal = listCouponsEdit?.filter(
+            (item: any) => !cartOrder?.coupons?.find((itemCart: any) => itemCart?.id === item?.id),
+        );
         const listCouponsAll = cartListCouponOrder?.coupons?.filter(
-            (item: any) => item?.coupon?.discountType === DiscountType.ALL_ORDER,
+            (item: any) => !listCouponsModal?.find((itemCart: any) => itemCart?.id === item?.id),
         );
         if (listCouponsModal.length > 0) {
             showApplyCoupon(listCouponsModal, listCouponsAll);
@@ -85,7 +88,12 @@ const CouponListScreen = () => {
                 handleUseCoupon={handleUseCoupon}
             />
             <View style={[styles.buttonView, commonStyles.shadow]}>
-                <StyledButton title={'order.useCoupon'} onPress={saveCartCoupon} customStyle={styles.buttonSave} />
+                <StyledButton
+                    disabled={cartOrder?.coupons?.length === cartListCouponOrder?.coupons?.length}
+                    title={'order.useCoupon'}
+                    onPress={saveCartCoupon}
+                    customStyle={styles.buttonSave}
+                />
                 <View style={commonStyles.separatorBottom} />
                 <View style={commonStyles.bottomView} />
             </View>

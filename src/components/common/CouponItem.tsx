@@ -17,7 +17,7 @@ export const CouponItem = (props: any) => {
     const { item = {}, canUse, handleUseCoupon, goToDetail, cartOrder: cartOrderState, isTabCoupon = false } = props;
     const { coupon, usedDate, status, id: idMemberCoupon } = item;
     const { image, title, startDate, endDate, dateType } = coupon;
-    const isInCartAPI = useMemo(() => status === MemberCouponStatus.IN_CART, [status]);
+    // const isInCartAPI = useMemo(() => status === MemberCouponStatus.IN_CART, [status]);
     const checkChooseTemp = cartOrderState?.coupons?.find((itemCoupon: any) => itemCoupon?.id === idMemberCoupon);
     const checkChooseInCart = order.cartOrder?.coupons?.find((itemCoupon: any) => itemCoupon?.id === idMemberCoupon);
     const checkChooseInOrderMobile = order.mobileOrder?.coupons?.find(

@@ -5,13 +5,14 @@ import { Themes } from 'assets/themes';
 import { StyledIcon, StyledText, StyledTouchable } from 'components/base';
 import React from 'react';
 import { ImageBackground, TouchableOpacity, View } from 'react-native';
-import { ScaledSheet } from 'react-native-size-matters';
+import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { staticValue } from 'utilities/staticData';
 
 const ButtonCart = (props: any) => {
     const { checkDisable, goToSaveOrder, amountValue, numOrder, isMenu, createDate } = props;
     return (
         <StyledTouchable
+            disabled={checkDisable}
             customStyle={[
                 styles.secondaryView,
                 { backgroundColor: checkDisable ? Themes.COLORS.silver : Themes.COLORS.secondary },
@@ -68,7 +69,7 @@ const styles = ScaledSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         paddingVertical: '10@vs',
-        marginBottom: Metrics.safeBottomPadding,
+        marginBottom: Metrics.safeBottomPadding > 0 ? Metrics.safeBottomPadding : '5@vs',
     },
     icBag: {
         marginTop: '3@vs',

@@ -1,6 +1,7 @@
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledImage, StyledText, StyledTouchable } from 'components/base';
+import DashView from 'components/common/DashView';
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
@@ -16,14 +17,13 @@ const OrderDish = (props: any) => {
     };
     return (
         <View style={styles.containerItem}>
-            <View style={styles.itemRow}>
+            <StyledTouchable customStyle={styles.itemRow} onPress={onChoose}>
                 <View style={styles.itemRow}>
                     <StyledImage source={{ uri: item?.dish?.thumbnail }} customStyle={styles.imgItem} />
                     <StyledText originValue={item?.dish?.title} customStyle={styles.nameOrder} />
                 </View>
-                <StyledTouchable
-                    onPress={onChoose}
-                    customStyle={[
+                <View
+                    style={[
                         styles.chooseButton,
                         {
                             backgroundColor: choose ? Themes.COLORS.primary : Themes.COLORS.white,
@@ -31,12 +31,12 @@ const OrderDish = (props: any) => {
                         },
                     ]}
                 />
-            </View>
+            </StyledTouchable>
         </View>
     );
 };
 const OneCoupon = (props: any) => {
-    const { item, enableButton, setEnableButton } = props;
+    const { item, enableButton, setEnableButton, dashView } = props;
     const [chooseDish, setChooseDish] = useState(item?.choose);
     return (
         <View>
@@ -53,6 +53,7 @@ const OneCoupon = (props: any) => {
                     enableButton={enableButton}
                 />
             ))}
+            {dashView && <DashView customStyle={styles.dash} />}
         </View>
     );
 };
@@ -60,10 +61,27 @@ const ModalCoupon = (props: any) => {
     const { listCouponsModal, setCartListCouponOrder, updateCouponsCart, cartListCouponAll, applyChooseDish } = props;
     const [enableButton, setEnableButton] = useState(listCouponsModal?.map((item: any) => ({ ...item })));
     const checkDisableButton = enableButton?.filter((item: any) => !item?.choose);
+    const numCheck = enableButton?.filter((item: any) => item?.choose)?.length || 0;
     return (
         <View style={styles.modalView}>
+            {listCouponsModal?.length >= 1 && (
+                <StyledText
+                    i18nText={'order.rangeEditMenu'}
+                    i18nParams={{
+                        numOrderCheck: numCheck,
+                        numOrder: listCouponsModal?.length,
+                    }}
+                    customStyle={styles.textNumCheck}
+                />
+            )}
             {listCouponsModal?.map((item: any, index: number) => (
-                <OneCoupon key={index} item={item} setEnableButton={setEnableButton} enableButton={enableButton} />
+                <OneCoupon
+                    dashView={listCouponsModal?.length > 1}
+                    key={index}
+                    item={item}
+                    setEnableButton={setEnableButton}
+                    enableButton={enableButton}
+                />
             ))}
             <StyledButton
                 title={'order.keep'}
@@ -92,7 +110,7 @@ const styles = ScaledSheet.create({
     },
     containerItem: {
         width: '100%',
-        marginBottom: '10@vs',
+        marginBottom: '15@vs',
         backgroundColor: Themes.COLORS.white,
     },
     imgItem: {
@@ -104,27 +122,38 @@ const styles = ScaledSheet.create({
         fontWeight: 'bold',
     },
     couponName: {
-        fontWeight: 'bold',
+        fontWeight: '700',
         fontSize: '16@ms0.3',
         paddingVertical: '10@vs',
     },
     conTentCoupon: {
-        fontWeight: 'bold',
+        fontWeight: '700',
         fontSize: '16@ms0.3',
         paddingBottom: '10@vs',
         color: Themes.COLORS.primary,
     },
     modalView: {
         paddingHorizontal: '20@s',
+        paddingBottom: '20@s',
     },
     chooseButton: {
-        width: '16@s',
-        height: '16@s',
+        width: '20@s',
+        height: '20@s',
         borderRadius: 16,
         borderWidth: 2,
     },
     saveButton: {
         alignSelf: 'center',
         marginBottom: Metrics.safeBottomPadding,
+    },
+    textNumCheck: {
+        color: Themes.COLORS.primary,
+        fontSize: '16@ms0.3',
+        fontWeight: '700',
+        marginTop: '30@vs',
+        marginBottom: '5@vs',
+    },
+    dash: {
+        marginVertical: '5@vs',
     },
 });

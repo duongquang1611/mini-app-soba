@@ -15,7 +15,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
 import { toLocalStringTime } from 'utilities/format';
-import { getDefaultSubDish, sumAmount, sumTotalAmount } from 'utilities/helper';
+import { getDefaultSubDish, isIos, sumAmount, sumTotalAmount } from 'utilities/helper';
 import { MenuType, staticValue } from 'utilities/staticData';
 import ButtonCart from './components/ButtonCart';
 import OrderItem from './components/OrderItem';
@@ -36,7 +36,6 @@ const DetailMealScreen = (props: any) => {
     const findIdStore = isNew ? null : cartOrder?.dishes?.find((item: any) => item.createDate === createDate);
     const [num, setNum] = useState(findIdStore?.mainDish?.amount || 1);
     const [dish, setDish] = useState<any>({});
-
     const { title, description, dishOptions } = dish || {};
     const [subDishDetail, setSubDishDetail] = useState<any>(
         !createDate ? getDefaultSubDish(dishOptions) : findIdStore?.subDishes || [],
@@ -74,7 +73,9 @@ const DetailMealScreen = (props: any) => {
     const numOrder = createDate ? findIdStore?.mainDish?.amount : 1;
     const totalNum = sumTotalAmount(cartOrder);
 
-    const newAmountOrder = createDate ? totalNum + amountValue - findIdStore?.totalAmount : totalNum + amountValue;
+    const newAmountOrder = createDate
+        ? totalNum + amountValue - (findIdStore?.totalAmount || 0)
+        : totalNum + amountValue;
     const goToSaveOrder = () => {
         const orderChooseItem = { id };
         const dishesStore = isNew
@@ -302,5 +303,10 @@ const styles = ScaledSheet.create({
         paddingHorizontal: '20@s',
         backgroundColor: Themes.COLORS.white,
         paddingVertical: '10@vs',
+    },
+    marginView: {
+        height: '5@vs',
+        width: '100%',
+        backgroundColor: Themes.COLORS.lightGray,
     },
 });

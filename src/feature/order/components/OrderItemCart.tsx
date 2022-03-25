@@ -155,11 +155,7 @@ const styles = ScaledSheet.create({
         paddingVertical: '10@vs',
         marginBottom: '10@vs',
     },
-    icCancel: {
-        position: 'absolute',
-        right: 0,
-        top: '5@vs',
-    },
+    icCancel: {},
     addValue: {
         marginVertical: '3@vs',
     },
@@ -193,9 +189,12 @@ const styles = ScaledSheet.create({
     },
     buttonCancel: {
         position: 'absolute',
-        right: '15@s',
-        width: '20@s',
-        height: '20@vs',
+        right: '1@s',
+        width: '35@s',
+        height: '35@vs',
+        alignItems: 'flex-end',
         zIndex: 2,
+        paddingTop: '5@vs',
+        paddingRight: '5@vs',
     },
 });

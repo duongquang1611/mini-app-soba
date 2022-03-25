@@ -36,7 +36,6 @@ const ItemMenu = (props: any) => {
     return (
         <StyledTouchable onPress={num > 0 ? props?.goToDetailModal : gotoNew}>
             <ImageBackground
-                imageStyle={styles.imageBorder}
                 source={{ uri: props?.item?.thumbnail }}
                 style={[styles.image, { borderColor: num > 0 ? Themes.COLORS.primary : Themes.COLORS.white }]}
             >
@@ -145,7 +144,7 @@ const MenuScreen = () => {
         );
     };
 
-    const menuFilter = menuList.filter((item: any) => {
+    const menuFilter = menuList?.filter((item: any) => {
         if (category) {
             const check = item?.category?.find((itemCate: any) => itemCate?.categoryId === category);
             if (!check?.categoryId) return false;
@@ -324,7 +323,7 @@ const styles = ScaledSheet.create({
         paddingBottom: '15@vs',
         paddingHorizontal: '6@s',
         borderWidth: 3,
-        borderRadius: 5,
+        borderRadius: 7,
         overflow: 'hidden',
     },
     secondaryView: {

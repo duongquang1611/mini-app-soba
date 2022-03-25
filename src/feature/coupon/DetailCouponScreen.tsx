@@ -37,7 +37,7 @@ const DetailCouponScreen = (props: any) => {
     const [detailMemberCoupon, setDetailMemberCoupon] = useState(item);
     const { coupon, id: idMemberCoupon, status: statusCoupon } = detailMemberCoupon;
     const { title = '' } = coupon || {};
-    const isInCartAPI = useMemo(() => statusCoupon === MemberCouponStatus.IN_CART, [statusCoupon]);
+    // const isInCartAPI = useMemo(() => item?.status === MemberCouponStatus.IN_CART, [statusCoupon]);
     const checkChooseInCart = order.cartOrder?.coupons?.find((itemCoupon: any) => itemCoupon?.id === idMemberCoupon);
     const checkChooseInOrderMobile = order.mobileOrder?.coupons?.find(
         (itemCoupon: any) => itemCoupon?.id === idMemberCoupon,
