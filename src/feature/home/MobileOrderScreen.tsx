@@ -19,7 +19,7 @@ import QRCode from 'react-native-qrcode-svg';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
 import { generateDataSaveOrderOption, generateOrderQR } from 'utilities/helper';
-import { coupon, DiscountType, MODAL_ID, staticValue } from 'utilities/staticData';
+import { DiscountType, MODAL_ID, staticValue } from 'utilities/staticData';
 
 const ItemCoupon = (props: any) => {
     const { cancelCouponItem, data } = props;
@@ -156,9 +156,6 @@ const MobileOrderScreen = () => {
                         </View>
                         <View style={styles.couponView}>
                             <StyledText customStyle={styles.title} i18nText={'mobileOrder.coupon.title'} />
-                            {/* {coupon.map((item, index) => (
-                                <ItemCoupon key={index} data={item} />
-                            ))} */}
                             {mobileOrder?.coupons?.map((item: any, index: number) => (
                                 <ItemCoupon key={index} data={item} />
                             ))}

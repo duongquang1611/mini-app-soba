@@ -16,8 +16,8 @@ import { DiscountType, MODAL_ID, staticValue, TabCouponStatus } from 'utilities/
 import CouponTab from './components/CouponTab';
 
 const TabCouponListScreen = () => {
-    const { t } = useTranslation();
     const dispatch = useDispatch();
+    const { t } = useTranslation();
     const modalize = ModalizeManager();
 
     const routes = [
