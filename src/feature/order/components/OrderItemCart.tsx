@@ -62,7 +62,14 @@ const OrderItemCart = (props: any) => {
                 </StyledTouchable>
             )}
             <View style={styles.orderItemView}>
-                <StyledIcon source={{ uri: image }} size={70} />
+                <View style={{ borderRadius: 1, overflow: 'hidden' }}>
+                    <StyledIcon
+                        source={{ uri: image }}
+                        resizeMode={'stretch'}
+                        size={70}
+                        customStyle={{ alignSelf: 'flex-start' }}
+                    />
+                </View>
                 <View style={styles.orderTextView}>
                     <StyledText originValue={name} customStyle={styles.titleOrder} />
                     {subDishes?.map((item: any, index: number) => (

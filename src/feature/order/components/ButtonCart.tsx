@@ -68,8 +68,8 @@ const styles = ScaledSheet.create({
         backgroundColor: Themes.COLORS.secondary,
         alignItems: 'center',
         justifyContent: 'center',
-        paddingVertical: '10@vs',
-        marginBottom: Metrics.safeBottomPadding > 0 ? Metrics.safeBottomPadding : '5@vs',
+        paddingVertical: '7@vs',
+        marginBottom: Metrics.safeBottomPadding > 0 ? Metrics.safeBottomPadding : '15@vs',
     },
     icBag: {
         marginTop: '3@vs',
