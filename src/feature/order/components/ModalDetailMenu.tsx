@@ -29,10 +29,10 @@ const OrderItemCart = (props: any) => {
                     {subDishes?.map((item: any, index: number) => (
                         <View key={index} style={styles.rowSub}>
                             <StyledText originValue={`+ ${item?.title}`} isBlack customStyle={styles.addValue} />
-                            {item?.value > 1 && (
+                            {item?.amount > 1 && (
                                 <View style={styles.numView}>
                                     <StyledText
-                                        originValue={`x ${item?.value}`}
+                                        originValue={`x ${item?.amount}`}
                                         isBlack
                                         customStyle={styles.addValueText}
                                     />

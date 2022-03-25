@@ -54,13 +54,19 @@ const ItemCoupon = (props: any) => {
             showApplyCoupon(listCouponsModal, listCouponsNoChange);
         }
     };
-
     return (
-        <StyledTouchable onPress={onPressCoupon} customStyle={styles.rowItem}>
-            <StyledIcon source={Images.icons.coupon} size={20} customStyle={styles.icCoupon} />
-            <View style={styles.nameCoupon}>
-                <StyledText originValue={coupon?.title} isBlack />
-                {choose ? (
+        <View>
+            <StyledTouchable onPress={() => cancelCouponItem(id)} customStyle={styles.buttonCancel}>
+                <StyledIcon source={Images.icons.cancel} size={17} />
+            </StyledTouchable>
+            <StyledTouchable onPress={onPressCoupon} customStyle={styles.buttonDetail}>
+                <View style={styles.rowItem}>
+                    <StyledIcon source={Images.icons.coupon} size={20} customStyle={styles.icCoupon} />
+                    <View style={styles.nameCoupon}>
+                        <StyledText originValue={coupon?.title} isBlack />
+                    </View>
+                </View>
+                {choose && (
                     <StyledText
                         i18nText={'order.couponUse'}
                         i18nParams={{
@@ -69,14 +75,9 @@ const ItemCoupon = (props: any) => {
                         customStyle={styles.dishUse}
                         isBlack
                     />
-                ) : (
-                    <StyledText i18nText={'order.allDish'} customStyle={styles.dishUse} isBlack />
                 )}
-            </View>
-            <StyledTouchable onPress={() => cancelCouponItem(id)}>
-                <StyledIcon source={Images.icons.cancel} size={15} />
             </StyledTouchable>
-        </StyledTouchable>
+        </View>
     );
 };
 const CartScreen = () => {
@@ -95,8 +96,22 @@ const CartScreen = () => {
 
     const cancelCart = () => {
         AlertMessage('order.deleteCart', {
-            textButtonCancel: 'common.cancel',
+            textButtonCancel: 'exchangeCoupon.confirm.textButtonCancel',
             onOk: onClear,
+            type: POPUP_TYPE.CONFIRM,
+        });
+    };
+    const popUpCancelDish = (createDate: string) => {
+        AlertMessage('order.cancelDish', {
+            textButtonCancel: 'exchangeCoupon.confirm.textButtonCancel',
+            onOk: () => cancelItem(createDate),
+            type: POPUP_TYPE.CONFIRM,
+        });
+    };
+    const popUpCancelCoupon = (id: number) => {
+        AlertMessage('order.cancelCoupon', {
+            textButtonCancel: 'exchangeCoupon.confirm.textButtonCancel',
+            onOk: () => cancelCouponItem(id),
             type: POPUP_TYPE.CONFIRM,
         });
     };
@@ -131,7 +146,7 @@ const CartScreen = () => {
                         {cartOrder?.dishes?.map((item: any, index: number) => (
                             <OrderItemCart
                                 cartOrder={cartOrder}
-                                cancelItem={cancelItem}
+                                cancelItem={popUpCancelDish}
                                 key={index}
                                 data={item}
                                 canChange={true}
@@ -141,7 +156,7 @@ const CartScreen = () => {
                     <View style={styles.contentView}>
                         <StyledText customStyle={styles.title} i18nText={'coupon.title'} />
                         {cartOrder?.coupons?.map((item: any, index: number) => (
-                            <ItemCoupon key={index} data={item} cancelCouponItem={cancelCouponItem} />
+                            <ItemCoupon key={index} data={item} cancelCouponItem={popUpCancelCoupon} />
                         ))}
                         {cartOrder?.coupons?.length === 0 && (
                             <View style={styles.noCouponView}>
@@ -231,6 +246,7 @@ const styles = ScaledSheet.create({
         backgroundColor: Themes.COLORS.white,
         paddingVertical: '10@vs',
         marginBottom: '10@vs',
+        paddingRight: '5@s',
     },
     noCouponView: {
         width: '100%',
@@ -261,9 +277,10 @@ const styles = ScaledSheet.create({
         width: '100%',
         justifyContent: 'space-between',
         marginTop: '10@vs',
+        alignItems: 'center',
     },
     nameCoupon: {
-        width: '80%',
+        width: '90%',
     },
     numOrderView: {
         flexDirection: 'row',
@@ -313,5 +330,19 @@ const styles = ScaledSheet.create({
         color: Themes.COLORS.silver,
         fontSize: '12@ms0.3',
         marginTop: '10@vs',
+    },
+    buttonCancel: {
+        position: 'absolute',
+        right: '-20@s',
+        width: '35@s',
+        height: '35@vs',
+        alignItems: 'flex-end',
+        zIndex: 2,
+        top: '5@vs',
+        paddingTop: '5@vs',
+        paddingRight: '5@vs',
+    },
+    buttonDetail: {
+        width: '95%',
     },
 });
