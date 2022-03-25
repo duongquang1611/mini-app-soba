@@ -191,7 +191,7 @@ export const generateOrderQR = (
     convert?: boolean,
     includeEOS?: boolean,
 ) => {
-    const { coupons, dishes } = dataOrder;
+    const { coupons = [], dishes = [] } = dataOrder || {};
     const couponsFormatted = coupons.map((couponItem: any) => {
         return generateCouponQR(couponItem, undefined, false)?.coupon;
     });

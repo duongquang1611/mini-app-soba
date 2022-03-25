@@ -336,5 +336,6 @@ export default {
         coupon: {
             title: 'クーポンリスト',
         },
+        cancelOrder: 'すべての注文をキャンセルしますか？',
     },
 };
