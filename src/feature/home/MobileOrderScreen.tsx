@@ -5,6 +5,7 @@ import { clearMobileOrder, updateCartOrder, updateMobileOrder } from 'app-redux/
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledIcon, StyledText, StyledTouchable } from 'components/base';
+import AlertMessage from 'components/base/AlertMessage';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeader from 'components/common/StyledHeader';
@@ -12,14 +13,14 @@ import AmountOrder from 'feature/order/components/AmountOrder';
 import ModalCoupon from 'feature/order/components/ModalCoupon';
 import OrderItemCart from 'feature/order/components/OrderItemCart';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
-import { navigate } from 'navigation/NavigationService';
+import { goBack, navigate } from 'navigation/NavigationService';
 import React, { useEffect, useMemo } from 'react';
 import { View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
 import { generateDataSaveOrderOption, generateOrderQR } from 'utilities/helper';
-import { DiscountType, MODAL_ID, staticValue } from 'utilities/staticData';
+import { DiscountType, MODAL_ID, POPUP_TYPE, staticValue } from 'utilities/staticData';
 
 const ItemCoupon = (props: any) => {
     const { cancelCouponItem, data } = props;
@@ -109,8 +110,18 @@ const MobileOrderScreen = () => {
     const edit = () => {
         navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.CART);
     };
-    const cancelOrderMobile = () => {
+
+    const onClearOrder = () => {
+        goBack();
         dispatch(clearMobileOrder());
+    };
+
+    const cancelOrderMobile = () => {
+        AlertMessage('mobileOrder.cancelOrder', {
+            textButtonCancel: 'exchangeCoupon.confirm.textButtonCancel',
+            onOk: onClearOrder,
+            type: POPUP_TYPE.CONFIRM,
+        });
     };
 
     const cancelItem = (id: number) => {
