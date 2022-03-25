@@ -337,6 +337,7 @@ export const STAMP_DATA = [
     createStampItem(),
 ];
 
+// id to show modal avoid duplicate id
 export const MODAL_ID = {
     CHOOSE_STAMP: 50,
     GUIDE_STAMP: 51,
@@ -685,11 +686,13 @@ export const statusUser = [
     },
 ];
 
+// type of 3 popup in app
 export enum POPUP_TYPE {
     CONFIRM,
     SUCCESS,
     ERROR,
 }
+
 export const stepGuide = [
     {
         index: 1,
@@ -716,13 +719,14 @@ export const stepGuide = [
 
 export const FAKER = {};
 
-// ENUM
+// type in api request verify code
 export enum VerifiedCodeType {
     REGISTER = 1,
     RESET_PASSWORD = 2,
     CHANGE_EMAIL = 3,
 }
 
+// gender in register, profile
 export enum Gender {
     MALE = 1,
     FEMALE = 2,
@@ -834,11 +838,13 @@ export const TEXT_OTP = [
     },
 ];
 
+// memberCoupon.status
 export enum MemberCouponStatus {
     IN_CART = 1,
     AVAILABLE = 2,
 }
 
+// type 2 tab in coupon bottom tab
 export enum TabCouponStatus {
     USED = 0,
     CAN_USE = 1,
@@ -846,20 +852,24 @@ export enum TabCouponStatus {
 
 export const CouponStoreKeyByStatus = ['couponsUsed', 'couponsCanUse'];
 
+// coupon.dateType
 export enum DateType {
     EXPIRED_DATE = 1,
     NO_EXPIRED_DATE = 2,
 }
 
+// coupon.discountType
 export enum DiscountType {
     ALL_ORDER = 1,
     EACH_DISH = 2,
 }
 
+// coupon.couponDish[0].type
 export enum CouponDishType {
     SETTING_DISCOUNT = 1,
     FREE = 2,
 }
+
 export enum MenuType {
     ENABLE = 1,
     DISABLE = 0,
@@ -869,16 +879,19 @@ export const dataFakeDishCoupon = [
     { title: 'mon 2', image: exLinkImageSquare, id: 2 },
 ];
 
+// orderType: api /order/save-order-options
 export enum OrderType {
     DEFAULT = 1,
     MOBILE = 2,
 }
 
+// coupon.type
 export enum CouponType {
     COMPANY = 1, // isAccounted: 1
     RESTAURANT = 0, // isAccounted: 0
 }
 
+// type 3 tab QR in home screen
 export enum QR_TAB_TYPE {
     ORDER_DEFAULT = 1,
     MOBILE_ORDER = 2,

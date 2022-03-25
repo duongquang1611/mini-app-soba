@@ -56,6 +56,9 @@ const orderSlice = createSlice({
             state = { ...state, cartOrder: {} };
             return state;
         },
+        clearOrder: () => {
+            return initialState;
+        },
     },
 });
 
@@ -68,6 +71,7 @@ export const {
     updateCouponMobileOrder,
     updateCouponCartOrder,
     clearCartOrder,
+    clearOrder,
 } = orderSlice.actions;
 
 export default persistReducer<IOrderState>(persistConfig, orderSlice.reducer);

@@ -1,6 +1,8 @@
 import { login } from 'api/modules/api-app/authenticate';
 import request from 'api/request';
+import { clearCoupon } from 'app-redux/slices/couponSlice';
 import { clearGlobalData, updateGlobalData } from 'app-redux/slices/globalDataSlice';
+import { clearOrder } from 'app-redux/slices/orderSlice';
 import { userInfoActions } from 'app-redux/slices/userInfoSlice';
 import { store } from 'app-redux/store';
 import { AxiosRequestConfig } from 'axios';
@@ -31,8 +33,10 @@ const AuthenticateService = {
             refresh_token: inputRefreshToken,
         }),
     logOut: () => {
-        store.dispatch(userInfoActions.logOut());
         store.dispatch(clearGlobalData());
+        store.dispatch(clearCoupon());
+        store.dispatch(clearOrder());
+        store.dispatch(userInfoActions.logOut());
         deleteTagOneSignal();
     },
     handlerLogin: (token: Record<string, string>) => {

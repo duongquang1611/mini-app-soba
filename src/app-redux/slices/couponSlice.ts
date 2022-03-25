@@ -22,9 +22,8 @@ const couponSlice = createSlice({
             state = { ...state, ...action.payload };
             return state;
         },
-        clearCoupon: (state) => {
-            state = initialState;
-            return state;
+        clearCoupon: () => {
+            return initialState;
         },
     },
 });
