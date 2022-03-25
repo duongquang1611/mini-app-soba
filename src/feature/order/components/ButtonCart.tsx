@@ -32,7 +32,7 @@ const ButtonCart = (props: any) => {
                     ]}
                 />
             </ImageBackground>
-            <TouchableOpacity style={[styles.rowCart]} onPress={goToSaveOrder} disabled={numOrder > 10}>
+            <View style={[styles.rowCart]}>
                 {isMenu ? (
                     <View>
                         <StyledText i18nText={'setting.viewCart'} customStyle={styles.textCart} />
@@ -56,7 +56,7 @@ const ButtonCart = (props: any) => {
                         customStyle={styles.textCart}
                     />
                 )}
-            </TouchableOpacity>
+            </View>
         </StyledTouchable>
     );
 };
