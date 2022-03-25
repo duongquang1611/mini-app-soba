@@ -64,7 +64,7 @@ const ModalCoupon = (props: any) => {
     const numCheck = enableButton?.filter((item: any) => item?.choose)?.length || 0;
     return (
         <View style={styles.modalView}>
-            {listCouponsModal?.length >= 1 && (
+            {listCouponsModal?.length > 1 && (
                 <StyledText
                     i18nText={'order.rangeEditMenu'}
                     i18nParams={{

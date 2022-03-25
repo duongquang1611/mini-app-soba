@@ -164,7 +164,11 @@ const CartScreen = () => {
                                 <StyledText customStyle={styles.noCoupon} i18nText={'coupon.noCoupon'} />
                             </View>
                         )}
-                        <StyledTouchable onPress={goToCouponList} customStyle={styles.moreCouponView}>
+                        <StyledTouchable
+                            disabled={cartOrder?.length >= staticValue.MAX_ORDER}
+                            onPress={goToCouponList}
+                            customStyle={styles.moreCouponView}
+                        >
                             <StyledText customStyle={styles.moreCoupon} i18nText={'coupon.moreCoupon'} />
                             <StyledIcon source={Images.icons.add} size={20} />
                         </StyledTouchable>

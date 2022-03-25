@@ -37,7 +37,12 @@ const ItemMenu = (props: any) => {
         <StyledTouchable onPress={num > 0 ? props?.goToDetailModal : gotoNew}>
             <ImageBackground
                 source={{ uri: props?.item?.thumbnail }}
-                style={[styles.image, { borderColor: num > 0 ? Themes.COLORS.primary : Themes.COLORS.white }]}
+                style={[
+                    styles.image,
+                    {
+                        borderColor: num > 0 ? Themes.COLORS.primary : Themes.COLORS.white,
+                    },
+                ]}
             >
                 <StyledText originValue={props?.item?.title} numberOfLines={1} customStyle={styles.name} />
                 {num > 0 && isSetting ? <StyledIcon source={Images.icons.tick} size={20} /> : null}

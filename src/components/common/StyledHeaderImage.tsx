@@ -193,7 +193,7 @@ const styles = ScaledSheet.create({
     },
     img: {
         width: '100%',
-        height: '250@vs',
+        height: '260@vs',
     },
     containerDot: {
         backgroundColor: Themes.COLORS.transparent,
@@ -204,20 +204,20 @@ const styles = ScaledSheet.create({
         width: '40@s',
         height: '4@vs',
         borderRadius: 2,
-        backgroundColor: Themes.COLORS.white,
+        backgroundColor: Themes.COLORS.lightGray,
     },
     slide: {
         width: '100%',
-        height: '250@vs',
+        height: '260@vs',
     },
     iconBack: {
-        tintColor: Themes.COLORS.white,
+        tintColor: Themes.COLORS.headerBackground,
     },
     contentText: {
         position: 'absolute',
         bottom: '-5@vs',
         marginLeft: '20@s',
-        color: Themes.COLORS.white,
+        color: Themes.COLORS.headerBackground,
         fontSize: '20@ms0.3',
         zIndex: 20,
         fontWeight: 'bold',

@@ -5,7 +5,7 @@ import { StyledIcon, StyledImage, StyledText } from 'components/base';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { scale, ScaledSheet } from 'react-native-size-matters';
+import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { MenuType, staticValue } from 'utilities/staticData';
 
 export const OrderChild = (data: any) => {
@@ -124,7 +124,7 @@ const OrderItem = (data: any) => {
     const { subDishDetail, setSubDishDetail } = data;
     const { subDish, title, isRequired, type, id } = data?.data || {};
     return (
-        <View style={[styles.containerItem, { paddingHorizontal: scale(20) }]}>
+        <View style={[styles.containerItem, styles.dishOrderView]}>
             <View style={styles.itemRow}>
                 <StyledText originValue={title} customStyle={styles.name} />
                 {isRequired === MenuType.ENABLE && (
@@ -210,5 +210,9 @@ const styles = ScaledSheet.create({
     requireText: {
         color: Themes.COLORS.primary,
         fontSize: '12@ms0.3',
+    },
+    dishOrderView: {
+        paddingHorizontal: '20@s',
+        paddingVertical: '10@vs',
     },
 });
