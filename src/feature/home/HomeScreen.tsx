@@ -59,7 +59,7 @@ export const ListNewsItem = (data: any) => {
         </View>
     );
 };
-const dataOder = {
+const orderDefault = {
     button: '注文詳細',
     background: Themes.COLORS.secondary,
     qrColor: Themes.COLORS.headerBackground,
@@ -67,14 +67,14 @@ const dataOder = {
     content1: '”いつもの！注文”がまだ設定されていません。',
     content2: ' ※設定すると、ホーム画面を開いただけで よく食べる商品の注文が簡単にできるようになります。',
 };
-const preOder = {
+const mobileOrder = {
     button: '注文詳細',
     background: Themes.COLORS.primary,
     qrColor: Themes.COLORS.headerBackground,
     content1: '事前注文"がまだありません。',
     content2: 'お店に入る前に商品を選んでおくと、 スマホをかざすだけで簡単に注文ができるようになります。',
 };
-const visitQr = {
+const checkInQR = {
     button: '来店QRコードについて',
     background: '#7B68EE',
     qrColor: Themes.COLORS.headerBackground,
@@ -138,9 +138,9 @@ const HomeScreen: FunctionComponent = () => {
     ];
 
     const renderScene = SceneMap({
-        qr1: () => <ShowQrTab data={dataOder} onClick={() => navigate(HOME_ROUTE.ORDER_DEFAULT_HOME)} />,
-        qr2: () => <ShowQrTab data={preOder} onClick={() => navigate(HOME_ROUTE.MOBILE_ORDER)} />,
-        qr3: () => <ShowQrTab data={visitQr} onClick={() => navigate(HOME_ROUTE.CHECK_IN)} />,
+        qr1: () => <ShowQrTab data={orderDefault} onClick={() => navigate(HOME_ROUTE.ORDER_DEFAULT_HOME)} />,
+        qr2: () => <ShowQrTab data={mobileOrder} onClick={() => navigate(HOME_ROUTE.MOBILE_ORDER)} />,
+        qr3: () => <ShowQrTab data={checkInQR} onClick={() => navigate(HOME_ROUTE.CHECK_IN)} />,
     });
 
     return (

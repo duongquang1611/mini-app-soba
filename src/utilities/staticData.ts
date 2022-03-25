@@ -27,10 +27,23 @@ export const staticValue = {
     COUNT_DOWN_OTP: 60,
     MAX_RETRY_OTP: 5,
     MAX_WRONG_OTP: 5,
-    OTP_INVALID_MESSAGE: 'Verified_Code_Invalid',
+    OTP_INVALID_MESSAGE: '認証コードが正しくありません.',
     MAX_ORDER: 10,
     NUMBER_ITEM_LIST_COUPON_MODAL: 3,
+    QR_SIZE: 163,
+    END_CODE_QR: 'EOS',
+    orderDetail: [
+        {
+            name: 'A',
+            subIDs: ['A1', 'A2'],
+        },
+        {
+            name: 'A',
+            subIDs: ['A1', 'A2'],
+        },
+    ],
 };
+
 export const LINEAR_COLOR = {
     CATEGORY: [Themes.COLORS.thunderbird, Themes.COLORS.primary],
     NO_CHOOSE_CATEGORY: [Themes.COLORS.white, Themes.COLORS.white],
@@ -88,84 +101,12 @@ export const exLinkImage =
 export const exLinkImageSquare =
     'https://kenh14cdn.com/203336854389633024/2021/9/1/photo-1-16304832141231584345047.jpg';
 
-export const dataFakeDetailMeal = {
-    id: 6,
-    title: 'string',
-    thumbnail: '',
-    description: '',
-    images: [],
-    dishOptions: [
-        {
-            id: 0,
-            title: 'string',
-            isRequired: 0,
-            type: 1,
-            subDish: [
-                {
-                    id: 0,
-                    defaultValue: 0,
-                    dish: {
-                        id: 0,
-                        title: 'string',
-                        thumbnail: exLinkImageSquare,
-                    },
-                },
-            ],
-        },
-    ],
-};
-
-export const listSideMenu = [
-    {
-        id: 1,
-        name: 'name',
-        dishes: [
-            { name: 'mon 1', id: 1, choose: true },
-            { name: 'mon 1', id: 2, choose: true },
-            { name: 'mon 1', id: 3, choose: true },
-        ],
-    },
-    {
-        id: 2,
-        name: 'name',
-        dishes: [
-            { name: 'mon 1', id: 1, choose: true },
-            { name: 'mon 1', id: 2, choose: true },
-        ],
-    },
-];
-
-export const notificationListFake = [
-    {
-        id: 1,
-        content: 'text content',
-        time: '20:20 Am',
-        img: 'promotion',
-    },
-    {
-        id: 2,
-        content: 'text content',
-        time: '20:20 Am',
-        img: 'coupon',
-    },
-    {
-        id: 3,
-        content: 'text content',
-        time: '20:20 Am',
-        img: 'stampCard',
-    },
-    {
-        id: 4,
-        content: 'text content',
-        time: '20:20 Am',
-        img: 'other',
-    },
-];
 export const imagesList: any = [
     'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
 
     'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
 ];
+
 export const netWorkList: any = [
     {
         id: 1,
@@ -211,6 +152,7 @@ export const listNews = [
         name: 'さくらえび',
     },
 ];
+
 export const listOrderDefault = [
     {
         id: 1,
@@ -283,26 +225,7 @@ export const detailCouponFake = {
     endDate: '2022-07-11',
     description: 'string',
 };
-export const listCouponCanUse = [
-    {
-        id: 1,
-        name: '新年会クーポンt',
-        time: '2022/03/01～2022/03/31',
-        img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQb4km6pqiEE1QzzbLxzOOeHSqawgslw-wX5Q&usqp=CAU',
-    },
-    {
-        id: 2,
-        name: '新年会クーポンt',
-        time: '2022/03/01～2022/03/31',
-        img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQb4km6pqiEE1QzzbLxzOOeHSqawgslw-wX5Q&usqp=CAU',
-    },
-    {
-        id: 3,
-        name: '新年会クーポンt',
-        time: '2022/03/01～2022/03/31',
-        img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQb4km6pqiEE1QzzbLxzOOeHSqawgslw-wX5Q&usqp=CAU',
-    },
-];
+
 export const listButton = [
     {
         id: 1,
@@ -945,3 +868,43 @@ export const dataFakeDishCoupon = [
     { title: 'mon 1', image: exLinkImageSquare, id: 1 },
     { title: 'mon 2', image: exLinkImageSquare, id: 2 },
 ];
+
+export enum OrderType {
+    DEFAULT = 1,
+    MOBILE = 2,
+}
+
+export enum CouponType {
+    COMPANY = 1, // isAccounted: 1
+    RESTAURANT = 0, // isAccounted: 0
+}
+
+export enum QR_TAB_TYPE {
+    ORDER_DEFAULT = 1,
+    MOBILE_ORDER = 2,
+    CHECK_IN = 3,
+}
+
+export const QR_TAB = {
+    orderDefault: {
+        button: '注文詳細',
+        background: Themes.COLORS.secondary,
+        qrColor: Themes.COLORS.headerBackground,
+        qrCode: Images.photo.qrCode,
+        content1: '”いつもの！注文”がまだ設定されていません。',
+        content2: ' ※設定すると、ホーム画面を開いただけで よく食べる商品の注文が簡単にできるようになります。',
+    },
+    mobileOrder: {
+        button: '注文詳細',
+        background: Themes.COLORS.primary,
+        qrColor: Themes.COLORS.headerBackground,
+        content1: '事前注文"がまだありません。',
+        content2: 'お店に入る前に商品を選んでおくと、 スマホをかざすだけで簡単に注文ができるようになります。',
+    },
+    checkInQR: {
+        button: '来店QRコードについて',
+        background: '#7B68EE',
+        qrColor: Themes.COLORS.headerBackground,
+        qrCode: Images.photo.qrCode,
+    },
+};

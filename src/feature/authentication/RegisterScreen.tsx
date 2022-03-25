@@ -2,7 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { checkIsExistEmail, getVerifyCode } from 'api/modules/api-app/authenticate';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
-import { StyledButton, StyledImage, StyledInputForm, StyledText, StyledTouchable } from 'components/base';
+import { StyledButton, StyledIcon, StyledImage, StyledInputForm, StyledText, StyledTouchable } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
 import { LabelInput } from 'components/base/StyledInput';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
@@ -12,7 +12,6 @@ import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useCallback, useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 import { Keyboard, Text, View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import { checkPasswordMatch, openURL } from 'utilities/helper';
@@ -34,7 +33,6 @@ const REGISTER_DEFAULT_FORM = __DEV__
     : {};
 
 const RegisTerScreen = () => {
-    const { t } = useTranslation();
     const [rule, setRule] = useState(__DEV__);
     const passwordRef = useRef<any>(null);
     const passwordConfirmRef = useRef<any>(null);
@@ -185,11 +183,7 @@ const RegisTerScreen = () => {
                     {GENDER_DATA.map(renderItemGender)}
                     <View style={styles.buttonRule}>
                         <StyledTouchable onPress={() => setRule(!rule)}>
-                            <RadioCheckView
-                                customStyle={styles.ruleButton}
-                                check={rule}
-                                customContentStyle={styles.contentRuleButton}
-                            />
+                            <StyledIcon source={rule ? Images.icons.tickSquare : Images.icons.untickSquare} size={20} />
                         </StyledTouchable>
                         <Text style={styles.textRule}>
                             <Text onPress={openPolicy} style={styles.textRuleCanPress}>
@@ -283,9 +277,6 @@ const styles = ScaledSheet.create({
     },
     titleGender: {
         marginTop: '10@vs',
-    },
-    ruleButton: {
-        borderRadius: 5,
     },
     contentRuleButton: {
         borderRadius: 3,

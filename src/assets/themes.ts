@@ -45,6 +45,7 @@ const Light = {
         error: '#E42B2B',
         mischka: 'rgba( 227, 226, 232,0.6)',
         labelCouponUsed: 'rgba(34,34,34,0.4)',
+        borderCheckbox: 'rgb(219,165,162)',
     },
     FONTS: {
         defaultFont: 'Montserrat-Regular',

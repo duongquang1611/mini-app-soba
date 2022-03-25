@@ -54,7 +54,7 @@ const ItemCoupon = (props: any) => {
             showApplyCoupon(listCouponsModal, listCouponsNoChange);
         }
     };
-    console.log({ choose });
+
     return (
         <StyledTouchable onPress={onPressCoupon} customStyle={styles.rowItem}>
             <StyledIcon source={Images.icons.coupon} size={20} customStyle={styles.icCoupon} />

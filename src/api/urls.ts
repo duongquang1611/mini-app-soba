@@ -15,11 +15,17 @@ const NOTIFICATION_URL = {
     coupon: (id: string | number) => `notifications/${id}`,
     read: (id: string | number) => `notifications/${id}`,
 };
+
 const MENU_URL = {
     menu: 'menu',
     dish: (id: string | number) => `menu/${id}`,
     cart: 'cart',
 };
+
+const ORDER_URL = {
+    saveOrder: 'order/save-order-options',
+};
+
 const HOME_URL = {
     listNews: 'news',
     newsDetail: (id: string | number) => `news/${id}`,
@@ -34,4 +40,4 @@ const COUPON_URL = {
     memberCoupon: (id: string | number) => `coupon/member-coupon/${id}`,
 };
 
-export { COMMON_URL, STAMP_URL, NOTIFICATION_URL, COUPON_URL, HOME_URL, MENU_URL };
+export { COMMON_URL, STAMP_URL, NOTIFICATION_URL, COUPON_URL, HOME_URL, MENU_URL, ORDER_URL };
