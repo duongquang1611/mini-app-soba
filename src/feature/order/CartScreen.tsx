@@ -54,6 +54,7 @@ const ItemCoupon = (props: any) => {
             showApplyCoupon(listCouponsModal, listCouponsNoChange);
         }
     };
+
     return (
         <View>
             <StyledTouchable onPress={() => cancelCouponItem(id)} customStyle={styles.buttonCancel}>
