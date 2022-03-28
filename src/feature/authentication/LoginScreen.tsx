@@ -166,7 +166,9 @@ const styles = ScaledSheet.create({
     forgotText: {
         fontSize: '16@ms0.3',
     },
-    registerText: {},
+    registerText: {
+        fontSize: '14@ms0.3',
+    },
     header: {
         width: '100%',
         height: '225@vs',

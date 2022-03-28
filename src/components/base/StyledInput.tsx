@@ -1,6 +1,6 @@
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
-import React, { forwardRef, useRef, useState } from 'react';
+import React, { forwardRef, useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
     ColorValue,
@@ -100,10 +100,11 @@ const StyledInput = (props: StyledInputProps, ref: any) => {
         setDatePickerVisibility(false);
     };
 
-    const handleConfirmDate = (date: any) => {
-        handleConfirm?.(date.toISOString());
+    const handleConfirmDate = useCallback((date: any) => {
         hideDatePicker();
-    };
+        handleConfirm?.(date.toISOString());
+    }, []);
+
     return (
         <View style={[styles.container, props.containerStyle]}>
             {!!icBirthday && (
@@ -132,7 +133,7 @@ const StyledInput = (props: StyledInputProps, ref: any) => {
                     onBlur={() => setIsFocused(false)}
                     style={[styles.input, props.customStyle]}
                     value={icBirthday ? formatDate(valueInput || '', YYYYMMDD) : valueInput}
-                    placeholderTextColor={props.placeholderTextColor || Themes.COLORS.grey}
+                    placeholderTextColor={props.placeholderTextColor || Themes.COLORS.silver}
                     placeholder={customPlaceHolder ? (t(customPlaceHolder as any) as string) : ''}
                     underlineColorAndroid={props.customUnderlineColor || 'transparent'}
                     autoCompleteType={props.autoCompleteType || 'off'}
@@ -182,6 +183,7 @@ const styles = ScaledSheet.create({
         width: '100%',
         color: Themes.COLORS.textPrimary,
         height: '50@vs',
+        fontSize: '16@ms0.3',
     },
     errorMessage: {
         fontSize: '12@ms0.3',

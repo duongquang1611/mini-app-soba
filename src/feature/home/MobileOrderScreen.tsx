@@ -13,7 +13,7 @@ import AmountOrder from 'feature/order/components/AmountOrder';
 import ModalCoupon from 'feature/order/components/ModalCoupon';
 import OrderItemCart from 'feature/order/components/OrderItemCart';
 import { APP_ROUTE, ORDER_ROUTE, TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
-import { goBack, navigate, reset } from 'navigation/NavigationService';
+import { navigate } from 'navigation/NavigationService';
 import React, { useEffect, useMemo } from 'react';
 import { View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';

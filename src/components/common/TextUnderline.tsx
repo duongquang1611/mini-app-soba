@@ -32,7 +32,6 @@ const styles = ScaledSheet.create({
         color: Themes.COLORS.mineShaft,
         textAlign: 'center',
         fontSize: '12@ms0.3',
-        lineHeight: '18@vs',
     },
 });
 
