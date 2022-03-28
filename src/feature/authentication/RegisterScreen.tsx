@@ -13,8 +13,8 @@ import { navigate } from 'navigation/NavigationService';
 import React, { useCallback, useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Keyboard, Text, View } from 'react-native';
-import { ScaledSheet } from 'react-native-size-matters';
-import { checkPasswordMatch, openURL } from 'utilities/helper';
+import { ScaledSheet, verticalScale } from 'react-native-size-matters';
+import { checkPasswordMatch, isIos, openURL } from 'utilities/helper';
 import { GENDER_DATA, staticValue, VerifiedCodeType } from 'utilities/staticData';
 import { PASSWORD_MAX_LENGTH, USERNAME_MAX_LENGTH } from 'utilities/validate';
 import yupValidate from 'utilities/yupValidate';
@@ -117,7 +117,12 @@ const RegisTerScreen = () => {
                 customContainer={styles.customContainerHeader}
             />
 
-            <StyledKeyboardAware style={styles.scrollView} customStyle={styles.contentScrollView}>
+            <StyledKeyboardAware
+                style={styles.scrollView}
+                customStyle={styles.contentScrollView}
+                enableResetScrollToCoords={false}
+                enableOnAndroid={false}
+            >
                 <StyledText customStyle={styles.title} i18nText={'authen.register.title'} />
                 <FormProvider {...form}>
                     <View style={styles.fakeRegisterInput}>

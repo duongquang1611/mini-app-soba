@@ -1,6 +1,8 @@
 import { getCouponList } from 'api/modules/api-app/coupon';
+import { getResources } from 'api/modules/api-app/general';
 import { getNewsList } from 'api/modules/api-app/home';
 import { updateCoupon } from 'app-redux/slices/couponSlice';
+import { resourceActions } from 'app-redux/slices/resourceSlice';
 import { store } from 'app-redux/store';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
@@ -36,7 +38,7 @@ const getColorTab = (key: number) => {
         case 1:
             return Themes.COLORS.primary;
         case 2:
-            return '#7B68EE';
+            return Themes.COLORS.qrCheckIn;
         default:
             return Themes.COLORS.secondary;
     }
@@ -76,7 +78,7 @@ const mobileOrder = {
 };
 const checkInQR = {
     button: '来店QRコードについて',
-    background: '#7B68EE',
+    background: Themes.COLORS.qrCheckIn,
     qrColor: Themes.COLORS.headerBackground,
     qrCode: Images.photo.qrCode,
 };
@@ -98,6 +100,15 @@ export const getCouponData = async (status?: TabCouponStatus) => {
                 }),
             );
         }
+    } catch (error) {
+        console.log('getCouponData -> error', error);
+    }
+};
+
+export const getResourcesData = async () => {
+    try {
+        const res = await getResources();
+        store.dispatch(resourceActions.getResourceSuccess(res));
     } catch (error) {
         console.log('getCouponData -> error', error);
     }
