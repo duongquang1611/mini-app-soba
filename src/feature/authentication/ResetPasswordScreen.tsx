@@ -87,7 +87,6 @@ const ResetPasswordScreen = ({ route }: any) => {
                             icYeyOff={Images.icons.eyeOff}
                             icYeyOn={Images.icons.eyeOn}
                             customStyle={styles.inputPassword}
-                            customErrorMessage={checkPassword()}
                         />
                         <StyledInputForm
                             ref={passwordConfirmRef}

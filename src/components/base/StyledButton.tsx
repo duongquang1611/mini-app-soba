@@ -96,6 +96,7 @@ const styles = ScaledSheet.create({
     textButtonLinear: {
         color: Themes.COLORS.white,
         fontWeight: 'bold',
+        fontSize: '16@ms0.3',
     },
     linear: {
         width: '100%',

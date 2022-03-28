@@ -131,6 +131,7 @@ const RegisTerScreen = () => {
                         customPlaceHolder={'authen.hintRegister.email'}
                         keyboardType="email-address"
                         onSubmitEditing={() => passwordRef.current.focus()}
+                        containerStyle={styles.emailContainer}
                     />
                     <StyledInputForm
                         ref={passwordRef}
@@ -143,7 +144,7 @@ const RegisTerScreen = () => {
                         icYeyOff={Images.icons.eyeOff}
                         icYeyOn={Images.icons.eyeOn}
                         customStyle={styles.inputPassword}
-                        customErrorMessage={checkPassword()}
+                        containerStyle={styles.normalInputContainer}
                     />
                     <StyledInputForm
                         ref={passwordConfirmRef}
@@ -157,6 +158,7 @@ const RegisTerScreen = () => {
                         icYeyOn={Images.icons.eyeOn}
                         customStyle={styles.inputPassword}
                         customErrorMessage={checkPassword()}
+                        containerStyle={styles.normalInputContainer}
                     />
                     <StyledInputForm
                         ref={fullNameRef}
@@ -164,6 +166,7 @@ const RegisTerScreen = () => {
                         customPlaceHolder={'authen.hintRegister.fullName'}
                         maxLength={USERNAME_MAX_LENGTH}
                         label={'authen.labelRegister.fullName'}
+                        containerStyle={styles.normalInputContainer}
                     />
                     <StyledInputForm
                         name={'birthday'}
@@ -174,6 +177,7 @@ const RegisTerScreen = () => {
                         editable={false}
                         pointerEvents={'none'}
                         handleConfirm={(text: string) => setValueForm('birthday', text)}
+                        containerStyle={styles.normalInputContainer}
                     />
                     <LabelInput
                         label={'authen.labelRegister.gender'}
@@ -273,10 +277,10 @@ const styles = ScaledSheet.create({
         alignItems: 'center',
     },
     textGender: {
-        marginLeft: '15@s',
+        marginLeft: '10@s',
     },
     titleGender: {
-        marginTop: '10@vs',
+        marginTop: '18@vs',
     },
     contentRuleButton: {
         borderRadius: 3,
@@ -285,7 +289,7 @@ const styles = ScaledSheet.create({
         color: Themes.COLORS.mineShaft,
         lineHeight: '21@vs',
         alignSelf: 'center',
-        marginTop: '10@vs',
+        marginTop: '20@vs',
     },
     textLogin: {
         color: Themes.COLORS.primary,
@@ -311,5 +315,11 @@ const styles = ScaledSheet.create({
     containerStyleTitleGender: {
         marginLeft: '20@s',
         marginBottom: 0,
+    },
+    emailContainer: {
+        marginTop: '25@vs',
+    },
+    normalInputContainer: {
+        marginTop: '13@vs',
     },
 });
