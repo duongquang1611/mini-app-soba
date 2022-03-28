@@ -95,6 +95,8 @@ export default {
             note: 'アカウントを持っている方？',
             login: 'ログイン',
             skipOrderDefault: 'スキップ',
+            contentOrderDefault:
+                'この画面では、自分が普段よく食べる商品を設定することができます。\n設定することで、ホーム画面に表示されるQRコードを店舗券売機にかざすだけで簡単に注文ができるようになります。\n※後でも設定・変更可能です。',
         },
         hintRegister: {
             email: 'メールを入力してください',

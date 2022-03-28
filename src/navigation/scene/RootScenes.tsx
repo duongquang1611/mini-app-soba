@@ -4,7 +4,7 @@ import { RootState } from 'app-redux/hooks';
 import { resourceActions } from 'app-redux/slices/resourceSlice';
 import { Themes } from 'assets/themes';
 import ChangePassword from 'feature/authentication/ChangePassword';
-import RegisterStep1 from 'feature/authentication/RegisterStep1';
+import OrderDefaultMenu from 'feature/authentication/OrderDefaultMenu';
 import RegisterStep2 from 'feature/authentication/RegisterStep2';
 import RegisterStep3 from 'feature/authentication/RegisterStep3';
 import SendOtpForgotPass from 'feature/authentication/SendOtpForgotPass';
@@ -72,7 +72,7 @@ const AppStack = () => {
                             ? APP_ROUTE.MAIN_TAB
                             : viewedOrderDefault
                             ? APP_ROUTE.MAIN_TAB
-                            : AUTHENTICATE_ROUTE.REGISTER_STEP_1
+                            : AUTHENTICATE_ROUTE.ORDER_DEFAULT_MENU
                     }
                     keyboardHandlingEnabled={isIos}
                     headerMode={'none'}
@@ -83,7 +83,10 @@ const AppStack = () => {
                     {/* Order Default */}
                     {!skipOrderDefault && (
                         <>
-                            <MainStack.Screen name={AUTHENTICATE_ROUTE.REGISTER_STEP_1} component={RegisterStep1} />
+                            <MainStack.Screen
+                                name={AUTHENTICATE_ROUTE.ORDER_DEFAULT_MENU}
+                                component={OrderDefaultMenu}
+                            />
                             <MainStack.Screen name={AUTHENTICATE_ROUTE.REGISTER_STEP_3} component={RegisterStep3} />
                             <MainStack.Screen name={AUTHENTICATE_ROUTE.REGISTER_STEP_2} component={RegisterStep2} />
                         </>

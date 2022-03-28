@@ -155,9 +155,11 @@ const MobileOrderScreen = () => {
                             {mobileOrder?.dishes?.map((item: any, index: number) => {
                                 return (
                                     <OrderItemCart
+                                        customValue={true}
                                         canChange={false}
                                         key={index}
                                         data={item}
+                                        saveOrder={mobileOrder}
                                         onCancel={cancelItem}
                                         notGoDetail={true}
                                         hideDashView={mobileOrder?.dishes?.length - 1 === index}
@@ -165,12 +167,15 @@ const MobileOrderScreen = () => {
                                 );
                             })}
                         </View>
-                        <View style={styles.couponView}>
-                            <StyledText customStyle={styles.title} i18nText={'mobileOrder.coupon.title'} />
-                            {mobileOrder?.coupons?.map((item: any, index: number) => (
-                                <ItemCoupon key={index} data={item} />
-                            ))}
-                        </View>
+                        {mobileOrder?.coupons?.length > 0 && (
+                            <View style={styles.couponView}>
+                                <StyledText customStyle={styles.title} i18nText={'mobileOrder.coupon.title'} />
+
+                                {mobileOrder?.coupons?.map((item: any, index: number) => (
+                                    <ItemCoupon key={index} data={item} />
+                                ))}
+                            </View>
+                        )}
                         <View style={styles.bottomView} />
                     </View>
                 </StyledKeyboardAware>
@@ -184,11 +189,12 @@ export default MobileOrderScreen;
 const styles = ScaledSheet.create({
     container: {
         flex: 1,
-        backgroundColor: Themes.COLORS.lightGray,
+        backgroundColor: Themes.COLORS.white,
     },
     scrollView: {},
     body: {
         flex: 1,
+        backgroundColor: Themes.COLORS.lightGray,
     },
     qrView: {
         alignItems: 'center',
@@ -203,7 +209,6 @@ const styles = ScaledSheet.create({
         paddingHorizontal: '20@s',
         backgroundColor: Themes.COLORS.white,
         paddingVertical: '10@vs',
-        marginBottom: '10@vs',
         marginTop: '10@vs',
     },
     buttonSave: {
@@ -247,6 +252,7 @@ const styles = ScaledSheet.create({
         height: '34@vs',
         width: '100%',
         backgroundColor: Themes.COLORS.white,
+        marginTop: '5@vs',
     },
     dishUse: {
         color: Themes.COLORS.silver,

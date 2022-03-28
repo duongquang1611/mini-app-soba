@@ -36,8 +36,8 @@ export const OrderChild = (data: any) => {
         <View style={styles.containerItem}>
             <View style={styles.itemRow}>
                 <View style={styles.itemRow}>
-                    <StyledImage source={{ uri: dish.thumbnail }} customStyle={styles.imgItem} />
-                    <StyledText numberOfLines={1} originValue={dish.title} customStyle={styles.nameOrder} />
+                    <StyledImage resizeMode={'stretch'} source={{ uri: dish.thumbnail }} customStyle={styles.imgItem} />
+                    <StyledText originValue={dish.title} customStyle={styles.nameOrder} />
                 </View>
                 <TouchableOpacity
                     onPress={onChoose}
@@ -94,8 +94,8 @@ const OrderChildCanChange = (data: any) => {
         <View style={styles.containerItem}>
             <View style={styles.itemRow}>
                 <View style={styles.itemRow}>
-                    <StyledImage source={{ uri: dish.thumbnail }} customStyle={styles.imgItem} />
-                    <StyledText numberOfLines={1} originValue={dish.title} customStyle={styles.nameOrder} />
+                    <StyledImage resizeMode={'stretch'} source={{ uri: dish.thumbnail }} customStyle={styles.imgItem} />
+                    <StyledText originValue={dish.title} customStyle={styles.nameOrder} />
                 </View>
                 <View style={styles.itemRow}>
                     <TouchableOpacity onPress={minus} disabled={num === 0}>
@@ -166,7 +166,7 @@ const styles = ScaledSheet.create({
     imgItem: {
         width: '60@s',
         height: '60@s',
-        marginRight: '20@s',
+        marginRight: '10@s',
     },
     itemRow: {
         flexDirection: 'row',
@@ -189,7 +189,7 @@ const styles = ScaledSheet.create({
     },
     nameOrder: {
         fontWeight: 'bold',
-        width: '170@s',
+        width: '185@s',
     },
     name: {
         fontSize: '16@ms0.3',

@@ -9,13 +9,14 @@ import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { staticValue } from 'utilities/staticData';
 
 const ButtonCart = (props: any) => {
-    const { checkDisable, goToSaveOrder, amountValue, numOrder, isMenu, createDate } = props;
+    const { checkDisable, goToSaveOrder, amountValue, numOrder, isMenu, createDate, customStyle } = props;
     return (
         <StyledTouchable
             disabled={checkDisable}
             customStyle={[
                 styles.secondaryView,
                 { backgroundColor: checkDisable ? Themes.COLORS.silver : Themes.COLORS.secondary },
+                customStyle,
             ]}
             onPress={goToSaveOrder}
         >
@@ -69,7 +70,7 @@ const styles = ScaledSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         paddingVertical: '7@vs',
-        marginBottom: Metrics.safeBottomPadding > 0 ? Metrics.safeBottomPadding : '15@vs',
+        marginBottom: '10@vs',
     },
     icBag: {
         marginTop: '3@vs',

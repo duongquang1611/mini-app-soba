@@ -1,4 +1,3 @@
-import { RootState } from 'app-redux/hooks';
 import { updateCartOrder } from 'app-redux/slices/orderSlice';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
@@ -9,29 +8,32 @@ import { navigate } from 'navigation/NavigationService';
 import React from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { staticValue } from 'utilities/staticData';
 
 const OrderItemCart = (props: any) => {
-    const { subDishes, createDate, mainDish, totalAmount, hideDashView = false } = props?.data;
-    const { cartOrder } = useSelector((state: RootState) => state.order);
+    const { hideDashView = false, customValue } = props;
+    const { subDishes, createDate, mainDish, totalAmount } = props?.data;
     const dispatch = useDispatch();
     const { name, image } = mainDish;
-    const { cancelItem, canChange, goDetailMenu, notGoDetail } = props;
+    const { cancelItem, canChange, goDetailMenu, notGoDetail, saveOrder, isDefaultOrder, SaveAllOrderCart } = props;
     const num = mainDish?.amount;
-
     const updateOrder = (currentNum: number) => {
-        const cartDishOrder = cartOrder?.dishes || [];
-        const findIndexDishEdit = cartOrder?.dishes?.findIndex((item: any) => item.createDate === createDate);
-        const orderEdit = cartOrder?.dishes?.find((item: any) => item.createDate === createDate);
+        const cartDishOrder = saveOrder?.dishes || [];
+        const findIndexDishEdit = saveOrder?.dishes?.findIndex((item: any) => item.createDate === createDate);
+        const orderEdit = saveOrder?.dishes?.find((item: any) => item.createDate === createDate);
         const orderChange = {
             ...orderEdit,
-            mainDish: { ...orderEdit.mainDish, amount: currentNum },
+            mainDish: { ...orderEdit?.mainDish, amount: currentNum },
             totalAmount: (totalAmount / mainDish.amount) * currentNum,
         };
         const newCartDishOrder = [...cartDishOrder];
         newCartDishOrder?.splice(findIndexDishEdit, 1, orderChange);
-        dispatch(updateCartOrder({ ...cartOrder, dishes: newCartDishOrder }));
+        if (isDefaultOrder) {
+            SaveAllOrderCart({ ...saveOrder, dishes: newCartDishOrder });
+        } else {
+            dispatch(updateCartOrder({ ...saveOrder, dishes: newCartDishOrder }));
+        }
     };
 
     const add = () => {
@@ -50,12 +52,18 @@ const OrderItemCart = (props: any) => {
         if (goDetailMenu) {
             goDetailMenu();
         } else {
-            navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.DETAIL_MEAL, { id: mainDish?.id, createDate });
+            navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.DETAIL_MEAL, {
+                id: mainDish?.id,
+                createDate,
+                isDefaultOrder,
+                orderDefault: saveOrder,
+                setOrderDefault: SaveAllOrderCart,
+            });
         }
     };
 
     return (
-        <StyledTouchable disabled={notGoDetail} onPress={goToDetail}>
+        <StyledTouchable disabled={notGoDetail} onPress={goToDetail} customStyle={styles.dishView}>
             {cancelItem && (
                 <StyledTouchable customStyle={styles.buttonCancel} onPress={() => cancelItem(createDate)}>
                     <StyledIcon source={Images.icons.cancel} size={17} customStyle={styles.icCancel} />
@@ -78,7 +86,7 @@ const OrderItemCart = (props: any) => {
                             {item?.amount > 1 && (
                                 <View style={styles.numView}>
                                     <StyledText
-                                        originValue={`x ${item?.amount}`}
+                                        originValue={`x${item?.amount}`}
                                         isBlack
                                         customStyle={styles.addValueText}
                                     />
@@ -100,7 +108,10 @@ const OrderItemCart = (props: any) => {
                                     />
                                 </StyledTouchable>
                             )}
-                            <StyledText originValue={`${num}`} customStyle={styles.quantityText} />
+                            <StyledText
+                                originValue={customValue && num < 10 ? `0${num}` : `${num}`}
+                                customStyle={styles.quantityText}
+                            />
                             {canChange && (
                                 <StyledTouchable onPress={add} disabled={num >= staticValue.MAX_ORDER}>
                                     <StyledIcon
@@ -196,12 +207,15 @@ const styles = ScaledSheet.create({
     },
     buttonCancel: {
         position: 'absolute',
-        right: '1@s',
+        right: '0@s',
         width: '35@s',
         height: '35@vs',
         alignItems: 'flex-end',
         zIndex: 2,
         paddingTop: '5@vs',
         paddingRight: '5@vs',
+    },
+    dishView: {
+        width: '100%',
     },
 });

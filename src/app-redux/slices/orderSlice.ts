@@ -3,13 +3,13 @@ import { persistReducer } from 'redux-persist';
 import { generatePersistConfig } from 'utilities/helper';
 
 interface IOrderState {
-    orderDefault: any;
+    defaultOrder: any;
     cartOrder: any;
     mobileOrder: any;
 }
 
 const initialState: IOrderState = {
-    orderDefault: {},
+    defaultOrder: { dishes: [], coupons: [] },
     cartOrder: { dishes: [], coupons: [] },
     mobileOrder: { dishes: [], coupons: [] },
 };
@@ -24,6 +24,10 @@ const orderSlice = createSlice({
         },
         updateCartOrder: (state, action: PayloadAction<any>) => {
             state = { ...state, cartOrder: action.payload };
+            return state;
+        },
+        updateDefaultOrder: (state, action: PayloadAction<any>) => {
+            state = { ...state, defaultOrder: action.payload };
             return state;
         },
         updateCouponMobileOrder: (state, action: PayloadAction<any>) => {
@@ -56,6 +60,10 @@ const orderSlice = createSlice({
             state = { ...state, cartOrder: {} };
             return state;
         },
+        clearDefaultOrder: (state) => {
+            state = { ...state, defaultOrder: {} };
+            return state;
+        },
         clearOrder: () => {
             return initialState;
         },
@@ -71,6 +79,8 @@ export const {
     updateCouponMobileOrder,
     updateCouponCartOrder,
     clearCartOrder,
+    updateDefaultOrder,
+    clearDefaultOrder,
     clearOrder,
 } = orderSlice.actions;
 

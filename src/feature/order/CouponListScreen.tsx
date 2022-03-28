@@ -106,6 +106,7 @@ export default CouponListScreen;
 const styles = ScaledSheet.create({
     container: {
         flex: 1,
+        backgroundColor: Themes.COLORS.lightGray,
     },
     body: {
         flex: 1,
