@@ -63,7 +63,11 @@ const StyledHeaderImage = (props: HeaderProps) => {
     const renderItem = (data: any) => {
         return (
             <View>
-                <StyledImage source={{ uri: data?.item?.image || data?.item }} customStyle={styles.img} />
+                <StyledImage
+                    resizeMode={'stretch'}
+                    source={{ uri: data?.item?.image || data?.item }}
+                    customStyle={styles.img}
+                />
             </View>
         );
     };
@@ -85,6 +89,9 @@ const StyledHeaderImage = (props: HeaderProps) => {
                 />
                 <View style={[styles.containerDot, { bottom: content ? verticalScale(20) : verticalScale(-10) }]}>
                     <Pagination
+                        containerStyle={{
+                            justifyContent: 'flex-start',
+                        }}
                         dotsLength={images.length}
                         activeDotIndex={index}
                         inactiveDotStyle={{ width: scale(5), borderRadius: 5 }}
@@ -204,7 +211,7 @@ const styles = ScaledSheet.create({
         width: '40@s',
         height: '4@vs',
         borderRadius: 2,
-        backgroundColor: Themes.COLORS.lightGray,
+        backgroundColor: Themes.COLORS.disabled,
     },
     slide: {
         width: '100%',
@@ -214,14 +221,14 @@ const styles = ScaledSheet.create({
         tintColor: Themes.COLORS.headerBackground,
     },
     contentText: {
-        position: 'absolute',
         bottom: '-5@vs',
+        marginTop: '-15@vs',
         marginLeft: '20@s',
         color: Themes.COLORS.headerBackground,
         fontSize: '20@ms0.3',
         zIndex: 20,
         fontWeight: 'bold',
-        width: '500@s',
+        width: '300@s',
     },
     logo: {
         width: '111@s',

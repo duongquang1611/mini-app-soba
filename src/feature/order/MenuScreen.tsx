@@ -131,7 +131,7 @@ const MenuScreen = () => {
                     contentContainerStyle: { flexGrow: 1 },
                 },
             },
-            { title: 'order.editCouponTitle' },
+            { title: 'order.orderGuide' },
         );
     };
     const numberItemListCoupon = dishes?.length;

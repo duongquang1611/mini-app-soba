@@ -145,7 +145,7 @@ const StyledHeader = (props: StyledHeaderProps) => {
                                 customStyle={[styles.iconRight, customIconRight]}
                             />
                         ) : textRight ? (
-                            <StyledText i18nText={textRight} numberOfLines={1} customStyle={styles.textRight} />
+                            <StyledText i18nText={textRight} customStyle={styles.textRight} />
                         ) : null}
                     </StyledTouchable>
                 )}
@@ -187,7 +187,7 @@ const styles = ScaledSheet.create({
     },
     containerRight: {
         marginLeft: 'auto',
-        marginRight: '25@s',
+        marginRight: '20@s',
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 30,
@@ -201,8 +201,8 @@ const styles = ScaledSheet.create({
     textRight: {
         color: Themes.COLORS.primary,
         fontSize: '14@ms0.3',
-        width: '200@s',
-        alignSelf: 'flex-start',
+        position: 'absolute',
+        right: '0@s',
     },
 });
 

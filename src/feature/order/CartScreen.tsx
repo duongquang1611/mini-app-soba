@@ -1,5 +1,5 @@
 import { RootState } from 'app-redux/hooks';
-import { clearCartOrder, updateCartOrder, updateMobileOrder } from 'app-redux/slices/orderSlice';
+import { clearCartOrder, updateCartOrder, updateDefaultOrder, updateMobileOrder } from 'app-redux/slices/orderSlice';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
@@ -10,7 +10,7 @@ import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeader from 'components/common/StyledHeader';
 import { HOME_ROUTE, TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { goBack, navigate } from 'navigation/NavigationService';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { View } from 'react-native';
 import { ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
@@ -81,17 +81,27 @@ const ItemCoupon = (props: any) => {
         </View>
     );
 };
-const CartScreen = () => {
+const CartScreen = (props: any) => {
+    const { isDefaultOrder, orderDefault, setOrderDefault } = props?.route?.params;
     const { cartOrder } = useSelector((state: RootState) => state.order);
+    const [saveOrderCart, setSaveOrderCart] = useState(orderDefault);
+    const saveOrder = isDefaultOrder ? saveOrderCart : cartOrder;
     const dispatch = useDispatch();
     let num = useRef(0).current;
-    cartOrder?.dishes?.forEach(async (rating: any) => {
+    saveOrder?.dishes?.forEach(async (rating: any) => {
         num += rating?.totalAmount;
     });
-    num += cartOrder?.coupons?.length || 0;
-
+    num += saveOrder?.coupons?.length || 0;
+    const SaveAllOrderCart = (order: any) => {
+        setOrderDefault?.(order);
+        setSaveOrderCart(order);
+    };
     const onClear = () => {
-        dispatch(clearCartOrder());
+        if (isDefaultOrder) {
+            SaveAllOrderCart({});
+        } else {
+            dispatch(clearCartOrder());
+        }
         goBack();
     };
 
@@ -118,13 +128,21 @@ const CartScreen = () => {
     };
 
     const cancelItem = (createDate: string) => {
-        const newDishes = cartOrder?.dishes?.filter((item: any) => item?.createDate !== createDate);
-        dispatch(updateCartOrder({ ...cartOrder, dishes: newDishes }));
+        const newDishes = saveOrder?.dishes?.filter((item: any) => item?.createDate !== createDate);
+        if (isDefaultOrder) {
+            SaveAllOrderCart({ ...saveOrder, dishes: newDishes });
+        } else {
+            dispatch(updateCartOrder({ ...saveOrder, dishes: newDishes }));
+        }
     };
 
     const cancelCouponItem = (id: number) => {
-        const newCoupons = cartOrder?.coupons?.filter((item: any) => item?.id !== id);
-        dispatch(updateCartOrder({ ...cartOrder, coupons: newCoupons }));
+        const newCoupons = saveOrder?.coupons?.filter((item: any) => item?.id !== id);
+        if (isDefaultOrder) {
+            SaveAllOrderCart({ ...saveOrder, coupons: newCoupons });
+        } else {
+            dispatch(updateCartOrder({ ...saveOrder, coupons: newCoupons }));
+        }
     };
 
     const goToCouponList = () => {
@@ -136,63 +154,82 @@ const CartScreen = () => {
         dispatch(updateMobileOrder(cartOrder));
         navigate(HOME_ROUTE.MOBILE_ORDER);
     };
+    const saveDefaultOrder = () => {
+        dispatch(updateDefaultOrder(saveOrderCart));
+        goBack();
+    };
 
     return (
         <View style={styles.container}>
             <StyledHeader title={'order.cartTitle'} textRight={'order.cancelOrder'} onPressRight={cancelCart} />
             <StyledKeyboardAware>
                 <View style={styles.body}>
-                    <AmountOrder cartOrder={cartOrder} />
+                    <AmountOrder cartOrder={saveOrder} />
                     <View style={styles.orderView}>
-                        {cartOrder?.dishes?.map((item: any, index: number) => (
+                        {saveOrder?.dishes?.map((item: any, index: number) => (
                             <OrderItemCart
-                                cartOrder={cartOrder}
+                                saveOrder={saveOrder}
                                 cancelItem={popUpCancelDish}
                                 key={index}
+                                hideDashView={index === saveOrder?.dishes?.length - 1}
                                 data={item}
                                 canChange={true}
+                                isDefaultOrder={isDefaultOrder}
+                                SaveAllOrderCart={SaveAllOrderCart}
                             />
                         ))}
                     </View>
-                    <View style={styles.contentView}>
-                        <StyledText customStyle={styles.title} i18nText={'coupon.title'} />
-                        {cartOrder?.coupons?.map((item: any, index: number) => (
-                            <ItemCoupon key={index} data={item} cancelCouponItem={popUpCancelCoupon} />
-                        ))}
-                        {cartOrder?.coupons?.length === 0 && (
-                            <View style={styles.noCouponView}>
-                                <StyledIcon source={Images.icons.noCoupon} size={40} />
-                                <StyledText customStyle={styles.noCoupon} i18nText={'coupon.noCoupon'} />
-                            </View>
-                        )}
-                        <StyledTouchable
-                            disabled={cartOrder?.length >= staticValue.MAX_ORDER}
-                            onPress={goToCouponList}
-                            customStyle={styles.moreCouponView}
-                        >
-                            <StyledText customStyle={styles.moreCoupon} i18nText={'coupon.moreCoupon'} />
-                            <StyledIcon source={Images.icons.add} size={20} />
-                        </StyledTouchable>
-                    </View>
+                    {!isDefaultOrder && (
+                        <View style={styles.contentView}>
+                            <StyledText customStyle={styles.title} i18nText={'coupon.title'} />
+                            {saveOrder?.coupons?.map((item: any, index: number) => (
+                                <ItemCoupon key={index} data={item} cancelCouponItem={popUpCancelCoupon} />
+                            ))}
+                            {saveOrder?.coupons?.length === 0 && (
+                                <View style={styles.noCouponView}>
+                                    <StyledIcon source={Images.icons.noCoupon} size={40} />
+                                    <StyledText customStyle={styles.noCoupon} i18nText={'coupon.noCoupon'} />
+                                </View>
+                            )}
+                            <StyledTouchable
+                                disabled={saveOrder?.length >= staticValue.MAX_ORDER}
+                                onPress={goToCouponList}
+                                customStyle={styles.moreCouponView}
+                            >
+                                <StyledText customStyle={styles.moreCoupon} i18nText={'coupon.moreCoupon'} />
+                                <StyledIcon source={Images.icons.add} size={20} />
+                            </StyledTouchable>
+                        </View>
+                    )}
                     <View style={styles.contentView}>
                         {num > staticValue.MAX_ORDER && (
                             <StyledText i18nText={'order.errorMaxOrder'} customStyle={styles.errText} />
                         )}
-
-                        <StyledButton
-                            disabled={num <= 0 || num > staticValue.MAX_ORDER}
-                            title={'order.qrButton'}
-                            onPress={createQRCode}
-                        />
-                        <StyledButton
-                            isNormal={true}
-                            title={'order.editCartButton'}
-                            onPress={goBack}
-                            customStyle={styles.productAddition}
-                            customStyleText={styles.textProduct}
-                        />
+                        {!isDefaultOrder && (
+                            <StyledButton
+                                disabled={num <= 0 || num > staticValue.MAX_ORDER}
+                                title={'order.qrButton'}
+                                onPress={createQRCode}
+                            />
+                        )}
+                        {!isDefaultOrder ? (
+                            <StyledButton
+                                isNormal={true}
+                                title={'order.editCartButton'}
+                                onPress={goBack}
+                                customStyle={styles.productAddition}
+                                customStyleText={styles.textProduct}
+                            />
+                        ) : (
+                            <StyledButton
+                                disabled={num <= 0 || num > staticValue.MAX_ORDER}
+                                title={'common.save'}
+                                onPress={saveDefaultOrder}
+                            />
+                        )}
                     </View>
                 </View>
+                <View style={styles.bottomView} />
             </StyledKeyboardAware>
         </View>
     );
@@ -203,12 +240,13 @@ export default CartScreen;
 const styles = ScaledSheet.create({
     container: {
         flex: 1,
-        backgroundColor: Themes.COLORS.lightGray,
+        backgroundColor: Themes.COLORS.white,
         paddingBottom: Metrics.safeBottomPadding,
     },
     body: {
         flex: 1,
         alignItems: 'center',
+        backgroundColor: Themes.COLORS.lightGray,
     },
     productAddition: {
         backgroundColor: Themes.COLORS.white,
@@ -217,41 +255,11 @@ const styles = ScaledSheet.create({
         paddingVertical: '10@vs',
         marginBottom: '10@vs',
     },
-    orderItemView: {
-        width: '100%',
-        paddingVertical: '10@vs',
-        paddingHorizontal: '20@s',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        backgroundColor: Themes.COLORS.white,
-    },
-    orderTextView: {
-        width: '75%',
-        justifyContent: 'space-between',
-    },
-    titleOrder: {
-        fontSize: '16@ms0.3',
-        fontWeight: 'bold',
-        marginBottom: '5@vs',
-    },
-    quantity: {
-        backgroundColor: Themes.COLORS.lightGray,
-        width: '100%',
-        borderRadius: 5,
-        paddingVertical: '10@vs',
-        paddingHorizontal: '20@s',
-        justifyContent: 'space-between',
-        flexDirection: 'row',
-        marginTop: '10@vs',
-        alignItems: 'center',
-    },
     orderView: {
         alignItems: 'center',
         width: '100%',
         backgroundColor: Themes.COLORS.white,
-        paddingVertical: '10@vs',
         marginBottom: '10@vs',
-        paddingRight: '5@s',
     },
     noCouponView: {
         width: '100%',
@@ -349,5 +357,11 @@ const styles = ScaledSheet.create({
     },
     buttonDetail: {
         width: '95%',
+    },
+    bottomView: {
+        height: '34@vs',
+        width: '100%',
+        backgroundColor: Themes.COLORS.white,
+        marginTop: '-5@vs',
     },
 });

@@ -16,7 +16,7 @@ const OrderItemCart = (props: any) => {
         <StyledTouchable onPress={goDetailMenu}>
             <View style={styles.orderItemView}>
                 <TouchableOpacity onPress={props.goDetailMenu}>
-                    <StyledIcon source={{ uri: mainDish?.image }} size={70} />
+                    <StyledIcon resizeMode={'stretch'} source={{ uri: mainDish?.image }} size={70} />
                 </TouchableOpacity>
                 <View style={styles.orderTextView}>
                     <View style={styles.rowDetail}>
@@ -46,15 +46,27 @@ const OrderItemCart = (props: any) => {
     );
 };
 const ModalDetailMenu = (props: any) => {
-    const { id, dishes } = props;
+    const { id, dishes, isDefaultOrder, orderDefault, setOrderDefault } = props;
     const getListFromDishes = dishes?.filter((item: any) => item?.mainDish?.id === id) || [];
     const goDetailNew = () => {
         props?.closeModal();
-        navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.DETAIL_MEAL, { id, isNew: true });
+        navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.DETAIL_MEAL, {
+            id,
+            isNew: true,
+            isDefaultOrder,
+            orderDefault,
+            setOrderDefault,
+        });
     };
     const goDetailEdit = (createDate: string) => {
         props?.closeModal();
-        navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.DETAIL_MEAL, { id, createDate });
+        navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.DETAIL_MEAL, {
+            id,
+            createDate,
+            isDefaultOrder,
+            orderDefault,
+            setOrderDefault,
+        });
     };
     return (
         <View style={styles.container}>

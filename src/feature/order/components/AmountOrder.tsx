@@ -23,12 +23,12 @@ const AmountOrder = (props: AmountOrderProps) => {
     return (
         <View style={styles.numOrderView}>
             <View style={styles.row}>
-                <StyledIcon source={Images.icons.bag} size={17} customStyle={styles.icBag} />
+                <StyledIcon source={Images.icons.bagTick} size={17} customStyle={styles.icBag} />
                 <StyledText i18nText={'order.numOrder'} customStyle={styles.contentText} />
             </View>
             <View style={styles.row}>
-                <StyledText originValue={`${numOrder}`} customStyle={styles.contentText} />
-                <StyledText i18nText={'order.point'} customStyle={styles.contentText} />
+                <StyledText originValue={`${numOrder}`} customStyle={styles.valuetext} />
+                <StyledText i18nText={'order.point'} customStyle={styles.valuetext} />
             </View>
         </View>
     );
@@ -57,5 +57,10 @@ const styles = ScaledSheet.create({
     row: {
         flexDirection: 'row',
         alignItems: 'center',
+    },
+    valuetext: {
+        marginLeft: '5@s',
+        fontSize: '24@ms0.3',
+        fontWeight: 'bold',
     },
 });

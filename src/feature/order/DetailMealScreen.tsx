@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { getDish } from 'api/modules/api-app/order';
 import { RootState } from 'app-redux/hooks';
-import { updateCartOrder } from 'app-redux/slices/orderSlice';
+import { updateCartOrder, updateDefaultOrder } from 'app-redux/slices/orderSlice';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
@@ -12,6 +12,7 @@ import { goBack } from 'navigation/NavigationService';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
 import { toLocalStringTime } from 'utilities/format';
@@ -31,9 +32,10 @@ const checkDisable = (dishOptions: any, subDishDetail: any) => {
     return result;
 };
 const DetailMealScreen = (props: any) => {
-    const { id, isNew, createDate } = props?.route?.params;
+    const { id, isNew, createDate, isDefaultOrder, orderDefault, setOrderDefault } = props?.route?.params;
     const { cartOrder } = useSelector((state: RootState) => state.order);
-    const findIdStore = isNew ? null : cartOrder?.dishes?.find((item: any) => item.createDate === createDate);
+    const saveOrder = isDefaultOrder ? orderDefault : cartOrder;
+    const findIdStore = isNew ? null : saveOrder?.dishes?.find((item: any) => item.createDate === createDate);
     const [num, setNum] = useState(findIdStore?.mainDish?.amount || 1);
     const [dish, setDish] = useState<any>({});
     const { title, description, dishOptions } = dish || {};
@@ -71,16 +73,15 @@ const DetailMealScreen = (props: any) => {
         subDishes: subDishDetail,
     });
     const numOrder = createDate ? findIdStore?.mainDish?.amount : 1;
-    const totalNum = sumTotalAmount(cartOrder);
+    const totalNum = sumTotalAmount(saveOrder);
 
     const newAmountOrder = createDate
         ? totalNum + amountValue - (findIdStore?.totalAmount || 0)
         : totalNum + amountValue;
     const goToSaveOrder = () => {
-        const orderChooseItem = { id };
         const dishesStore = isNew
-            ? cartOrder?.dishes || []
-            : cartOrder?.dishes?.filter((item: any) => item.createDate !== createDate) || [];
+            ? saveOrder?.dishes || []
+            : saveOrder?.dishes?.filter((item: any) => item.createDate !== createDate) || [];
 
         const paramOrder =
             amountValue > 0
@@ -101,13 +102,19 @@ const DetailMealScreen = (props: any) => {
                       ],
                   }
                 : {};
-        dispatch(updateCartOrder({ ...paramOrder, coupons: cartOrder?.coupons }));
+        if (isDefaultOrder) {
+            setOrderDefault?.({ ...paramOrder, coupons: saveOrder?.coupons });
+        } else {
+            dispatch(updateCartOrder({ ...paramOrder, coupons: saveOrder?.coupons }));
+        }
+
         goBack();
     };
     return (
-        <View style={styles.container}>
-            <StyledHeaderImage images={dish?.images || []} content={title} />
+        <SafeAreaView style={styles.container}>
             <StyledKeyboardAware style={styles.container}>
+                <StyledHeaderImage images={dish?.images || []} content={title} />
+
                 <StyledText originValue={description} isBlack customStyle={styles.contentText} />
                 <View style={styles.body}>
                     {dishOptions?.map((item: any, index: number) => (
@@ -151,8 +158,9 @@ const DetailMealScreen = (props: any) => {
                 amountValue={amountValue}
                 numOrder={newAmountOrder}
                 createDate={createDate}
+                customStyle={styles.btnCart}
             />
-        </View>
+        </SafeAreaView>
     );
 };
 
@@ -308,5 +316,8 @@ const styles = ScaledSheet.create({
         height: '5@vs',
         width: '100%',
         backgroundColor: Themes.COLORS.lightGray,
+    },
+    btnCart: {
+        marginBottom: Metrics.safeBottomPadding > 0 ? Metrics.safeBottomPadding : '10@vs',
     },
 });

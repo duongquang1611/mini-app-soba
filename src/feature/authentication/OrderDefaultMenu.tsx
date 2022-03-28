@@ -1,6 +1,7 @@
 import { getMenu } from 'api/modules/api-app/order';
 import { RootState } from 'app-redux/hooks';
 import { updateGlobalData } from 'app-redux/slices/globalDataSlice';
+import { updateDefaultOrder } from 'app-redux/slices/orderSlice';
 import { store } from 'app-redux/store';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
@@ -9,6 +10,7 @@ import { StyledButton, StyledIcon, StyledText, StyledTouchable } from 'component
 import AlertMessage from 'components/base/AlertMessage';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledHeader from 'components/common/StyledHeader';
+import ButtonCart from 'feature/order/components/ButtonCart';
 import ListViewSelect from 'feature/order/components/ListViewSelect';
 import ModalDetailMenu from 'feature/order/components/ModalDetailMenu';
 import { ORDER_ROUTE } from 'navigation/config/routes';
@@ -22,7 +24,7 @@ import { sumTotalAmount } from 'utilities/helper';
 import { MenuType, MODAL_ID, staticValue } from 'utilities/staticData';
 
 const ItemMenu = (props: any) => {
-    const { orderDefault } = useSelector((state: RootState) => state.order);
+    const { orderDefault, setOrderDefault } = props;
     let num = useRef(0).current;
     orderDefault?.dishes
         ?.filter((itemOrder: any) => itemOrder?.mainDish?.id === props?.item?.id)
@@ -31,7 +33,13 @@ const ItemMenu = (props: any) => {
         });
     const isSetting = false;
     const gotoNew = () => {
-        navigate(ORDER_ROUTE.DETAIL_MEAL, { id: props?.item?.id, isNew: true });
+        navigate(ORDER_ROUTE.DETAIL_MEAL, {
+            id: props?.item?.id,
+            isNew: true,
+            isDefaultOrder: true,
+            orderDefault,
+            setOrderDefault,
+        });
     };
     return (
         <StyledTouchable onPress={num > 0 ? props?.goToDetailModal : gotoNew}>
@@ -51,8 +59,9 @@ const ItemMenu = (props: any) => {
         </StyledTouchable>
     );
 };
-const RegisterStep1 = () => {
-    const { orderDefault } = useSelector((state: RootState) => state.order);
+const OrderDefaultMenu = () => {
+    const { defaultOrder } = useSelector((state: RootState) => state.order);
+    const [orderDefault, setOrderDefault] = useState(defaultOrder);
     const { dishes } = orderDefault || [];
     const numOrder = sumTotalAmount(orderDefault);
     const { resource } = store.getState();
@@ -92,7 +101,14 @@ const RegisterStep1 = () => {
     const showModalDetail = (id: any) => {
         modalize.show(
             MODAL_ID.DETAIL_MENU,
-            <ModalDetailMenu dishes={dishes} id={id} closeModal={() => modalize.dismiss(MODAL_ID.DETAIL_MENU)} />,
+            <ModalDetailMenu
+                isDefaultOrder={true}
+                dishes={dishes}
+                id={id}
+                closeModal={() => modalize.dismiss(MODAL_ID.DETAIL_MENU)}
+                orderDefault={orderDefault}
+                setOrderDefault={setOrderDefault}
+            />,
             {
                 modalHeight: verticalScale(numberItemListCoupon * 60 + 300),
                 scrollViewProps: {
@@ -119,6 +135,17 @@ const RegisterStep1 = () => {
     const skipOrderDefault = () => {
         dispatch(updateGlobalData({ skipOrderDefault: true }));
     };
+    const gotoCart = () => {
+        navigate(ORDER_ROUTE.CART, {
+            isDefaultOrder: true,
+            setOrderDefault,
+            orderDefault,
+        });
+    };
+    const saveDefaultOrder = () => {
+        dispatch(updateDefaultOrder(orderDefault));
+        dispatch(updateGlobalData({ skipOrderDefault: true }));
+    };
 
     return (
         <View style={styles.container}>
@@ -129,6 +156,10 @@ const RegisterStep1 = () => {
                 hasBack={false}
                 largeTitleHeader
             />
+            <View style={styles.rowContent}>
+                <StyledIcon customStyle={styles.icQuestion} source={Images.icons.question} size={20} />
+                <StyledText i18nText={'authen.register.contentOrderDefault'} customStyle={styles.contentName} />
+            </View>
             <View style={styles.categoryContainer}>
                 <ListViewSelect
                     onPressCategory={onPressCategory}
@@ -154,7 +185,13 @@ const RegisterStep1 = () => {
                     data={menuFilter}
                     keyExtractor={(item) => item.id}
                     renderItem={({ item }) => (
-                        <ItemMenu goToDetailModal={() => showModalDetail(item?.id)} key={item.id} item={item} />
+                        <ItemMenu
+                            goToDetailModal={() => showModalDetail(item?.id)}
+                            key={item.id}
+                            item={item}
+                            orderDefault={orderDefault}
+                            setOrderDefault={setOrderDefault}
+                        />
                     )}
                 />
             </View>
@@ -163,14 +200,19 @@ const RegisterStep1 = () => {
                     <StyledText i18nText={'order.errorMaxOrder'} customStyle={styles.quantityErr} />
                 </View>
             )}
+            {numOrder > 0 && <ButtonCart goToSaveOrder={gotoCart} amountValue={numOrder} numOrder={numOrder} isMenu />}
             <View style={styles.buttonSave}>
-                <StyledButton title={'common.save'} />
+                <StyledButton
+                    disabled={numOrder > staticValue.MAX_ORDER || numOrder === 0}
+                    title={'common.save'}
+                    onPress={saveDefaultOrder}
+                />
             </View>
         </View>
     );
 };
 
-export default RegisterStep1;
+export default OrderDefaultMenu;
 
 const styles = ScaledSheet.create({
     container: {
@@ -193,10 +235,12 @@ const styles = ScaledSheet.create({
         paddingHorizontal: '10@s',
     },
     buttonSave: {
-        paddingVertical: '20@vs',
+        paddingVertical: '10@vs',
+        paddingBottom: '20@vs',
         marginBottom: Metrics.safeBottomPadding,
         backgroundColor: Themes.COLORS.white,
         alignItems: 'center',
+        marginTop: '-10@vs',
     },
     contentView: {
         width: '100%',
@@ -220,9 +264,8 @@ const styles = ScaledSheet.create({
         fontSize: '16@ms0.3',
     },
     contentName: {
-        fontWeight: 'normal',
         color: Themes.COLORS.textSecondary,
-        fontSize: '14@ms0.3',
+        width: '90%',
     },
     containView: {
         width: '200@s',
@@ -347,6 +390,13 @@ const styles = ScaledSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
     },
+    rowContent: {
+        flexDirection: 'row',
+        width: '100%',
+        justifyContent: 'space-between',
+        paddingHorizontal: '20@s',
+        marginTop: '15@vs',
+    },
     buttonCategory: {
         width: '20@s',
         alignItems: 'center',
@@ -367,5 +417,8 @@ const styles = ScaledSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         width: '100%',
+    },
+    icQuestion: {
+        tintColor: Themes.COLORS.silver,
     },
 });

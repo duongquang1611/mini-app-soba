@@ -81,6 +81,7 @@ const Images = {
         nextSecondary: require('./icon/next_secondary.png'),
         tickSquare: require('./icon/ic_tick_square.png'),
         untickSquare: require('./icon/ic_untick_square.png'),
+        bagTick: require('./icon/ic_bag_tick.png'),
     },
     photo: {
         defaultImage: require('./photo/img_default_image.png'),
