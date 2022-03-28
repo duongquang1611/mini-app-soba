@@ -2,6 +2,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { getResources } from 'api/modules/api-app/general';
 import { RootState } from 'app-redux/hooks';
 import { resourceActions } from 'app-redux/slices/resourceSlice';
+import { Themes } from 'assets/themes';
 import ChangePassword from 'feature/authentication/ChangePassword';
 import RegisterStep1 from 'feature/authentication/RegisterStep1';
 import RegisterStep2 from 'feature/authentication/RegisterStep2';
@@ -40,6 +41,7 @@ import StampCardDetailScreen from 'feature/stamp/StampCardDetailScreen';
 import StampCardScreen from 'feature/stamp/StampCardScreen';
 import useNetwork from 'hooks/useNetwork';
 import React, { useEffect } from 'react';
+import { StatusBar } from 'react-native';
 import { Host } from 'react-native-portalize';
 import { useDispatch, useSelector } from 'react-redux';
 import { isIos } from 'utilities/helper';
@@ -61,74 +63,80 @@ const MainStack = createStackNavigator();
 const AppStack = () => {
     const { skipOrderDefault, viewedOrderDefault } = useSelector((state: RootState) => state.globalData);
     return (
-        <Host>
-            <MainStack.Navigator
-                initialRouteName={
-                    skipOrderDefault
-                        ? APP_ROUTE.MAIN_TAB
-                        : viewedOrderDefault
-                        ? APP_ROUTE.MAIN_TAB
-                        : AUTHENTICATE_ROUTE.REGISTER_STEP_1
-                }
-                keyboardHandlingEnabled={isIos}
-                headerMode={'none'}
-                screenOptions={navigationConfigs}
-            >
-                <MainStack.Screen name={APP_ROUTE.MAIN_TAB} component={MainTabContainer} />
+        <>
+            <StatusBar backgroundColor={Themes.COLORS.headerBackground} barStyle={'dark-content'} />
+            <Host>
+                <MainStack.Navigator
+                    initialRouteName={
+                        skipOrderDefault
+                            ? APP_ROUTE.MAIN_TAB
+                            : viewedOrderDefault
+                            ? APP_ROUTE.MAIN_TAB
+                            : AUTHENTICATE_ROUTE.REGISTER_STEP_1
+                    }
+                    keyboardHandlingEnabled={isIos}
+                    headerMode={'none'}
+                    screenOptions={navigationConfigs}
+                >
+                    <MainStack.Screen name={APP_ROUTE.MAIN_TAB} component={MainTabContainer} />
 
-                {/* Order Default */}
-                {!skipOrderDefault && (
-                    <>
-                        <MainStack.Screen name={AUTHENTICATE_ROUTE.REGISTER_STEP_1} component={RegisterStep1} />
-                        <MainStack.Screen name={AUTHENTICATE_ROUTE.REGISTER_STEP_3} component={RegisterStep3} />
-                        <MainStack.Screen name={AUTHENTICATE_ROUTE.REGISTER_STEP_2} component={RegisterStep2} />
-                    </>
-                )}
+                    {/* Order Default */}
+                    {!skipOrderDefault && (
+                        <>
+                            <MainStack.Screen name={AUTHENTICATE_ROUTE.REGISTER_STEP_1} component={RegisterStep1} />
+                            <MainStack.Screen name={AUTHENTICATE_ROUTE.REGISTER_STEP_3} component={RegisterStep3} />
+                            <MainStack.Screen name={AUTHENTICATE_ROUTE.REGISTER_STEP_2} component={RegisterStep2} />
+                        </>
+                    )}
 
-                {/* HOME_ROUTE */}
-                <MainStack.Screen name={HOME_ROUTE.HOME} component={HomeScreen} />
-                <MainStack.Screen name={HOME_ROUTE.CHECK_IN} component={CheckInScreen} />
-                <MainStack.Screen name={HOME_ROUTE.NOTIFICATION} component={NotificationScreen} />
-                <MainStack.Screen name={HOME_ROUTE.NEW_LIST} component={NewsListScreen} />
-                <MainStack.Screen name={HOME_ROUTE.NEW_DETAIL} component={NewsDetailScreen} />
-                <MainStack.Screen name={HOME_ROUTE.MOBILE_ORDER} component={MobileOrderScreen} />
-                <MainStack.Screen name={HOME_ROUTE.ORDER_DEFAULT_HOME} component={OrderDefaultHomeScreen} />
-                <MainStack.Screen name={HOME_ROUTE.CART} component={CartScreen} />
-                <MainStack.Screen name={HOME_ROUTE.EDIT_ORDER} component={EditOrderScreen} />
-                <MainStack.Screen name={HOME_ROUTE.NOTIFICATION_DETAIL} component={NotificationDetailScreen} />
+                    {/* HOME_ROUTE */}
+                    <MainStack.Screen name={HOME_ROUTE.HOME} component={HomeScreen} />
+                    <MainStack.Screen name={HOME_ROUTE.CHECK_IN} component={CheckInScreen} />
+                    <MainStack.Screen name={HOME_ROUTE.NOTIFICATION} component={NotificationScreen} />
+                    <MainStack.Screen name={HOME_ROUTE.NEW_LIST} component={NewsListScreen} />
+                    <MainStack.Screen name={HOME_ROUTE.NEW_DETAIL} component={NewsDetailScreen} />
+                    <MainStack.Screen name={HOME_ROUTE.MOBILE_ORDER} component={MobileOrderScreen} />
+                    <MainStack.Screen name={HOME_ROUTE.ORDER_DEFAULT_HOME} component={OrderDefaultHomeScreen} />
+                    <MainStack.Screen name={HOME_ROUTE.CART} component={CartScreen} />
+                    <MainStack.Screen name={HOME_ROUTE.EDIT_ORDER} component={EditOrderScreen} />
+                    <MainStack.Screen name={HOME_ROUTE.NOTIFICATION_DETAIL} component={NotificationDetailScreen} />
 
-                {/* ORDER_ROUTE */}
-                <MainStack.Screen name={ORDER_ROUTE.ROOT} component={MenuScreen} />
-                <MainStack.Screen name={ORDER_ROUTE.DETAIL_MEAL} component={DetailMealScreen} />
-                <MainStack.Screen name={ORDER_ROUTE.COUPON_LIST} component={CouponListScreen} />
-                <MainStack.Screen name={ORDER_ROUTE.DETAIL_SHOP} component={DetailShopScreen} />
-                <MainStack.Screen name={ORDER_ROUTE.COUPON_DETAIL} component={DetailCouponOrderScreen} />
-                <MainStack.Screen name={ORDER_ROUTE.ORDER_QR_CODE} component={OrderQrCodeScreen} />
+                    {/* ORDER_ROUTE */}
+                    <MainStack.Screen name={ORDER_ROUTE.ROOT} component={MenuScreen} />
+                    <MainStack.Screen name={ORDER_ROUTE.DETAIL_MEAL} component={DetailMealScreen} />
+                    <MainStack.Screen name={ORDER_ROUTE.COUPON_LIST} component={CouponListScreen} />
+                    <MainStack.Screen name={ORDER_ROUTE.DETAIL_SHOP} component={DetailShopScreen} />
+                    <MainStack.Screen name={ORDER_ROUTE.COUPON_DETAIL} component={DetailCouponOrderScreen} />
+                    <MainStack.Screen name={ORDER_ROUTE.ORDER_QR_CODE} component={OrderQrCodeScreen} />
 
-                {/* STAMP_ROUTE */}
-                <MainStack.Screen name={STAMP_ROUTE.ROOT} component={StampCardScreen} />
-                <MainStack.Screen name={STAMP_ROUTE.STAMP_CARD_DETAIL} component={StampCardDetailScreen} />
-                <MainStack.Screen name={STAMP_ROUTE.EXCHANGE_COUPON} component={ExchangeCouponListScreen} />
+                    {/* STAMP_ROUTE */}
+                    <MainStack.Screen name={STAMP_ROUTE.ROOT} component={StampCardScreen} />
+                    <MainStack.Screen name={STAMP_ROUTE.STAMP_CARD_DETAIL} component={StampCardDetailScreen} />
+                    <MainStack.Screen name={STAMP_ROUTE.EXCHANGE_COUPON} component={ExchangeCouponListScreen} />
 
-                {/* COUPON_ROUTE */}
-                <MainStack.Screen name={COUPON_ROUTE.ROOT} component={TabCouponListScreen} />
-                <MainStack.Screen name={COUPON_ROUTE.DETAIL_COUPON} component={DetailCouponScreen} />
+                    {/* COUPON_ROUTE */}
+                    <MainStack.Screen name={COUPON_ROUTE.ROOT} component={TabCouponListScreen} />
+                    <MainStack.Screen name={COUPON_ROUTE.DETAIL_COUPON} component={DetailCouponScreen} />
 
-                {/* SETTING_ROUTE */}
-                <MainStack.Screen name={SETTING_ROUTE.ROOT} component={SettingScreen} />
-                <MainStack.Screen name={SETTING_ROUTE.MY_PAGE} component={MyPageScreen} />
-                <MainStack.Screen name={SETTING_ROUTE.EDIT_PROFILE} component={EditProfileScreen} />
-                <MainStack.Screen name={SETTING_ROUTE.ORDER_DEFAULT_SETTING} component={OrderDefaultSettingScreen} />
-                <MainStack.Screen name={SETTING_ROUTE.ORDER_HISTORY} component={OrderHistoryScreen} />
-                <MainStack.Screen name={SETTING_ROUTE.CONTACT} component={ContactScreen} />
-                <MainStack.Screen name={SETTING_ROUTE.SETTING_NOTIFICATION} component={SettingNotificationScreen} />
-                <MainStack.Screen name={SETTING_ROUTE.ORDER_HISTORY_DETAIL} component={OrderHistoryDetailScreen} />
-                <MainStack.Screen name={AUTHENTICATE_ROUTE.CHANGE_PASS} component={ChangePassword} />
-                <MainStack.Screen name={SETTING_ROUTE.DEFAULT_ORDER_DETAIL} component={DefaultOrderDetailScreen} />
-                <MainStack.Screen name={SETTING_ROUTE.ORDER_SAVE} component={OrderSave} />
-                <MainStack.Screen name={AUTHENTICATE_ROUTE.SEND_OTP_FORGOT_PASS} component={SendOtpForgotPass} />
-            </MainStack.Navigator>
-        </Host>
+                    {/* SETTING_ROUTE */}
+                    <MainStack.Screen name={SETTING_ROUTE.ROOT} component={SettingScreen} />
+                    <MainStack.Screen name={SETTING_ROUTE.MY_PAGE} component={MyPageScreen} />
+                    <MainStack.Screen name={SETTING_ROUTE.EDIT_PROFILE} component={EditProfileScreen} />
+                    <MainStack.Screen
+                        name={SETTING_ROUTE.ORDER_DEFAULT_SETTING}
+                        component={OrderDefaultSettingScreen}
+                    />
+                    <MainStack.Screen name={SETTING_ROUTE.ORDER_HISTORY} component={OrderHistoryScreen} />
+                    <MainStack.Screen name={SETTING_ROUTE.CONTACT} component={ContactScreen} />
+                    <MainStack.Screen name={SETTING_ROUTE.SETTING_NOTIFICATION} component={SettingNotificationScreen} />
+                    <MainStack.Screen name={SETTING_ROUTE.ORDER_HISTORY_DETAIL} component={OrderHistoryDetailScreen} />
+                    <MainStack.Screen name={AUTHENTICATE_ROUTE.CHANGE_PASS} component={ChangePassword} />
+                    <MainStack.Screen name={SETTING_ROUTE.DEFAULT_ORDER_DETAIL} component={DefaultOrderDetailScreen} />
+                    <MainStack.Screen name={SETTING_ROUTE.ORDER_SAVE} component={OrderSave} />
+                    <MainStack.Screen name={AUTHENTICATE_ROUTE.SEND_OTP_FORGOT_PASS} component={SendOtpForgotPass} />
+                </MainStack.Navigator>
+            </Host>
+        </>
     );
 };
 

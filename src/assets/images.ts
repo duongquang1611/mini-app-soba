@@ -94,6 +94,10 @@ const Images = {
         line: require('./photo/pt_line.png'),
         ptLogin: require('./photo/pt_login.png'),
     },
+    lottie: {
+        loadingNoodleJp: require('./lotties/loadingNoodleJp.json'),
+        loadingRamen: require('./lotties/loadingRamen.json'),
+    },
 };
 
 export default Images;

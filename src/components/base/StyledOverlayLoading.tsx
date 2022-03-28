@@ -1,8 +1,8 @@
 import React, { FunctionComponent, memo, useEffect } from 'react';
-import { StyleSheet, View, Modal, ActivityIndicator, Keyboard, ViewProps } from 'react-native';
+import { StyleSheet, View, Modal, Keyboard, ViewProps } from 'react-native';
 import { Themes } from 'assets/themes';
-import Metrics from 'assets/metrics';
-import { isIos } from 'utilities/helper';
+import LottieView from 'lottie-react-native';
+import Images from 'assets/images';
 
 interface Props extends ViewProps {
     visible: boolean;
@@ -11,7 +11,7 @@ interface Props extends ViewProps {
     children?: FunctionComponent;
 }
 
-const StyledOverlayLoading: any = (props: Props) => {
+const StyledOverlayLoading = (props: Props) => {
     useEffect(() => {
         Keyboard.dismiss();
     }, [props.visible]);
@@ -20,55 +20,29 @@ const StyledOverlayLoading: any = (props: Props) => {
         return null;
     }
 
-    const Spinner = () => {
+    const DotIndicator = () => {
         if (props.children) {
             return <View style={[styles.container]}>{props.children}</View>;
         }
         return (
             <View style={[styles.container]}>
                 <View style={styles.background}>
-                    <View style={styles.circle}>
-                        <ActivityIndicator color={Themes.COLORS.black} size={42} style={[styles.activityIndicator]} />
-                    </View>
+                    <LottieView source={Images.lottie.loadingRamen} style={styles.lottie} autoPlay={true} />
                 </View>
             </View>
         );
     };
 
-    const renderIosMode = () => {
-        return (
-            <Modal
-                onRequestClose={props.onRequestClose}
-                supportedOrientations={['portrait']}
-                transparent
-                visible={props.visible}
-            >
-                <Spinner />
-            </Modal>
-        );
-    };
-
-    const renderAndroidMode = () => {
-        return (
-            props.visible && (
-                <View
-                    style={{
-                        position: 'absolute',
-                        width: Metrics.screenWidth,
-                        height: Metrics.screenHeight,
-                        zIndex: 99,
-                        backgroundColor: 'rgba(0,0,0,0.4)',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}
-                >
-                    <Spinner />
-                </View>
-            )
-        );
-    };
-
-    return isIos ? renderIosMode() : renderAndroidMode();
+    return (
+        <Modal
+            onRequestClose={props.onRequestClose}
+            supportedOrientations={['portrait']}
+            transparent
+            visible={props.visible}
+        >
+            <DotIndicator />
+        </Modal>
+    );
 };
 
 const styles = StyleSheet.create({
@@ -83,19 +57,13 @@ const styles = StyleSheet.create({
     },
     background: {
         position: 'absolute',
-        backgroundColor: 'rgba(0, 0, 0, 0.25)',
+        backgroundColor: Themes.COLORS.overlayLoading,
         top: 0,
         bottom: 0,
         left: 0,
         right: 0,
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    circle: {
-        width: 36,
-        height: 36,
-        borderRadius: 18,
-        backgroundColor: 'white',
     },
     textContainer: {
         flex: 1,
@@ -111,10 +79,10 @@ const styles = StyleSheet.create({
         top: 80,
         height: 50,
         fontSize: 20,
-        fontWeight: 'bold',
     },
-    activityIndicator: {
-        flex: 1,
+    lottie: {
+        height: 200,
+        width: 300,
     },
 });
 

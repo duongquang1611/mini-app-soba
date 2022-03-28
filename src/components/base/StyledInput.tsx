@@ -147,15 +147,15 @@ const StyledInput = (props: StyledInputProps, ref: any) => {
                 {isSecureTextEntry ? (
                     <StyledTouchable onPress={changeEntryText} customStyle={{}}>
                         {isTextEntry ? (
-                            <StyledIcon size={15} source={icYeyOff || Images.icons.eyeOff} />
+                            <StyledIcon size={24} source={icYeyOff || Images.icons.eyeOff} />
                         ) : (
-                            <StyledIcon size={15} source={icYeyOn || Images.icons.eyeOn} />
+                            <StyledIcon size={24} source={icYeyOn || Images.icons.eyeOn} />
                         )}
                     </StyledTouchable>
                 ) : null}
                 {icBirthday && (
                     <TouchableOpacity onPress={showDatePicker}>
-                        <StyledIcon customStyle={styles.icEntry} size={15} source={icBirthday} />
+                        <StyledIcon customStyle={styles.icEntry} size={24} source={icBirthday} />
                     </TouchableOpacity>
                 )}
             </WrapInput>
@@ -172,15 +172,16 @@ const styles = ScaledSheet.create({
     textInput: {
         width: '100%',
         borderRadius: 10,
-        padding: '12@s',
         borderWidth: 1,
         borderColor: Themes.COLORS.silver,
         backgroundColor: Themes.COLORS.backGroundInput,
+        paddingHorizontal: '15@s',
     },
     input: {
         paddingVertical: 0,
         width: '100%',
         color: Themes.COLORS.textPrimary,
+        height: '50@vs',
     },
     errorMessage: {
         fontSize: '12@ms0.3',
@@ -190,7 +191,8 @@ const styles = ScaledSheet.create({
         marginLeft: '2@s',
     },
     container: {
-        marginVertical: '8@vs',
+        marginTop: '7@vs',
+        marginBottom: '7@vs',
         width: '100%',
         paddingHorizontal: '20@vs',
     },
@@ -214,7 +216,7 @@ const styles = ScaledSheet.create({
     },
     wrapLabel: {
         flexDirection: 'row',
-        marginVertical: '8@vs',
+        marginVertical: '5@vs',
         alignItems: 'center',
     },
 });

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { yupResolver } from '@hookform/resolvers/yup';
 import { checkIsExistEmail, getVerifyCode } from 'api/modules/api-app/authenticate';
 import { StyledButton } from 'components/base';
@@ -10,7 +9,7 @@ import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { FunctionComponent } from 'react';
 import { useForm } from 'react-hook-form';
-import { Keyboard, View } from 'react-native';
+import { Keyboard } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import { VerifiedCodeType } from 'utilities/staticData';
 import yupValidate from 'utilities/yupValidate';
@@ -22,7 +21,7 @@ const DEFAULT_FORM = __DEV__
       }
     : {};
 
-const SendEmailScreen: FunctionComponent = ({ route }: any) => {
+const ForgotPwdScreen: FunctionComponent = () => {
     const yupSchema = yup.object().shape({
         email: yupValidate.email(),
     });
@@ -55,7 +54,7 @@ const SendEmailScreen: FunctionComponent = ({ route }: any) => {
     return (
         <>
             <StyledHeader title={'forgotPass.title'} />
-            <StyledKeyboardAware customStyle={styles.container} scrollEnabled={false}>
+            <StyledKeyboardAware customStyle={styles.container} scrollEnabled={false} style={styles.awareView}>
                 <StyledInputForm
                     label={'forgotPass.email.label'}
                     name={'email'}
@@ -79,7 +78,6 @@ const SendEmailScreen: FunctionComponent = ({ route }: any) => {
 
 const styles = ScaledSheet.create({
     container: {
-        flex: 1,
         paddingTop: '15@vs',
     },
     buttonSave: {
@@ -87,5 +85,8 @@ const styles = ScaledSheet.create({
         alignSelf: 'center',
     },
     input: {},
+    awareView: {
+        flex: 1,
+    },
 });
-export default SendEmailScreen;
+export default ForgotPwdScreen;

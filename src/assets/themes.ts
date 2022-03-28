@@ -38,6 +38,7 @@ const Light = {
         stampExchange: 'rgba(88, 59, 150, 0.25)',
         stampOther: 'rgba(189, 76, 69, 0.25)',
         overlayModalize: 'rgba(0,0,0,0.8)',
+        overlayLoading: 'rgba(0,0,0,0.2)',
         thunderbird: '#DE1E13',
         opacityThunderbird: (opacity: number) => `rgba(222, 30, 19, ${opacity})`,
         disabled: '#DEDEDE',
