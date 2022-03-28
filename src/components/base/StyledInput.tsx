@@ -111,7 +111,7 @@ const StyledInput = (props: StyledInputProps, ref: any) => {
                 <DateTimePickerModal
                     isVisible={isDatePickerVisible}
                     mode="date"
-                    date={valueInput ? new Date(valueInput) : new Date()}
+                    date={valueInput ? new Date(valueInput) : getYesterday()}
                     onConfirm={handleConfirmDate}
                     onCancel={hideDatePicker}
                     maximumDate={getYesterday()}

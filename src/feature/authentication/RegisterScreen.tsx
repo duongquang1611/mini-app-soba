@@ -117,7 +117,12 @@ const RegisTerScreen = () => {
                 customContainer={styles.customContainerHeader}
             />
 
-            <StyledKeyboardAware style={styles.scrollView} customStyle={styles.contentScrollView}>
+            <StyledKeyboardAware
+                style={styles.scrollView}
+                customStyle={styles.contentScrollView}
+                enableResetScrollToCoords={false}
+                enableOnAndroid={false}
+            >
                 <StyledText customStyle={styles.title} i18nText={'authen.register.title'} />
                 <FormProvider {...form}>
                     <View style={styles.fakeRegisterInput}>

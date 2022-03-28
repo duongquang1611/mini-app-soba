@@ -156,12 +156,10 @@ const SendOTP: FunctionComponent = ({ route }: any) => {
         );
     };
 
-    console.log({ type, title: TEXT_OTP[type - 1].title });
-
     return (
         <>
             <StyledHeader title={TEXT_OTP[type - 1].title} />
-            <StyledKeyboardAware customStyle={styles.container} scrollEnabled={false}>
+            <StyledKeyboardAware customStyle={styles.container} scrollEnabled={false} style={styles.awareView}>
                 <StyledText customStyle={styles.titleInputOtp} i18nText={TEXT_OTP[type - 1].titleInputOtp} />
                 <StyledText customStyle={styles.textNote} i18nText={TEXT_OTP[type - 1].note} />
                 <View style={styles.content}>
@@ -210,10 +208,12 @@ const SendOTP: FunctionComponent = ({ route }: any) => {
 
 const styles = ScaledSheet.create({
     container: {
-        flex: 1,
         paddingHorizontal: '20@s',
         paddingTop: '30@vs',
         justifyContent: 'center',
+    },
+    awareView: {
+        flex: 1,
     },
     content: {
         flex: 1,
