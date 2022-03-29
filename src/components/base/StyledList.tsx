@@ -26,7 +26,17 @@ interface Props extends FlatListProps<any> {
 const StyledList = (props: Props, ref: any) => {
     const list = useRef<FlatList>(null);
     const { t } = useTranslation();
-    const { loading, loadingMore, data, ListHeaderComponent, refreshing, customStyle } = props;
+    const {
+        loading,
+        loadingMore,
+        data,
+        ListHeaderComponent,
+        refreshing,
+        customStyle,
+        noDataText,
+        noDataTextI18Key,
+        noDataCanRefresh,
+    } = props;
     const contentContainerStyle: StyleProp<ViewStyle> = {};
     const hasData = data?.length !== 0;
 
@@ -66,7 +76,6 @@ const StyledList = (props: Props, ref: any) => {
     }
 
     function renderNoData() {
-        const { noDataText, noDataTextI18Key, noDataCanRefresh } = props;
         return (
             <NoData
                 customStyle={props.noDataStyle}

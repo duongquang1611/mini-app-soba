@@ -82,6 +82,7 @@ const Images = {
         tickSquare: require('./icon/ic_tick_square.png'),
         untickSquare: require('./icon/ic_untick_square.png'),
         bagTick: require('./icon/ic_bag_tick.png'),
+        noData: require('./icon/ic_no_data.png'),
     },
     photo: {
         defaultImage: require('./photo/img_default_image.png'),

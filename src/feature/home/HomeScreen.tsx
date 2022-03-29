@@ -156,16 +156,16 @@ const HomeScreen: FunctionComponent = () => {
 
     return (
         <View style={styles.container}>
-            <StyledHeaderImage
-                iconQr={Images.icons.tab.notification}
-                iconNoti={Images.icons.tab.notification}
-                onPressQr={goToQrScreen}
-                onPressNoti={goToNotifyScreen}
-                isBack={false}
-                images={imagesList}
-                logo
-            />
             <StyledKeyboardAware>
+                <StyledHeaderImage
+                    iconQr={Images.icons.tab.notification}
+                    iconNoti={Images.icons.tab.notification}
+                    onPressQr={goToQrScreen}
+                    onPressNoti={goToNotifyScreen}
+                    isBack={false}
+                    images={imagesList}
+                    logo
+                />
                 <View style={styles.contScreen}>
                     <View style={styles.qrView}>
                         <View style={styles.logoView}>
