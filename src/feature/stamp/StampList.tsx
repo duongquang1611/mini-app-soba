@@ -51,6 +51,7 @@ const StampList = (props: StampListProps) => {
                 customStyle={styles.listStamp}
                 refreshing={refreshing}
                 onRefresh={onRefresh}
+                noDataText={'stamp.noData'}
             />
         </View>
     );

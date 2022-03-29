@@ -6,12 +6,13 @@ import { Themes } from 'assets/themes';
 import { StyledButton, StyledText } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
+import StyledOverlayLoading from 'components/base/StyledOverlayLoading';
 import StyledHeader from 'components/common/StyledHeader';
 import TextUnderline from 'components/common/TextUnderline';
 import useCountdown from 'hooks/useCountDown';
 import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
-import React, { FunctionComponent, useEffect, useMemo, useRef, useState } from 'react';
+import React, { FunctionComponent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Keyboard, Text, View } from 'react-native';
 import { CodeField, Cursor, useClearByFocusCell } from 'react-native-confirmation-code-field';
 import { ScaledSheet } from 'react-native-size-matters';
@@ -33,7 +34,7 @@ const SendOTP: FunctionComponent = ({ route }: any) => {
     const maxResend = useMemo(() => retryOtpCount === staticValue.MAX_RETRY_OTP, [retryOtpCount]);
     const maxWrongOtp = useMemo(() => wrongOtpCount >= staticValue.MAX_WRONG_OTP, [wrongOtpCount]);
     const disabledResend = useMemo(() => countdown > 0 || maxResend, [countdown, maxResend]);
-
+    const [loading, setLoading] = useState(false);
     const [props, getCellOnLayoutHandler] = useClearByFocusCell({ value: code, setValue: setCode });
     const isResetPassword = useMemo(() => type === VerifiedCodeType.RESET_PASSWORD, [type]);
     const isRegister = useMemo(() => type === VerifiedCodeType.REGISTER, [type]);
@@ -62,6 +63,7 @@ const SendOTP: FunctionComponent = ({ route }: any) => {
         try {
             // reset password
             const res = await checkVerifyCode({ email, verifiedCode: code, type });
+            setLoading(false);
             if (res?.data?.isValid) {
                 navigate(AUTHENTICATE_ROUTE.RESET_PASSWORD, { email });
             } else {
@@ -77,6 +79,7 @@ const SendOTP: FunctionComponent = ({ route }: any) => {
     const handleConfirmChangePassword = async () => {
         // change password
         const res = await checkVerifyCode({ email, verifiedCode: code });
+        setLoading(false);
         if (res?.data?.isValid) {
             navigate(AUTHENTICATE_ROUTE.CHANGE_PASS, { email, code });
         } else {
@@ -107,22 +110,26 @@ const SendOTP: FunctionComponent = ({ route }: any) => {
                 AlertMessage('alert.invalidOTP');
                 return;
             }
+            setLoading(true);
             if (isRegister) {
                 const response = await register({
                     ...user,
                     verifiedCode: code,
                 });
+                setLoading(false);
                 dispatch(userInfoActions.getUserInfoRequest(response?.data?.token));
                 dispatch(userInfoActions.updateToken(response.data));
             } else if (isResetPassword) {
-                handleConfirmResetPassword();
+                await handleConfirmResetPassword();
             } else {
-                handleConfirmChangePassword();
+                await handleConfirmChangePassword();
             }
         } catch (error: any) {
             if (error?.includes?.(staticValue.OTP_INVALID_MESSAGE)) {
                 handleWrongOtpMax(error);
             } else AlertMessage(error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -158,6 +165,7 @@ const SendOTP: FunctionComponent = ({ route }: any) => {
 
     return (
         <>
+            <StyledOverlayLoading visible={loading} />
             <StyledHeader title={TEXT_OTP[type - 1].title} />
             <StyledKeyboardAware customStyle={styles.container} scrollEnabled={false} style={styles.awareView}>
                 <StyledText customStyle={styles.titleInputOtp} i18nText={TEXT_OTP[type - 1].titleInputOtp} />

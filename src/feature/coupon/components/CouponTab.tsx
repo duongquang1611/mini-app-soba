@@ -52,6 +52,7 @@ const CouponTab = (props: CouponTabProps) => {
                 customStyle={styles.listCoupon}
                 onRefresh={() => getCouponData(canUse)}
                 refreshing={false}
+                noDataText={'coupon.noData'}
             />
         </View>
     );

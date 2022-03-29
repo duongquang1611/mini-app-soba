@@ -4,10 +4,11 @@ import { StyledButton } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
 import StyledInputForm from 'components/base/StyledInputForm';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
+import StyledOverlayLoading from 'components/base/StyledOverlayLoading';
 import StyledHeader from 'components/common/StyledHeader';
 import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Keyboard } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
@@ -22,6 +23,7 @@ const DEFAULT_FORM = __DEV__
     : {};
 
 const ForgotPwdScreen: FunctionComponent = () => {
+    const [loading, setLoading] = useState(false);
     const yupSchema = yup.object().shape({
         email: yupValidate.email(),
     });
@@ -39,20 +41,25 @@ const ForgotPwdScreen: FunctionComponent = () => {
 
     const handleGetVerifyCode = async ({ email }: any) => {
         try {
+            setLoading(true);
             const res = await checkIsExistEmail({ email });
             if (res?.data?.isExisted === false) {
+                setLoading(false);
                 AlertMessage('error.emailNotExisted');
                 return;
             }
             Keyboard.dismiss();
             await getVerifyCode({ email, type: VerifiedCodeType.RESET_PASSWORD });
+            setLoading(false);
             navigate(AUTHENTICATE_ROUTE.SEND_OTP, { user: { email }, type: VerifiedCodeType.RESET_PASSWORD });
         } catch (error) {
+            setLoading(false);
             AlertMessage(error);
         }
     };
     return (
         <>
+            <StyledOverlayLoading visible={loading} />
             <StyledHeader title={'forgotPass.title'} />
             <StyledKeyboardAware customStyle={styles.container} scrollEnabled={false} style={styles.awareView}>
                 <StyledInputForm

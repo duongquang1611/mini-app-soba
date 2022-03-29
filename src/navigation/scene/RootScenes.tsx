@@ -64,7 +64,7 @@ const AppStack = () => {
     const { skipOrderDefault, viewedOrderDefault } = useSelector((state: RootState) => state.globalData);
     return (
         <>
-            <StatusBar backgroundColor={Themes.COLORS.headerBackground} barStyle={'dark-content'} />
+            <StatusBar backgroundColor={Themes.COLORS.headerBackground} barStyle={'dark-content'} translucent />
             <Host>
                 <MainStack.Navigator
                     initialRouteName={

@@ -1,6 +1,9 @@
-import React, { FunctionComponent } from 'react';
-import { ActivityIndicator, StyleProp, StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
+import Images from 'assets/images';
 import { Themes } from 'assets/themes';
+import React, { FunctionComponent } from 'react';
+import { ActivityIndicator, StyleProp, TextStyle, View, ViewStyle } from 'react-native';
+import { ScaledSheet } from 'react-native-size-matters';
+import StyledIcon from './StyledIcon';
 import StyledText from './StyledText';
 import StyledTouchable from './StyledTouchable';
 
@@ -17,17 +20,22 @@ const NO_DATA_TEXT = 'No data';
 const RELOAD = 'Reload';
 
 const StyledNoData: FunctionComponent<StyledListNoDataProps> = (props: StyledListNoDataProps) => {
+    const { loading, customStyle, text = NO_DATA_TEXT, canRefresh, customStyleText, onRefresh } = props;
+
     return (
-        <View style={[styles.container, props.customStyle]}>
-            {props.loading ? (
+        <View style={[styles.container, customStyle]}>
+            {loading ? (
                 <View style={styles.loadingContainer}>
                     <ActivityIndicator />
                 </View>
             ) : (
-                <StyledText i18nText={props.text || NO_DATA_TEXT} customStyle={props.customStyleText} />
+                <>
+                    <StyledIcon size={50} source={Images.icons.noData} customStyle={styles.iconNoData} />
+                    <StyledText i18nText={text} customStyle={[styles.textNoData, customStyleText]} />
+                </>
             )}
-            {!!props.canRefresh && !props.loading ? (
-                <StyledTouchable onPress={props.onRefresh}>
+            {!!canRefresh && !loading ? (
+                <StyledTouchable onPress={onRefresh}>
                     <StyledText i18nText={RELOAD} customStyle={styles.textReload} />
                 </StyledTouchable>
             ) : (
@@ -37,24 +45,26 @@ const StyledNoData: FunctionComponent<StyledListNoDataProps> = (props: StyledLis
     );
 };
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
     container: {
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 8,
+        flex: 1,
     },
-    text: {
-        fontWeight: '600',
-        fontSize: 14,
-        color: Themes.COLORS.primary,
+    textNoData: {
+        fontSize: '16@ms0.3',
+        color: Themes.COLORS.silver,
         textAlign: 'center',
     },
     textReload: {
-        margin: 12,
+        margin: '12@s',
         color: Themes.COLORS.primary,
     },
     loadingContainer: {
         alignItems: 'center',
+    },
+    iconNoData: {
+        marginBottom: '20@vs',
     },
 });
 

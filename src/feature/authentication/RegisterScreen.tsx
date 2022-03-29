@@ -6,6 +6,7 @@ import { StyledButton, StyledIcon, StyledImage, StyledInputForm, StyledText, Sty
 import AlertMessage from 'components/base/AlertMessage';
 import { LabelInput } from 'components/base/StyledInput';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
+import StyledOverlayLoading from 'components/base/StyledOverlayLoading';
 import RadioCheckView from 'components/common/RadioCheckView';
 import StyledHeader from 'components/common/StyledHeader';
 import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
@@ -37,6 +38,7 @@ const RegisTerScreen = () => {
     const passwordRef = useRef<any>(null);
     const passwordConfirmRef = useRef<any>(null);
     const fullNameRef = useRef<any>(null);
+    const [loading, setLoading] = useState(false);
 
     const registerSchema = yup.object().shape({
         email: yupValidate.email(),
@@ -63,13 +65,16 @@ const RegisTerScreen = () => {
 
     const submit = async (user: any) => {
         try {
+            setLoading(true);
             const res = await checkIsExistEmail({ email: user?.email });
             if (res?.data?.isExisted) {
+                setLoading(false);
                 AlertMessage('error.emailExisted');
                 return;
             }
             Keyboard.dismiss();
             await getVerifyCode({ email: user?.email, type: VerifiedCodeType.REGISTER });
+            setLoading(false);
             const newUser = { ...user };
             delete newUser.confirmPassword;
             if (newUser?.gender) {
@@ -77,6 +82,7 @@ const RegisTerScreen = () => {
             }
             navigate(AUTHENTICATE_ROUTE.SEND_OTP, { user: newUser, type: VerifiedCodeType.REGISTER });
         } catch (error) {
+            setLoading(false);
             AlertMessage(error);
         }
     };
@@ -111,6 +117,7 @@ const RegisTerScreen = () => {
 
     return (
         <View style={styles.container}>
+            <StyledOverlayLoading visible={loading} />
             <StyledHeader
                 title={'register'}
                 renderCenter={renderCenter}

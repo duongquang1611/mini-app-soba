@@ -218,6 +218,7 @@ export default {
         exchangeStamp: '交換\nカード',
         cumulativeStamp: '累計\nカード',
         guideTitle: 'スタンプカードの詳細',
+        noData: '現在、スタンプカードがありません',
     },
     chooseStamp: {
         earnStamp: 'スタンプが貯まる',
@@ -285,6 +286,7 @@ export default {
         chooseDish: 'クーポンを適用する商品を選択してください',
         moreCoupon: 'クーポン追加',
         noCoupon: 'なし',
+        noData: '現在、クーポンがありません',
     },
     otp: {
         register: {
