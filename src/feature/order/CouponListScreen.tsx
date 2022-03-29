@@ -1,5 +1,6 @@
 import { RootState } from 'app-redux/hooks';
 import { updateCartOrder } from 'app-redux/slices/orderSlice';
+import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledButton } from 'components/base';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
@@ -11,7 +12,7 @@ import { View } from 'react-native';
 import { ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
 import { commonStyles } from 'utilities/commonStyles';
-import { DiscountType, MODAL_ID, staticValue, TabCouponStatus } from 'utilities/staticData';
+import { DiscountType, MODAL_ID, TabCouponStatus } from 'utilities/staticData';
 import ModalCoupon from './components/ModalCoupon';
 
 const CouponListScreen = () => {
@@ -56,7 +57,9 @@ const CouponListScreen = () => {
                 updateCouponsCart={updateCouponsCart}
             />,
             {
-                modalHeight: verticalScale(staticValue.NUMBER_ITEM_LIST_COUPON_MODAL * 60 + 250),
+                modalHeight: Metrics.screenHeight * 0.8,
+
+                snapPoint: verticalScale(370),
                 scrollViewProps: {
                     contentContainerStyle: { flexGrow: 1 },
                 },
@@ -74,7 +77,7 @@ const CouponListScreen = () => {
         } else {
             setCartListCouponOrder({
                 dishes: cartListCouponOrder?.dishes || [],
-                coupons: [...newCoupons, itemCoupon],
+                coupons: [itemCoupon, ...newCoupons],
             });
         }
     };
@@ -157,5 +160,14 @@ const styles = ScaledSheet.create({
         height: '16@s',
         borderRadius: 16,
         borderWidth: 2,
+    },
+    footerButtonChooseStamp: {
+        position: 'absolute',
+        right: '20@s',
+        bottom: '25@vs',
+        borderRadius: 30,
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 10,
     },
 });

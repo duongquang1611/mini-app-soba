@@ -6,7 +6,7 @@ import { CommonStatus } from './types';
 interface IResourceState {
     status: CommonStatus;
     error?: any;
-    resource?: Record<string, any>;
+    data?: Record<string, any>;
 }
 
 type Reducer<A extends Action<any> = AnyAction> = CaseReducer<IResourceState, A>;
@@ -17,13 +17,13 @@ const initialState: IResourceState = {
 
 const getResourceRequest: Reducer = (state) => {
     state.status = CommonStatus.LOADING;
-    delete state.resource;
+    delete state.data;
     delete state.error;
 };
 
 const getResourceSuccess: Reducer<PayloadAction<any>> = (state, { payload }) => {
     state.status = CommonStatus.SUCCESS;
-    state.resource = payload;
+    state.data = payload;
 };
 
 const getResourceFailed: Reducer<PayloadAction<any>> = (state, { payload }) => {
@@ -41,7 +41,7 @@ const resourceSlice = createSlice({
     },
 });
 
-const persistConfig = generatePersistConfig('resource', ['resource']);
+const persistConfig = generatePersistConfig('resource', ['data']);
 
 export const resourceActions = resourceSlice.actions;
 export default persistReducer<IResourceState>(persistConfig, resourceSlice.reducer);

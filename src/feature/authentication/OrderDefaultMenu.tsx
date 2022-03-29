@@ -65,7 +65,7 @@ const OrderDefaultMenu = () => {
     const { dishes } = orderDefault || [];
     const numOrder = sumTotalAmount(orderDefault);
     const { resource } = store.getState();
-    const { categories, menu } = resource?.resource?.data || {};
+    const { categories, menu } = resource?.data || {};
     const listEnableCategory = categories?.filter((item: any) => item?.status === MenuType.ENABLE);
     const modalize = ModalizeManager();
     const [menuList, setMenu] = useState(menu);

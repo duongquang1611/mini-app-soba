@@ -698,21 +698,24 @@ export const stepGuide = [
         index: 1,
         name: '手順 1：',
         contentName: 'アプリ使用可能店 に行く',
-        content: '使用可能な店舗は随時追加します。※現在、使用可能な店舗はこちら',
+        content: '使用可能な店舗は随時追加 します。\n※現在、使用可能な店舗は',
         icon: Images.icons.step1,
+        textLink: 'こちら',
+        link: 'https://www.facebook.com/',
     },
     {
         index: 2,
         name: '手順 2：',
-        contentName: 'アプリ使用可能店 に行く',
-        content: '使用可能な店舗は随時追加します。※現在、使用可能な店舗はこちら',
+        contentName: '券売機にかざす',
+        content: ' ホーム画面にあるQRコードもしくは注文画面からQRコードを発行しスマートフォンに表示します。',
         icon: Images.icons.step2,
     },
     {
         index: 3,
         name: '手順 3：',
         contentName: 'アプリ使用可能店 に行く',
-        content: '使用可能な店舗は随時追加します。※現在、使用可能な店舗はこちら',
+        content:
+            ' 券売機のQR読取部分にスマートフォンをかざします。\n ※使用可能な券売機は、下記の写真の読取部分がついています。',
         icon: Images.icons.step3,
     },
 ];

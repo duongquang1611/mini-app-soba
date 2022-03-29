@@ -7,6 +7,7 @@ import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import DashView from 'components/common/DashView';
 import Images from 'assets/images';
+import Metrics from 'assets/metrics';
 
 const OrderItemCart = (props: any) => {
     const { mainDish, subDishes } = props?.data;
@@ -32,7 +33,7 @@ const OrderItemCart = (props: any) => {
                             {item?.amount > 1 && (
                                 <View style={styles.numView}>
                                     <StyledText
-                                        originValue={`x ${item?.amount}`}
+                                        originValue={`x${item?.amount}`}
                                         isBlack
                                         customStyle={styles.addValueText}
                                     />
@@ -72,7 +73,7 @@ const ModalDetailMenu = (props: any) => {
         <View style={styles.container}>
             <View style={styles.paddingView}>
                 <StyledButton onPress={goDetailNew} title={'order.addNew'} customContentStyle={styles.buttonNew} />
-                <DashView />
+                <DashView customStyle={styles.dash} />
                 <StyledText i18nText={'order.editMenu'} customStyle={styles.edit} />
             </View>
             {getListFromDishes?.map((item: any, index: number) => (
@@ -135,7 +136,7 @@ const styles = ScaledSheet.create({
         fontSize: '12@ms0.3',
     },
     buttonNew: {
-        marginBottom: '10@vs',
+        marginBottom: '20@vs',
     },
     rowSub: {
         flexDirection: 'row',
@@ -153,5 +154,9 @@ const styles = ScaledSheet.create({
     detailIconView: {
         flexDirection: 'row',
         alignItems: 'center',
+    },
+    dash: {
+        width: Metrics.screenWidth,
+        alignSelf: 'center',
     },
 });

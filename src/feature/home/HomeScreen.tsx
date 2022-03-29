@@ -108,7 +108,7 @@ export const getCouponData = async (status?: TabCouponStatus) => {
 export const getResourcesData = async () => {
     try {
         const res = await getResources();
-        store.dispatch(resourceActions.getResourceSuccess(res));
+        store.dispatch(resourceActions.getResourceSuccess(res?.data));
     } catch (error) {
         console.log('getCouponData -> error', error);
     }
