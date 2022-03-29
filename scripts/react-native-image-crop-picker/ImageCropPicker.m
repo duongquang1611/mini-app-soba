@@ -71,7 +71,8 @@ RCT_EXPORT_MODULE();
             @"forceJpg": @NO,
             @"sortOrder": @"none",
             @"cropperCancelText": @"Cancel",
-            @"cropperChooseText": @"Choose"
+            @"cropperChooseText": @"Choose",
+            @"cropperRotateButtonsHidden": @NO
         };
         self.compression = [[Compression alloc] init];
     }
@@ -889,8 +890,12 @@ RCT_EXPORT_METHOD(openCropper:(NSDictionary *)options
         
         cropVC.doneButtonTitle = [self.options objectForKey:@"cropperChooseText"];
         cropVC.cancelButtonTitle = [self.options objectForKey:@"cropperCancelText"];
+        cropVC.rotateButtonsHidden = [[self.options objectForKey:@"cropperRotateButtonsHidden"] boolValue];
         
         cropVC.modalPresentationStyle = UIModalPresentationFullScreen;
+        if (@available(iOS 15.0, *)) {
+            cropVC.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+        }
         
         [[self getRootVC] presentViewController:cropVC animated:FALSE completion:nil];
     });
@@ -902,7 +907,7 @@ RCT_EXPORT_METHOD(openCropper:(NSDictionary *)options
 
 - (void)cropViewController:(TOCropViewController *)cropViewController didFinishCancelled:(BOOL)cancelled {
     [self dismissCropper:cropViewController selectionDone:NO completion:[self waitAnimationEnd:^{
-        if (self.currentSelectionMode == CROPPING || [[self.options objectForKey:@"cropping"] boolValue]) {
+        if (self.currentSelectionMode == CROPPING || self.currentSelectionMode == CAMERA) {
             self.reject(ERROR_PICKER_CANCEL_KEY, ERROR_PICKER_CANCEL_MSG, nil);
         }
     }]];
