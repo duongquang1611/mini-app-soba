@@ -153,7 +153,7 @@ const Navigation: React.FunctionComponent = () => {
     const initApp = async () => {
         try {
             const res = await getResources();
-            dispatch(resourceActions.getResourceSuccess(res));
+            dispatch(resourceActions.getResourceSuccess(res.data));
         } catch (error) {
             console.log('🚀 ~ file: RootScenes.tsx ~ line 122 ~ initApp ~ error', error);
         }

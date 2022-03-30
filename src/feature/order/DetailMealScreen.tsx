@@ -87,7 +87,6 @@ const DetailMealScreen = (props: any) => {
             amountValue > 0
                 ? {
                       dishes: [
-                          ...dishesStore,
                           {
                               createDate: toLocalStringTime(new Date()),
                               totalAmount: amountValue,
@@ -99,6 +98,7 @@ const DetailMealScreen = (props: any) => {
                               },
                               subDishes: subDishDetail,
                           },
+                          ...dishesStore,
                       ],
                   }
                 : {};

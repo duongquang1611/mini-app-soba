@@ -8,10 +8,11 @@ import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components
 import AlertMessage from 'components/base/AlertMessage';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledHeader from 'components/common/StyledHeader';
+import TextUnderline from 'components/common/TextUnderline';
 import { ORDER_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useEffect, useRef, useState } from 'react';
-import { ImageBackground, Text, View } from 'react-native';
+import { ImageBackground, Linking, Text, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
@@ -60,13 +61,20 @@ const StepItem = (item: any) => (
         <View style={styles.numberView}>
             <StyledText originValue={item?.item?.index} customStyle={styles.numberValue} />
         </View>
-        <StyledIcon source={item?.item?.icon} size={80} customStyle={styles.icStep} />
+        <StyledImage source={item?.item?.icon} customStyle={styles.icStep} />
         <View style={styles.containView}>
             <Text style={styles.title}>
                 {item?.item?.name}
                 <Text style={styles.contentName}>{item?.item?.contentName}</Text>
             </Text>
             <StyledText originValue={item?.item?.content} isBlack />
+            <View>
+                <TextUnderline
+                    onPress={() => Linking.openURL(item?.item?.link)}
+                    title={item?.item?.textLink}
+                    color={Themes.COLORS.primary}
+                />
+            </View>
         </View>
     </View>
 );
@@ -86,7 +94,9 @@ const MenuScreen = () => {
     const { dishes } = cartOrder || [];
     const numOrder = sumTotalAmount(cartOrder);
     const { resource } = store.getState();
-    const { categories, menu } = resource?.resource?.data || {};
+    const { categories, menu } = resource?.data || {};
+    console.log({ resource });
+    console.log({ categories, menu });
     const listEnableCategory = categories?.filter((item: any) => item?.status === MenuType.ENABLE);
     const modalize = ModalizeManager();
     const [menuList, setMenu] = useState(menu);
@@ -126,7 +136,7 @@ const MenuScreen = () => {
             MODAL_ID.ORDER_GUIDE,
             <ModalGuide />,
             {
-                modalHeight: verticalScale(420),
+                modalHeight: verticalScale(470),
                 scrollViewProps: {
                     contentContainerStyle: { flexGrow: 1 },
                 },
@@ -264,11 +274,13 @@ const styles = ScaledSheet.create({
         fontSize: '14@ms0.3',
     },
     containView: {
-        width: '200@s',
-        justifyContent: 'space-between',
+        width: '220@s',
+        alignItems: 'flex-start',
+        justifyContent: 'flex-start',
     },
     icStep: {
-        marginRight: '20@s',
+        width: '80@vs',
+        height: '80@vs',
     },
     numberView: {
         width: '24@s',
@@ -286,22 +298,22 @@ const styles = ScaledSheet.create({
         alignItems: 'center',
         width: '100%',
         paddingHorizontal: '20@s',
-        height: '100@s',
+        height: '120@vs',
         justifyContent: 'space-between',
     },
     line1: {
         position: 'absolute',
         width: 2,
-        height: '55@s',
+        height: '70@vs',
         left: '32@s',
-        top: '70@s',
+        top: '85@vs',
     },
     line2: {
         position: 'absolute',
         width: 2,
-        height: '55@s',
+        height: '70@vs',
         left: '32@s',
-        top: '175@s',
+        top: '205@vs',
     },
     tabCategoryHeader: {
         alignItems: 'center',
@@ -406,5 +418,8 @@ const styles = ScaledSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         width: '100%',
+    },
+    textLink: {
+        backgroundColor: Themes.COLORS.primary,
     },
 });

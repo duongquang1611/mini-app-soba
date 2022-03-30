@@ -19,7 +19,11 @@ const OrderDish = (props: any) => {
         <View style={styles.containerItem}>
             <StyledTouchable customStyle={styles.itemRow} onPress={onChoose}>
                 <View style={styles.itemRow}>
-                    <StyledImage source={{ uri: item?.dish?.thumbnail }} customStyle={styles.imgItem} />
+                    <StyledImage
+                        resizeMode={'stretch'}
+                        source={{ uri: item?.dish?.thumbnail }}
+                        customStyle={styles.imgItem}
+                    />
                     <StyledText originValue={item?.dish?.title} customStyle={styles.nameOrder} />
                 </View>
                 <View
@@ -76,7 +80,7 @@ const ModalCoupon = (props: any) => {
             )}
             {listCouponsModal?.map((item: any, index: number) => (
                 <OneCoupon
-                    dashView={listCouponsModal?.length > 1}
+                    dashView={index < listCouponsModal?.length - 1}
                     key={index}
                     item={item}
                     setEnableButton={setEnableButton}
@@ -89,8 +93,8 @@ const ModalCoupon = (props: any) => {
                     if (applyChooseDish) {
                         applyChooseDish?.(enableButton);
                     } else {
-                        setCartListCouponOrder?.([...cartListCouponAll, ...enableButton]);
-                        updateCouponsCart([...cartListCouponAll, ...enableButton]);
+                        setCartListCouponOrder?.([...enableButton, ...cartListCouponAll]);
+                        updateCouponsCart([...enableButton, ...cartListCouponAll]);
                     }
                 }}
                 disabled={checkDisableButton.length > 0}
@@ -155,5 +159,7 @@ const styles = ScaledSheet.create({
     },
     dash: {
         marginVertical: '5@vs',
+        width: Metrics.screenWidth,
+        alignSelf: 'center',
     },
 });

@@ -3,11 +3,10 @@ import { Themes } from 'assets/themes';
 import { StyledIcon, StyledText, StyledTouchable } from 'components/base';
 import LinearView from 'components/common/LinearView';
 import React, { memo, useEffect, useRef, useState } from 'react';
-import { Dimensions, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { moderateScale, scale, ScaledSheet } from 'react-native-size-matters';
 import { LINEAR_COLOR } from 'utilities/staticData';
 
-const { width } = Dimensions.get('window');
 interface ListViewSelectProps {
     data: any[];
     category?: any;
@@ -114,13 +113,10 @@ const ListViewSelect = (props: ListViewSelectProps) => {
                     <ScrollView
                         ref={listCategoryRef}
                         style={styles.container}
-                        pagingEnabled={true}
                         horizontal={true}
                         decelerationRate={'fast'}
                         showsHorizontalScrollIndicator={false}
                         bounces={false}
-                        snapToInterval={width}
-                        snapToAlignment={'center'}
                         onScroll={(e: any) => {
                             const { layoutMeasurement, contentOffset, contentSize } = e.nativeEvent;
                             if (contentOffset.x >= startWidth) {
