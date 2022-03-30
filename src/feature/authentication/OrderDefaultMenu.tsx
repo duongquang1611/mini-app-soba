@@ -13,8 +13,8 @@ import StyledHeader from 'components/common/StyledHeader';
 import ButtonCart from 'feature/order/components/ButtonCart';
 import ListViewSelect from 'feature/order/components/ListViewSelect';
 import ModalDetailMenu from 'feature/order/components/ModalDetailMenu';
-import { ORDER_ROUTE } from 'navigation/config/routes';
-import { navigate } from 'navigation/NavigationService';
+import { APP_ROUTE, ORDER_ROUTE } from 'navigation/config/routes';
+import { navigate, reset } from 'navigation/NavigationService';
 import React, { useEffect, useRef, useState } from 'react';
 import { ImageBackground, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
@@ -134,6 +134,7 @@ const OrderDefaultMenu = () => {
     });
     const skipOrderDefault = () => {
         dispatch(updateGlobalData({ skipOrderDefault: true }));
+        reset(APP_ROUTE.MAIN_TAB);
     };
     const gotoCart = () => {
         navigate(ORDER_ROUTE.CART, {
@@ -145,6 +146,7 @@ const OrderDefaultMenu = () => {
     const saveDefaultOrder = () => {
         dispatch(updateDefaultOrder(orderDefault));
         dispatch(updateGlobalData({ skipOrderDefault: true }));
+        reset(APP_ROUTE.MAIN_TAB);
     };
 
     return (

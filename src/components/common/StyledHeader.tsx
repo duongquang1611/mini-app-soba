@@ -191,7 +191,7 @@ const styles = ScaledSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 30,
-        maxWidth: '80@s',
+        maxWidth: '100@s',
     },
     iconRight: {},
     iconBack: {},
@@ -201,8 +201,6 @@ const styles = ScaledSheet.create({
     textRight: {
         color: Themes.COLORS.primary,
         fontSize: '14@ms0.3',
-        position: 'absolute',
-        right: '0@s',
     },
 });
 

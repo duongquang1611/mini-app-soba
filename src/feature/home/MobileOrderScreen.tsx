@@ -231,10 +231,11 @@ const styles = ScaledSheet.create({
         justifyContent: 'space-between',
         marginTop: '10@vs',
         backgroundColor: Themes.COLORS.white,
-        alignItems: 'center',
     },
     nameCoupon: {
-        width: '93%',
+        width: '90%',
+        marginTop: '2@vs',
+        marginLeft: '10@s',
     },
     title: {
         fontSize: '16@ms0.3',

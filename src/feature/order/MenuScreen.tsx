@@ -275,7 +275,7 @@ const styles = ScaledSheet.create({
         fontSize: '14@ms0.3',
     },
     containView: {
-        width: '210@s',
+        width: '220@s',
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
     },

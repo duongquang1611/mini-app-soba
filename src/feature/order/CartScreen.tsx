@@ -1,4 +1,5 @@
 import { RootState } from 'app-redux/hooks';
+import { updateGlobalData } from 'app-redux/slices/globalDataSlice';
 import { clearCartOrder, updateCartOrder, updateDefaultOrder, updateMobileOrder } from 'app-redux/slices/orderSlice';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
@@ -8,8 +9,8 @@ import AlertMessage from 'components/base/AlertMessage';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeader from 'components/common/StyledHeader';
-import { HOME_ROUTE, TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
-import { goBack, navigate } from 'navigation/NavigationService';
+import { APP_ROUTE, HOME_ROUTE, TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
+import { goBack, navigate, reset } from 'navigation/NavigationService';
 import React, { useRef, useState } from 'react';
 import { View } from 'react-native';
 import { ScaledSheet, verticalScale } from 'react-native-size-matters';
@@ -106,11 +107,16 @@ const CartScreen = (props: any) => {
     };
 
     const cancelCart = () => {
-        AlertMessage('order.deleteCart', {
-            textButtonCancel: 'exchangeCoupon.confirm.textButtonCancel',
-            onOk: onClear,
-            type: POPUP_TYPE.CONFIRM,
-        });
+        if (isDefaultOrder) {
+            dispatch(updateGlobalData({ skipOrderDefault: true }));
+            reset(APP_ROUTE.MAIN_TAB);
+        } else {
+            AlertMessage('order.deleteCart', {
+                textButtonCancel: 'exchangeCoupon.confirm.textButtonCancel',
+                onOk: onClear,
+                type: POPUP_TYPE.CONFIRM,
+            });
+        }
     };
     const popUpCancelDish = (createDate: string) => {
         AlertMessage('order.cancelDish', {
@@ -161,7 +167,11 @@ const CartScreen = (props: any) => {
 
     return (
         <View style={styles.container}>
-            <StyledHeader title={'order.cartTitle'} textRight={'order.cancelOrder'} onPressRight={cancelCart} />
+            <StyledHeader
+                title={'order.cartTitle'}
+                textRight={isDefaultOrder ? 'authen.register.skipOrderDefault' : 'order.cancelOrder'}
+                onPressRight={cancelCart}
+            />
             <StyledKeyboardAware>
                 <View style={styles.body}>
                     <AmountOrder cartOrder={saveOrder} />
@@ -293,6 +303,7 @@ const styles = ScaledSheet.create({
     },
     nameCoupon: {
         width: '90%',
+        marginTop: '2@vs',
     },
     numOrderView: {
         flexDirection: 'row',
