@@ -43,7 +43,6 @@ const CouponTab = (props: CouponTabProps) => {
             />
         );
     };
-
     return (
         <View style={styles.container}>
             <StyledList

@@ -259,7 +259,7 @@ const styles = ScaledSheet.create({
         alignItems: 'center',
         width: '100%',
         backgroundColor: Themes.COLORS.white,
-        marginBottom: '5@vs',
+        marginBottom: '10@vs',
     },
     noCouponView: {
         width: '100%',
@@ -290,7 +290,6 @@ const styles = ScaledSheet.create({
         width: '100%',
         justifyContent: 'space-between',
         marginTop: '10@vs',
-        alignItems: 'center',
     },
     nameCoupon: {
         width: '90%',

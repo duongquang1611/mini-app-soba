@@ -16,27 +16,25 @@ const OrderDish = (props: any) => {
         setEnableButton([...findItemNotChange, { ...findItemChoose, choose: item }]);
     };
     return (
-        <View style={styles.containerItem}>
-            <StyledTouchable customStyle={styles.itemRow} onPress={onChoose}>
-                <View style={styles.itemRow}>
-                    <StyledImage
-                        resizeMode={'stretch'}
-                        source={{ uri: item?.dish?.thumbnail }}
-                        customStyle={styles.imgItem}
-                    />
-                    <StyledText originValue={item?.dish?.title} customStyle={styles.nameOrder} />
-                </View>
-                <View
-                    style={[
-                        styles.chooseButton,
-                        {
-                            backgroundColor: choose ? Themes.COLORS.primary : Themes.COLORS.white,
-                            borderColor: choose ? Themes.COLORS.sweetPink : Themes.COLORS.silver,
-                        },
-                    ]}
+        <StyledTouchable customStyle={styles.containerItem} onPress={onChoose}>
+            <View style={styles.itemRow}>
+                <StyledImage
+                    resizeMode={'stretch'}
+                    source={{ uri: item?.dish?.thumbnail }}
+                    customStyle={styles.imgItem}
                 />
-            </StyledTouchable>
-        </View>
+                <StyledText originValue={item?.dish?.title} customStyle={styles.nameOrder} />
+            </View>
+            <View
+                style={[
+                    styles.chooseButton,
+                    {
+                        backgroundColor: choose ? Themes.COLORS.primary : Themes.COLORS.white,
+                        borderColor: choose ? Themes.COLORS.sweetPink : Themes.COLORS.silver,
+                    },
+                ]}
+            />
+        </StyledTouchable>
     );
 };
 const OneCoupon = (props: any) => {
@@ -110,12 +108,14 @@ const styles = ScaledSheet.create({
     itemRow: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        flex: 1,
     },
     containerItem: {
-        width: '100%',
         marginBottom: '15@vs',
         backgroundColor: Themes.COLORS.white,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
     },
     imgItem: {
         width: '60@s',
@@ -124,6 +124,8 @@ const styles = ScaledSheet.create({
     },
     nameOrder: {
         fontWeight: 'bold',
+        flexShrink: 1,
+        marginRight: '10@s',
     },
     couponName: {
         fontWeight: '700',

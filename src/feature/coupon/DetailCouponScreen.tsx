@@ -49,7 +49,6 @@ const DetailCouponScreen = (props: any) => {
     useEffect(() => {
         getCouponData();
     }, []);
-
     const getCouponData = async () => {
         try {
             const res = await getDetailMemberCoupon(idMemberCoupon);

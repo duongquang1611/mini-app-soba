@@ -112,7 +112,6 @@ const DetailMealScreen = (props: any) => {
     };
     return (
         <View style={styles.container}>
-            {isIos && <View style={styles.statusBarIos} />}
             <StyledKeyboardAware style={styles.container}>
                 <StyledHeaderImage images={dish?.images || []} content={title} />
 
