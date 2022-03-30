@@ -83,7 +83,7 @@ const OrderItemCart = (props: any) => {
                     {subDishes?.map((item: any, index: number) => (
                         <View key={index} style={styles.rowSub}>
                             <StyledText originValue={`+ ${item?.title}`} isBlack customStyle={styles.addValue} />
-                            {item?.amount > 1 && (
+                            {item?.amount >= 1 && (
                                 <View style={styles.numView}>
                                     <StyledText
                                         originValue={`x${item?.amount}`}
@@ -147,8 +147,9 @@ const styles = ScaledSheet.create({
         backgroundColor: Themes.COLORS.white,
     },
     orderTextView: {
-        width: '75%',
+        width: '73%',
         justifyContent: 'space-between',
+        marginRight: '5@s',
     },
     titleOrder: {
         fontSize: '16@ms0.3',
@@ -176,6 +177,7 @@ const styles = ScaledSheet.create({
     icCancel: {},
     addValue: {
         marginVertical: '3@vs',
+        maxWidth: '90%',
     },
     changeText: {
         fontWeight: 'bold',
@@ -190,7 +192,7 @@ const styles = ScaledSheet.create({
         borderRadius: 5,
         paddingHorizontal: '5@s',
         paddingVertical: '2@vs',
-        marginLeft: '5@s',
+        marginLeft: '10@s',
     },
     addValueText: {
         color: Themes.COLORS.primary,

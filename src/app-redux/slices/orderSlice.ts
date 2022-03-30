@@ -36,7 +36,7 @@ const orderSlice = createSlice({
                 ...state,
                 mobileOrder: {
                     ...state.mobileOrder,
-                    coupons: [...oldCoupons, ...action.payload],
+                    coupons: [...action.payload, ...oldCoupons],
                 },
             };
             return state;
@@ -47,7 +47,7 @@ const orderSlice = createSlice({
                 ...state,
                 cartOrder: {
                     ...state.cartOrder,
-                    coupons: [...oldCoupons, ...action.payload],
+                    coupons: [...action.payload, ...oldCoupons],
                 },
             };
             return state;

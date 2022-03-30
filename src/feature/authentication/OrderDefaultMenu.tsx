@@ -221,7 +221,7 @@ const styles = ScaledSheet.create({
     },
     categoryContainer: {
         marginTop: '10@vs',
-        paddingVertical: '10@vs',
+        paddingVertical: '15@vs',
         backgroundColor: Themes.COLORS.white,
     },
     recommendContainer: {
@@ -236,8 +236,7 @@ const styles = ScaledSheet.create({
     },
     buttonSave: {
         paddingVertical: '10@vs',
-        paddingBottom: '20@vs',
-        marginBottom: Metrics.safeBottomPadding,
+        paddingBottom: verticalScale(20) + Metrics.safeBottomPadding,
         backgroundColor: Themes.COLORS.white,
         alignItems: 'center',
         marginTop: '-10@vs',
@@ -322,8 +321,8 @@ const styles = ScaledSheet.create({
         marginVertical: '10@vs',
     },
     image: {
-        width: (Metrics.screenWidth - scale(50)) / 2,
-        height: (Metrics.screenWidth - scale(50)) / 2,
+        width: (Metrics.screenWidth - scale(40)) / 2,
+        height: (Metrics.screenWidth - scale(40)) / 2,
         backgroundColor: Themes.COLORS.white,
         margin: '5@s',
         justifyContent: 'space-between',

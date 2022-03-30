@@ -692,7 +692,6 @@ export enum POPUP_TYPE {
     SUCCESS,
     ERROR,
 }
-
 export const stepGuide = [
     {
         index: 1,
@@ -706,16 +705,16 @@ export const stepGuide = [
     {
         index: 2,
         name: '手順 2：',
-        contentName: '券売機にかざす',
+        contentName: 'アプリのQRコード画面を開く',
         content: ' ホーム画面にあるQRコードもしくは注文画面からQRコードを発行しスマートフォンに表示します。',
         icon: Images.icons.step2,
     },
     {
         index: 3,
         name: '手順 3：',
-        contentName: 'アプリ使用可能店 に行く',
+        contentName: '券売機にかざす',
         content:
-            ' 券売機のQR読取部分にスマートフォンをかざします。\n ※使用可能な券売機は、下記の写真の読取部分がついています。',
+            '券売機のQR読取部分にスマートフォンをかざします。\n※使用可能な券売機は、下記の写真の読取部分がついています。',
         icon: Images.icons.step3,
     },
 ];

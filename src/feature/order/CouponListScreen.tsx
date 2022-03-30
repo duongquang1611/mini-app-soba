@@ -69,10 +69,15 @@ const CouponListScreen = () => {
     };
 
     const handleUseCoupon = (itemCoupon: any) => {
-        const findCouponCart = cartListCouponOrder?.coupons?.find((item: any) => item?.id === itemCoupon?.id);
-        const newCoupons = cartListCouponOrder?.coupons?.filter((item: any) => item?.id !== itemCoupon?.id) || [];
+        const findCouponCart = cartListCouponOrder?.coupons?.find(
+            (item: any) => item?.receivedDate === itemCoupon?.receivedDate,
+        );
+        const newCoupons =
+            cartListCouponOrder?.coupons?.filter((item: any) => item?.receivedDate !== itemCoupon?.receivedDate) || [];
         if (findCouponCart) {
-            const newCoupons = cartListCouponOrder?.coupons?.filter((item: any) => item?.id !== itemCoupon?.id) || [];
+            const newCoupons =
+                cartListCouponOrder?.coupons?.filter((item: any) => item?.receivedDate !== itemCoupon?.receivedDate) ||
+                [];
             setCartListCouponOrder({ dishes: cartListCouponOrder?.dishes || [], coupons: newCoupons });
         } else {
             setCartListCouponOrder({

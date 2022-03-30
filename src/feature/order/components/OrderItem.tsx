@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
-import { StyledIcon, StyledImage, StyledText } from 'components/base';
+import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -33,14 +33,13 @@ export const OrderChild = (data: any) => {
         } else setSubDishDetail(listSubNotChange);
     };
     return (
-        <View style={styles.containerItem}>
+        <StyledTouchable customStyle={styles.containerItem} onPress={onChoose}>
             <View style={styles.itemRow}>
                 <View style={styles.itemRow}>
                     <StyledImage resizeMode={'stretch'} source={{ uri: dish.thumbnail }} customStyle={styles.imgItem} />
                     <StyledText originValue={dish.title} customStyle={styles.nameOrder} />
                 </View>
-                <TouchableOpacity
-                    onPress={onChoose}
+                <View
                     style={[
                         styles.chooseButton,
                         {
@@ -50,7 +49,7 @@ export const OrderChild = (data: any) => {
                     ]}
                 />
             </View>
-        </View>
+        </StyledTouchable>
     );
 };
 const OrderChildCanChange = (data: any) => {

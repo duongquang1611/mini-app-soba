@@ -14,9 +14,9 @@ import { navigate } from 'navigation/NavigationService';
 import React, { useEffect, useRef, useState } from 'react';
 import { ImageBackground, Linking, Text, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
-import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
+import { scale, ScaledSheet } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
-import { sumTotalAmount } from 'utilities/helper';
+import { isIos, sumTotalAmount } from 'utilities/helper';
 import { MenuType, MODAL_ID, staticValue, stepGuide } from 'utilities/staticData';
 import ButtonCart from './components/ButtonCart';
 import ListViewSelect from './components/ListViewSelect';
@@ -57,17 +57,17 @@ const ItemMenu = (props: any) => {
     );
 };
 const StepItem = (item: any) => (
-    <View style={styles.rowStep}>
+    <View style={item?.largeView ? [styles.rowStep, { height: scale(140) }] : styles.rowStep}>
         <View style={styles.numberView}>
             <StyledText originValue={item?.item?.index} customStyle={styles.numberValue} />
         </View>
         <StyledImage source={item?.item?.icon} customStyle={styles.icStep} />
         <View style={styles.containView}>
-            <Text style={styles.title}>
+            <Text style={[styles.title, styles.textGuide]}>
                 {item?.item?.name}
-                <Text style={styles.contentName}>{item?.item?.contentName}</Text>
+                <Text style={[styles.contentName, styles.textGuide]}>{item?.item?.contentName}</Text>
             </Text>
-            <StyledText originValue={item?.item?.content} isBlack />
+            <StyledText originValue={item?.item?.content} isBlack customStyle={styles.textGuide} />
             <View>
                 <TextUnderline
                     onPress={() => Linking.openURL(item?.item?.link)}
@@ -83,8 +83,8 @@ const ModalGuide = () => (
         <StyledImage source={Images.photo.line} customStyle={styles.line1} />
         <StyledImage source={Images.photo.line} customStyle={styles.line2} />
         <View>
-            {stepGuide.map((item) => (
-                <StepItem key={item.name} item={item} />
+            {stepGuide.map((item, index) => (
+                <StepItem key={item.name} item={item} largeView={isIos && index === 2} />
             ))}
         </View>
     </View>
@@ -95,8 +95,6 @@ const MenuScreen = () => {
     const numOrder = sumTotalAmount(cartOrder);
     const { resource } = store.getState();
     const { categories, menu } = resource?.data || {};
-    console.log({ resource });
-    console.log({ categories, menu });
     const listEnableCategory = categories?.filter((item: any) => item?.status === MenuType.ENABLE);
     const modalize = ModalizeManager();
     const [menuList, setMenu] = useState(menu);
@@ -136,7 +134,7 @@ const MenuScreen = () => {
             MODAL_ID.ORDER_GUIDE,
             <ModalGuide />,
             {
-                modalHeight: verticalScale(470),
+                modalHeight: isIos ? scale(425) + Metrics.safeBottomPadding : scale(465) + Metrics.safeBottomPadding,
                 scrollViewProps: {
                     contentContainerStyle: { flexGrow: 1 },
                 },
@@ -144,13 +142,16 @@ const MenuScreen = () => {
             { title: 'order.orderGuide' },
         );
     };
-    const numberItemListCoupon = dishes?.length;
     const showModalDetail = (id: any) => {
+        const numberItemListCoupon = dishes?.filter((item: any) => item?.mainDish?.id === id)?.length || 0;
+        const point = numberItemListCoupon <= 3 ? numberItemListCoupon * 60 + 300 : Metrics.screenHeight * 0.8;
+
         modalize.show(
             MODAL_ID.DETAIL_MENU,
             <ModalDetailMenu dishes={dishes} id={id} closeModal={() => modalize.dismiss(MODAL_ID.DETAIL_MENU)} />,
             {
-                modalHeight: verticalScale(numberItemListCoupon * 60 + 300),
+                modalHeight: Metrics.screenHeight * 0.8,
+                snapPoint: point,
                 scrollViewProps: {
                     contentContainerStyle: { flexGrow: 1 },
                 },
@@ -274,7 +275,7 @@ const styles = ScaledSheet.create({
         fontSize: '14@ms0.3',
     },
     containView: {
-        width: '220@s',
+        width: '210@s',
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
     },
@@ -298,22 +299,22 @@ const styles = ScaledSheet.create({
         alignItems: 'center',
         width: '100%',
         paddingHorizontal: '20@s',
-        height: '120@vs',
+        height: isIos ? '120@s' : '140@s',
         justifyContent: 'space-between',
     },
     line1: {
         position: 'absolute',
         width: 2,
-        height: '70@vs',
+        height: isIos ? '70@s' : '90@s',
         left: '32@s',
-        top: '85@vs',
+        top: isIos ? '85@s' : '95@s',
     },
     line2: {
         position: 'absolute',
         width: 2,
-        height: '70@vs',
+        height: isIos ? '80@s' : '90@s',
         left: '32@s',
-        top: '205@vs',
+        top: isIos ? '205@s' : '235@s',
     },
     tabCategoryHeader: {
         alignItems: 'center',
@@ -330,8 +331,8 @@ const styles = ScaledSheet.create({
         marginVertical: '10@vs',
     },
     image: {
-        width: (Metrics.screenWidth - scale(50)) / 2,
-        height: (Metrics.screenWidth - scale(50)) / 2,
+        width: (Metrics.screenWidth - scale(40)) / 2,
+        height: (Metrics.screenWidth - scale(40)) / 2,
         backgroundColor: Themes.COLORS.white,
         margin: '5@s',
         justifyContent: 'space-between',
@@ -421,5 +422,8 @@ const styles = ScaledSheet.create({
     },
     textLink: {
         backgroundColor: Themes.COLORS.primary,
+    },
+    textGuide: {
+        lineHeight: scale(24),
     },
 });

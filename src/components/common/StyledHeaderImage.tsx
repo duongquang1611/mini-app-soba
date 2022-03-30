@@ -87,7 +87,10 @@ const StyledHeaderImage = (props: HeaderProps) => {
                     inactiveSlideOpacity={1}
                     inactiveSlideScale={1}
                 />
-                <View style={[styles.containerDot, { bottom: content ? verticalScale(20) : verticalScale(-10) }]}>
+                <View
+                    pointerEvents={'none'}
+                    style={[styles.containerDot, { bottom: content ? verticalScale(20) : verticalScale(-10) }]}
+                >
                     <Pagination
                         containerStyle={{
                             justifyContent: 'flex-start',
@@ -228,7 +231,7 @@ const styles = ScaledSheet.create({
         fontSize: '20@ms0.3',
         zIndex: 20,
         fontWeight: 'bold',
-        width: '300@s',
+        maxWidth: '300@s',
     },
     logo: {
         width: '111@s',
