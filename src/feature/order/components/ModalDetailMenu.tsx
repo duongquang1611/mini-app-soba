@@ -141,10 +141,12 @@ const styles = ScaledSheet.create({
     rowSub: {
         flexDirection: 'row',
         alignItems: 'center',
+        flex: 1,
     },
     addValue: {
         marginVertical: '3@vs',
         fontSize: '12@ms0.3',
+        flexShrink: 1,
     },
     rowDetail: {
         flexDirection: 'row',

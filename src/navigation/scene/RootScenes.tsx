@@ -81,16 +81,11 @@ const AppStack = () => {
                     <MainStack.Screen name={APP_ROUTE.MAIN_TAB} component={MainTabContainer} />
 
                     {/* Order Default */}
-                    {!skipOrderDefault && (
-                        <>
-                            <MainStack.Screen
-                                name={AUTHENTICATE_ROUTE.ORDER_DEFAULT_MENU}
-                                component={OrderDefaultMenu}
-                            />
-                            <MainStack.Screen name={AUTHENTICATE_ROUTE.REGISTER_STEP_3} component={RegisterStep3} />
-                            <MainStack.Screen name={AUTHENTICATE_ROUTE.REGISTER_STEP_2} component={RegisterStep2} />
-                        </>
-                    )}
+                    <>
+                        <MainStack.Screen name={AUTHENTICATE_ROUTE.ORDER_DEFAULT_MENU} component={OrderDefaultMenu} />
+                        <MainStack.Screen name={AUTHENTICATE_ROUTE.REGISTER_STEP_3} component={RegisterStep3} />
+                        <MainStack.Screen name={AUTHENTICATE_ROUTE.REGISTER_STEP_2} component={RegisterStep2} />
+                    </>
 
                     {/* HOME_ROUTE */}
                     <MainStack.Screen name={HOME_ROUTE.HOME} component={HomeScreen} />
