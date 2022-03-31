@@ -2,7 +2,6 @@ import { getMenu } from 'api/modules/api-app/order';
 import { RootState } from 'app-redux/hooks';
 import { updateGlobalData } from 'app-redux/slices/globalDataSlice';
 import { updateDefaultOrder } from 'app-redux/slices/orderSlice';
-import { store } from 'app-redux/store';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
@@ -60,11 +59,14 @@ const ItemMenu = (props: any) => {
     );
 };
 const OrderDefaultMenu = () => {
-    const { defaultOrder } = useSelector((state: RootState) => state.order);
+    const dispatch = useDispatch();
+    const {
+        order: { defaultOrder },
+        resource,
+    } = useSelector((state: RootState) => state);
     const [orderDefault, setOrderDefault] = useState(defaultOrder);
     const { dishes } = orderDefault || [];
     const numOrder = sumTotalAmount(orderDefault);
-    const { resource } = store.getState();
     const { categories, menu } = resource?.data || {};
     const listEnableCategory = categories?.filter((item: any) => item?.status === MenuType.ENABLE);
     const modalize = ModalizeManager();
@@ -74,7 +76,7 @@ const OrderDefaultMenu = () => {
         listEnableCategory?.[0]?.subCategories?.filter((item: any) => item?.status === MenuType.ENABLE),
     );
     const [recommendSelected, setRecommendSelected] = useState(listSubCategory?.[0]?.id);
-    const dispatch = useDispatch();
+
     useEffect(() => {
         getMenuList();
         dispatch(updateGlobalData({ viewedOrderDefault: true }));

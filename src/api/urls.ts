@@ -4,7 +4,7 @@ const COMMON_URL = {
 };
 
 const STAMP_URL = {
-    list: 'stamp-list',
+    list: 'stamp',
     detail: (id: string | number) => `stamp-list/${id}`,
     exchangeCoupon: 'exchange-coupon',
     exchangeCouponHistory: 'exchange-coupon-history',

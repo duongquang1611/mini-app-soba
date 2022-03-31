@@ -4,13 +4,12 @@ import React from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 
-const StampTypeView = ({ customStyle, title, status }: any) => {
-    // status: 1: cumulativeStamp, 0: exchangeStamp
+const StampTypeView = ({ customStyle, title, isExchange }: any) => {
     return (
-        <View style={[styles.statusView, status && { backgroundColor: Themes.COLORS.stampOther }, customStyle]}>
+        <View style={[styles.statusView, isExchange && { backgroundColor: Themes.COLORS.stampExchange }, customStyle]}>
             <StyledText
-                i18nText={title || (status ? 'stamp.cumulativeStamp' : 'stamp.exchangeStamp')}
-                customStyle={styles.textStatus}
+                i18nText={title || (isExchange ? 'stamp.exchangeStamp' : 'stamp.cumulativeStamp')}
+                customStyle={[styles.textStatus, isExchange && { color: Themes.COLORS.primary }]}
             />
         </View>
     );
@@ -18,7 +17,7 @@ const StampTypeView = ({ customStyle, title, status }: any) => {
 
 const styles = ScaledSheet.create({
     statusView: {
-        backgroundColor: Themes.COLORS.stampExchange,
+        backgroundColor: Themes.COLORS.stampCumulative,
         width: '79@s',
         height: '79@s',
         borderRadius: 100,

@@ -77,6 +77,7 @@ const ListViewSelect = (props: ListViewSelectProps) => {
     const listCategoryRef = useRef<any>(null);
     const [showIconLeft, setShowIconLeft] = useState<boolean>(false);
     const [showIconRight, setShowIconRight] = useState<boolean>(props.data.length > 3);
+
     const scrollTop = () => {
         listCategoryRef?.current?.scrollTo({
             animated: true,
@@ -92,6 +93,7 @@ const ListViewSelect = (props: ListViewSelectProps) => {
             props.data.length < 3 && setShowIconRight(false);
         }
     }, [category]);
+
     return (
         <View style={styles.categoryContainer}>
             {data.length > 0 ? (

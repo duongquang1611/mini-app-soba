@@ -64,7 +64,7 @@ const AppStack = () => {
     const { skipOrderDefault, viewedOrderDefault } = useSelector((state: RootState) => state.globalData);
     return (
         <>
-            <StatusBar backgroundColor={Themes.COLORS.headerBackground} barStyle={'dark-content'} translucent />
+            <StatusBar backgroundColor={Themes.COLORS.headerBackground} barStyle={'dark-content'} />
             <Host>
                 <MainStack.Navigator
                     initialRouteName={
@@ -81,11 +81,9 @@ const AppStack = () => {
                     <MainStack.Screen name={APP_ROUTE.MAIN_TAB} component={MainTabContainer} />
 
                     {/* Order Default */}
-                    <>
-                        <MainStack.Screen name={AUTHENTICATE_ROUTE.ORDER_DEFAULT_MENU} component={OrderDefaultMenu} />
-                        <MainStack.Screen name={AUTHENTICATE_ROUTE.REGISTER_STEP_3} component={RegisterStep3} />
-                        <MainStack.Screen name={AUTHENTICATE_ROUTE.REGISTER_STEP_2} component={RegisterStep2} />
-                    </>
+                    <MainStack.Screen name={AUTHENTICATE_ROUTE.ORDER_DEFAULT_MENU} component={OrderDefaultMenu} />
+                    <MainStack.Screen name={AUTHENTICATE_ROUTE.REGISTER_STEP_3} component={RegisterStep3} />
+                    <MainStack.Screen name={AUTHENTICATE_ROUTE.REGISTER_STEP_2} component={RegisterStep2} />
 
                     {/* HOME_ROUTE */}
                     <MainStack.Screen name={HOME_ROUTE.HOME} component={HomeScreen} />

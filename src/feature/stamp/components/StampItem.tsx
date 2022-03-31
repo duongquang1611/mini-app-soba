@@ -1,11 +1,13 @@
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { ScaledSheet } from 'react-native-size-matters';
+import { StampCardType, StampSettingDuration } from 'utilities/enumData';
 import { formatDate } from 'utilities/format';
+import { checkExpired } from 'utilities/helper';
 import { staticValue } from 'utilities/staticData';
 import StampTypeView from './StampTypeView';
 
@@ -19,41 +21,52 @@ interface IProps {
 }
 
 const StampItem = (props: IProps) => {
-    const { onPress, item, customStyle, caseType, containerStyle, animation = false } = props;
-    const { image, title, startDate, endDate, used, status, amount, usedAmount } = item;
+    const { onPress, item: itemMemberStamp, customStyle, containerStyle, animation = false } = props;
+    const { stamp = {}, leftAmount = 0 } = itemMemberStamp;
+    const { image, title, startDate, cardType, settingDuration, endDate } = stamp;
+    // cardType: StampCardType
+    const isExchange = useMemo(() => cardType === StampCardType.EXCHANGE, [cardType]);
+    const isNoExpired = useMemo(() => settingDuration === StampSettingDuration.NO_EXPIRED_DATE, [settingDuration]);
+    const isExpired = useMemo(() => {
+        return isNoExpired ? false : checkExpired(endDate);
+    }, [endDate, isNoExpired]);
 
     return (
         <Animatable.View style={containerStyle} animation={animation ? staticValue.ANIMATION_ITEM : ''} useNativeDriver>
             <StyledTouchable customStyle={[styles.container, customStyle]} onPress={onPress} disabled={!onPress}>
-                <StyledImage source={{ uri: image }} customStyle={styles.imgStamp} />
+                <StyledImage resizeMode={'cover'} source={{ uri: image }} customStyle={styles.imgStamp} />
                 <View style={styles.content}>
                     <StyledText originValue={title} customStyle={styles.nameStamp} numberOfLines={2} />
                     <StyledText
-                        i18nText={caseType === 1 ? 'stampDetail.expired' : 'stamp.rangeDate'}
+                        i18nText={
+                            settingDuration === StampSettingDuration.NO_EXPIRED_DATE
+                                ? 'stamp.noExpiredDate'
+                                : 'stamp.rangeDate'
+                        }
                         i18nParams={{ start: formatDate(startDate), end: formatDate(endDate) }}
                         customStyle={styles.textRangeDate}
                     />
 
                     <View style={styles.wrapCount}>
-                        {used ? (
+                        {isExpired ? (
                             <StyledText i18nText={''} customStyle={styles.textCount} />
                         ) : (
                             <>
                                 <StyledText
-                                    i18nText={caseType === 1 ? 'stampDetail.numberOfRemain' : 'stamp.titleCount'}
+                                    i18nText={isExchange ? 'stamp.remain' : 'stamp.titleCount'}
                                     customStyle={styles.textTitleCount}
                                 />
                                 <StyledText
                                     i18nText={'stamp.count'}
-                                    i18nParams={{ count: amount - usedAmount }}
+                                    i18nParams={{ count: leftAmount }}
                                     customStyle={styles.textCount}
                                 />
                             </>
                         )}
                     </View>
                 </View>
-                <StampTypeView status={status} />
-                {!!used && <StyledIcon source={Images.icons.stampUsed} size={90} customStyle={styles.stampUsed} />}
+                <StampTypeView isExchange={isExchange} />
+                {!!isExpired && <StyledIcon source={Images.icons.stampUsed} size={90} customStyle={styles.stampUsed} />}
             </StyledTouchable>
         </Animatable.View>
     );

@@ -4,13 +4,12 @@ import { Themes } from 'assets/themes';
 import { StyledIcon, StyledList, StyledText, StyledTouchable } from 'components/base';
 import DashView from 'components/common/DashView';
 import LinearView from 'components/common/LinearView';
-import usePaging from 'hooks/usePaging';
+import usePaging, { SIZE_LIMIT } from 'hooks/usePaging';
 import { STAMP_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
-import { STAMP_DATA } from 'utilities/staticData';
 import StampItem from './components/StampItem';
 
 interface StampListProps {
@@ -20,10 +19,16 @@ interface StampListProps {
 
 const StampList = (props: StampListProps) => {
     const { canUse = false, showEarnStamp } = props;
-    const { pagingData, onRefresh } = usePaging(getStampList, {
-        type: Number(canUse),
-    });
+    const { pagingData, onRefresh, onLoadMore } = usePaging(
+        getStampList,
+        {
+            status: Number(canUse),
+            take: SIZE_LIMIT,
+        },
+        'stamps',
+    );
     const { list, refreshing } = pagingData;
+    const { stamps = [], untickedStamps = 0 } = list;
 
     const goToDetail = (item: any) => {
         navigate(STAMP_ROUTE.STAMP_CARD_DETAIL, { item });
@@ -32,6 +37,7 @@ const StampList = (props: StampListProps) => {
     const renderItemStamp = ({ item }: any) => {
         return <StampItem item={item} onPress={() => goToDetail(item)} />;
     };
+
     return (
         <View style={styles.container}>
             {canUse ? (
@@ -39,19 +45,24 @@ const StampList = (props: StampListProps) => {
                     <StyledTouchable onPress={showEarnStamp}>
                         <LinearView style={styles.wrapNote}>
                             <StyledIcon source={Images.icons.message} size={20} />
-                            <StyledText i18nText={'stamp.noteUse'} customStyle={styles.noteUse} />
+                            <StyledText
+                                i18nText={'stamp.noteUse'}
+                                i18nParams={{ count: untickedStamps }}
+                                customStyle={styles.noteUse}
+                            />
                         </LinearView>
                     </StyledTouchable>
                 </>
             ) : null}
             <StyledList
-                data={(list.length > 0 ? list : STAMP_DATA).filter((item: any) => item.used === !canUse)}
+                data={stamps}
                 renderItem={renderItemStamp}
                 ItemSeparatorComponent={DashView}
                 customStyle={styles.listStamp}
                 refreshing={refreshing}
                 onRefresh={onRefresh}
                 noDataText={'stamp.noData'}
+                onEndReached={onLoadMore}
             />
         </View>
     );
@@ -67,7 +78,7 @@ const styles = ScaledSheet.create({
     },
     wrapNote: {
         flexDirection: 'row',
-        paddingVertical: '4@vs',
+        paddingVertical: '6@vs',
         alignItems: 'center',
         paddingHorizontal: '42@s',
     },
