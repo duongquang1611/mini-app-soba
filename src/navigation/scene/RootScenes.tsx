@@ -10,7 +10,6 @@ import RegisterStep3 from 'feature/authentication/RegisterStep3';
 import SendOtpForgotPass from 'feature/authentication/SendOtpForgotPass';
 import DetailCouponScreen from 'feature/coupon/DetailCouponScreen';
 import TabCouponListScreen from 'feature/coupon/TabCouponListScreen';
-import CheckInScreen from 'feature/home/CheckInScreen';
 import EditOrderScreen from 'feature/home/EditOrderScreen';
 import HomeScreen from 'feature/home/HomeScreen';
 import MobileOrderScreen from 'feature/home/MobileOrderScreen';
@@ -87,7 +86,6 @@ const AppStack = () => {
 
                     {/* HOME_ROUTE */}
                     <MainStack.Screen name={HOME_ROUTE.HOME} component={HomeScreen} />
-                    <MainStack.Screen name={HOME_ROUTE.CHECK_IN} component={CheckInScreen} />
                     <MainStack.Screen name={HOME_ROUTE.NOTIFICATION} component={NotificationScreen} />
                     <MainStack.Screen name={HOME_ROUTE.NEW_LIST} component={NewsListScreen} />
                     <MainStack.Screen name={HOME_ROUTE.NEW_DETAIL} component={NewsDetailScreen} />

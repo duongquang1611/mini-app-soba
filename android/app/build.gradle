@@ -211,8 +211,8 @@ android {
                 variant.outputs.each{
                     // On below line we are setting a name to our apk
                     output->
-                        project.ext { appName = 'app' }
-                        def formattedDate = new Date().format('yyyyMMdd-HHmm')
+                        project.ext { appName = 'Soba' }
+                        def formattedDate = new Date().format('ddMMyyyy')
                         def newName = output.outputFile.name
                         def versionName = env.get("ANDROID_APP_VERSION_NAME")
                         newName = newName.replace("app-", "$project.ext.appName-$formattedDate-$versionName-")

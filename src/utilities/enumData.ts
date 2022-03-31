@@ -38,3 +38,10 @@ export enum MemberCouponType {
     STAMP = 1,
     NOTI = 2,
 }
+
+// type 3 tab QR in home screen
+export enum QR_TAB_TYPE {
+    ORDER_DEFAULT = 0,
+    MOBILE_ORDER = 1,
+    CHECK_IN = 2,
+}
