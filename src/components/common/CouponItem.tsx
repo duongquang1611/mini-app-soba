@@ -42,7 +42,7 @@ export const CouponItem = (props: any) => {
     return (
         <>
             <StyledTouchable customStyle={styles.couponItem} onPress={handleGoToDetail}>
-                <StyledImage resizeMode={'stretch'} source={{ uri: image }} customStyle={styles.couponImage} />
+                <StyledImage resizeMode={'cover'} source={{ uri: image }} customStyle={styles.couponImage} />
                 <View style={styles.content}>
                     <StyledText originValue={title} numberOfLines={2} customStyle={styles.title} />
                     <View style={styles.rowView}>

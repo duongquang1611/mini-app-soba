@@ -2,19 +2,28 @@ import { AxiosRequestConfig } from 'axios';
 import { useEffect, useRef, useState } from 'react';
 
 export const SIZE_LIMIT = 10000000;
+export const SIZE_LIMIT_PAGING = 20;
 
-const usePaging = (requestPaging: (config: AxiosRequestConfig) => Promise<any>, initialParams?: any) => {
-    const [pagingData, setPagingData] = useState({
+const usePaging = (
+    requestPaging: (config: AxiosRequestConfig) => Promise<any>,
+    initialParams?: any,
+    mainKeyData?: string,
+) => {
+    const [pagingData, setPagingData] = useState<any>({
         refreshing: false,
         loadingMore: false,
         pageIndex: 1,
-        list: [],
+        list: mainKeyData
+            ? {
+                  [mainKeyData]: [],
+              }
+            : [],
         noMore: false,
     });
     const [params, setParams] = useState<any>(initialParams);
     const isFirstRun = useRef<any>(true);
     useEffect(() => {
-        runRequest(pagingData.pageIndex, SIZE_LIMIT, params);
+        runRequest(pagingData.pageIndex, SIZE_LIMIT_PAGING, params);
     }, [pagingData.pageIndex]);
 
     useEffect(() => {
@@ -27,7 +36,7 @@ const usePaging = (requestPaging: (config: AxiosRequestConfig) => Promise<any>, 
 
     const handleOnSuccess = (data: any) => {
         const responseData = data || {};
-        const newList: [] = responseData.data || [];
+        const newList: any = responseData.data || (mainKeyData ? {} : []);
         if (pagingData.pageIndex === 1) {
             setPagingData({
                 ...pagingData,
@@ -36,10 +45,16 @@ const usePaging = (requestPaging: (config: AxiosRequestConfig) => Promise<any>, 
                 refreshing: false,
                 loadingMore: false,
             });
-        } else if (newList.length > 0) {
+        } else if (mainKeyData ? newList?.[mainKeyData]?.length > 0 : newList.length > 0) {
+            const newMergedList = mainKeyData
+                ? {
+                      ...pagingData.list,
+                      [mainKeyData]: [...pagingData.list[mainKeyData], ...newList?.[mainKeyData]],
+                  }
+                : [...pagingData.list, ...newList];
             setPagingData({
                 ...pagingData,
-                list: [...pagingData.list, ...newList],
+                list: newMergedList,
                 noMore: pagingData.pageIndex >= responseData?.totalPages,
                 refreshing: false,
                 loadingMore: false,
@@ -56,7 +71,7 @@ const usePaging = (requestPaging: (config: AxiosRequestConfig) => Promise<any>, 
         const res = await requestPaging({
             params: {
                 pageIndex: requestPageIndex,
-                take: take || SIZE_LIMIT,
+                take: take || SIZE_LIMIT_PAGING,
                 ...otherParams,
             },
         });
@@ -67,7 +82,7 @@ const usePaging = (requestPaging: (config: AxiosRequestConfig) => Promise<any>, 
         if (pagingData.pageIndex > 1) {
             setPagingData({ ...pagingData, refreshing: true, pageIndex: 1 });
         } else {
-            runRequest(1, SIZE_LIMIT, params);
+            runRequest(1, SIZE_LIMIT_PAGING, params);
         }
     };
 

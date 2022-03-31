@@ -1,23 +1,20 @@
-import { getMenu } from 'api/modules/api-app/order';
 import { RootState } from 'app-redux/hooks';
-import { store } from 'app-redux/store';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
-import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
-import AlertMessage from 'components/base/AlertMessage';
+import { StyledIcon, StyledImage, StyledList, StyledText, StyledTouchable } from 'components/base';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledHeader from 'components/common/StyledHeader';
 import TextUnderline from 'components/common/TextUnderline';
+import { getResourcesData } from 'feature/home/HomeScreen';
 import { ORDER_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { ImageBackground, Linking, Text, View } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
-import { isIos, sumTotalAmount } from 'utilities/helper';
-import { MenuType, MODAL_ID, staticValue, stepGuide } from 'utilities/staticData';
+import { funcFilterStatus, isIos, sumTotalAmount } from 'utilities/helper';
+import { MODAL_ID, staticValue, stepGuide } from 'utilities/staticData';
 import ButtonCart from './components/ButtonCart';
 import ListViewSelect from './components/ListViewSelect';
 import ModalDetailMenu from './components/ModalDetailMenu';
@@ -89,43 +86,54 @@ const ModalGuide = () => (
         </View>
     </View>
 );
+
 const MenuScreen = () => {
-    const { cartOrder } = useSelector((state: RootState) => state.order);
+    const {
+        order: { cartOrder },
+        resource,
+    } = useSelector((state: RootState) => state);
     const { dishes } = cartOrder || [];
     const numOrder = sumTotalAmount(cartOrder);
-    const { resource } = store.getState();
     const { categories, menu } = resource?.data || {};
-    const listEnableCategory = categories?.filter((item: any) => item?.status === MenuType.ENABLE);
+    const listEnableCategory: any[] = useMemo(() => funcFilterStatus(categories), [categories]);
     const modalize = ModalizeManager();
-    const [menuList, setMenu] = useState(menu);
     const [category, setCategory] = useState<any>(listEnableCategory?.[0]?.id);
     const [listSubCategory, setListSubCategory] = useState<any>(
-        listEnableCategory?.[0]?.subCategories?.filter((item: any) => item?.status === MenuType.ENABLE),
+        funcFilterStatus(listEnableCategory?.[0]?.subCategories),
     );
+    const menuList = useMemo(() => funcFilterStatus(menu), [menu]);
     const [recommendSelected, setRecommendSelected] = useState(listSubCategory?.[0]?.id);
 
-    useEffect(() => {
-        getMenuList();
-    }, []);
-
-    const getMenuList = async () => {
-        try {
-            const res = await getMenu();
-            setMenu(res?.data?.filter((item: any) => item?.status === MenuType.ENABLE));
-        } catch (error) {
-            console.log('getMenuList -> error', error);
-            AlertMessage(error);
-        }
-    };
     const onPressCategory = (item: any) => {
         setCategory(item.id);
-        const newListCategory = item?.subCategories?.filter((item: any) => item?.status === MenuType.ENABLE);
+        const newListCategory: any[] = funcFilterStatus(item?.subCategories);
         setListSubCategory(newListCategory);
         setRecommendSelected(newListCategory?.[0]?.id);
     };
+
+    useEffect(() => {
+        const categoryIds = listEnableCategory.map((item: any) => item?.id);
+        if (categoryIds?.length > 0) {
+            // item category is selecting not exist
+            if (!categoryIds?.includes?.(category)) {
+                onPressCategory(listEnableCategory[0]);
+            } else {
+                // item category is selecting exist
+                const currentListCategories = listEnableCategory.find((item: any) => item?.id === category) || {};
+                const newListSubCategories: any[] = funcFilterStatus(currentListCategories?.subCategories);
+                const subCategoryIds = newListSubCategories.map((item: any) => item?.id);
+                if (!subCategoryIds?.includes?.(recommendSelected) && subCategoryIds?.length > 0) {
+                    setRecommendSelected(subCategoryIds?.[0]);
+                }
+                setListSubCategory(newListSubCategories);
+            }
+        }
+    }, [listEnableCategory]);
+
     const onPressRecommend = (item: any) => {
         setRecommendSelected(item.id);
     };
+
     const gotoCart = () => {
         navigate(ORDER_ROUTE.CART);
     };
@@ -186,7 +194,7 @@ const MenuScreen = () => {
             <View style={styles.categoryContainer}>
                 <ListViewSelect
                     onPressCategory={onPressCategory}
-                    data={categories?.filter((item: any) => item?.status === MenuType.ENABLE)}
+                    data={funcFilterStatus(categories)}
                     category={category}
                     isCategory
                 />
@@ -203,13 +211,15 @@ const MenuScreen = () => {
             )}
 
             <View style={styles.body}>
-                <FlatList
+                <StyledList
                     numColumns={2}
                     data={menuFilter}
-                    keyExtractor={(item) => item.id}
-                    renderItem={({ item }) => (
+                    keyExtractor={(item: any) => item.id}
+                    renderItem={({ item }: any) => (
                         <ItemMenu goToDetailModal={() => showModalDetail(item?.id)} key={item.id} item={item} />
                     )}
+                    onRefresh={getResourcesData}
+                    refreshing={false}
                 />
             </View>
             {numOrder > staticValue.MAX_ORDER && (

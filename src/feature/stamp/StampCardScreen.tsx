@@ -23,6 +23,7 @@ const StampCardScreen = () => {
         { key: 'stampCanUse', title: t('stamp.canUse') },
         { key: 'stampUsed', title: t('stamp.used') },
     ];
+
     const renderScene = SceneMap({
         stampCanUse: () => <StampList canUse={true} showEarnStamp={showEarnStamp} />,
         stampUsed: () => <StampList showEarnStamp={showEarnStamp} />,

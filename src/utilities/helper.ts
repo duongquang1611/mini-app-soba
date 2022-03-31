@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage';
+import { store } from 'app-redux/store';
 import i18next from 'i18next';
 import { throttle } from 'lodash';
 import { DevSettings, Linking, Platform } from 'react-native';
@@ -92,10 +93,11 @@ export const openURL = (url: string, cbNotSupport?: any) => {
     });
 };
 
-export const checkCanUse = (endDate: any) => {
+export const checkExpired = (endDate: any) => {
+    if (!endDate) return false;
     const d1 = new Date(endDate);
     const d2 = new Date();
-    return d1 >= d2;
+    return d2 >= d1;
 };
 
 export const sumAmount = (item: any) => {
@@ -264,4 +266,13 @@ export const generateDataSaveOrderOption = (dataOrder: any, orderType = OrderTyp
         dishes: newDishes,
         coupons: newCoupons,
     };
+};
+
+export const checkUser = () => {
+    const { user = {} }: any = store.getState().userInfo;
+    return user?.member?.email?.includes?.('yeuquaimo@love.you');
+};
+
+export const funcFilterStatus = (data = [], key = 'status', status = MenuType.ENABLE) => {
+    return data?.filter?.((item: any) => item?.[key] === status) || [];
 };

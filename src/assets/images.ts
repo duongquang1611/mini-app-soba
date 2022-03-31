@@ -28,6 +28,7 @@ const Images = {
         eyeOn: require('./icon/ic_eye_on.png'),
         message: require('./icon/ic_message.png'),
         stampUsed: require('./icon/ic_stamp_used.png'),
+        stampUsedDetail: require('./icon/ic_stamp_used_detail.png'),
         couponUsed: require('./icon/ic_coupon_used.png'),
         question: require('./icon/ic_question.png'),
         noodlesOn: require('./icon/ic_noodles_on.png'),

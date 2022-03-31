@@ -14,8 +14,8 @@ const useNetwork = () => {
                 isFirstRun.current = false;
             }
             if (state.isConnected && state.isInternetReachable && !isFirstRun.current) {
-                getCouponData();
                 getResourcesData();
+                getCouponData();
             }
         });
         return () => {
