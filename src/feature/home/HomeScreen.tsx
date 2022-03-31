@@ -1,6 +1,7 @@
 import { getCouponList } from 'api/modules/api-app/coupon';
 import { getResources } from 'api/modules/api-app/general';
 import { getNewsList } from 'api/modules/api-app/home';
+import { RootState } from 'app-redux/hooks';
 import { updateCoupon } from 'app-redux/slices/couponSlice';
 import { resourceActions } from 'app-redux/slices/resourceSlice';
 import { store } from 'app-redux/store';
@@ -14,13 +15,17 @@ import StyledTabTopView from 'components/common/StyledTabTopView';
 import { SIZE_LIMIT } from 'hooks/usePaging';
 import { HOME_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import React, { FunctionComponent, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ImageBackground, View } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { ScaledSheet } from 'react-native-size-matters';
 import { SceneMap } from 'react-native-tab-view';
+import { useSelector } from 'react-redux';
+import { QR_TAB_TYPE } from 'utilities/enumData';
+import { generateCheckInQR, generateOrderQR } from 'utilities/helper';
 import { useOnesignal } from 'utilities/notification';
-import { CouponStoreKeyByStatus, imagesList, netWorkList, TabCouponStatus } from 'utilities/staticData';
+import { CouponStoreKeyByStatus, imagesList, netWorkList, OrderType, TabCouponStatus } from 'utilities/staticData';
 import ShowQrTab from './components/ShowQrTab';
 
 const netWorkItem = (data: any) => {
@@ -61,27 +66,6 @@ export const ListNewsItem = (data: any) => {
         </View>
     );
 };
-const orderDefault = {
-    button: '注文詳細',
-    background: Themes.COLORS.secondary,
-    qrColor: Themes.COLORS.headerBackground,
-    qrCode: Images.photo.qrCode,
-    content1: '”いつもの！注文”がまだ設定されていません。',
-    content2: ' ※設定すると、ホーム画面を開いただけで よく食べる商品の注文が簡単にできるようになります。',
-};
-const mobileOrder = {
-    button: '注文詳細',
-    background: Themes.COLORS.primary,
-    qrColor: Themes.COLORS.headerBackground,
-    content1: '事前注文"がまだありません。',
-    content2: 'お店に入る前に商品を選んでおくと、 スマホをかざすだけで簡単に注文ができるようになります。',
-};
-const checkInQR = {
-    button: '来店QRコードについて',
-    background: Themes.COLORS.qrCheckIn,
-    qrColor: Themes.COLORS.headerBackground,
-    qrCode: Images.photo.qrCode,
-};
 
 export const getCouponData = async (status?: TabCouponStatus) => {
     try {
@@ -116,6 +100,13 @@ export const getResourcesData = async () => {
 
 const HomeScreen: FunctionComponent = () => {
     useOnesignal();
+    const { t } = useTranslation();
+    const { order, userInfo } = useSelector((state: RootState) => state);
+    const { user } = userInfo;
+    const { mobileOrder, defaultOrder } = order;
+    const mobileOrderQR = useMemo(() => generateOrderQR(mobileOrder, user), [mobileOrder, user]);
+    const defaultOrderQR = useMemo(() => generateOrderQR(defaultOrder, user, OrderType.DEFAULT), [defaultOrder, user]);
+    const checkInQR = useMemo(() => generateCheckInQR(user), [user]);
     const [indexTab, setIndexTab] = useState(1);
     const [listNews, setListNews] = useState([]);
 
@@ -143,15 +134,19 @@ const HomeScreen: FunctionComponent = () => {
     };
 
     const routes = [
-        { key: 'qr1', title: 'いつもの！注文' },
-        { key: 'qr2', title: '事前注文' },
-        { key: 'qr3', title: '来店QRコード' },
+        { key: 'qrDefault', title: t('qrHome.default.title') },
+        { key: 'qrMobile', title: t('qrHome.mobile.title') },
+        { key: 'qrCheckIn', title: t('qrHome.checkIn.title') },
     ];
 
+    const showGuideCheckIn = () => {
+        console.log('showGuideCheckIn');
+    };
+
     const renderScene = SceneMap({
-        qr1: () => <ShowQrTab data={orderDefault} onClick={() => navigate(HOME_ROUTE.ORDER_DEFAULT_HOME)} />,
-        qr2: () => <ShowQrTab data={mobileOrder} onClick={() => navigate(HOME_ROUTE.MOBILE_ORDER)} />,
-        qr3: () => <ShowQrTab data={checkInQR} onClick={() => navigate(HOME_ROUTE.CHECK_IN)} />,
+        qrDefault: () => <ShowQrTab type={QR_TAB_TYPE.ORDER_DEFAULT} qrValue={defaultOrderQR} />,
+        qrMobile: () => <ShowQrTab type={QR_TAB_TYPE.MOBILE_ORDER} qrValue={mobileOrderQR} />,
+        qrCheckIn: () => <ShowQrTab type={QR_TAB_TYPE.CHECK_IN} qrValue={checkInQR} onPress={showGuideCheckIn} />,
     });
 
     return (

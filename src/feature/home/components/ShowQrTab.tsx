@@ -1,25 +1,64 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { Themes } from 'assets/themes';
-import { StyledButton, StyledIcon, StyledText } from 'components/base';
+import { StyledButton, StyledText } from 'components/base';
+import { APP_ROUTE, HOME_ROUTE, ORDER_ROUTE } from 'navigation/config/routes';
+import { navigate } from 'navigation/NavigationService';
 import React from 'react';
 import { View } from 'react-native';
-import { ScaledSheet } from 'react-native-size-matters';
+import QRCode from 'react-native-qrcode-svg';
+import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
+import { QR_TAB_TYPE } from 'utilities/enumData';
+import { QR_TAB_DATA, staticValue } from 'utilities/staticData';
 
-const ShowQrTab = (data: any) => {
-    const { button, background, qrCode, content1, content2 } = data?.data;
-    const { onClick } = data;
+const ShowQrTab = (props: any) => {
+    const { type = QR_TAB_TYPE.ORDER_DEFAULT, qrValue, onPress } = props;
+    const qrComponentData: any = QR_TAB_DATA[type];
+    const { background, textButton, content1, content2, navigateScreen } = qrComponentData;
+
+    const handleQrPress = () => {
+        if (qrValue) {
+            type === QR_TAB_TYPE.CHECK_IN ? onPress?.() : navigate(navigateScreen);
+        } else {
+            switch (type) {
+                case QR_TAB_TYPE.ORDER_DEFAULT:
+                    navigate(HOME_ROUTE.ORDER_DEFAULT_HOME);
+                    break;
+                case QR_TAB_TYPE.MOBILE_ORDER:
+                    navigate(APP_ROUTE.MAIN_TAB, { screen: ORDER_ROUTE.ROOT });
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
     return (
         <View style={[styles.containerQrTab, { backgroundColor: background || Themes.COLORS.primary }]}>
-            {qrCode ? (
+            {qrValue ? (
                 <View style={[styles.qrCodeView]}>
-                    <StyledIcon source={qrCode} size={90} customStyle={{ tintColor: Themes.COLORS.headerBackground }} />
-                    <StyledButton onPress={onClick} title={button} customStyle={[styles.detailButton]} />
+                    <QRCode
+                        value={'mobileOrderQR'}
+                        color={Themes.COLORS.headerBackground}
+                        size={scale(staticValue.QR_SIZE_HOME)}
+                        backgroundColor={Themes.COLORS.transparent}
+                    />
+                    <StyledButton
+                        onPress={handleQrPress}
+                        title={textButton}
+                        customContentStyle={styles.detailButton}
+                        customStyleText={styles.textBtn}
+                    />
                 </View>
             ) : (
                 <View style={[styles.noQrCodeView]}>
-                    <StyledText originValue={content1} customStyle={styles.content} />
-                    <StyledText originValue={content2} customStyle={styles.content} />
-                    <StyledButton onPress={onClick} title={button} customStyle={[styles.detailButton]} />
+                    <StyledText i18nText={content1} customStyle={styles.content1} />
+                    <StyledText i18nText={content2} customStyle={styles.content2} />
+                    <StyledButton
+                        onPress={handleQrPress}
+                        title={textButton}
+                        customContentStyle={styles.detailButton}
+                        customStyleText={styles.textBtn}
+                    />
                 </View>
             )}
         </View>
@@ -30,27 +69,42 @@ export default ShowQrTab;
 
 const styles = ScaledSheet.create({
     containerQrTab: {
-        padding: '20@s',
         alignItems: 'center',
-        justifyContent: 'space-between',
-        height: '220@vs',
         paddingBottom: '10@s',
+        paddingTop: '15@vs',
+        height: verticalScale(85) + scale(staticValue.QR_SIZE_HOME),
+        justifyContent: 'flex-end',
     },
     detailButton: {
         width: '160@s',
         padding: 0,
         marginTop: '10@vs',
+        paddingVertical: '8@vs',
     },
     noQrCodeView: {
-        height: '140@vs',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        paddingHorizontal: '30@s',
     },
     qrCodeView: {
         alignItems: 'center',
     },
-    content: {
+    content1: {
         textAlign: 'center',
-        color: Themes.COLORS.white,
+        marginBottom: '25@vs',
+        color: Themes.COLORS.headerBackground,
+        fontSize: '12@ms0.3',
+        lineHeight: '18@vs',
+    },
+    content2: {
+        fontSize: '12@ms0.3',
+        lineHeight: '20@vs',
+        color: Themes.COLORS.headerBackground,
+        textAlign: 'center',
+        marginBottom: '8@vs',
+    },
+    textBtn: {
+        color: Themes.COLORS.headerBackground,
+        fontSize: '14@ms0.3',
+        lineHeight: '21@vs',
     },
 });

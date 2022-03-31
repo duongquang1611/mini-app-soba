@@ -194,6 +194,7 @@ export const generateOrderQR = (
     includeEOS?: boolean,
 ) => {
     const { coupons = [], dishes = [] } = dataOrder || {};
+    if (!coupons?.length && !dishes?.length) return '';
     const couponsFormatted = coupons.map((couponItem: any) => {
         return generateCouponQR(couponItem, undefined, false)?.coupon;
     });

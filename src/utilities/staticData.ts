@@ -1,6 +1,7 @@
 import { COUPON_URL } from 'api/urls';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
+import { HOME_ROUTE } from 'navigation/config/routes';
 
 export const staticValue = {
     DEFAULT: 1,
@@ -31,6 +32,7 @@ export const staticValue = {
     MAX_ORDER: 10,
     NUMBER_ITEM_LIST_COUPON_MODAL: 3,
     QR_SIZE: 163,
+    QR_SIZE_HOME: 110,
     END_CODE_QR: 'EOS',
     orderDetail: [
         {
@@ -893,33 +895,24 @@ export enum CouponType {
     RESTAURANT = 0, // isAccounted: 0
 }
 
-// type 3 tab QR in home screen
-export enum QR_TAB_TYPE {
-    ORDER_DEFAULT = 1,
-    MOBILE_ORDER = 2,
-    CHECK_IN = 3,
-}
-
-export const QR_TAB = {
-    orderDefault: {
-        button: '注文詳細',
+export const QR_TAB_DATA = [
+    {
+        textButton: 'qrHome.default.button',
         background: Themes.COLORS.secondary,
-        qrColor: Themes.COLORS.headerBackground,
-        qrCode: Images.photo.qrCode,
-        content1: '”いつもの！注文”がまだ設定されていません。',
-        content2: ' ※設定すると、ホーム画面を開いただけで よく食べる商品の注文が簡単にできるようになります。',
+        navigateScreen: HOME_ROUTE.ORDER_DEFAULT_HOME,
+        content1: 'qrHome.default.content1',
+        content2: 'qrHome.default.content2',
     },
-    mobileOrder: {
-        button: '注文詳細',
+    {
+        textButton: 'qrHome.mobile.button',
         background: Themes.COLORS.primary,
-        qrColor: Themes.COLORS.headerBackground,
-        content1: '事前注文"がまだありません。',
-        content2: 'お店に入る前に商品を選んでおくと、 スマホをかざすだけで簡単に注文ができるようになります。',
+        navigateScreen: HOME_ROUTE.MOBILE_ORDER,
+        content1: 'qrHome.mobile.content1',
+        content2: 'qrHome.mobile.content2',
     },
-    checkInQR: {
-        button: '来店QRコードについて',
+    {
+        textButton: 'qrHome.checkIn.button',
+        navigateScreen: HOME_ROUTE.CHECK_IN,
         background: Themes.COLORS.qrCheckIn,
-        qrColor: Themes.COLORS.headerBackground,
-        qrCode: Images.photo.qrCode,
     },
-};
+];
