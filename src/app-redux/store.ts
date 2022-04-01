@@ -31,7 +31,7 @@ const store = configureStore({
                 ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
             },
         })
-            .concat(logger)
+            // .concat(logger)
             .prepend(sagaMiddleware),
     devTools: __DEV__,
 });

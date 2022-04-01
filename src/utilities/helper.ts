@@ -7,8 +7,9 @@ import codePush from 'react-native-code-push';
 import Config from 'react-native-config';
 import Picker from 'react-native-picker';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
+import { MenuType } from 'utilities/staticData';
 import { formatDate, YYYYMMDD_PUBLISH } from './format';
-import { CouponDishType, CouponType, DiscountType, MenuType, OrderType, staticValue } from './staticData';
+import { CouponDishType, CouponType, DiscountType, OrderType, staticValue } from './staticData';
 
 export const isAndroid = Platform.OS === 'android';
 
@@ -21,14 +22,14 @@ export function wait(timeout: number): Promise<any> {
 }
 
 export function logger(msg: string, isWarning?: boolean, params?: any): void {
-    if (__DEV__ && !isWarning) {
-        if (params) console.log(msg, params);
-        else console.log(msg);
-    }
-    if (__DEV__ && isWarning) {
-        if (params) console.warn(msg, params);
-        else console.warn(msg);
-    }
+    // if (__DEV__ && !isWarning) {
+    //     if (params) console.log(msg, params);
+    //     else console.log(msg);
+    // }
+    // if (__DEV__ && isWarning) {
+    //     if (params) console.warn(msg, params);
+    //     else console.warn(msg);
+    // }
 }
 
 export function initPicker(params?: any) {
@@ -276,4 +277,33 @@ export const checkUser = () => {
 
 export const funcFilterStatus = (data = [], key = 'status', status = MenuType.ENABLE) => {
     return data?.filter?.((item: any) => item?.[key] === status) || [];
+};
+
+export const filterResources = (data: any) => {
+    const newResources = { ...data };
+
+    // filter status enable in menu and categories
+    newResources.categories = funcFilterStatus(newResources.categories);
+    newResources.menu = funcFilterStatus(newResources.menu);
+
+    // filter dish in menu
+    if (newResources?.menu?.length > 0) {
+        for (let i = 0; i < newResources.menu.length; i++) {
+            newResources.menu[i] = filterDishOptions(newResources.menu[i]);
+        }
+    }
+    return newResources;
+};
+
+export const filterDishOptions = (dish: any) => {
+    const newDish = { ...dish };
+    for (let j = 0; j < newDish?.dishOptions?.length; j++) {
+        // remove dish null in subDish
+        newDish.dishOptions[j].subDish = newDish?.dishOptions?.[j]?.subDish?.filter((item: any) => item.dish);
+    }
+    newDish.dishOptions = newDish?.dishOptions?.filter((item: any) => {
+        // remove dishOption status 0 and dont have subDish
+        return item?.status !== MenuType.DISABLE && item?.subDish?.length;
+    });
+    return newDish;
 };

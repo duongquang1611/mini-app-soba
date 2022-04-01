@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { getDish } from 'api/modules/api-app/order';
 import { RootState } from 'app-redux/hooks';
-import { updateCartOrder, updateDefaultOrder } from 'app-redux/slices/orderSlice';
+import { updateCartOrder } from 'app-redux/slices/orderSlice';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
@@ -12,12 +12,11 @@ import { goBack } from 'navigation/NavigationService';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
 import { toLocalStringTime } from 'utilities/format';
-import { getDefaultSubDish, isIos, sumAmount, sumTotalAmount } from 'utilities/helper';
-import { MenuType, OrderType, OrderTypeMenu, staticValue } from 'utilities/staticData';
+import { filterDishOptions, getDefaultSubDish, sumAmount, sumTotalAmount } from 'utilities/helper';
+import { MenuType, OrderTypeMenu, staticValue } from 'utilities/staticData';
 import ButtonCart from './components/ButtonCart';
 import OrderItem from './components/OrderItem';
 
@@ -63,7 +62,8 @@ const DetailMealScreen = (props: any) => {
     const getMenuDetail = async () => {
         try {
             const res = await getDish(id);
-            setDish(res?.data);
+            const newRes: any = filterDishOptions(res?.data);
+            setDish(newRes);
         } catch (error) {
             console.log('file: DetailMealScreen.tsx -> line 51 -> getMenuDetail -> error', error);
         }

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledText } from 'components/base';
 import { HOME_ROUTE, ORDER_ROUTE } from 'navigation/config/routes';
@@ -74,10 +73,11 @@ export default ShowQrTab;
 const styles = ScaledSheet.create({
     containerQrTab: {
         alignItems: 'center',
-        paddingBottom: '10@s',
+        paddingBottom: '15@vs',
         paddingTop: '15@vs',
-        height: verticalScale(85) + scale(staticValue.QR_SIZE_HOME),
+        height: verticalScale(90) + scale(staticValue.QR_SIZE_HOME),
         justifyContent: 'flex-end',
+        backgroundColor: 'purple',
     },
     detailButton: {
         width: '160@s',
@@ -97,7 +97,7 @@ const styles = ScaledSheet.create({
         marginBottom: '25@vs',
         color: Themes.COLORS.headerBackground,
         fontSize: '12@ms0.3',
-        lineHeight: '18@vs',
+        lineHeight: '20@vs',
     },
     content2: {
         fontSize: '12@ms0.3',
