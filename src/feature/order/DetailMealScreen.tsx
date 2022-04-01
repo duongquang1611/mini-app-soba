@@ -17,7 +17,7 @@ import { scale, ScaledSheet } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
 import { toLocalStringTime } from 'utilities/format';
 import { getDefaultSubDish, isIos, sumAmount, sumTotalAmount } from 'utilities/helper';
-import { MenuType, staticValue } from 'utilities/staticData';
+import { MenuType, OrderType, OrderTypeMenu, staticValue } from 'utilities/staticData';
 import ButtonCart from './components/ButtonCart';
 import OrderItem from './components/OrderItem';
 
@@ -32,9 +32,17 @@ const checkDisable = (dishOptions: any, subDishDetail: any) => {
     return result;
 };
 const DetailMealScreen = (props: any) => {
-    const { id, isNew, createDate, isDefaultOrder, orderDefault, setOrderDefault } = props?.route?.params;
+    const {
+        id,
+        isNew,
+        createDate,
+        isDefaultOrder,
+        order,
+        setOrder,
+        orderType = OrderTypeMenu.CART_ORDER,
+    } = props?.route?.params;
     const { cartOrder } = useSelector((state: RootState) => state.order);
-    const saveOrder = isDefaultOrder ? orderDefault : cartOrder;
+    const saveOrder = order || cartOrder;
     const findIdStore = isNew ? null : saveOrder?.dishes?.find((item: any) => item.createDate === createDate);
     const [num, setNum] = useState(findIdStore?.mainDish?.amount || 1);
     const [dish, setDish] = useState<any>({});
@@ -102,8 +110,8 @@ const DetailMealScreen = (props: any) => {
                       ],
                   }
                 : {};
-        if (isDefaultOrder) {
-            setOrderDefault?.({ ...paramOrder, coupons: saveOrder?.coupons });
+        if (isDefaultOrder || orderType !== OrderTypeMenu.CART_ORDER) {
+            setOrder?.({ ...paramOrder, coupons: saveOrder?.coupons });
         } else {
             dispatch(updateCartOrder({ ...paramOrder, coupons: saveOrder?.coupons }));
         }

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledText } from 'components/base';
-import { APP_ROUTE, HOME_ROUTE, ORDER_ROUTE } from 'navigation/config/routes';
+import { HOME_ROUTE, ORDER_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React from 'react';
 import { View } from 'react-native';
@@ -24,7 +24,11 @@ const ShowQrTab = (props: any) => {
                     navigate(HOME_ROUTE.ORDER_DEFAULT_HOME);
                     break;
                 case QR_TAB_TYPE.MOBILE_ORDER:
-                    navigate(APP_ROUTE.MAIN_TAB, { screen: ORDER_ROUTE.ROOT });
+                    if (qrValue) {
+                        navigate(HOME_ROUTE.MOBILE_ORDER);
+                    } else {
+                        navigate(ORDER_ROUTE.ROOT);
+                    }
                     break;
                 default:
                     break;
@@ -37,7 +41,7 @@ const ShowQrTab = (props: any) => {
             {qrValue ? (
                 <View style={[styles.qrCodeView]}>
                     <QRCode
-                        value={'mobileOrderQR'}
+                        value={qrValue}
                         color={Themes.COLORS.headerBackground}
                         size={scale(staticValue.QR_SIZE_HOME)}
                         backgroundColor={Themes.COLORS.transparent}

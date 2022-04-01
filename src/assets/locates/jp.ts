@@ -153,6 +153,7 @@ export default {
         rangeEditMenu: '{{numOrderCheck}}/{{numOrder}}クーポン選択済み',
         cancelDish: 'この商品を削除してよろしいですか？',
         cancelCoupon: 'このクーポンを削除してよろしいですか？',
+        qrGuide: '来店QRコードの詳細',
     },
     setting: {
         editProfileTitle: 'マイページ編集',

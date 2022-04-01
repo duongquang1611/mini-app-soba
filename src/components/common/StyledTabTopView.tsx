@@ -89,7 +89,7 @@ const styles = ScaledSheet.create({
         backgroundColor: Themes.COLORS.transparent,
     },
     contentContainerTabBar: {
-        height: '37@vs',
+        height: '38@vs',
         alignItems: 'center',
     },
     tabBar: {

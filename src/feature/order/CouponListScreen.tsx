@@ -12,22 +12,37 @@ import { View } from 'react-native';
 import { ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
 import { commonStyles } from 'utilities/commonStyles';
-import { DiscountType, MODAL_ID, TabCouponStatus } from 'utilities/staticData';
+import { DiscountType, MODAL_ID, OrderTypeMenu, TabCouponStatus } from 'utilities/staticData';
 import ModalCoupon from './components/ModalCoupon';
 
-const CouponListScreen = () => {
+const CouponListScreen = (props: any) => {
+    const { orderType, order, setOrder } = props?.route?.params || {};
     const { cartOrder } = useSelector((state: RootState) => state.order);
+    const checkOrder = order || cartOrder;
     const dispatch = useDispatch();
-    const [cartListCouponOrder, setCartListCouponOrder] = useState(cartOrder);
+    const [cartListCouponOrder, setCartListCouponOrder] = useState(checkOrder);
     const modalize = ModalizeManager();
     const updateCart = () => {
-        dispatch(updateCartOrder(cartListCouponOrder));
+        if (orderType === OrderTypeMenu.MOBILE_ORDER) {
+            setCartListCouponOrder(cartListCouponOrder);
+            setOrder(cartListCouponOrder);
+        }
+        if (orderType === OrderTypeMenu.CART_ORDER) {
+            dispatch(updateCartOrder(cartListCouponOrder));
+        }
+
         modalize.dismiss(MODAL_ID.APPLY_COUPON);
         goBack();
     };
 
     const updateCouponsCart = (coupons: any) => {
-        dispatch(updateCartOrder({ ...cartListCouponOrder, coupons }));
+        if (orderType === OrderTypeMenu.MOBILE_ORDER) {
+            setCartListCouponOrder({ ...cartListCouponOrder, coupons });
+            setOrder({ ...cartListCouponOrder, coupons });
+        }
+        if (orderType === OrderTypeMenu.CART_ORDER) {
+            dispatch(updateCartOrder({ ...cartListCouponOrder, coupons }));
+        }
         modalize.dismiss(MODAL_ID.APPLY_COUPON);
         goBack();
     };
@@ -37,7 +52,7 @@ const CouponListScreen = () => {
             (item: any) => item?.coupon?.discountType === DiscountType.EACH_DISH,
         );
         const listCouponsModal = listCouponsEdit?.filter(
-            (item: any) => !cartOrder?.coupons?.find((itemCart: any) => itemCart?.id === item?.id),
+            (item: any) => !(order || cartOrder)?.coupons?.find((itemCart: any) => itemCart?.id === item?.id),
         );
         const listCouponsAll = cartListCouponOrder?.coupons?.filter(
             (item: any) => !listCouponsModal?.find((itemCart: any) => itemCart?.id === item?.id),
@@ -94,10 +109,11 @@ const CouponListScreen = () => {
                 canUse={TabCouponStatus.CAN_USE}
                 cartListCouponOrder={cartListCouponOrder}
                 handleUseCoupon={handleUseCoupon}
+                orderType={orderType}
             />
             <View style={[styles.buttonView, commonStyles.shadow]}>
                 <StyledButton
-                    disabled={cartOrder?.coupons?.length === cartListCouponOrder?.coupons?.length}
+                    disabled={checkOrder?.coupons?.length === cartListCouponOrder?.coupons?.length}
                     title={'order.useCoupon'}
                     onPress={saveCartCoupon}
                     customStyle={styles.buttonSave}

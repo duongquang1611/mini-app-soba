@@ -1,6 +1,6 @@
 import { RootState } from 'app-redux/hooks';
 import { updateGlobalData } from 'app-redux/slices/globalDataSlice';
-import { clearCartOrder, updateCartOrder, updateDefaultOrder, updateMobileOrder } from 'app-redux/slices/orderSlice';
+import { clearMobileOrder, updateCartOrder, updateDefaultOrder, updateMobileOrder } from 'app-redux/slices/orderSlice';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledIcon, StyledText, StyledTouchable } from 'components/base';
@@ -8,8 +8,8 @@ import AlertMessage from 'components/base/AlertMessage';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeader from 'components/common/StyledHeader';
-import { APP_ROUTE, HOME_ROUTE, TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
-import { goBack, navigate, reset } from 'navigation/NavigationService';
+import { APP_ROUTE, HOME_ROUTE, ORDER_ROUTE, TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
+import { navigate, reset } from 'navigation/NavigationService';
 import React, { useRef, useState } from 'react';
 import { View } from 'react-native';
 import { ScaledSheet, verticalScale } from 'react-native-size-matters';
@@ -81,46 +81,42 @@ const ItemCoupon = (props: any) => {
         </View>
     );
 };
-const CartScreen = (props: any) => {
-    const {
-        isDefaultOrder,
-        orderDefault,
-        setOrderDefault,
-        orderType = OrderTypeMenu.CART_ORDER,
-    } = props?.route?.params;
-    const { cartOrder } = useSelector((state: RootState) => state.order);
-    const [saveOrderCart, setSaveOrderCart] = useState(orderDefault);
-    const saveOrder = isDefaultOrder ? saveOrderCart : cartOrder;
+
+const CartEditQrScreen = (props: any) => {
+    const { orderType = OrderTypeMenu.CART_ORDER } = props?.route?.params;
+    const { mobileOrder, defaultOrder } = useSelector((state: RootState) => state.order);
+
+    const getOrderFromType = () => {
+        switch (orderType) {
+            case OrderTypeMenu.MOBILE_ORDER:
+                return mobileOrder;
+            case OrderTypeMenu.DEFAULT_ORDER:
+                return defaultOrder;
+            default:
+                return mobileOrder;
+        }
+    };
+    const [saveOrderCart, setSaveOrderCart] = useState(getOrderFromType());
     const dispatch = useDispatch();
     let num = useRef(0).current;
-    saveOrder?.dishes?.forEach(async (rating: any) => {
+    saveOrderCart?.dishes?.forEach(async (rating: any) => {
         num += rating?.totalAmount;
     });
-    num += saveOrder?.coupons?.length || 0;
-    const SaveAllOrderCart = (order: any) => {
-        setOrderDefault?.(order);
-        setSaveOrderCart(order);
-    };
+    num += saveOrderCart?.coupons?.length || 0;
     const onClear = () => {
-        if (isDefaultOrder) {
-            SaveAllOrderCart({});
-        } else {
-            dispatch(clearCartOrder());
+        setSaveOrderCart({});
+        if (orderType === OrderTypeMenu.MOBILE_ORDER) {
+            dispatch(clearMobileOrder());
         }
-        goBack();
+        navigate(HOME_ROUTE.ROOT);
     };
 
     const cancelCart = () => {
-        if (isDefaultOrder) {
-            dispatch(updateGlobalData({ skipOrderDefault: true }));
-            reset(APP_ROUTE.MAIN_TAB);
-        } else {
-            AlertMessage('order.deleteCart', {
-                textButtonCancel: 'exchangeCoupon.confirm.textButtonCancel',
-                onOk: onClear,
-                type: POPUP_TYPE.CONFIRM,
-            });
-        }
+        AlertMessage('order.deleteCart', {
+            textButtonCancel: 'exchangeCoupon.confirm.textButtonCancel',
+            onOk: onClear,
+            type: POPUP_TYPE.CONFIRM,
+        });
     };
     const popUpCancelDish = (createDate: string) => {
         AlertMessage('order.cancelDish', {
@@ -138,75 +134,71 @@ const CartScreen = (props: any) => {
     };
 
     const cancelItem = (createDate: string) => {
-        const newDishes = saveOrder?.dishes?.filter((item: any) => item?.createDate !== createDate);
-        if (isDefaultOrder) {
-            SaveAllOrderCart({ ...saveOrder, dishes: newDishes });
-        } else {
-            dispatch(updateCartOrder({ ...saveOrder, dishes: newDishes }));
-        }
+        const newDishes = saveOrderCart?.dishes?.filter((item: any) => item?.createDate !== createDate);
+
+        setSaveOrderCart({ ...saveOrderCart, dishes: newDishes });
     };
 
     const cancelCouponItem = (id: number) => {
-        const newCoupons = saveOrder?.coupons?.filter((item: any) => item?.id !== id);
-        if (isDefaultOrder) {
-            SaveAllOrderCart({ ...saveOrder, coupons: newCoupons });
-        } else {
-            dispatch(updateCartOrder({ ...saveOrder, coupons: newCoupons }));
-        }
+        const newCoupons = saveOrderCart?.coupons?.filter((item: any) => item?.id !== id);
+        setSaveOrderCart({ ...saveOrderCart, coupons: newCoupons });
     };
 
     const goToCouponList = () => {
-        navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.COUPON_LIST, { orderType });
+        navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.COUPON_LIST, {
+            orderType,
+            order: saveOrderCart,
+            setOrder: setSaveOrderCart,
+        });
     };
 
     const createQRCode = () => {
         // update mobile order
-        dispatch(updateMobileOrder(cartOrder));
-        navigate(HOME_ROUTE.MOBILE_ORDER);
+        if (orderType === OrderTypeMenu.MOBILE_ORDER) {
+            dispatch(updateMobileOrder(saveOrderCart));
+            navigate(HOME_ROUTE.MOBILE_ORDER);
+        }
     };
     const saveDefaultOrder = () => {
         dispatch(updateDefaultOrder(saveOrderCart));
-        goBack();
+        dispatch(updateGlobalData({ skipOrderDefault: true }));
+        reset(APP_ROUTE.MAIN_TAB);
     };
 
     return (
         <View style={styles.container}>
-            <StyledHeader
-                title={'order.cartTitle'}
-                textRight={isDefaultOrder ? 'authen.register.skipOrderDefault' : 'order.cancelOrder'}
-                onPressRight={cancelCart}
-            />
+            <StyledHeader title={'order.cartTitle'} textRight={'order.cancelOrder'} onPressRight={cancelCart} />
             <StyledKeyboardAware>
                 <View style={styles.body}>
-                    <AmountOrder cartOrder={saveOrder} />
+                    <AmountOrder cartOrder={saveOrderCart} />
                     <View style={styles.orderView}>
-                        {saveOrder?.dishes?.map((item: any, index: number) => (
+                        {saveOrderCart?.dishes?.map((item: any, index: number) => (
                             <OrderItemCart
-                                saveOrder={saveOrder}
+                                saveOrder={saveOrderCart}
                                 cancelItem={popUpCancelDish}
                                 key={index}
-                                hideDashView={index === saveOrder?.dishes?.length - 1}
+                                hideDashView={index === saveOrderCart?.dishes?.length - 1}
                                 data={item}
                                 canChange={true}
-                                isDefaultOrder={isDefaultOrder}
-                                SaveAllOrderCart={SaveAllOrderCart}
+                                orderType={orderType}
+                                SaveAllOrderCart={setSaveOrderCart}
                             />
                         ))}
                     </View>
-                    {!isDefaultOrder && (
+                    {orderType !== OrderTypeMenu.DEFAULT_ORDER && (
                         <View style={styles.contentView}>
                             <StyledText customStyle={styles.title} i18nText={'coupon.title'} />
-                            {saveOrder?.coupons?.map((item: any, index: number) => (
+                            {saveOrderCart?.coupons?.map((item: any, index: number) => (
                                 <ItemCoupon key={index} data={item} cancelCouponItem={popUpCancelCoupon} />
                             ))}
-                            {saveOrder?.coupons?.length === 0 && (
+                            {saveOrderCart?.coupons?.length === 0 && (
                                 <View style={styles.noCouponView}>
                                     <StyledIcon source={Images.icons.noCoupon} size={40} />
                                     <StyledText customStyle={styles.noCoupon} i18nText={'coupon.noCoupon'} />
                                 </View>
                             )}
                             <StyledTouchable
-                                disabled={saveOrder?.length >= staticValue.MAX_ORDER}
+                                disabled={saveOrderCart?.length >= staticValue.MAX_ORDER}
                                 onPress={goToCouponList}
                                 customStyle={styles.moreCouponView}
                             >
@@ -219,18 +211,24 @@ const CartScreen = (props: any) => {
                         {num > staticValue.MAX_ORDER && (
                             <StyledText i18nText={'order.errorMaxOrder'} customStyle={styles.errText} />
                         )}
-                        {!isDefaultOrder && (
+                        {orderType !== OrderTypeMenu.DEFAULT_ORDER && (
                             <StyledButton
                                 disabled={num <= 0 || num > staticValue.MAX_ORDER}
                                 title={'order.qrButton'}
                                 onPress={createQRCode}
                             />
                         )}
-                        {!isDefaultOrder ? (
+                        {orderType !== OrderTypeMenu.DEFAULT_ORDER ? (
                             <StyledButton
                                 isNormal={true}
                                 title={'order.editCartButton'}
-                                onPress={goBack}
+                                onPress={() =>
+                                    navigate(ORDER_ROUTE.MENU_EDIT_QR, {
+                                        orderType,
+                                        order: saveOrderCart,
+                                        setOrder: setSaveOrderCart,
+                                    })
+                                }
                                 customStyle={styles.productAddition}
                                 customStyleText={styles.textProduct}
                             />
@@ -249,7 +247,7 @@ const CartScreen = (props: any) => {
     );
 };
 
-export default CartScreen;
+export default CartEditQrScreen;
 
 const styles = ScaledSheet.create({
     container: {

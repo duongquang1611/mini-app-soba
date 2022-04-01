@@ -25,7 +25,7 @@ export const OrderChild = (data: any) => {
                         dishOptionsId,
                     },
                     subDishId: id,
-                    title: dish.title,
+                    title: dish?.title,
                     selected: 1,
                     amount: 1,
                 },
@@ -36,8 +36,12 @@ export const OrderChild = (data: any) => {
         <StyledTouchable customStyle={styles.containerItem} onPress={onChoose}>
             <View style={styles.itemRow}>
                 <View style={styles.itemRow}>
-                    <StyledImage resizeMode={'stretch'} source={{ uri: dish.thumbnail }} customStyle={styles.imgItem} />
-                    <StyledText originValue={dish.title} customStyle={styles.nameOrder} />
+                    <StyledImage
+                        resizeMode={'stretch'}
+                        source={{ uri: dish?.thumbnail }}
+                        customStyle={styles.imgItem}
+                    />
+                    <StyledText originValue={dish?.title} customStyle={styles.nameOrder} />
                 </View>
                 <View
                     style={[
@@ -72,7 +76,7 @@ const OrderChildCanChange = (data: any) => {
                         dishOptionsId,
                     },
                     subDishId: item?.id,
-                    title: dish.title,
+                    title: dish?.title,
                     selected: 1,
                     amount: numChoose,
                 },
@@ -93,8 +97,12 @@ const OrderChildCanChange = (data: any) => {
         <View style={styles.containerItem}>
             <View style={styles.itemRow}>
                 <View style={styles.itemRow}>
-                    <StyledImage resizeMode={'stretch'} source={{ uri: dish.thumbnail }} customStyle={styles.imgItem} />
-                    <StyledText originValue={dish.title} customStyle={styles.nameOrder} />
+                    <StyledImage
+                        resizeMode={'stretch'}
+                        source={{ uri: dish?.thumbnail }}
+                        customStyle={styles.imgItem}
+                    />
+                    <StyledText originValue={dish?.title} customStyle={styles.nameOrder} />
                 </View>
                 <View style={styles.itemRow}>
                     <TouchableOpacity onPress={minus} disabled={num === 0}>
