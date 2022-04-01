@@ -9,14 +9,15 @@ import React from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import { useDispatch } from 'react-redux';
-import { staticValue } from 'utilities/staticData';
+import { OrderTypeMenu, staticValue } from 'utilities/staticData';
 
 const OrderItemCart = (props: any) => {
     const { hideDashView = false, customValue } = props;
     const { subDishes, createDate, mainDish, totalAmount } = props?.data;
     const dispatch = useDispatch();
     const { name, image } = mainDish;
-    const { cancelItem, canChange, goDetailMenu, notGoDetail, saveOrder, isDefaultOrder, SaveAllOrderCart } = props;
+    const { cancelItem, canChange, goDetailMenu, notGoDetail, saveOrder, isDefaultOrder, SaveAllOrderCart, orderType } =
+        props;
     const num = mainDish?.amount;
     const updateOrder = (currentNum: number) => {
         const cartDishOrder = saveOrder?.dishes || [];
@@ -29,7 +30,7 @@ const OrderItemCart = (props: any) => {
         };
         const newCartDishOrder = [...cartDishOrder];
         newCartDishOrder?.splice(findIndexDishEdit, 1, orderChange);
-        if (isDefaultOrder) {
+        if (isDefaultOrder || orderType === OrderTypeMenu.MOBILE_ORDER) {
             SaveAllOrderCart({ ...saveOrder, dishes: newCartDishOrder });
         } else {
             dispatch(updateCartOrder({ ...saveOrder, dishes: newCartDishOrder }));
@@ -56,8 +57,8 @@ const OrderItemCart = (props: any) => {
                 id: mainDish?.id,
                 createDate,
                 isDefaultOrder,
-                orderDefault: saveOrder,
-                setOrderDefault: SaveAllOrderCart,
+                order: saveOrder,
+                setOrder: SaveAllOrderCart,
             });
         }
     };

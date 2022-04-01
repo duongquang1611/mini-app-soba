@@ -19,13 +19,20 @@ import React, { FunctionComponent, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ImageBackground, View } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
-import { ScaledSheet } from 'react-native-size-matters';
+import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { SceneMap } from 'react-native-tab-view';
 import { useSelector } from 'react-redux';
 import { QR_TAB_TYPE } from 'utilities/enumData';
 import { generateCheckInQR, generateOrderQR } from 'utilities/helper';
 import { useOnesignal } from 'utilities/notification';
-import { CouponStoreKeyByStatus, imagesList, netWorkList, OrderType, TabCouponStatus } from 'utilities/staticData';
+import {
+    CouponStoreKeyByStatus,
+    imagesList,
+    netWorkList,
+    OrderType,
+    staticValue,
+    TabCouponStatus,
+} from 'utilities/staticData';
 import ShowQrTab from './components/ShowQrTab';
 
 const netWorkItem = (data: any) => {
@@ -98,7 +105,7 @@ export const getResourcesData = async () => {
     }
 };
 
-const HomeScreen: FunctionComponent = () => {
+const HomeScreen: FunctionComponent = (props: any) => {
     useOnesignal();
     const { t } = useTranslation();
     const { order, userInfo } = useSelector((state: RootState) => state);
@@ -322,7 +329,7 @@ const styles = ScaledSheet.create({
         tintColor: '#FBE3C0',
     },
     tabContainerStyle: {
-        height: '230@s',
+        height: verticalScale(128) + scale(staticValue.QR_SIZE_HOME),
     },
 });
 

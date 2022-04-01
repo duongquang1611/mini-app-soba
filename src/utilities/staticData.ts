@@ -721,6 +721,31 @@ export const stepGuide = [
     },
 ];
 
+export const orderGuide = {
+    content:
+        '～来店QRコードについて～\n券売機にかざしてから発券する事で、お得なクーポンが手に入るスタンプを獲得する事ができるQRコードです。\nいつもの！注文 設定していない場合は、ホーム画面に自動的に表示されます。',
+    header: '～使用方法～',
+    steps: [
+        {
+            index: 1,
+            content: '券売機に来店QRコードをかざす',
+            icon: Images.icons.step3,
+            textLink: 'こちら',
+            link: 'https://www.facebook.com/',
+        },
+        {
+            index: 2,
+            content: '券売機で商品を選択し、発券する',
+            icon: Images.icons.step1,
+        },
+        {
+            index: 3,
+            content: 'スタンプGET\nスタンプカードの詳しい使い方についてはこちら',
+            icon: Images.icons.step2,
+        },
+    ],
+};
+
 export const FAKER = {};
 
 // type in api request verify code
@@ -916,3 +941,8 @@ export const QR_TAB_DATA = [
         background: Themes.COLORS.qrCheckIn,
     },
 ];
+export enum OrderTypeMenu {
+    CART_ORDER = 0,
+    MOBILE_ORDER = 1,
+    DEFAULT_ORDER = 2,
+}

@@ -47,7 +47,7 @@ const OrderItemCart = (props: any) => {
     );
 };
 const ModalDetailMenu = (props: any) => {
-    const { id, dishes, isDefaultOrder, orderDefault, setOrderDefault } = props;
+    const { id, dishes, isDefaultOrder, order, setOrder, orderType } = props;
     const getListFromDishes = dishes?.filter((item: any) => item?.mainDish?.id === id) || [];
     const goDetailNew = () => {
         props?.closeModal();
@@ -55,8 +55,9 @@ const ModalDetailMenu = (props: any) => {
             id,
             isNew: true,
             isDefaultOrder,
-            orderDefault,
-            setOrderDefault,
+            order,
+            setOrder,
+            orderType,
         });
     };
     const goDetailEdit = (createDate: string) => {
@@ -65,8 +66,9 @@ const ModalDetailMenu = (props: any) => {
             id,
             createDate,
             isDefaultOrder,
-            orderDefault,
-            setOrderDefault,
+            order,
+            setOrder,
+            orderType,
         });
     };
     return (

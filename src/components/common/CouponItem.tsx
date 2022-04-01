@@ -9,12 +9,20 @@ import { View } from 'react-native';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
 import { formatDate, YYYYMMDD } from 'utilities/format';
-import { DateType, MemberCouponStatus, staticValue } from 'utilities/staticData';
+import { DateType, MemberCouponStatus, OrderTypeMenu, staticValue } from 'utilities/staticData';
 import DashView from './DashView';
 
 export const CouponItem = (props: any) => {
     const { order } = useSelector((state: RootState) => state);
-    const { item = {}, canUse, handleUseCoupon, goToDetail, cartOrder: cartOrderState, isTabCoupon = false } = props;
+    const {
+        item = {},
+        canUse,
+        handleUseCoupon,
+        goToDetail,
+        cartOrder: cartOrderState,
+        isTabCoupon = false,
+        orderType,
+    } = props;
     const { coupon, usedDate, status, id: idMemberCoupon } = item;
     const { image, title, startDate, endDate, dateType } = coupon;
     // const isInCartAPI = useMemo(() => status === MemberCouponStatus.IN_CART, [status]);
@@ -23,7 +31,7 @@ export const CouponItem = (props: any) => {
     const checkChooseInOrderMobile = order.mobileOrder?.coupons?.find(
         (itemCoupon: any) => itemCoupon?.id === idMemberCoupon,
     );
-    const disabledUse = checkChooseInCart;
+    const disabledUse = orderType === OrderTypeMenu.MOBILE_ORDER ? checkChooseInOrderMobile : checkChooseInCart;
 
     const handleGoToDetail = () => {
         goToDetail?.(item);

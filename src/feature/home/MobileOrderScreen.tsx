@@ -2,9 +2,11 @@
 import { saveOrderOption } from 'api/modules/api-app/order';
 import { RootState } from 'app-redux/hooks';
 import { clearMobileOrder, updateCartOrder, updateMobileOrder } from 'app-redux/slices/orderSlice';
+import { store } from 'app-redux/store';
 import Images from 'assets/images';
+import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
-import { StyledButton, StyledIcon, StyledText, StyledTouchable } from 'components/base';
+import { StyledButton, StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
@@ -12,15 +14,15 @@ import StyledHeader from 'components/common/StyledHeader';
 import AmountOrder from 'feature/order/components/AmountOrder';
 import ModalCoupon from 'feature/order/components/ModalCoupon';
 import OrderItemCart from 'feature/order/components/OrderItemCart';
-import { APP_ROUTE, ORDER_ROUTE, TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
-import { navigate } from 'navigation/NavigationService';
-import React, { useEffect, useMemo } from 'react';
+import { APP_ROUTE, HOME_ROUTE, ORDER_ROUTE, TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
+import { goBack, navigate } from 'navigation/NavigationService';
+import React, { useEffect, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
-import { generateDataSaveOrderOption, generateOrderQR } from 'utilities/helper';
-import { DiscountType, MODAL_ID, POPUP_TYPE, staticValue } from 'utilities/staticData';
+import { generateDataSaveOrderOption, generateOrderQR, isIos } from 'utilities/helper';
+import { DiscountType, MODAL_ID, POPUP_TYPE, staticValue, orderGuide, OrderTypeMenu } from 'utilities/staticData';
 
 const ItemCoupon = (props: any) => {
     const { cancelCouponItem, data } = props;
@@ -85,11 +87,40 @@ const ItemCoupon = (props: any) => {
         </View>
     );
 };
+const ModalGuide = () => (
+    <View>
+        <StyledText originValue={orderGuide?.content} isBlack customStyle={styles.contentGuide} />
+        <StyledText originValue={orderGuide?.header} isBlack customStyle={styles.headerStep} />
+        <View>
+            <StyledImage source={Images.photo.line} customStyle={styles.line1} />
+            <StyledImage source={Images.photo.line} customStyle={styles.line2} />
+            <View>
+                {orderGuide?.steps?.map((item, index) => (
+                    <StepItem key={index} item={item} largeView={isIos && index === 2} />
+                ))}
+            </View>
+        </View>
+    </View>
+);
+const StepItem = (item: any) => (
+    <View style={styles.rowStep}>
+        <View style={styles.numberView}>
+            <StyledText originValue={item?.item?.index} customStyle={styles.numberValue} />
+        </View>
+        <StyledImage source={item?.item?.icon} customStyle={styles.icStep} />
+        <View style={styles.containView}>
+            <StyledText originValue={item?.item?.content} isBlack customStyle={styles.textGuide} />
+            <View></View>
+        </View>
+    </View>
+);
 
 const MobileOrderScreen = () => {
     const { order, userInfo } = useSelector((state: RootState) => state);
     const { mobileOrder } = order;
+    const [orderMobile, setOrderMobile] = useState(mobileOrder);
     const { user } = userInfo;
+    const modalize = ModalizeManager();
     const mobileOrderQR = useMemo(() => generateOrderQR(mobileOrder, user), [mobileOrder, user]);
     const mobileOrderSaveOrderOption = useMemo(() => generateDataSaveOrderOption(mobileOrder), [mobileOrder]);
     const dispatch = useDispatch();
@@ -108,12 +139,16 @@ const MobileOrderScreen = () => {
     };
 
     const edit = () => {
-        navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.CART);
+        navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.CART_EDIT_QR, {
+            orderType: OrderTypeMenu.MOBILE_ORDER,
+            setOrder: setOrderMobile,
+            order: orderMobile,
+        });
     };
 
     const onClearOrder = () => {
-        navigate(APP_ROUTE.MAIN_TAB, { screen: ORDER_ROUTE.ROOT });
-        dispatch(clearMobileOrder());
+        // dispatch(clearMobileOrder());
+        navigate(HOME_ROUTE.ROOT, { indexTabQr: 1 });
     };
 
     const cancelOrderMobile = () => {
@@ -128,10 +163,23 @@ const MobileOrderScreen = () => {
         const newDishes = mobileOrder?.dishes?.filter((item: any) => item?.id !== id);
         dispatch(updateMobileOrder({ ...mobileOrder, dishes: newDishes }));
     };
+    const showModal = () => {
+        modalize.show(
+            MODAL_ID.ORDER_GUIDE,
+            <ModalGuide />,
+            {
+                modalHeight: scale(550),
+                scrollViewProps: {
+                    contentContainerStyle: { flexGrow: 1 },
+                },
+            },
+            { title: 'order.qrGuide' },
+        );
+    };
 
     return (
         <>
-            <StyledHeader title={'mobileOrder.title'} iconRight={Images.icons.question} />
+            <StyledHeader title={'mobileOrder.title'} iconRight={Images.icons.question} onPressRight={showModal} />
             <View style={styles.container}>
                 <StyledKeyboardAware customStyle={styles.scrollView}>
                     <View style={styles.body}>
@@ -273,5 +321,60 @@ const styles = ScaledSheet.create({
     },
     buttonDetail: {
         width: '95%',
+    },
+    icStep: {
+        width: '80@s',
+        height: '80@s',
+    },
+    numberView: {
+        width: '24@s',
+        height: '24@s',
+        backgroundColor: Themes.COLORS.primary,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 24,
+    },
+    numberValue: {
+        color: Themes.COLORS.white,
+    },
+    rowStep: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: '100%',
+        paddingHorizontal: '20@s',
+        height: '80@s',
+        justifyContent: 'space-between',
+        marginVertical: '5@s',
+    },
+    line1: {
+        position: 'absolute',
+        width: 2,
+        height: '50@s',
+        left: '32@s',
+        top: '63@s',
+    },
+    line2: {
+        position: 'absolute',
+        width: 2,
+        height: '50@s',
+        left: '32@s',
+        top: '155@s',
+    },
+    containView: {
+        width: '220@s',
+        alignItems: 'flex-start',
+        justifyContent: 'flex-start',
+    },
+    textGuide: {
+        lineHeight: scale(24),
+    },
+    contentGuide: {
+        paddingHorizontal: '20@s',
+        paddingVertical: '30@s',
+        lineHeight: scale(24),
+    },
+    headerStep: {
+        paddingHorizontal: '20@s',
+        marginBottom: '10@s',
     },
 });

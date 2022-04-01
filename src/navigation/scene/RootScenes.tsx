@@ -18,11 +18,13 @@ import NewsListScreen from 'feature/home/NewsListScreen';
 import NotificationDetailScreen from 'feature/home/NotificationDetailScreen';
 import NotificationScreen from 'feature/home/NotificationScreen';
 import OrderDefaultHomeScreen from 'feature/home/OrderDefaultHomeScreen';
+import CartEditQrScreen from 'feature/order/CartEditQrScreen';
 import CartScreen from 'feature/order/CartScreen';
 import CouponListScreen from 'feature/order/CouponListScreen';
 import DetailCouponOrderScreen from 'feature/order/DetailCouponOrderScreen';
 import DetailMealScreen from 'feature/order/DetailMealScreen';
 import DetailShopScreen from 'feature/order/DetailShopScreen';
+import MenuEditQrScreen from 'feature/order/MenuEditQrScreen';
 import MenuScreen from 'feature/order/MenuScreen';
 import OrderQrCodeScreen from 'feature/order/OrderQrCode';
 import ContactScreen from 'feature/setting/ContactScreen';
@@ -102,6 +104,8 @@ const AppStack = () => {
                     <MainStack.Screen name={ORDER_ROUTE.DETAIL_SHOP} component={DetailShopScreen} />
                     <MainStack.Screen name={ORDER_ROUTE.COUPON_DETAIL} component={DetailCouponOrderScreen} />
                     <MainStack.Screen name={ORDER_ROUTE.ORDER_QR_CODE} component={OrderQrCodeScreen} />
+                    <MainStack.Screen name={ORDER_ROUTE.CART_EDIT_QR} component={CartEditQrScreen} />
+                    <MainStack.Screen name={ORDER_ROUTE.MENU_EDIT_QR} component={MenuEditQrScreen} />
 
                     {/* STAMP_ROUTE */}
                     <MainStack.Screen name={STAMP_ROUTE.ROOT} component={StampCardScreen} />
