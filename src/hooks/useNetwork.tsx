@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import NetInfo from '@react-native-community/netinfo';
 import { RootState } from 'app-redux/hooks';
 import { updateCartOrder, updateDishesCartOrder } from 'app-redux/slices/orderSlice';
@@ -17,7 +18,7 @@ const useNetwork = () => {
 
     useEffect(() => {
         // handle menu,categories change => update cart
-        console.log('useEffect', { menu, cartOrder, categories });
+        // console.log('useEffect', { menu, cartOrder, categories });
         const categoryIds = categories.map((item: any) => item.id);
         const menuIds = menu.map((item: any) => item.id);
         const { dishes = [] } = cartOrder || {};
@@ -30,9 +31,6 @@ const useNetwork = () => {
                     // categoryId exists
                     // check subDishes (dua vao subDishId)
                     console.log('useEffect -> newDishes', newDishes);
-                    // newDishes[i].subDishes = newDishes?.[i]?.subDishes?.filter?.((subDish: any) => {
-                    //     return '';
-                    // });
                 }
             }
         }

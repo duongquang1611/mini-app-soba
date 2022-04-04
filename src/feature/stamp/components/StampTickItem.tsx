@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
@@ -12,8 +11,13 @@ const itemHeight = 67;
 const separatorBottom = 10;
 const separatorTop = 10;
 
+// open box: couponsCumulative length > 0
+// noodle on: createdDate &&  couponsCumulative length <= 0
+// noodle off: normal
+// close box: couponsExchange (item?.stampAmount)
+
 const StampTickItem = ({ item, numCol, onPress }: any) => {
-    const { giftType, status, date, on } = item;
+    const { couponsCumulative, createdDate } = item;
 
     const handlePressItem = () => {
         onPress?.();
@@ -23,44 +27,47 @@ const StampTickItem = ({ item, numCol, onPress }: any) => {
         <StyledTouchable
             onPress={handlePressItem}
             activeOpacity={0.9}
-            disabled={!giftType}
+            disabled={!couponsCumulative?.length && !item?.stampAmount}
             customStyle={[
                 s.wrapItem,
                 {
-                    backgroundColor:
-                        giftType === 1
-                            ? Themes.COLORS.headerBackground
-                            : giftType === 2
-                            ? Themes.COLORS.redOxide
-                            : status
-                            ? Themes.COLORS.headerBackground
-                            : Themes.COLORS.disabled,
-                    marginRight: scale(numCol === staticValue.COLUMNS_COUPON_EXCHANGE[0] ? 15 : 9),
+                    backgroundColor: couponsCumulative?.length
+                        ? Themes.COLORS.headerBackground
+                        : item?.stampAmount
+                        ? Themes.COLORS.redOxide
+                        : createdDate
+                        ? Themes.COLORS.headerBackground
+                        : Themes.COLORS.disabled,
+                    marginRight: scale(numCol === staticValue.COLUMNS_STAMP_TICK[0] ? 15 : 9),
                     width:
                         (Metrics.screenWidth -
-                            scale(40 + (numCol === staticValue.COLUMNS_COUPON_EXCHANGE[0] ? 15 : 9) * (numCol - 1))) /
+                            scale(40 + (numCol === staticValue.COLUMNS_STAMP_TICK[0] ? 15 : 9) * (numCol - 1))) /
                         numCol,
                 },
             ]}
         >
             <StyledImage
                 source={
-                    giftType === 1
-                        ? Images.icons[`giftOpen${numCol}`]
-                        : giftType === 2
+                    couponsCumulative?.length
+                        ? Images?.icons?.[`giftOpen${numCol}`]
+                        : item?.stampAmount
                         ? Images.icons.giftClose
-                        : status
+                        : createdDate
                         ? Images.icons.noodlesOn
                         : Images.icons.noodlesOff
                 }
                 customStyle={{
-                    width: giftType === 1 ? '100%' : scale(numCol > staticValue.COLUMNS_COUPON_EXCHANGE[1] ? 32 : 40),
-                    height: giftType === 1 ? '100%' : scale(numCol > staticValue.COLUMNS_COUPON_EXCHANGE[1] ? 32 : 40),
-                    marginBottom: giftType === 2 ? scale(7) : 0,
+                    width: couponsCumulative?.length
+                        ? '100%'
+                        : scale(numCol > staticValue.COLUMNS_STAMP_TICK[1] ? 32 : 40),
+                    height: couponsCumulative?.length
+                        ? '100%'
+                        : scale(numCol > staticValue.COLUMNS_STAMP_TICK[1] ? 32 : 40),
+                    marginBottom: item?.stampAmount ? scale(7) : 0,
                 }}
             />
-            {status && !giftType && (
-                <StyledText originValue={formatDate(date, DDMM)} isBlack customStyle={s.textDate} />
+            {!!createdDate && (
+                <StyledText originValue={formatDate(createdDate, DDMM)} isBlack customStyle={s.textDate} />
             )}
         </StyledTouchable>
     );
@@ -93,6 +100,7 @@ const s = ScaledSheet.create({
     },
     textDate: {
         fontSize: '12@ms0.3',
+        marginTop: '2@vs',
     },
 });
 

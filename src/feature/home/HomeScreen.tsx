@@ -106,7 +106,7 @@ export const getResourcesData = async () => {
     }
 };
 
-const HomeScreen: FunctionComponent = (props: any) => {
+const HomeScreen: FunctionComponent = () => {
     useOnesignal();
     const { t } = useTranslation();
     const { order, userInfo } = useSelector((state: RootState) => state);

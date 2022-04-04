@@ -110,7 +110,6 @@ const StepItem = (item: any) => (
         <StyledImage source={item?.item?.icon} customStyle={styles.icStep} />
         <View style={styles.containView}>
             <StyledText originValue={item?.item?.content} isBlack customStyle={styles.textGuide} />
-            <View></View>
         </View>
     </View>
 );

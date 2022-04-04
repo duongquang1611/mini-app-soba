@@ -7,9 +7,8 @@ import codePush from 'react-native-code-push';
 import Config from 'react-native-config';
 import Picker from 'react-native-picker';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
-import { MenuType } from 'utilities/staticData';
 import { formatDate, YYYYMMDD_PUBLISH } from './format';
-import { CouponDishType, CouponType, DiscountType, OrderType, staticValue } from './staticData';
+import { CouponDishType, CouponType, DiscountType, MenuType, OrderType, staticValue } from './staticData';
 
 export const isAndroid = Platform.OS === 'android';
 
@@ -22,14 +21,14 @@ export function wait(timeout: number): Promise<any> {
 }
 
 export function logger(msg: string, isWarning?: boolean, params?: any): void {
-    // if (__DEV__ && !isWarning) {
-    //     if (params) console.log(msg, params);
-    //     else console.log(msg);
-    // }
-    // if (__DEV__ && isWarning) {
-    //     if (params) console.warn(msg, params);
-    //     else console.warn(msg);
-    // }
+    if (__DEV__ && !isWarning) {
+        if (params) console.log(msg, params);
+        else console.log(msg);
+    }
+    if (__DEV__ && isWarning) {
+        if (params) console.warn(msg, params);
+        else console.warn(msg);
+    }
 }
 
 export function initPicker(params?: any) {

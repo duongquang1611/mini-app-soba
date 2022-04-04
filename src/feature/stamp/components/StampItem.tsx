@@ -1,8 +1,8 @@
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
-import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
+import { StyledIcon, StyledText, StyledTouchable } from 'components/base';
 import React, { useMemo } from 'react';
-import { StyleProp, View, ViewStyle } from 'react-native';
+import { ImageBackground, StyleProp, View, ViewStyle } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { ScaledSheet } from 'react-native-size-matters';
 import { StampCardType, StampSettingDuration } from 'utilities/enumData';
@@ -16,13 +16,20 @@ interface IProps {
     onPress?: any;
     customStyle?: StyleProp<ViewStyle>;
     containerStyle?: StyleProp<ViewStyle>;
-    caseType?: number;
     animation?: boolean;
+    showExpiredImage?: boolean;
 }
 
 const StampItem = (props: IProps) => {
-    const { onPress, item: itemMemberStamp, customStyle, containerStyle, animation = false } = props;
-    const { stamp = {}, leftAmount = 0 } = itemMemberStamp;
+    const {
+        onPress,
+        item: itemMemberStamp,
+        customStyle,
+        containerStyle,
+        animation = false,
+        showExpiredImage = true,
+    } = props;
+    const { stamp = {}, leftAmount = 0, totalAmount = 0 } = itemMemberStamp;
     const { image, title, startDate, cardType, settingDuration, endDate } = stamp;
     // cardType: StampCardType
     const isExchange = useMemo(() => cardType === StampCardType.EXCHANGE, [cardType]);
@@ -34,7 +41,13 @@ const StampItem = (props: IProps) => {
     return (
         <Animatable.View style={containerStyle} animation={animation ? staticValue.ANIMATION_ITEM : ''} useNativeDriver>
             <StyledTouchable customStyle={[styles.container, customStyle]} onPress={onPress} disabled={!onPress}>
-                <StyledImage resizeMode={'cover'} source={{ uri: image }} customStyle={styles.imgStamp} />
+                <ImageBackground source={{ uri: image }} style={styles.imgStamp} resizeMode={'cover'}>
+                    {!!isExpired && showExpiredImage && (
+                        <View style={styles.expiredImage}>
+                            <StyledIcon size={60} source={Images.icons.stampUsedDetail} />
+                        </View>
+                    )}
+                </ImageBackground>
                 <View style={styles.content}>
                     <StyledText originValue={title} customStyle={styles.nameStamp} numberOfLines={2} />
                     <StyledText
@@ -58,7 +71,7 @@ const StampItem = (props: IProps) => {
                                 />
                                 <StyledText
                                     i18nText={'stamp.count'}
-                                    i18nParams={{ count: leftAmount }}
+                                    i18nParams={{ count: (isExchange ? leftAmount : totalAmount) || 0 }}
                                     customStyle={styles.textCount}
                                 />
                             </>
@@ -93,6 +106,7 @@ const styles = ScaledSheet.create({
     nameStamp: {
         fontSize: '16@ms0.3',
         fontWeight: 'bold',
+        marginRight: '60@s',
     },
     textCount: {
         fontSize: '16@ms0.3',
@@ -117,6 +131,13 @@ const styles = ScaledSheet.create({
     stampUsed: {
         position: 'absolute',
         top: '-2@s',
+    },
+    expiredImage: {
+        width: '100%',
+        height: '100%',
+        backgroundColor: Themes.COLORS.overlayExpired,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 });
 
