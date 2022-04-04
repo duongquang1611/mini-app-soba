@@ -239,6 +239,8 @@ export default {
         couponExchangeBtn: 'クーポン交換',
         couponGetHistory: 'クーポンGET履歴',
         modalGetCoupon: 'クーポンGET',
+        dishesApplyAll: '注意\nスタンプ対象商品設定：なし',
+        dishesApplyEach: '注意\nスタンプ対象商品設定：',
     },
     exchangeCoupon: {
         title: 'クーポン交換',

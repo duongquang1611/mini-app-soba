@@ -6,7 +6,7 @@ import { CommonStatus } from './types';
 interface IResourceState {
     status: CommonStatus;
     error?: any;
-    data?: Record<string, any>;
+    data?: any;
 }
 
 type Reducer<A extends Action<any> = AnyAction> = CaseReducer<IResourceState, A>;

@@ -35,7 +35,7 @@ const StampList = (props: StampListProps) => {
     };
 
     const renderItemStamp = ({ item }: any) => {
-        return <StampItem item={item} onPress={() => goToDetail(item)} />;
+        return <StampItem item={item} onPress={() => goToDetail(item)} showExpiredImage={false} />;
     };
 
     return (
@@ -58,6 +58,7 @@ const StampList = (props: StampListProps) => {
                 data={stamps}
                 renderItem={renderItemStamp}
                 ItemSeparatorComponent={DashView}
+                ListFooterComponent={DashView}
                 customStyle={styles.listStamp}
                 refreshing={refreshing}
                 onRefresh={onRefresh}

@@ -12,7 +12,7 @@ export const staticValue = {
         left: 10,
         right: 10,
     },
-    COLUMNS_COUPON_EXCHANGE: [3, 5, 7],
+    COLUMNS_STAMP_TICK: [3, 5, 7],
     THROTTLE_TIME: 500,
     CONFIG_THROTTLE: { trailing: false },
     ANIMATION_ITEM: {
@@ -44,6 +44,8 @@ export const staticValue = {
             subIDs: ['A1', 'A2'],
         },
     ],
+    DEFAULT_STAMP_TICK_COLUMN: 5,
+    NO_LIMIT_BOX: 200,
 };
 
 export const LINEAR_COLOR = {

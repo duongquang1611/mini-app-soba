@@ -23,7 +23,7 @@ import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { SceneMap } from 'react-native-tab-view';
 import { useSelector } from 'react-redux';
 import { QR_TAB_TYPE } from 'utilities/enumData';
-import { generateCheckInQR, generateOrderQR } from 'utilities/helper';
+import { filterResources, generateCheckInQR, generateOrderQR } from 'utilities/helper';
 import { useOnesignal } from 'utilities/notification';
 import {
     CouponStoreKeyByStatus,
@@ -98,14 +98,15 @@ export const getCouponData = async (status?: TabCouponStatus) => {
 
 export const getResourcesData = async () => {
     try {
-        const res = await getResources();
-        store.dispatch(resourceActions.getResourceSuccess(res?.data));
+        const response = await getResources();
+        const newResources = filterResources(response?.data);
+        store.dispatch(resourceActions.getResourceSuccess(newResources));
     } catch (error) {
         console.log('getCouponData -> error', error);
     }
 };
 
-const HomeScreen: FunctionComponent = (props: any) => {
+const HomeScreen: FunctionComponent = () => {
     useOnesignal();
     const { t } = useTranslation();
     const { order, userInfo } = useSelector((state: RootState) => state);
@@ -329,7 +330,7 @@ const styles = ScaledSheet.create({
         tintColor: '#FBE3C0',
     },
     tabContainerStyle: {
-        height: verticalScale(128) + scale(staticValue.QR_SIZE_HOME),
+        height: verticalScale(135) + scale(staticValue.QR_SIZE_HOME),
     },
 });
 

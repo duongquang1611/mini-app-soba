@@ -52,7 +52,7 @@ export const CouponItem = (props: any) => {
             <StyledTouchable customStyle={styles.couponItem} onPress={handleGoToDetail}>
                 <StyledImage resizeMode={'cover'} source={{ uri: image }} customStyle={styles.couponImage} />
                 <View style={styles.content}>
-                    <StyledText originValue={title} numberOfLines={2} customStyle={styles.title} />
+                    <StyledText originValue={title} numberOfLines={1} customStyle={styles.title} />
                     <View style={styles.rowView}>
                         <StyledText
                             i18nText={dateType === DateType.EXPIRED_DATE ? 'coupon.rangeDate' : 'coupon.noExpiredDate'}
@@ -144,6 +144,7 @@ const styles = ScaledSheet.create({
         fontSize: '16@ms0.3',
         fontWeight: 'bold',
         color: Themes.COLORS.secondary,
+        marginRight: '18@s',
     },
     rowView: {
         flexDirection: 'row',

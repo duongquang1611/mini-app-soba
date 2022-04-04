@@ -30,6 +30,16 @@ const orderSlice = createSlice({
             state = { ...state, defaultOrder: action.payload };
             return state;
         },
+        updateDishesCartOrder: (state, action: PayloadAction<any>) => {
+            state = {
+                ...state,
+                cartOrder: {
+                    ...state.cartOrder,
+                    dishes: action.payload,
+                },
+            };
+            return state;
+        },
         updateCouponMobileOrder: (state, action: PayloadAction<any>) => {
             const oldCoupons = state.mobileOrder?.coupons || [];
             state = {
@@ -82,6 +92,7 @@ export const {
     updateDefaultOrder,
     clearDefaultOrder,
     clearOrder,
+    updateDishesCartOrder,
 } = orderSlice.actions;
 
 export default persistReducer<IOrderState>(persistConfig, orderSlice.reducer);

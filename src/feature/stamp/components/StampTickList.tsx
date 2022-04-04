@@ -1,41 +1,37 @@
 import { StyledButton } from 'components/base';
 import DashView from 'components/common/DashView';
-import { STAMP_ROUTE } from 'navigation/config/routes';
-import { navigate } from 'navigation/NavigationService';
 import React, { memo, useMemo } from 'react';
 import { View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
+import { StampCardType } from 'utilities/enumData';
+import { staticValue } from 'utilities/staticData';
 import StampTickItem from './StampTickItem';
-
-const createItem = (on = false, rd = Math.random()) => {
-    return { id: rd, status: on, date: '2022-03-02T06:49:49.039Z' };
-};
-const data = Array(50).fill(createItem(true), 0, 8).fill(createItem(), 8, 100);
 
 const itemHeight = 67;
 const separatorBottom = 10;
 const separatorTop = 10;
-const numCol = 7;
-// const numCol = staticValue.COLUMNS_COUPON_EXCHANGE[Math.round(Math.random() * 2)];
 
-const StampTickList = ({ caseType, onPressItemHistory, stampDetail }: any) => {
-    const { amount, usedAmount } = stampDetail;
-    const remainAmount = useMemo(() => amount - usedAmount, [amount, usedAmount]);
+const StampTickList = ({
+    onPressItemHistory,
+    stampDetail,
+    numCol = staticValue.DEFAULT_STAMP_TICK_COLUMN,
+    data = [],
+}: any) => {
+    const { leftAmount, stamp = {} } = stampDetail || {};
+    const isExchange = useMemo(() => stamp.cardType === StampCardType.EXCHANGE, [stamp.cardType]);
 
-    for (let index = 0; index < 6; index++) {
-        const newIndex = index + 10 + Math.round(Math.random() * 10);
-        data[newIndex] = {
-            ...data[newIndex],
-            giftType: Math.ceil(Math.random() * 2),
-        };
-    }
+    // open box: couponsCumulative length > 0
+    // noodle on: createdDate &&  couponsCumulative length <= 0
+    // noodle off: normal
+    // close box: couponsExchange
+
     const renderItem = ({ item }: any) => {
         return <StampTickItem item={item} numCol={numCol} onPress={onPressItemHistory} />;
     };
 
     const goToExchangeCoupon = () => {
-        navigate(STAMP_ROUTE.EXCHANGE_COUPON);
+        // navigate(STAMP_ROUTE.EXCHANGE_COUPON);
     };
 
     return (
@@ -51,11 +47,11 @@ const StampTickList = ({ caseType, onPressItemHistory, stampDetail }: any) => {
                 />
             </View>
             <DashView customStyle={styles.dashView} />
-            {caseType !== 2 && (
+            {isExchange && (
                 <StyledButton
                     title={'stampDetail.couponExchangeBtn'}
                     customStyle={styles.btnExchange}
-                    disabled={caseType === 1 && remainAmount <= 0}
+                    disabled={leftAmount <= 0}
                     onPress={goToExchangeCoupon}
                 />
             )}

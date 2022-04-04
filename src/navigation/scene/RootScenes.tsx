@@ -1,7 +1,5 @@
 import { createStackNavigator } from '@react-navigation/stack';
-import { getResources } from 'api/modules/api-app/general';
 import { RootState } from 'app-redux/hooks';
-import { resourceActions } from 'app-redux/slices/resourceSlice';
 import { Themes } from 'assets/themes';
 import ChangePassword from 'feature/authentication/ChangePassword';
 import OrderDefaultMenu from 'feature/authentication/OrderDefaultMenu';
@@ -41,10 +39,10 @@ import ExchangeCouponListScreen from 'feature/stamp/ExchangeCouponListScreen';
 import StampCardDetailScreen from 'feature/stamp/StampCardDetailScreen';
 import StampCardScreen from 'feature/stamp/StampCardScreen';
 import useNetwork from 'hooks/useNetwork';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { StatusBar } from 'react-native';
 import { Host } from 'react-native-portalize';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { isIos } from 'utilities/helper';
 import navigationConfigs from '../config/options';
 import {
@@ -143,20 +141,6 @@ const Navigation: React.FunctionComponent = () => {
 
     const { userInfo } = useSelector((state: RootState) => state);
     const { token } = userInfo;
-    const dispatch = useDispatch();
-
-    const initApp = async () => {
-        try {
-            const res = await getResources();
-            dispatch(resourceActions.getResourceSuccess(res.data));
-        } catch (error) {
-            console.log('🚀 ~ file: RootScenes.tsx ~ line 122 ~ initApp ~ error', error);
-        }
-    };
-
-    useEffect(() => {
-        initApp();
-    }, []);
 
     if (token) {
         return <AppStack />;
