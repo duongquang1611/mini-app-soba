@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { RootState } from 'app-redux/hooks';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
@@ -7,14 +8,16 @@ import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import DashView from 'components/common/DashView';
 import LinearView from 'components/common/LinearView';
-import { SETTING_ROUTE } from 'navigation/config/routes';
+import { AUTHENTICATE_ROUTE, ORDER_ROUTE, SETTING_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { ImageBackground, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { scale, ScaledSheet } from 'react-native-size-matters';
+import { useSelector } from 'react-redux';
 import AuthenticateService from 'utilities/authenticate/AuthenticateService';
-import { INFORMATION, listButton } from 'utilities/staticData';
+import { generateOrderQR } from 'utilities/helper';
+import { INFORMATION, listButton, OrderTypeMenu } from 'utilities/staticData';
 import UserStatus from './components/UserStatus';
 
 const InfoItem = (data: any) => {
@@ -37,6 +40,10 @@ const SettingScreen = () => {
     const handleCancel = () => {
         modalize.dismiss('modalPickerBackdrop');
     };
+    const { order, userInfo } = useSelector((state: RootState) => state);
+    const { user } = userInfo;
+    const { defaultOrder } = order;
+    const defaultOrderQR = useMemo(() => generateOrderQR(defaultOrder, user), [defaultOrder, user]);
 
     const handleShowPicker = () => {
         modalize.show(
@@ -74,7 +81,11 @@ const SettingScreen = () => {
         navigate(SETTING_ROUTE.ORDER_HISTORY);
     };
     const goToOrderDefault = () => {
-        navigate(SETTING_ROUTE.ORDER_DEFAULT_SETTING);
+        if (defaultOrderQR) {
+            navigate(ORDER_ROUTE.ORDER_QR_CODE, { orderType: OrderTypeMenu.DEFAULT_ORDER });
+        } else {
+            navigate(AUTHENTICATE_ROUTE.ORDER_DEFAULT_MENU, { screen: SETTING_ROUTE.ORDER_DEFAULT_SETTING });
+        }
     };
     const goToNotification = () => {
         navigate(SETTING_ROUTE.SETTING_NOTIFICATION);

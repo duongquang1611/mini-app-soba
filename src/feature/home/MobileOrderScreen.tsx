@@ -11,13 +11,14 @@ import AlertMessage from 'components/base/AlertMessage';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeader from 'components/common/StyledHeader';
+import TextUnderline from 'components/common/TextUnderline';
 import AmountOrder from 'feature/order/components/AmountOrder';
 import ModalCoupon from 'feature/order/components/ModalCoupon';
 import OrderItemCart from 'feature/order/components/OrderItemCart';
 import { APP_ROUTE, HOME_ROUTE, ORDER_ROUTE, TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { goBack, navigate } from 'navigation/NavigationService';
 import React, { useEffect, useMemo, useState } from 'react';
-import { View } from 'react-native';
+import { Linking, Text, View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
@@ -109,7 +110,15 @@ const StepItem = (item: any) => (
         </View>
         <StyledImage source={item?.item?.icon} customStyle={styles.icStep} />
         <View style={styles.containView}>
-            <StyledText originValue={item?.item?.content} isBlack customStyle={styles.textGuide} />
+            <Text style={styles.textGuide}>
+                {item?.item?.content}
+                <TextUnderline
+                    onPress={() => Linking.openURL(item?.item?.link)}
+                    title={item?.item?.textLink}
+                    color={Themes.COLORS.primary}
+                    customStyleText={styles.textLink}
+                />
+            </Text>
         </View>
     </View>
 );
@@ -183,7 +192,7 @@ const MobileOrderScreen = () => {
                 <StyledKeyboardAware customStyle={styles.scrollView}>
                     <View style={styles.body}>
                         <View style={styles.qrView}>
-                            <QRCode value={mobileOrderQR} size={scale(staticValue.QR_SIZE)} />
+                            {!!mobileOrderQR && <QRCode value={mobileOrderQR} size={scale(staticValue.QR_SIZE)} />}
                             <StyledButton
                                 title={'mobileOrder.qr.edit'}
                                 onPress={edit}
@@ -375,5 +384,12 @@ const styles = ScaledSheet.create({
     headerStep: {
         paddingHorizontal: '20@s',
         marginBottom: '10@s',
+    },
+    textLink: {
+        lineHeight: scale(24),
+        color: Themes.COLORS.primary,
+        fontWeight: 'bold',
+        marginBottom: '-5@vs',
+        fontSize: '14@ms0.3',
     },
 });

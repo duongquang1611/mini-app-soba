@@ -6,12 +6,14 @@ interface IOrderState {
     defaultOrder: any;
     cartOrder: any;
     mobileOrder: any;
+    defaultOrderLocal: any;
 }
 
 const initialState: IOrderState = {
     defaultOrder: { dishes: [], coupons: [] },
     cartOrder: { dishes: [], coupons: [] },
     mobileOrder: { dishes: [], coupons: [] },
+    defaultOrderLocal: { dishes: [], coupons: [] },
 };
 
 const orderSlice = createSlice({
@@ -38,6 +40,9 @@ const orderSlice = createSlice({
                     dishes: action.payload,
                 },
             };
+        },
+        updateDefaultOrderLocal: (state, action: PayloadAction<any>) => {
+            state = { ...state, defaultOrderLocal: action.payload };
             return state;
         },
         updateCouponMobileOrder: (state, action: PayloadAction<any>) => {
@@ -74,6 +79,10 @@ const orderSlice = createSlice({
             state = { ...state, defaultOrder: {} };
             return state;
         },
+        clearDefaultOrderLocal: (state) => {
+            state = { ...state, defaultOrderLocal: {} };
+            return state;
+        },
         clearOrder: () => {
             return initialState;
         },
@@ -93,6 +102,8 @@ export const {
     clearDefaultOrder,
     clearOrder,
     updateDishesCartOrder,
+    clearDefaultOrderLocal,
+    updateDefaultOrderLocal,
 } = orderSlice.actions;
 
 export default persistReducer<IOrderState>(persistConfig, orderSlice.reducer);

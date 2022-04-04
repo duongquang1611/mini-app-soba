@@ -16,8 +16,16 @@ const OrderItemCart = (props: any) => {
     const { subDishes, createDate, mainDish, totalAmount } = props?.data;
     const dispatch = useDispatch();
     const { name, image } = mainDish;
-    const { cancelItem, canChange, goDetailMenu, notGoDetail, saveOrder, isDefaultOrder, SaveAllOrderCart, orderType } =
-        props;
+    const {
+        cancelItem,
+        canChange,
+        goDetailMenu,
+        notGoDetail,
+        saveOrder,
+        isDefaultOrder,
+        SaveAllOrderCart,
+        orderType = OrderTypeMenu.CART_ORDER,
+    } = props;
     const num = mainDish?.amount;
     const updateOrder = (currentNum: number) => {
         const cartDishOrder = saveOrder?.dishes || [];
@@ -30,9 +38,10 @@ const OrderItemCart = (props: any) => {
         };
         const newCartDishOrder = [...cartDishOrder];
         newCartDishOrder?.splice(findIndexDishEdit, 1, orderChange);
-        if (isDefaultOrder || orderType === OrderTypeMenu.MOBILE_ORDER) {
+        if (orderType !== OrderTypeMenu.CART_ORDER) {
             SaveAllOrderCart({ ...saveOrder, dishes: newCartDishOrder });
         } else {
+            SaveAllOrderCart({ ...saveOrder, dishes: newCartDishOrder });
             dispatch(updateCartOrder({ ...saveOrder, dishes: newCartDishOrder }));
         }
     };
@@ -59,6 +68,7 @@ const OrderItemCart = (props: any) => {
                 isDefaultOrder,
                 order: saveOrder,
                 setOrder: SaveAllOrderCart,
+                orderType,
             });
         }
     };

@@ -13,7 +13,7 @@ import { DateType, MemberCouponStatus, OrderTypeMenu, staticValue } from 'utilit
 import DashView from './DashView';
 
 export const CouponItem = (props: any) => {
-    const { order } = useSelector((state: RootState) => state);
+    const { cartOrder } = useSelector((state: RootState) => state.order);
     const {
         item = {},
         canUse,
@@ -22,13 +22,16 @@ export const CouponItem = (props: any) => {
         cartOrder: cartOrderState,
         isTabCoupon = false,
         orderType,
+        order,
     } = props;
     const { coupon, usedDate, status, id: idMemberCoupon } = item;
     const { image, title, startDate, endDate, dateType } = coupon;
     // const isInCartAPI = useMemo(() => status === MemberCouponStatus.IN_CART, [status]);
     const checkChooseTemp = cartOrderState?.coupons?.find((itemCoupon: any) => itemCoupon?.id === idMemberCoupon);
-    const checkChooseInCart = order.cartOrder?.coupons?.find((itemCoupon: any) => itemCoupon?.id === idMemberCoupon);
-    const checkChooseInOrderMobile = order.mobileOrder?.coupons?.find(
+    const checkChooseInCart = (order || cartOrder)?.coupons?.find(
+        (itemCoupon: any) => itemCoupon?.id === idMemberCoupon,
+    );
+    const checkChooseInOrderMobile = (order || cartOrder).mobileOrder?.coupons?.find(
         (itemCoupon: any) => itemCoupon?.id === idMemberCoupon,
     );
     const disabledUse = orderType === OrderTypeMenu.MOBILE_ORDER ? checkChooseInOrderMobile : checkChooseInCart;

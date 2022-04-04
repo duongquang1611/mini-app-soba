@@ -23,11 +23,10 @@ const CouponListScreen = (props: any) => {
     const [cartListCouponOrder, setCartListCouponOrder] = useState(checkOrder);
     const modalize = ModalizeManager();
     const updateCart = () => {
-        if (orderType === OrderTypeMenu.MOBILE_ORDER) {
+        if (orderType !== OrderTypeMenu.CART_ORDER) {
             setCartListCouponOrder(cartListCouponOrder);
             setOrder(cartListCouponOrder);
-        }
-        if (orderType === OrderTypeMenu.CART_ORDER) {
+        } else {
             dispatch(updateCartOrder(cartListCouponOrder));
         }
 
@@ -36,11 +35,10 @@ const CouponListScreen = (props: any) => {
     };
 
     const updateCouponsCart = (coupons: any) => {
-        if (orderType === OrderTypeMenu.MOBILE_ORDER) {
+        if (orderType !== OrderTypeMenu.CART_ORDER) {
             setCartListCouponOrder({ ...cartListCouponOrder, coupons });
             setOrder({ ...cartListCouponOrder, coupons });
-        }
-        if (orderType === OrderTypeMenu.CART_ORDER) {
+        } else {
             dispatch(updateCartOrder({ ...cartListCouponOrder, coupons }));
         }
         modalize.dismiss(MODAL_ID.APPLY_COUPON);
@@ -109,6 +107,7 @@ const CouponListScreen = (props: any) => {
                 canUse={TabCouponStatus.CAN_USE}
                 cartListCouponOrder={cartListCouponOrder}
                 handleUseCoupon={handleUseCoupon}
+                order={order}
                 orderType={orderType}
             />
             <View style={[styles.buttonView, commonStyles.shadow]}>

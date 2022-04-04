@@ -1,7 +1,7 @@
 import { getMenu } from 'api/modules/api-app/order';
 import { RootState } from 'app-redux/hooks';
 import { updateGlobalData } from 'app-redux/slices/globalDataSlice';
-import { updateDefaultOrder } from 'app-redux/slices/orderSlice';
+import { updateDefaultOrder, updateDefaultOrderLocal } from 'app-redux/slices/orderSlice';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
@@ -13,15 +13,16 @@ import StyledHeader from 'components/common/StyledHeader';
 import ButtonCart from 'feature/order/components/ButtonCart';
 import ListViewSelect from 'feature/order/components/ListViewSelect';
 import ModalDetailMenu from 'feature/order/components/ModalDetailMenu';
+import ModalGuideMenu from 'feature/order/components/ModalGuideMenu';
 import useBackHandler from 'hooks/useBackHandler';
-import { APP_ROUTE, ORDER_ROUTE } from 'navigation/config/routes';
-import { navigate, reset } from 'navigation/NavigationService';
+import { APP_ROUTE, HOME_ROUTE, ORDER_ROUTE, SETTING_ROUTE } from 'navigation/config/routes';
+import { goBack, navigate, reset } from 'navigation/NavigationService';
 import React, { useEffect, useRef, useState } from 'react';
 import { ImageBackground, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
-import { sumTotalAmount } from 'utilities/helper';
+import { checkHasDataOrder, checkSameData, isIos, sumTotalAmount } from 'utilities/helper';
 import { MenuType, MODAL_ID, staticValue } from 'utilities/staticData';
 
 const ItemMenu = (props: any) => {
@@ -64,10 +65,12 @@ const ItemMenu = (props: any) => {
         </StyledTouchable>
     );
 };
-const OrderDefaultMenu = () => {
+const OrderDefaultMenu = (props: any) => {
+    const { screen } = props?.route?.params;
+    const checkHomeScreen = screen === HOME_ROUTE.HOME || SETTING_ROUTE.ORDER_DEFAULT_SETTING;
     const dispatch = useDispatch();
     const {
-        order: { defaultOrder },
+        order: { defaultOrder, defaultOrderLocal },
         resource,
     } = useSelector((state: RootState) => state);
     const [orderDefault, setOrderDefault] = useState(defaultOrder);
@@ -149,32 +152,71 @@ const OrderDefaultMenu = () => {
             isDefaultOrder: true,
             setOrder: setOrderDefault,
             order: orderDefault,
+            screen,
         });
     };
     const saveDefaultOrder = () => {
         dispatch(updateDefaultOrder(orderDefault));
+        if (!checkHasDataOrder(defaultOrderLocal) || !checkSameData(defaultOrder, defaultOrderLocal)) {
+            dispatch(updateDefaultOrderLocal(orderDefault));
+        }
         dispatch(updateGlobalData({ skipOrderDefault: true }));
-        reset(APP_ROUTE.MAIN_TAB);
+        if (!screen) {
+            reset(APP_ROUTE.MAIN_TAB);
+        } else {
+            goBack();
+        }
     };
     const handleBack = () => {
-        return true;
+        return !checkHomeScreen;
+    };
+    const showModal = () => {
+        modalize.show(
+            MODAL_ID.ORDER_GUIDE,
+            <ModalGuideMenu />,
+            {
+                modalHeight: isIos ? scale(425) + Metrics.safeBottomPadding : scale(465) + Metrics.safeBottomPadding,
+                scrollViewProps: {
+                    contentContainerStyle: { flexGrow: 1 },
+                },
+            },
+            { title: 'order.orderGuide' },
+        );
     };
     useBackHandler(handleBack);
 
     return (
         <View style={styles.container}>
-            <StyledHeader
-                onPressRight={skipOrderDefault}
-                title={'setting.orderDefaultTitle'}
-                textRight={'authen.register.skipOrderDefault'}
-                hasBack={false}
-                largeTitleHeader
-            />
+            {checkHomeScreen ? (
+                // <StyledHeader
+                //     onPressRight={skipOrderDefault}
+                //     title={'setting.orderDefaultTitle'}
+                //     textRight={'order.cancelOrderDefault'}
+                //     largeTitleHeader
+                // />
+                <StyledHeader
+                    onPressRight={showModal}
+                    title={'setting.orderDefaultTitle'}
+                    iconRight={Images.icons.question}
+                    // hasBack={false}
+                    largeTitleHeader
+                />
+            ) : (
+                <StyledHeader
+                    onPressRight={skipOrderDefault}
+                    title={'setting.orderDefaultTitle'}
+                    textRight={'authen.register.skipOrderDefault'}
+                    hasBack={false}
+                    largeTitleHeader
+                />
+            )}
             <StyledKeyboardAware>
-                <View style={styles.rowContent}>
-                    <StyledIcon customStyle={styles.icQuestion} source={Images.icons.question} size={20} />
-                    <StyledText i18nText={'authen.register.contentOrderDefault'} customStyle={styles.contentName} />
-                </View>
+                {!checkHomeScreen && (
+                    <View style={styles.rowContent}>
+                        <StyledIcon customStyle={styles.icQuestion} source={Images.icons.question} size={20} />
+                        <StyledText i18nText={'authen.register.contentOrderDefault'} customStyle={styles.contentName} />
+                    </View>
+                )}
                 <View style={styles.categoryContainer}>
                     <ListViewSelect
                         onPressCategory={onPressCategory}
@@ -210,22 +252,20 @@ const OrderDefaultMenu = () => {
                         )}
                     />
                 </View>
-                {numOrder > staticValue.MAX_ORDER && (
-                    <View style={styles.quantityErrView}>
-                        <StyledText i18nText={'order.errorMaxOrder'} customStyle={styles.quantityErr} />
-                    </View>
-                )}
-                {numOrder > 0 && (
-                    <ButtonCart goToSaveOrder={gotoCart} amountValue={numOrder} numOrder={numOrder} isMenu />
-                )}
-                <View style={styles.buttonSave}>
-                    <StyledButton
-                        disabled={numOrder > staticValue.MAX_ORDER || numOrder === 0}
-                        title={'common.save'}
-                        onPress={saveDefaultOrder}
-                    />
-                </View>
             </StyledKeyboardAware>
+            {numOrder > staticValue.MAX_ORDER && (
+                <View style={styles.quantityErrView}>
+                    <StyledText i18nText={'order.errorMaxOrder'} customStyle={styles.quantityErr} />
+                </View>
+            )}
+            {numOrder > 0 && <ButtonCart goToSaveOrder={gotoCart} amountValue={numOrder} numOrder={numOrder} isMenu />}
+            <View style={styles.buttonSave}>
+                <StyledButton
+                    disabled={numOrder > staticValue.MAX_ORDER || numOrder === 0}
+                    title={'common.save'}
+                    onPress={saveDefaultOrder}
+                />
+            </View>
         </View>
     );
 };

@@ -1,6 +1,6 @@
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledText } from 'components/base';
-import { HOME_ROUTE, ORDER_ROUTE } from 'navigation/config/routes';
+import { AUTHENTICATE_ROUTE, HOME_ROUTE, ORDER_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React from 'react';
 import { View } from 'react-native';
@@ -12,22 +12,18 @@ import { QR_TAB_DATA, staticValue } from 'utilities/staticData';
 const ShowQrTab = (props: any) => {
     const { type = QR_TAB_TYPE.ORDER_DEFAULT, qrValue, onPress } = props;
     const qrComponentData: any = QR_TAB_DATA[type];
-    const { background, textButton, content1, content2, navigateScreen } = qrComponentData;
+    const { background, textButton, content1, content2, navigateScreen, orderType, createButton } = qrComponentData;
 
     const handleQrPress = () => {
         if (qrValue) {
-            type === QR_TAB_TYPE.CHECK_IN ? onPress?.() : navigate(navigateScreen);
+            type === QR_TAB_TYPE.CHECK_IN ? onPress?.() : navigate(navigateScreen, { orderType });
         } else {
             switch (type) {
                 case QR_TAB_TYPE.ORDER_DEFAULT:
-                    navigate(HOME_ROUTE.ORDER_DEFAULT_HOME);
+                    navigate(AUTHENTICATE_ROUTE.ORDER_DEFAULT_MENU, { screen: HOME_ROUTE.HOME });
                     break;
                 case QR_TAB_TYPE.MOBILE_ORDER:
-                    if (qrValue) {
-                        navigate(HOME_ROUTE.MOBILE_ORDER);
-                    } else {
-                        navigate(ORDER_ROUTE.ROOT);
-                    }
+                    navigate(ORDER_ROUTE.ROOT);
                     break;
                 default:
                     break;
@@ -39,12 +35,14 @@ const ShowQrTab = (props: any) => {
         <View style={[styles.containerQrTab, { backgroundColor: background || Themes.COLORS.primary }]}>
             {qrValue ? (
                 <View style={[styles.qrCodeView]}>
-                    <QRCode
-                        value={qrValue}
-                        color={Themes.COLORS.headerBackground}
-                        size={scale(staticValue.QR_SIZE_HOME)}
-                        backgroundColor={Themes.COLORS.transparent}
-                    />
+                    {!!qrValue && (
+                        <QRCode
+                            value={qrValue}
+                            color={Themes.COLORS.headerBackground}
+                            size={scale(staticValue.QR_SIZE_HOME)}
+                            backgroundColor={Themes.COLORS.transparent}
+                        />
+                    )}
                     <StyledButton
                         onPress={handleQrPress}
                         title={textButton}
@@ -58,7 +56,7 @@ const ShowQrTab = (props: any) => {
                     <StyledText i18nText={content2} customStyle={styles.content2} />
                     <StyledButton
                         onPress={handleQrPress}
-                        title={textButton}
+                        title={createButton}
                         customContentStyle={styles.detailButton}
                         customStyleText={styles.textBtn}
                     />

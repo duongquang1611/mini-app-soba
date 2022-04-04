@@ -1,6 +1,12 @@
 import { RootState } from 'app-redux/hooks';
 import { updateGlobalData } from 'app-redux/slices/globalDataSlice';
-import { clearCartOrder, updateCartOrder, updateDefaultOrder, updateMobileOrder } from 'app-redux/slices/orderSlice';
+import {
+    clearCartOrder,
+    updateCartOrder,
+    updateDefaultOrder,
+    updateDefaultOrderLocal,
+    updateMobileOrder,
+} from 'app-redux/slices/orderSlice';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledIcon, StyledText, StyledTouchable } from 'components/base';
@@ -8,12 +14,13 @@ import AlertMessage from 'components/base/AlertMessage';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeader from 'components/common/StyledHeader';
-import { APP_ROUTE, HOME_ROUTE, TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
+import { APP_ROUTE, ORDER_ROUTE, SETTING_ROUTE, TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { goBack, navigate, reset } from 'navigation/NavigationService';
 import React, { useRef, useState } from 'react';
 import { View } from 'react-native';
 import { ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
+import { checkHasDataOrder, checkSameData } from 'utilities/helper';
 import { DiscountType, MODAL_ID, OrderTypeMenu, POPUP_TYPE, staticValue } from 'utilities/staticData';
 import AmountOrder from './components/AmountOrder';
 import ModalCoupon from './components/ModalCoupon';
@@ -82,14 +89,9 @@ const ItemCoupon = (props: any) => {
     );
 };
 const CartScreen = (props: any) => {
-    const {
-        isDefaultOrder,
-        orderDefault,
-        setOrderDefault,
-        orderType = OrderTypeMenu.CART_ORDER,
-    } = props?.route?.params;
-    const { cartOrder } = useSelector((state: RootState) => state.order);
-    const [saveOrderCart, setSaveOrderCart] = useState(orderDefault);
+    const { isDefaultOrder, order, setOrder, orderType = OrderTypeMenu.CART_ORDER, screen } = props?.route?.params;
+    const { cartOrder, defaultOrderLocal, defaultOrder } = useSelector((state: RootState) => state.order);
+    const [saveOrderCart, setSaveOrderCart] = useState(order);
     const saveOrder = isDefaultOrder ? saveOrderCart : cartOrder;
     const dispatch = useDispatch();
     let num = useRef(0).current;
@@ -98,7 +100,7 @@ const CartScreen = (props: any) => {
     });
     num += saveOrder?.coupons?.length || 0;
     const SaveAllOrderCart = (order: any) => {
-        setOrderDefault?.(order);
+        setOrder?.(order);
         setSaveOrderCart(order);
     };
     const onClear = () => {
@@ -107,11 +109,15 @@ const CartScreen = (props: any) => {
         } else {
             dispatch(clearCartOrder());
         }
-        goBack();
+        if (screen === SETTING_ROUTE.ORDER_DEFAULT_SETTING) {
+            navigate(SETTING_ROUTE.ROOT);
+        } else {
+            goBack();
+        }
     };
 
     const cancelCart = () => {
-        if (isDefaultOrder) {
+        if (!screen && isDefaultOrder) {
             dispatch(updateGlobalData({ skipOrderDefault: true }));
             reset(APP_ROUTE.MAIN_TAB);
         } else {
@@ -162,23 +168,33 @@ const CartScreen = (props: any) => {
     const createQRCode = () => {
         // update mobile order
         dispatch(updateMobileOrder(cartOrder));
-        navigate(HOME_ROUTE.MOBILE_ORDER);
+        // navigate(HOME_ROUTE.MOBILE_ORDER);
+        navigate(ORDER_ROUTE.ORDER_QR_CODE, { orderType });
     };
     const saveDefaultOrder = () => {
         dispatch(updateDefaultOrder(saveOrderCart));
-        goBack();
+        if (!checkHasDataOrder(defaultOrderLocal) || !checkSameData(defaultOrder, defaultOrderLocal)) {
+            dispatch(updateDefaultOrderLocal(saveOrderCart));
+        }
+        dispatch(updateGlobalData({ skipOrderDefault: true }));
+        if (screen === SETTING_ROUTE.ORDER_DEFAULT_SETTING) {
+            navigate(APP_ROUTE.MAIN_TAB, { screen: SETTING_ROUTE.ROOT });
+        } else {
+            reset(APP_ROUTE.MAIN_TAB);
+        }
+    };
+    const getTextHeader = () => {
+        if (isDefaultOrder && !!screen) return 'order.cancelOrderDefault';
+        if (isDefaultOrder) return 'authen.register.skipOrderDefault';
+        return 'order.cancelOrder';
     };
 
     return (
         <View style={styles.container}>
-            <StyledHeader
-                title={'order.cartTitle'}
-                textRight={isDefaultOrder ? 'authen.register.skipOrderDefault' : 'order.cancelOrder'}
-                onPressRight={cancelCart}
-            />
+            <StyledHeader title={'order.cartTitle'} textRight={getTextHeader()} onPressRight={cancelCart} />
             <StyledKeyboardAware>
                 <View style={styles.body}>
-                    <AmountOrder cartOrder={saveOrder} />
+                    <AmountOrder order={saveOrder} />
                     <View style={styles.orderView}>
                         {saveOrder?.dishes?.map((item: any, index: number) => (
                             <OrderItemCart

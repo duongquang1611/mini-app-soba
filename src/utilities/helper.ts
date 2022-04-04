@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import { store } from 'app-redux/store';
 import i18next from 'i18next';
-import { throttle } from 'lodash';
+import { isEqual, throttle } from 'lodash';
 import { DevSettings, Linking, Platform } from 'react-native';
 import codePush from 'react-native-code-push';
 import Config from 'react-native-config';
@@ -305,4 +305,10 @@ export const filterDishOptions = (dish: any) => {
         return item?.status !== MenuType.DISABLE && item?.subDish?.length;
     });
     return newDish;
+};
+export const checkHasDataOrder = (order: any) => {
+    return order?.dishes?.length + order?.coupons?.length > 0;
+};
+export const checkSameData = (order: any, orderLocal: any) => {
+    return isEqual(order, orderLocal);
 };

@@ -17,10 +17,11 @@ interface CouponTabProps {
     handleUseCoupon?: any;
     isTabCoupon?: boolean;
     orderType?: any;
+    order?: any;
 }
 
 const CouponTab = (props: CouponTabProps) => {
-    const { canUse, handleUseCoupon, cartListCouponOrder, isTabCoupon, orderType } = props;
+    const { canUse, handleUseCoupon, cartListCouponOrder, isTabCoupon, orderType, order } = props;
     const { coupon } = useSelector((state: RootState) => state);
     const { couponsCanUse, couponsUsed } = coupon;
 
@@ -42,6 +43,7 @@ const CouponTab = (props: CouponTabProps) => {
                 cartOrder={cartListCouponOrder}
                 handleUseCoupon={() => handleUseCouponItem(item)}
                 orderType={orderType}
+                order={order}
             />
         );
     };
