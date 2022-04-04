@@ -110,9 +110,8 @@ const DetailMealScreen = (props: any) => {
                       ],
                   }
                 : {};
-        if (isDefaultOrder || orderType !== OrderTypeMenu.CART_ORDER) {
-            setOrder?.({ ...paramOrder, coupons: saveOrder?.coupons });
-        } else {
+        setOrder?.({ ...paramOrder, coupons: saveOrder?.coupons });
+        if (orderType === OrderTypeMenu.CART_ORDER) {
             dispatch(updateCartOrder({ ...paramOrder, coupons: saveOrder?.coupons }));
         }
 

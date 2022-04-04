@@ -2,22 +2,22 @@ import { RootState } from 'app-redux/hooks';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
-import { StyledIcon, StyledImage, StyledList, StyledText, StyledTouchable } from 'components/base';
+import { StyledIcon, StyledList, StyledText, StyledTouchable } from 'components/base';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledHeader from 'components/common/StyledHeader';
-import TextUnderline from 'components/common/TextUnderline';
 import { getResourcesData } from 'feature/home/HomeScreen';
 import { ORDER_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { ImageBackground, Linking, Text, View } from 'react-native';
+import { ImageBackground, View } from 'react-native';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
 import { funcFilterStatus, isIos, sumTotalAmount } from 'utilities/helper';
-import { MODAL_ID, staticValue, stepGuide } from 'utilities/staticData';
+import { MODAL_ID, staticValue } from 'utilities/staticData';
 import ButtonCart from './components/ButtonCart';
 import ListViewSelect from './components/ListViewSelect';
 import ModalDetailMenu from './components/ModalDetailMenu';
+import ModalGuideMenu from './components/ModalGuideMenu';
 
 const ItemMenu = (props: any) => {
     const { cartOrder } = useSelector((state: RootState) => state.order);
@@ -53,39 +53,6 @@ const ItemMenu = (props: any) => {
         </StyledTouchable>
     );
 };
-const StepItem = (item: any) => (
-    <View style={item?.largeView ? [styles.rowStep, { height: scale(140) }] : styles.rowStep}>
-        <View style={styles.numberView}>
-            <StyledText originValue={item?.item?.index} customStyle={styles.numberValue} />
-        </View>
-        <StyledImage source={item?.item?.icon} customStyle={styles.icStep} />
-        <View style={styles.containView}>
-            <Text style={[styles.title, styles.textGuide]}>
-                {item?.item?.name}
-                <Text style={[styles.contentName, styles.textGuide]}>{item?.item?.contentName}</Text>
-            </Text>
-            <StyledText originValue={item?.item?.content} isBlack customStyle={styles.textGuide} />
-            <View>
-                <TextUnderline
-                    onPress={() => Linking.openURL(item?.item?.link)}
-                    title={item?.item?.textLink}
-                    color={Themes.COLORS.primary}
-                />
-            </View>
-        </View>
-    </View>
-);
-const ModalGuide = () => (
-    <View>
-        <StyledImage source={Images.photo.line} customStyle={styles.line1} />
-        <StyledImage source={Images.photo.line} customStyle={styles.line2} />
-        <View>
-            {stepGuide.map((item, index) => (
-                <StepItem key={item.name} item={item} largeView={isIos && index === 2} />
-            ))}
-        </View>
-    </View>
-);
 
 const MenuScreen = () => {
     const {
@@ -140,7 +107,7 @@ const MenuScreen = () => {
     const showModal = () => {
         modalize.show(
             MODAL_ID.ORDER_GUIDE,
-            <ModalGuide />,
+            <ModalGuideMenu />,
             {
                 modalHeight: isIos ? scale(425) + Metrics.safeBottomPadding : scale(465) + Metrics.safeBottomPadding,
                 scrollViewProps: {

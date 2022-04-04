@@ -13,6 +13,7 @@ import DashView from 'components/common/DashView';
 import StyledHeaderImage from 'components/common/StyledHeaderImage';
 import StyledTabTopView from 'components/common/StyledTabTopView';
 import { SIZE_LIMIT } from 'hooks/usePaging';
+import { isEqual } from 'lodash';
 import { HOME_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { FunctionComponent, useEffect, useMemo, useState } from 'react';
@@ -111,9 +112,12 @@ const HomeScreen: FunctionComponent = () => {
     const { t } = useTranslation();
     const { order, userInfo } = useSelector((state: RootState) => state);
     const { user } = userInfo;
-    const { mobileOrder, defaultOrder } = order;
+    const { mobileOrder, defaultOrderLocal } = order;
     const mobileOrderQR = useMemo(() => generateOrderQR(mobileOrder, user), [mobileOrder, user]);
-    const defaultOrderQR = useMemo(() => generateOrderQR(defaultOrder, user, OrderType.DEFAULT), [defaultOrder, user]);
+    const defaultOrderQR = useMemo(
+        () => generateOrderQR(defaultOrderLocal, user, OrderType.DEFAULT),
+        [defaultOrderLocal, user],
+    );
     const checkInQR = useMemo(() => generateCheckInQR(user), [user]);
     const [indexTab, setIndexTab] = useState(1);
     const [listNews, setListNews] = useState([]);
@@ -150,13 +154,11 @@ const HomeScreen: FunctionComponent = () => {
     const showGuideCheckIn = () => {
         console.log('showGuideCheckIn');
     };
-
     const renderScene = SceneMap({
         qrDefault: () => <ShowQrTab type={QR_TAB_TYPE.ORDER_DEFAULT} qrValue={defaultOrderQR} />,
         qrMobile: () => <ShowQrTab type={QR_TAB_TYPE.MOBILE_ORDER} qrValue={mobileOrderQR} />,
         qrCheckIn: () => <ShowQrTab type={QR_TAB_TYPE.CHECK_IN} qrValue={checkInQR} onPress={showGuideCheckIn} />,
     });
-
     return (
         <View style={styles.container}>
             <StyledKeyboardAware>
@@ -330,7 +332,7 @@ const styles = ScaledSheet.create({
         tintColor: '#FBE3C0',
     },
     tabContainerStyle: {
-        height: verticalScale(135) + scale(staticValue.QR_SIZE_HOME),
+        height: verticalScale(138) + scale(staticValue.QR_SIZE_HOME),
     },
 });
 

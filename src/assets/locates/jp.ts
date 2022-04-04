@@ -154,6 +154,8 @@ export default {
         cancelDish: 'この商品を削除してよろしいですか？',
         cancelCoupon: 'このクーポンを削除してよろしいですか？',
         qrGuide: '来店QRコードの詳細',
+        cancelOrderDefault: '全てキャンセル',
+        editOrderDefault: 'いつもの！注文編集',
     },
     setting: {
         editProfileTitle: 'マイページ編集',
@@ -353,12 +355,14 @@ export default {
             button: '注文詳細',
             content1: '”いつもの！注文”がまだ設定されていません。',
             content2: '※設定すると、ホーム画面を開いただけで よく食べる商品の注文が簡単にできるようになります。',
+            createButton: '設定',
         },
         mobile: {
             title: '事前注文',
             button: '注文詳細',
-            content1: '事前注文"がまだありません。',
+            content1: '"事前注文"がまだありません。',
             content2: 'お店に入る前に商品を選んでおくと、 スマホをかざすだけで簡単に注文ができるようになります。',
+            createButton: '事前注文',
         },
         checkIn: {
             title: '来店QRコード',

@@ -8,12 +8,12 @@ import { ScaledSheet } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
 
 interface AmountOrderProps {
-    cartOrder?: any;
+    order?: any;
 }
 const AmountOrder = (props: AmountOrderProps) => {
-    const { cartOrder } = props;
-    const { cartOrder: cartOrderStore } = useSelector((state: RootState) => state.order);
-    const { dishes, coupons } = cartOrder || cartOrderStore || [];
+    const { order } = props;
+    const { cartOrder } = useSelector((state: RootState) => state.order);
+    const { dishes, coupons } = order || cartOrder || [];
     let numOrder = useRef(0).current;
     dishes?.map((item: any) => {
         numOrder += item.totalAmount;

@@ -1,6 +1,13 @@
 import { RootState } from 'app-redux/hooks';
 import { updateGlobalData } from 'app-redux/slices/globalDataSlice';
-import { clearMobileOrder, updateCartOrder, updateDefaultOrder, updateMobileOrder } from 'app-redux/slices/orderSlice';
+import {
+    clearDefaultOrder,
+    clearMobileOrder,
+    updateCartOrder,
+    updateDefaultOrder,
+    updateDefaultOrderLocal,
+    updateMobileOrder,
+} from 'app-redux/slices/orderSlice';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledIcon, StyledText, StyledTouchable } from 'components/base';
@@ -8,8 +15,8 @@ import AlertMessage from 'components/base/AlertMessage';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeader from 'components/common/StyledHeader';
-import { APP_ROUTE, HOME_ROUTE, ORDER_ROUTE, TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
-import { navigate, reset } from 'navigation/NavigationService';
+import { HOME_ROUTE, ORDER_ROUTE, TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
+import { navigate } from 'navigation/NavigationService';
 import React, { useRef, useState } from 'react';
 import { View } from 'react-native';
 import { ScaledSheet, verticalScale } from 'react-native-size-matters';
@@ -84,14 +91,15 @@ const ItemCoupon = (props: any) => {
 
 const CartEditQrScreen = (props: any) => {
     const { orderType = OrderTypeMenu.CART_ORDER } = props?.route?.params;
-    const { mobileOrder, defaultOrder } = useSelector((state: RootState) => state.order);
-
+    const { mobileOrder, defaultOrder, defaultOrderLocal } = useSelector((state: RootState) => state.order);
     const getOrderFromType = () => {
         switch (orderType) {
             case OrderTypeMenu.MOBILE_ORDER:
                 return mobileOrder;
             case OrderTypeMenu.DEFAULT_ORDER:
                 return defaultOrder;
+            case OrderTypeMenu.DEFAULT_ORDER_LOCAL:
+                return defaultOrderLocal;
             default:
                 return mobileOrder;
         }
@@ -107,6 +115,12 @@ const CartEditQrScreen = (props: any) => {
         setSaveOrderCart({});
         if (orderType === OrderTypeMenu.MOBILE_ORDER) {
             dispatch(clearMobileOrder());
+        }
+        if (orderType === OrderTypeMenu.DEFAULT_ORDER) {
+            dispatch(clearDefaultOrder());
+        }
+        if (orderType === OrderTypeMenu.DEFAULT_ORDER_LOCAL) {
+            dispatch(updateDefaultOrderLocal(defaultOrder));
         }
         navigate(HOME_ROUTE.ROOT);
     };
@@ -138,7 +152,6 @@ const CartEditQrScreen = (props: any) => {
 
         setSaveOrderCart({ ...saveOrderCart, dishes: newDishes });
     };
-
     const cancelCouponItem = (id: number) => {
         const newCoupons = saveOrderCart?.coupons?.filter((item: any) => item?.id !== id);
         setSaveOrderCart({ ...saveOrderCart, coupons: newCoupons });
@@ -156,13 +169,19 @@ const CartEditQrScreen = (props: any) => {
         // update mobile order
         if (orderType === OrderTypeMenu.MOBILE_ORDER) {
             dispatch(updateMobileOrder(saveOrderCart));
-            navigate(HOME_ROUTE.MOBILE_ORDER);
         }
+        if (orderType === OrderTypeMenu.DEFAULT_ORDER) {
+            dispatch(updateDefaultOrder(saveOrderCart));
+        }
+        if (orderType === OrderTypeMenu.DEFAULT_ORDER_LOCAL) {
+            dispatch(updateDefaultOrderLocal(saveOrderCart));
+        }
+        navigate(ORDER_ROUTE.ORDER_QR_CODE, { orderType });
     };
     const saveDefaultOrder = () => {
         dispatch(updateDefaultOrder(saveOrderCart));
         dispatch(updateGlobalData({ skipOrderDefault: true }));
-        reset(APP_ROUTE.MAIN_TAB);
+        navigate(ORDER_ROUTE.ORDER_QR_CODE, { orderType });
     };
 
     return (
@@ -170,7 +189,7 @@ const CartEditQrScreen = (props: any) => {
             <StyledHeader title={'order.cartTitle'} textRight={'order.cancelOrder'} onPressRight={cancelCart} />
             <StyledKeyboardAware>
                 <View style={styles.body}>
-                    <AmountOrder cartOrder={saveOrderCart} />
+                    <AmountOrder order={saveOrderCart} />
                     <View style={styles.orderView}>
                         {saveOrderCart?.dishes?.map((item: any, index: number) => (
                             <OrderItemCart

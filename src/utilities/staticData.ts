@@ -1,7 +1,7 @@
 import { COUPON_URL } from 'api/urls';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
-import { HOME_ROUTE } from 'navigation/config/routes';
+import { HOME_ROUTE, ORDER_ROUTE } from 'navigation/config/routes';
 
 export const staticValue = {
     DEFAULT: 1,
@@ -732,8 +732,6 @@ export const orderGuide = {
             index: 1,
             content: '券売機に来店QRコードをかざす',
             icon: Images.icons.step3,
-            textLink: 'こちら',
-            link: 'https://www.facebook.com/',
         },
         {
             index: 2,
@@ -742,8 +740,10 @@ export const orderGuide = {
         },
         {
             index: 3,
-            content: 'スタンプGET\nスタンプカードの詳しい使い方についてはこちら',
+            content: 'スタンプGET\nスタンプカードの詳しい使い方については',
             icon: Images.icons.step2,
+            textLink: 'こちら',
+            link: 'https://www.facebook.com/',
         },
     ],
 };
@@ -921,21 +921,31 @@ export enum CouponType {
     COMPANY = 1, // isAccounted: 1
     RESTAURANT = 0, // isAccounted: 0
 }
+export enum OrderTypeMenu {
+    CART_ORDER = 0,
+    MOBILE_ORDER = 1,
+    DEFAULT_ORDER = 2,
+    DEFAULT_ORDER_LOCAL = 3,
+}
 
 export const QR_TAB_DATA = [
     {
         textButton: 'qrHome.default.button',
         background: Themes.COLORS.secondary,
-        navigateScreen: HOME_ROUTE.ORDER_DEFAULT_HOME,
+        navigateScreen: ORDER_ROUTE.ORDER_QR_CODE,
+        orderType: OrderTypeMenu.DEFAULT_ORDER_LOCAL,
         content1: 'qrHome.default.content1',
         content2: 'qrHome.default.content2',
+        createButton: 'qrHome.default.createButton',
     },
     {
         textButton: 'qrHome.mobile.button',
         background: Themes.COLORS.primary,
-        navigateScreen: HOME_ROUTE.MOBILE_ORDER,
+        navigateScreen: ORDER_ROUTE.ORDER_QR_CODE,
+        orderType: OrderTypeMenu.MOBILE_ORDER,
         content1: 'qrHome.mobile.content1',
         content2: 'qrHome.mobile.content2',
+        createButton: 'qrHome.mobile.createButton',
     },
     {
         textButton: 'qrHome.checkIn.button',
@@ -943,8 +953,3 @@ export const QR_TAB_DATA = [
         background: Themes.COLORS.qrCheckIn,
     },
 ];
-export enum OrderTypeMenu {
-    CART_ORDER = 0,
-    MOBILE_ORDER = 1,
-    DEFAULT_ORDER = 2,
-}
