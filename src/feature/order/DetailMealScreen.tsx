@@ -91,6 +91,7 @@ const DetailMealScreen = (props: any) => {
                               createDate: toLocalStringTime(new Date()),
                               totalAmount: amountValue,
                               mainDish: {
+                                  stringId: dish?.stringId,
                                   id,
                                   name: dish?.title,
                                   image: dish?.thumbnail,

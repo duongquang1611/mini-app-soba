@@ -24,6 +24,7 @@ export const OrderChild = (data: any) => {
                     dishOption: {
                         dishOptionsId,
                     },
+                    stringId: dish?.stringId,
                     subDishId: id,
                     title: dish?.title,
                     selected: 1,
@@ -76,6 +77,7 @@ const OrderChildCanChange = (data: any) => {
                         dishOptionsId,
                     },
                     subDishId: item?.id,
+                    stringId: dish?.stringId,
                     title: dish?.title,
                     selected: 1,
                     amount: numChoose,

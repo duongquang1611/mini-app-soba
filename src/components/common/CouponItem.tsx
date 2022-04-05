@@ -24,17 +24,14 @@ export const CouponItem = (props: any) => {
         orderType,
         order,
     } = props;
-    const { coupon, usedDate, status, id: idMemberCoupon } = item;
+    const { coupon, usedDate, status, id: idMemberCoupon, receivedDate } = item;
     const { image, title, startDate, endDate, dateType } = coupon;
     // const isInCartAPI = useMemo(() => status === MemberCouponStatus.IN_CART, [status]);
     const checkChooseTemp = cartOrderState?.coupons?.find((itemCoupon: any) => itemCoupon?.id === idMemberCoupon);
     const checkChooseInCart = (order || cartOrder)?.coupons?.find(
-        (itemCoupon: any) => itemCoupon?.id === idMemberCoupon,
+        (itemCoupon: any) => itemCoupon?.id === idMemberCoupon && itemCoupon?.receivedDate === receivedDate,
     );
-    const checkChooseInOrderMobile = (order || cartOrder).mobileOrder?.coupons?.find(
-        (itemCoupon: any) => itemCoupon?.id === idMemberCoupon,
-    );
-    const disabledUse = orderType === OrderTypeMenu.MOBILE_ORDER ? checkChooseInOrderMobile : checkChooseInCart;
+    const disabledUse = checkChooseInCart;
 
     const handleGoToDetail = () => {
         goToDetail?.(item);

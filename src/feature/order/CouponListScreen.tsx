@@ -83,14 +83,13 @@ const CouponListScreen = (props: any) => {
 
     const handleUseCoupon = (itemCoupon: any) => {
         const findCouponCart = cartListCouponOrder?.coupons?.find(
-            (item: any) => item?.receivedDate === itemCoupon?.receivedDate,
+            (item: any) => item?.receivedDate === itemCoupon?.receivedDate && item?.id === itemCoupon?.id,
         );
         const newCoupons =
-            cartListCouponOrder?.coupons?.filter((item: any) => item?.receivedDate !== itemCoupon?.receivedDate) || [];
+            cartListCouponOrder?.coupons?.filter(
+                (item: any) => !(item?.receivedDate === itemCoupon?.receivedDate && item?.id === itemCoupon?.id),
+            ) || [];
         if (findCouponCart) {
-            const newCoupons =
-                cartListCouponOrder?.coupons?.filter((item: any) => item?.receivedDate !== itemCoupon?.receivedDate) ||
-                [];
             setCartListCouponOrder({ dishes: cartListCouponOrder?.dishes || [], coupons: newCoupons });
         } else {
             setCartListCouponOrder({
