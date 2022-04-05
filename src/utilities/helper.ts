@@ -145,6 +145,7 @@ export const getDefaultSubDish = (dishOptions: any) => {
                     dishOption: {
                         dishOptionsId: itemDish?.id,
                     },
+                    stringId: itemSub?.dish?.stringId,
                     subDishId: itemSub?.id,
                     title: itemSub?.dish?.title,
                     selected: 1,

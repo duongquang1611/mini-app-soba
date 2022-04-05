@@ -188,19 +188,12 @@ const OrderDefaultMenu = (props: any) => {
     useBackHandler(handleBack);
 
     return (
-        <View style={styles.container}>
+        <>
             {checkHomeScreen ? (
-                // <StyledHeader
-                //     onPressRight={skipOrderDefault}
-                //     title={'setting.orderDefaultTitle'}
-                //     textRight={'order.cancelOrderDefault'}
-                //     largeTitleHeader
-                // />
                 <StyledHeader
                     onPressRight={showModal}
                     title={'setting.orderDefaultTitle'}
                     iconRight={Images.icons.question}
-                    // hasBack={false}
                     largeTitleHeader
                 />
             ) : (
@@ -212,63 +205,70 @@ const OrderDefaultMenu = (props: any) => {
                     largeTitleHeader
                 />
             )}
-            <StyledKeyboardAware>
-                {!checkHomeScreen && (
-                    <View style={styles.rowContent}>
-                        <StyledIcon customStyle={styles.icQuestion} source={Images.icons.question} size={20} />
-                        <StyledText i18nText={'authen.register.contentOrderDefault'} customStyle={styles.contentName} />
-                    </View>
-                )}
-                <View style={styles.categoryContainer}>
-                    <ListViewSelect
-                        onPressCategory={onPressCategory}
-                        data={categories?.filter((item: any) => item?.status === MenuType.ENABLE)}
-                        category={category}
-                        isCategory
-                    />
-                </View>
-                {listSubCategory?.length > 0 && (
-                    <View style={styles.recommendContainer}>
+            <View style={styles.container}>
+                <StyledKeyboardAware>
+                    {!checkHomeScreen && (
+                        <View style={styles.rowContent}>
+                            <StyledIcon customStyle={styles.icQuestion} source={Images.icons.question} size={20} />
+                            <StyledText
+                                i18nText={'authen.register.contentOrderDefault'}
+                                customStyle={styles.contentName}
+                            />
+                        </View>
+                    )}
+                    <View style={styles.categoryContainer}>
                         <ListViewSelect
-                            recommendSelected={recommendSelected}
-                            onPressCategory={onPressRecommend}
-                            data={listSubCategory}
+                            onPressCategory={onPressCategory}
+                            data={categories?.filter((item: any) => item?.status === MenuType.ENABLE)}
                             category={category}
+                            isCategory
                         />
                     </View>
-                )}
-
-                <View style={styles.body}>
-                    <FlatList
-                        numColumns={2}
-                        data={menuFilter}
-                        keyExtractor={(item) => item.id}
-                        renderItem={({ item }) => (
-                            <ItemMenu
-                                goToDetailModal={() => showModalDetail(item?.id)}
-                                key={item.id}
-                                item={item}
-                                order={orderDefault}
-                                setOrder={setOrderDefault}
+                    {listSubCategory?.length > 0 && (
+                        <View style={styles.recommendContainer}>
+                            <ListViewSelect
+                                recommendSelected={recommendSelected}
+                                onPressCategory={onPressRecommend}
+                                data={listSubCategory}
+                                category={category}
                             />
-                        )}
+                        </View>
+                    )}
+
+                    <View style={styles.body}>
+                        <FlatList
+                            numColumns={2}
+                            data={menuFilter}
+                            keyExtractor={(item) => item.id}
+                            renderItem={({ item }) => (
+                                <ItemMenu
+                                    goToDetailModal={() => showModalDetail(item?.id)}
+                                    key={item.id}
+                                    item={item}
+                                    order={orderDefault}
+                                    setOrder={setOrderDefault}
+                                />
+                            )}
+                        />
+                    </View>
+                </StyledKeyboardAware>
+                {numOrder > staticValue.MAX_ORDER && (
+                    <View style={styles.quantityErrView}>
+                        <StyledText i18nText={'order.errorMaxOrder'} customStyle={styles.quantityErr} />
+                    </View>
+                )}
+                {numOrder > 0 && (
+                    <ButtonCart goToSaveOrder={gotoCart} amountValue={numOrder} numOrder={numOrder} isMenu />
+                )}
+                <View style={styles.buttonSave}>
+                    <StyledButton
+                        disabled={numOrder > staticValue.MAX_ORDER || numOrder === 0}
+                        title={'common.save'}
+                        onPress={saveDefaultOrder}
                     />
                 </View>
-            </StyledKeyboardAware>
-            {numOrder > staticValue.MAX_ORDER && (
-                <View style={styles.quantityErrView}>
-                    <StyledText i18nText={'order.errorMaxOrder'} customStyle={styles.quantityErr} />
-                </View>
-            )}
-            {numOrder > 0 && <ButtonCart goToSaveOrder={gotoCart} amountValue={numOrder} numOrder={numOrder} isMenu />}
-            <View style={styles.buttonSave}>
-                <StyledButton
-                    disabled={numOrder > staticValue.MAX_ORDER || numOrder === 0}
-                    title={'common.save'}
-                    onPress={saveDefaultOrder}
-                />
             </View>
-        </View>
+        </>
     );
 };
 

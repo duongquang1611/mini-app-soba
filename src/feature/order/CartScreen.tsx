@@ -177,10 +177,10 @@ const CartScreen = (props: any) => {
             dispatch(updateDefaultOrderLocal(saveOrderCart));
         }
         dispatch(updateGlobalData({ skipOrderDefault: true }));
-        if (screen === SETTING_ROUTE.ORDER_DEFAULT_SETTING || orderType === OrderTypeMenu.DEFAULT_ORDER) {
-            navigate(ORDER_ROUTE.ORDER_QR_CODE, { orderType });
-        } else {
+        if (isDefaultOrder && !screen) {
             reset(APP_ROUTE.MAIN_TAB);
+        } else {
+            navigate(ORDER_ROUTE.ORDER_QR_CODE, { orderType });
         }
     };
     const getTextHeaderCancel = () => {
@@ -254,22 +254,6 @@ const CartScreen = (props: any) => {
                                 onPress={saveDefaultOrder}
                             />
                         )}
-
-                        {/* {!isDefaultOrder ? (
-                            <StyledButton
-                                isNormal={true}
-                                title={'order.editCartButton'}
-                                onPress={goBack}
-                                customStyle={styles.productAddition}
-                                customStyleText={styles.textProduct}
-                            />
-                        ) : (
-                            <StyledButton
-                                disabled={num <= 0 || num > staticValue.MAX_ORDER}
-                                title={'common.save'}
-                                onPress={saveDefaultOrder}
-                            />
-                        )} */}
                         <StyledButton
                             isNormal={true}
                             title={'order.editCartButton'}

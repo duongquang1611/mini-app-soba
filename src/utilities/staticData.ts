@@ -915,6 +915,7 @@ export const dataFakeDishCoupon = [
 export enum OrderType {
     DEFAULT = 1,
     MOBILE = 2,
+    DEFAULT_LOCAL = 3,
 }
 
 // coupon.type
