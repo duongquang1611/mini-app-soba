@@ -285,7 +285,7 @@ export default {
         detail: {
             id: 'クーポンＩＤ：{{id}}',
             expired: '有効期限切れ',
-            getCoupon: '3つクーポンをGETできます',
+            getCoupon: '{{count}}つクーポンをGETできます',
             discount: '{{title}} : ￥{{discount}}割引',
             free: '{{title}} : 無料',
             discountAllOrder: '注文全体用のクーポン : ￥{{discount}}割引',

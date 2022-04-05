@@ -35,7 +35,7 @@ const StampList = (props: StampListProps) => {
     };
 
     const renderItemStamp = ({ item }: any) => {
-        return <StampItem item={item} onPress={() => goToDetail(item)} showExpiredImage={false} />;
+        return <StampItem item={item} onPress={() => goToDetail(item)} isBottomTab={true} />;
     };
 
     return (

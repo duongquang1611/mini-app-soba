@@ -1,14 +1,20 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { useIsFocused } from '@react-navigation/native';
+import { getCouponList } from 'api/modules/api-app/coupon';
 import { getDetailMemberStamp } from 'api/modules/api-app/stamp';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledText, StyledTouchable } from 'components/base';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
+import StyledOverlayLoading from 'components/base/StyledOverlayLoading';
 import StyledHeader from 'components/common/StyledHeader';
+import CouponContentStampView from 'feature/coupon/components/CouponContentStampView';
 import CouponContentView from 'feature/coupon/components/CouponContentView';
+import { SIZE_LIMIT } from 'hooks/usePaging';
 import React, { useEffect, useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { ScaledSheet, verticalScale } from 'react-native-size-matters';
-import { StampCardType, StampSettingBox } from 'utilities/enumData';
+import { MemberCouponType, StampCardType, StampSettingBox } from 'utilities/enumData';
 import { MODAL_ID, staticValue } from 'utilities/staticData';
 import HistoryExchangeModal from './components/HistoryExchangeModal';
 import StampItem from './components/StampItem';
@@ -24,13 +30,19 @@ const StampNumberView = ({ title, count }: any) => {
 };
 
 const createItemStampTick = (rd = Math.random()) => {
-    return { id: rd, createdDate: null, couponsCumulative: [] };
+    return { id: rd, createdDate: null };
 };
 
 const StampCardDetailScreen = (props: any) => {
+    const [loading, setLoading] = useState(true);
     const modalize = ModalizeManager();
+    const focused = useIsFocused();
     const { item } = props?.route?.params || {};
-    const [stampDetail, setStampDetail] = useState(item);
+    const [stateData, setStateData] = useState({
+        stampDetail: item,
+        histories: [],
+    });
+    const { stampDetail, histories } = stateData;
     const { stamp = {}, leftAmount = 0, totalAmount = 0 } = stampDetail;
     const {
         cardType,
@@ -40,18 +52,41 @@ const StampCardDetailScreen = (props: any) => {
         couponsExchange = [],
         settingBox,
         stampDishes = [],
+        couponsCumulative = [],
+        title: titleStamp,
     } = stamp;
 
     const isExchange = useMemo(() => cardType === StampCardType.EXCHANGE, [cardType]);
+
+    useEffect(() => {
+        focused && getInitDataDetail();
+    }, [focused]);
+
+    const getInitDataDetail = async () => {
+        try {
+            const response = await Promise.all([
+                getDetailMemberStamp(item.id),
+                getCouponList({ params: { take: SIZE_LIMIT, type: MemberCouponType.STAMP } }),
+            ]);
+            setStateData({
+                stampDetail: response?.[0]?.data,
+                histories: response?.[1]?.data,
+            });
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const dataTicks = useMemo(() => {
         // init box amount when settingBox no limit (add 200 to max exchange amount)
         let settingInitBoxNoLimit = staticValue.NO_LIMIT_BOX;
         if (settingBox === StampSettingBox.NO_LIMIT) {
-            if (couponsExchange?.length > 0 && !isExchange) {
-                const indexAmounts = couponsExchange.map((item: any) => item.stampAmount);
-                const maxAmount = Math.max(...indexAmounts) || 0;
-                settingInitBoxNoLimit = maxAmount + staticValue.NO_LIMIT_BOX;
+            if (couponsCumulative?.length > 0 && !isExchange) {
+                const positionsBox = couponsCumulative.map((item: any) => item.positionBox);
+                const maxPosition = Math.max(...positionsBox) || 0;
+                settingInitBoxNoLimit = maxPosition + staticValue.NO_LIMIT_BOX;
             }
             const modSettingInitBoxNoLimit = settingInitBoxNoLimit % numCol;
             settingInitBoxNoLimit += numCol - modSettingInitBoxNoLimit;
@@ -59,44 +94,29 @@ const StampCardDetailScreen = (props: any) => {
 
         const newBoxAmount = settingBox === StampSettingBox.LIMIT ? boxAmount : settingInitBoxNoLimit;
         const dataListTicks = Array(newBoxAmount).fill(createItemStampTick(), 0, newBoxAmount);
+        dataListTicks.splice(0, stampTicks?.length, ...stampTicks);
         if (!isExchange) {
-            couponsExchange.forEach((element: any) => {
-                if (element?.stampAmount - 1 <= dataListTicks?.length) {
-                    dataListTicks[element?.stampAmount - 1] = element;
+            couponsCumulative.forEach((element: any) => {
+                if (element?.positionBox - 1 <= dataListTicks?.length) {
+                    dataListTicks[element?.positionBox - 1] = element;
                 }
             });
         }
-        dataListTicks.splice(0, stampTicks?.length, ...stampTicks);
         return dataListTicks;
-    }, [stampTicks, boxAmount, settingBox, couponsExchange, numCol]);
-
-    useEffect(() => {
-        getDetailMemberStampData();
-    }, []);
-
-    const getDetailMemberStampData = async () => {
-        try {
-            const res = await getDetailMemberStamp(item.id);
-            setStampDetail(res?.data);
-        } catch (error) {
-            console.log('getDetailMemberStampData -> error', error);
-        }
-    };
+    }, [stampTicks, boxAmount, settingBox, couponsCumulative, numCol]);
 
     const showHistory = () => {
-        if (isExchange) {
-            modalize.show(
-                MODAL_ID.HISTORY_STAMP,
-                <HistoryExchangeModal />,
-                {
-                    modalHeight: verticalScale(550),
-                    scrollViewProps: {
-                        contentContainerStyle: { flexGrow: 1 },
-                    },
+        modalize.show(
+            MODAL_ID.HISTORY_STAMP,
+            <HistoryExchangeModal data={histories} />,
+            {
+                modalHeight: verticalScale(550),
+                scrollViewProps: {
+                    contentContainerStyle: { flexGrow: 1 },
                 },
-                { title: 'stampDetail.historyExchange' },
-            );
-        } else showModalGetCoupon();
+            },
+            { title: 'stampDetail.historyExchange' },
+        );
     };
 
     const showModalGetCoupon = () => {
@@ -112,9 +132,27 @@ const StampCardDetailScreen = (props: any) => {
         );
     };
 
+    const onPressItemStampTick = (positionBox: any, isOpen = false) => {
+        const couponsCumulativeChoose = couponsCumulative.filter((item: any) => item?.positionBox === positionBox);
+        modalize.show(
+            MODAL_ID.BOX_RECEIVE_TICK,
+            <CouponContentStampView
+                isOpen={isOpen}
+                customStyle={styles.contentCoupon}
+                datas={couponsCumulativeChoose}
+            />,
+            {
+                scrollViewProps: {
+                    contentContainerStyle: { flexGrow: 1 },
+                },
+            },
+            { title: 'stampDetail.modalGetCoupon' },
+        );
+    };
+
     return (
         <>
-            <StyledHeader title={'stampDetail.title'} />
+            <StyledHeader title={titleStamp} />
             <View style={styles.container}>
                 <ScrollView
                     contentContainerStyle={styles.contentScrollView}
@@ -124,23 +162,32 @@ const StampCardDetailScreen = (props: any) => {
                     <StampItem item={stampDetail} animation customStyle={styles.customItemStyle} />
                     <View style={styles.wrapContentHistory}>
                         <View style={styles.headerListContent}>
-                            <StampNumberView title={'stampDetail.numberOfCollect'} count={totalAmount || 0} />
-                            <StampNumberView
-                                title={'stampDetail.numberOfUse'}
-                                count={(totalAmount || 0) - (leftAmount || 0)}
-                            />
-                            <StyledTouchable onPress={showHistory} customStyle={styles.btnHistory}>
-                                <StyledIcon source={Images.icons.history} size={15} />
+                            {isExchange && (
+                                <>
+                                    <StampNumberView title={'stampDetail.numberOfCollect'} count={totalAmount || 0} />
+                                    <StampNumberView
+                                        title={'stampDetail.numberOfUse'}
+                                        count={(totalAmount || 0) - (leftAmount || 0)}
+                                    />
+                                </>
+                            )}
+                            <StyledTouchable
+                                onPress={showHistory}
+                                customStyle={[styles.btnHistory, isExchange && { marginTop: verticalScale(8) }]}
+                                disabled={!histories?.length}
+                            >
+                                <StyledIcon source={Images.icons.history} size={15} disabled={!histories?.length} />
                                 <StyledText
                                     i18nText={
                                         isExchange ? 'stampDetail.historyExchange' : 'stampDetail.couponGetHistory'
                                     }
                                     customStyle={styles.textHistory}
+                                    disabled={!histories?.length}
                                 />
                             </StyledTouchable>
                         </View>
                         <StampTickList
-                            onPressItemHistory={showModalGetCoupon}
+                            onPressItemStampTick={onPressItemStampTick}
                             stampDetail={stampDetail}
                             numCol={numCol}
                             data={dataTicks}
@@ -209,9 +256,9 @@ const styles = ScaledSheet.create({
     },
     btnHistory: {
         flexDirection: 'row',
-        marginTop: '8@vs',
         alignSelf: 'flex-end',
         alignItems: 'center',
+        marginBottom: '20@vs',
     },
     headerListContent: {
         paddingHorizontal: '20@s',

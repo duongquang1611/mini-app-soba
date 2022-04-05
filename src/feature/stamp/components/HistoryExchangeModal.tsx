@@ -1,44 +1,33 @@
-import { getExchangeCouponHistory } from 'api/modules/api-app/stamp';
 import { Themes } from 'assets/themes';
 import { StyledText } from 'components/base';
-import usePaging from 'hooks/usePaging';
 import React from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import { formatDate } from 'utilities/format';
 
-const itemData = {
-    title: 'string',
-    createdDate: '2022-03-09',
-    amount: 5,
-};
-const data = Array(20).fill(itemData);
-
 const ItemHistory = ({ item }: any) => {
-    const { createdDate, title = '', amount = 0 } = item;
+    const { receivedDate, coupon = {}, stampAmount } = item;
+    const { title = '' } = coupon;
     return (
         <View style={styles.wrapItem}>
             <View style={styles.wrapTitleDate}>
-                <StyledText originValue={`${formatDate(createdDate)} : `} customStyle={styles.textDate} />
+                <StyledText originValue={`${formatDate(receivedDate)} : `} customStyle={styles.textDate} />
                 <StyledText originValue={title} customStyle={styles.textTitle} />
             </View>
-            <View style={styles.wrapCount}>
-                <StyledText originValue={amount} customStyle={styles.textCount} />
-            </View>
+            {!!stampAmount && (
+                <View style={styles.wrapCount}>
+                    <StyledText originValue={`${stampAmount}`} customStyle={styles.textCount} />
+                </View>
+            )}
         </View>
     );
 };
-const HistoryExchangeModal = () => {
-    const { pagingData } = usePaging(getExchangeCouponHistory, {
-        take: 100,
-    });
-    const { list = [] } = pagingData;
-
+const HistoryExchangeModal = ({ data = [] }: any) => {
     const renderItem = (item: any, index: number) => {
         return <ItemHistory item={item} key={index} />;
     };
 
-    return <View style={styles.container}>{(list.length > 0 ? list : data).map(renderItem)}</View>;
+    return <View style={styles.container}>{data.map(renderItem)}</View>;
 };
 
 const styles = ScaledSheet.create({

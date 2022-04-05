@@ -1,10 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { saveOrderOption } from 'api/modules/api-app/order';
 import { RootState } from 'app-redux/hooks';
-import { clearMobileOrder, updateCartOrder, updateMobileOrder } from 'app-redux/slices/orderSlice';
-import { store } from 'app-redux/store';
+import { updateCartOrder, updateMobileOrder } from 'app-redux/slices/orderSlice';
 import Images from 'assets/images';
-import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
@@ -15,15 +13,15 @@ import TextUnderline from 'components/common/TextUnderline';
 import AmountOrder from 'feature/order/components/AmountOrder';
 import ModalCoupon from 'feature/order/components/ModalCoupon';
 import OrderItemCart from 'feature/order/components/OrderItemCart';
-import { APP_ROUTE, HOME_ROUTE, ORDER_ROUTE, TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
-import { goBack, navigate } from 'navigation/NavigationService';
+import { HOME_ROUTE, TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
+import { navigate } from 'navigation/NavigationService';
 import React, { useEffect, useMemo, useState } from 'react';
-import { Linking, Text, View } from 'react-native';
+import { Clipboard, Linking, Text, TouchableOpacity, View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
 import { generateDataSaveOrderOption, generateOrderQR, isIos } from 'utilities/helper';
-import { DiscountType, MODAL_ID, POPUP_TYPE, staticValue, orderGuide, OrderTypeMenu } from 'utilities/staticData';
+import { DiscountType, MODAL_ID, orderGuide, OrderTypeMenu, POPUP_TYPE, staticValue } from 'utilities/staticData';
 
 const ItemCoupon = (props: any) => {
     const { cancelCouponItem, data } = props;
@@ -192,7 +190,16 @@ const MobileOrderScreen = () => {
                 <StyledKeyboardAware customStyle={styles.scrollView}>
                     <View style={styles.body}>
                         <View style={styles.qrView}>
-                            {!!mobileOrderQR && <QRCode value={mobileOrderQR} size={scale(staticValue.QR_SIZE)} />}
+                            {!!mobileOrderQR && (
+                                <TouchableOpacity
+                                    activeOpacity={1}
+                                    onLongPress={() => {
+                                        Clipboard.setString(mobileOrderQR);
+                                    }}
+                                >
+                                    <QRCode value={mobileOrderQR} size={scale(staticValue.QR_SIZE)} />
+                                </TouchableOpacity>
+                            )}
                             <StyledButton
                                 title={'mobileOrder.qr.edit'}
                                 onPress={edit}

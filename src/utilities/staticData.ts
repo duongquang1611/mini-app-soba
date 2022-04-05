@@ -355,6 +355,7 @@ export const MODAL_ID = {
     LIST_COUPON: 59,
     IMG_PICKER: 60,
     DETAIL_MENU: 61,
+    BOX_RECEIVE_TICK: 62,
 };
 
 export const INFORMATION = [

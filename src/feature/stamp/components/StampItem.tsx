@@ -17,7 +17,7 @@ interface IProps {
     customStyle?: StyleProp<ViewStyle>;
     containerStyle?: StyleProp<ViewStyle>;
     animation?: boolean;
-    showExpiredImage?: boolean;
+    isBottomTab?: boolean;
 }
 
 const StampItem = (props: IProps) => {
@@ -27,10 +27,11 @@ const StampItem = (props: IProps) => {
         customStyle,
         containerStyle,
         animation = false,
-        showExpiredImage = true,
+        isBottomTab = false,
     } = props;
     const { stamp = {}, leftAmount = 0, totalAmount = 0 } = itemMemberStamp;
     const { image, title, startDate, cardType, settingDuration, endDate } = stamp;
+    const titleProps = useMemo(() => (isBottomTab ? { numberOfLines: 1 } : {}), [isBottomTab]);
     // cardType: StampCardType
     const isExchange = useMemo(() => cardType === StampCardType.EXCHANGE, [cardType]);
     const isNoExpired = useMemo(() => settingDuration === StampSettingDuration.NO_EXPIRED_DATE, [settingDuration]);
@@ -42,14 +43,14 @@ const StampItem = (props: IProps) => {
         <Animatable.View style={containerStyle} animation={animation ? staticValue.ANIMATION_ITEM : ''} useNativeDriver>
             <StyledTouchable customStyle={[styles.container, customStyle]} onPress={onPress} disabled={!onPress}>
                 <ImageBackground source={{ uri: image }} style={styles.imgStamp} resizeMode={'cover'}>
-                    {!!isExpired && showExpiredImage && (
+                    {!!isExpired && !isBottomTab && (
                         <View style={styles.expiredImage}>
                             <StyledIcon size={60} source={Images.icons.stampUsedDetail} />
                         </View>
                     )}
                 </ImageBackground>
                 <View style={styles.content}>
-                    <StyledText originValue={title} customStyle={styles.nameStamp} numberOfLines={2} />
+                    <StyledText originValue={title} customStyle={styles.nameStamp} {...titleProps} />
                     <StyledText
                         i18nText={
                             settingDuration === StampSettingDuration.NO_EXPIRED_DATE

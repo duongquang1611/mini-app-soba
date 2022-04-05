@@ -3,7 +3,7 @@ import { StyledButton, StyledText } from 'components/base';
 import { AUTHENTICATE_ROUTE, HOME_ROUTE, ORDER_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React from 'react';
-import { View } from 'react-native';
+import { Clipboard, TouchableOpacity, View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { QR_TAB_TYPE } from 'utilities/enumData';
@@ -36,12 +36,19 @@ const ShowQrTab = (props: any) => {
             {qrValue ? (
                 <View style={[styles.qrCodeView]}>
                     {!!qrValue && (
-                        <QRCode
-                            value={qrValue}
-                            color={Themes.COLORS.headerBackground}
-                            size={scale(staticValue.QR_SIZE_HOME)}
-                            backgroundColor={Themes.COLORS.transparent}
-                        />
+                        <TouchableOpacity
+                            activeOpacity={1}
+                            onLongPress={() => {
+                                Clipboard.setString(qrValue);
+                            }}
+                        >
+                            <QRCode
+                                value={qrValue}
+                                color={Themes.COLORS.headerBackground}
+                                size={scale(staticValue.QR_SIZE_HOME)}
+                                backgroundColor={Themes.COLORS.transparent}
+                            />
+                        </TouchableOpacity>
                     )}
                     <StyledButton
                         onPress={handleQrPress}
