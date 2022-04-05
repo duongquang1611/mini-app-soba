@@ -10,7 +10,16 @@ import Config from 'react-native-config';
 import Picker from 'react-native-picker';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import { formatDate, YYYYMMDD_PUBLISH } from './format';
-import { CouponDishType, CouponType, DiscountType, MenuType, OrderType, POPUP_TYPE, staticValue } from './staticData';
+import {
+    CouponDishType,
+    CouponType,
+    DiscountType,
+    MenuType,
+    OrderType,
+    OrderTypeMenu,
+    POPUP_TYPE,
+    staticValue,
+} from './staticData';
 
 export const isAndroid = Platform.OS === 'android';
 
@@ -386,4 +395,11 @@ export const showActionQR = (qrCode: any, newOrderTest: any, titleCancel = 'New 
         },
         type: POPUP_TYPE.CONFIRM,
     });
+};
+
+export const titleOrder = (orderType: any, defaultTitle: string) => {
+    if (orderType === OrderTypeMenu.DEFAULT_ORDER || orderType === OrderTypeMenu.DEFAULT_ORDER_LOCAL) {
+        return 'setting.orderDefaultTitle';
+    }
+    return defaultTitle;
 };

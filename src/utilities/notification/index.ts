@@ -62,6 +62,7 @@ export const useOnesignal = (user?: any) => {
     if (!user) {
         const { userInfo } = store.getState();
         user = userInfo?.user;
+        console.log('🚀 ~ file: index.ts ~ line 64 ~ useOnesignal ~ user', user);
     }
 
     useEffect(() => {

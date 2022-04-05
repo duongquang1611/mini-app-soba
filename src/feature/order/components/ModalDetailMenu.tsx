@@ -8,6 +8,7 @@ import { navigate } from 'navigation/NavigationService';
 import DashView from 'components/common/DashView';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
+import { OrderTypeMenu } from 'utilities/staticData';
 
 const OrderItemCart = (props: any) => {
     const { mainDish, subDishes } = props?.data;
@@ -47,7 +48,7 @@ const OrderItemCart = (props: any) => {
     );
 };
 const ModalDetailMenu = (props: any) => {
-    const { id, dishes, isDefaultOrder, order, setOrder, orderType } = props;
+    const { id, dishes, isDefaultOrder, order, setOrder, orderType = OrderTypeMenu.CART_ORDER } = props;
     const getListFromDishes = dishes?.filter((item: any) => item?.mainDish?.id === id) || [];
     const goDetailNew = () => {
         props?.closeModal();
@@ -79,7 +80,12 @@ const ModalDetailMenu = (props: any) => {
                 <StyledText i18nText={'order.editMenu'} customStyle={styles.edit} />
             </View>
             {getListFromDishes?.map((item: any, index: number) => (
-                <OrderItemCart key={index} data={item} goDetailMenu={() => goDetailEdit(item?.createDate)} />
+                <OrderItemCart
+                    orderType={orderType}
+                    key={index}
+                    data={item}
+                    goDetailMenu={() => goDetailEdit(item?.createDate)}
+                />
             ))}
         </View>
     );

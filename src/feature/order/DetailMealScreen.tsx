@@ -31,15 +31,7 @@ const checkDisable = (dishOptions: any, subDishDetail: any) => {
     return result;
 };
 const DetailMealScreen = (props: any) => {
-    const {
-        id,
-        isNew,
-        createDate,
-        isDefaultOrder,
-        order,
-        setOrder,
-        orderType = OrderTypeMenu.CART_ORDER,
-    } = props?.route?.params;
+    const { id, isNew, createDate, isDefaultOrder, order, setOrder, orderType } = props?.route?.params;
     const { cartOrder } = useSelector((state: RootState) => state.order);
     const saveOrder = order || cartOrder;
     const findIdStore = isNew ? null : saveOrder?.dishes?.find((item: any) => item.createDate === createDate);

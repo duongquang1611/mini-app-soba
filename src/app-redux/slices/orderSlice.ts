@@ -89,7 +89,7 @@ const orderSlice = createSlice({
     },
 });
 
-const persistConfig = generatePersistConfig('order', ['cartOrder', 'mobileOrder']);
+const persistConfig = generatePersistConfig('order', ['cartOrder', 'mobileOrder', 'defaultOrder', 'defaultOrderLocal']);
 
 export const {
     updateMobileOrder,
