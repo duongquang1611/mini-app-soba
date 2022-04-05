@@ -156,6 +156,8 @@ export default {
         qrGuide: '来店QRコードの詳細',
         cancelOrderDefault: '全てキャンセル',
         editOrderDefault: 'いつもの！注文編集',
+        resetOrderDefault: 'リセット',
+        resetDefaultOrder: '注文をリセットしてもよろしいでしょうか？',
     },
     setting: {
         editProfileTitle: 'マイページ編集',

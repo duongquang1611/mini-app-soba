@@ -16,14 +16,14 @@ import ModalDetailMenu from 'feature/order/components/ModalDetailMenu';
 import ModalGuideMenu from 'feature/order/components/ModalGuideMenu';
 import useBackHandler from 'hooks/useBackHandler';
 import { APP_ROUTE, HOME_ROUTE, ORDER_ROUTE, SETTING_ROUTE } from 'navigation/config/routes';
-import { goBack, navigate, reset } from 'navigation/NavigationService';
+import { navigate, reset } from 'navigation/NavigationService';
 import React, { useEffect, useRef, useState } from 'react';
 import { ImageBackground, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkHasDataOrder, checkSameData, isIos, sumTotalAmount } from 'utilities/helper';
-import { MenuType, MODAL_ID, staticValue } from 'utilities/staticData';
+import { MenuType, MODAL_ID, OrderTypeMenu, staticValue } from 'utilities/staticData';
 
 const ItemMenu = (props: any) => {
     const { order, setOrder } = props;
@@ -66,8 +66,8 @@ const ItemMenu = (props: any) => {
     );
 };
 const OrderDefaultMenu = (props: any) => {
-    const { screen } = props?.route?.params;
-    const checkHomeScreen = screen === HOME_ROUTE.HOME || SETTING_ROUTE.ORDER_DEFAULT_SETTING;
+    const { screen } = props?.route?.params || {};
+    const checkHomeScreen = screen === HOME_ROUTE.HOME || screen === SETTING_ROUTE.ORDER_DEFAULT_SETTING;
     const dispatch = useDispatch();
     const {
         order: { defaultOrder, defaultOrderLocal },
@@ -118,6 +118,7 @@ const OrderDefaultMenu = (props: any) => {
                 id={id}
                 closeModal={() => modalize.dismiss(MODAL_ID.DETAIL_MENU)}
                 order={orderDefault}
+                orderType={OrderTypeMenu.DEFAULT_ORDER}
                 setOrder={setOrderDefault}
             />,
             {
@@ -153,6 +154,7 @@ const OrderDefaultMenu = (props: any) => {
             setOrder: setOrderDefault,
             order: orderDefault,
             screen,
+            orderType: OrderTypeMenu.DEFAULT_ORDER,
         });
     };
     const saveDefaultOrder = () => {
@@ -164,7 +166,7 @@ const OrderDefaultMenu = (props: any) => {
         if (!screen) {
             reset(APP_ROUTE.MAIN_TAB);
         } else {
-            goBack();
+            navigate(ORDER_ROUTE.ORDER_QR_CODE, { orderType: OrderTypeMenu.DEFAULT_ORDER });
         }
     };
     const handleBack = () => {

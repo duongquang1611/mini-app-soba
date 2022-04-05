@@ -1,8 +1,9 @@
 import { RootState } from 'app-redux/hooks';
+import { updateDefaultOrder, updateDefaultOrderLocal } from 'app-redux/slices/orderSlice';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
-import { StyledIcon, StyledImage, StyledList, StyledText, StyledTouchable } from 'components/base';
+import { StyledButton, StyledIcon, StyledImage, StyledList, StyledText, StyledTouchable } from 'components/base';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledHeader from 'components/common/StyledHeader';
 import TextUnderline from 'components/common/TextUnderline';
@@ -11,9 +12,16 @@ import { ORDER_ROUTE } from 'navigation/config/routes';
 import { goBack, navigate } from 'navigation/NavigationService';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { ImageBackground, Linking, Text, View } from 'react-native';
-import { scale, ScaledSheet } from 'react-native-size-matters';
-import { useSelector } from 'react-redux';
-import { funcFilterStatus, isIos, sumTotalAmount } from 'utilities/helper';
+import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    checkHasDataOrder,
+    checkSameData,
+    funcFilterStatus,
+    isIos,
+    sumTotalAmount,
+    titleOrder,
+} from 'utilities/helper';
 import { MODAL_ID, OrderTypeMenu, staticValue, stepGuide } from 'utilities/staticData';
 import ButtonCart from './components/ButtonCart';
 import ListViewSelect from './components/ListViewSelect';
@@ -29,7 +37,7 @@ const ItemMenu = (props: any) => {
         });
     const isSetting = false;
     const gotoNew = () => {
-        navigate(ORDER_ROUTE.DETAIL_MEAL, { id: props?.item?.id, isNew: true, orderType, setOrder });
+        navigate(ORDER_ROUTE.DETAIL_MEAL, { id: props?.item?.id, isNew: true, orderType, setOrder, order });
     };
     return (
         <StyledTouchable onPress={num > 0 ? props?.goToDetailModal : gotoNew}>
@@ -90,8 +98,8 @@ const ModalGuide = () => (
 const MenuEditQrScreen = (props: any) => {
     const { orderType, order, setOrder } = props?.route?.params || { orderType: OrderTypeMenu.CART_ORDER };
     const { resource } = useSelector((state: RootState) => state);
+    const { defaultOrderLocal, defaultOrder } = useSelector((state: RootState) => state.order);
     const [orderEditMenu, setOrderEditMenu] = useState(order);
-
     const { dishes } = orderEditMenu || [];
     const numOrder = sumTotalAmount(orderEditMenu);
     const { categories, menu } = resource?.data || {};
@@ -109,6 +117,7 @@ const MenuEditQrScreen = (props: any) => {
         setListSubCategory(newListCategory);
         setRecommendSelected(newListCategory?.[0]?.id);
     };
+    const dispatch = useDispatch();
 
     useEffect(() => {
         const categoryIds = listEnableCategory.map((item: any) => item?.id);
@@ -178,6 +187,13 @@ const MenuEditQrScreen = (props: any) => {
             { title: 'order.editCouponTitle' },
         );
     };
+    const saveDefaultOrder = () => {
+        dispatch(updateDefaultOrder(orderEditMenu));
+        if (!checkHasDataOrder(defaultOrderLocal) || !checkSameData(defaultOrder, defaultOrderLocal)) {
+            dispatch(updateDefaultOrderLocal(orderEditMenu));
+        }
+        navigate(ORDER_ROUTE.ORDER_QR_CODE, { orderType });
+    };
 
     const menuFilter = menuList?.filter((item: any) => {
         if (category) {
@@ -197,9 +213,8 @@ const MenuEditQrScreen = (props: any) => {
         <View style={styles.container}>
             <StyledHeader
                 onPressRight={showModal}
-                title={'order.menuTitle'}
+                title={titleOrder(orderType, 'order.menuTitle')}
                 iconRight={Images.icons.question}
-                // hasBack={false}
                 largeTitleHeader
             />
             <View style={styles.categoryContainer}>
@@ -246,6 +261,17 @@ const MenuEditQrScreen = (props: any) => {
                 </View>
             )}
             {numOrder > 0 && <ButtonCart goToSaveOrder={gotoCart} amountValue={numOrder} numOrder={numOrder} isMenu />}
+            {orderType === OrderTypeMenu.DEFAULT_ORDER ? (
+                <View style={styles.buttonSave}>
+                    <StyledButton
+                        disabled={numOrder <= 0 || numOrder > staticValue.MAX_ORDER}
+                        title={'common.save'}
+                        onPress={saveDefaultOrder}
+                    />
+                </View>
+            ) : (
+                <View style={styles.bottomView} />
+            )}
         </View>
     );
 };
@@ -271,10 +297,6 @@ const styles = ScaledSheet.create({
         flex: 1,
         backgroundColor: Themes.COLORS.white,
         paddingHorizontal: '10@s',
-    },
-    buttonSave: {
-        marginVertical: '20@vs',
-        alignSelf: 'center',
     },
     contentView: {
         width: '100%',
@@ -453,5 +475,15 @@ const styles = ScaledSheet.create({
     },
     textGuide: {
         lineHeight: scale(24),
+    },
+    buttonSave: {
+        paddingVertical: '10@vs',
+        paddingBottom: verticalScale(20) + Metrics.safeBottomPadding,
+        backgroundColor: Themes.COLORS.white,
+        alignItems: 'center',
+        marginTop: '-10@vs',
+    },
+    bottomView: {
+        paddingBottom: verticalScale(20) + Metrics.safeBottomPadding,
     },
 });

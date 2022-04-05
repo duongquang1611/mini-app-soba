@@ -21,6 +21,7 @@ import React, { useRef, useState } from 'react';
 import { View } from 'react-native';
 import { ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
+import { checkHasDataOrder, checkSameData, titleOrder } from 'utilities/helper';
 import { DiscountType, MODAL_ID, OrderTypeMenu, POPUP_TYPE, staticValue } from 'utilities/staticData';
 import AmountOrder from './components/AmountOrder';
 import ModalCoupon from './components/ModalCoupon';
@@ -126,7 +127,7 @@ const CartEditQrScreen = (props: any) => {
     };
 
     const cancelCart = () => {
-        AlertMessage('order.deleteCart', {
+        AlertMessage(orderType === OrderTypeMenu.DEFAULT_ORDER_LOCAL ? 'order.resetDefaultOrder' : 'order.deleteCart', {
             textButtonCancel: 'exchangeCoupon.confirm.textButtonCancel',
             onOk: onClear,
             type: POPUP_TYPE.CONFIRM,
@@ -172,6 +173,9 @@ const CartEditQrScreen = (props: any) => {
         }
         if (orderType === OrderTypeMenu.DEFAULT_ORDER) {
             dispatch(updateDefaultOrder(saveOrderCart));
+            if (!checkHasDataOrder(defaultOrderLocal) || !checkSameData(defaultOrder, defaultOrderLocal)) {
+                dispatch(updateDefaultOrderLocal(saveOrderCart));
+            }
         }
         if (orderType === OrderTypeMenu.DEFAULT_ORDER_LOCAL) {
             dispatch(updateDefaultOrderLocal(saveOrderCart));
@@ -180,13 +184,23 @@ const CartEditQrScreen = (props: any) => {
     };
     const saveDefaultOrder = () => {
         dispatch(updateDefaultOrder(saveOrderCart));
+        if (!checkHasDataOrder(defaultOrderLocal) || !checkSameData(defaultOrder, defaultOrderLocal)) {
+            dispatch(updateDefaultOrderLocal(saveOrderCart));
+        }
         dispatch(updateGlobalData({ skipOrderDefault: true }));
         navigate(ORDER_ROUTE.ORDER_QR_CODE, { orderType });
     };
-
+    const getTextCancelTitle = () => {
+        if (orderType === OrderTypeMenu.DEFAULT_ORDER_LOCAL) return 'order.resetOrderDefault';
+        return 'order.cancelOrder';
+    };
     return (
         <View style={styles.container}>
-            <StyledHeader title={'order.cartTitle'} textRight={'order.cancelOrder'} onPressRight={cancelCart} />
+            <StyledHeader
+                title={titleOrder(orderType, 'order.cartTitle')}
+                textRight={getTextCancelTitle()}
+                onPressRight={cancelCart}
+            />
             <StyledKeyboardAware>
                 <View style={styles.body}>
                     <AmountOrder order={saveOrderCart} />
@@ -237,27 +251,26 @@ const CartEditQrScreen = (props: any) => {
                                 onPress={createQRCode}
                             />
                         )}
-                        {orderType !== OrderTypeMenu.DEFAULT_ORDER ? (
-                            <StyledButton
-                                isNormal={true}
-                                title={'order.editCartButton'}
-                                onPress={() =>
-                                    navigate(ORDER_ROUTE.MENU_EDIT_QR, {
-                                        orderType,
-                                        order: saveOrderCart,
-                                        setOrder: setSaveOrderCart,
-                                    })
-                                }
-                                customStyle={styles.productAddition}
-                                customStyleText={styles.textProduct}
-                            />
-                        ) : (
+                        {orderType === OrderTypeMenu.DEFAULT_ORDER && (
                             <StyledButton
                                 disabled={num <= 0 || num > staticValue.MAX_ORDER}
                                 title={'common.save'}
                                 onPress={saveDefaultOrder}
                             />
                         )}
+                        <StyledButton
+                            isNormal={true}
+                            title={'order.editCartButton'}
+                            onPress={() =>
+                                navigate(ORDER_ROUTE.MENU_EDIT_QR, {
+                                    orderType,
+                                    order: saveOrderCart,
+                                    setOrder: setSaveOrderCart,
+                                })
+                            }
+                            customStyle={styles.productAddition}
+                            customStyleText={styles.textProduct}
+                        />
                     </View>
                 </View>
                 <View style={styles.bottomView} />

@@ -13,17 +13,26 @@ import AlertMessage from 'components/base/AlertMessage';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeader from 'components/common/StyledHeader';
+import TextUnderline from 'components/common/TextUnderline';
 import AmountOrder from 'feature/order/components/AmountOrder';
 import ModalCoupon from 'feature/order/components/ModalCoupon';
 import OrderItemCart from 'feature/order/components/OrderItemCart';
-import { APP_ROUTE, HOME_ROUTE, TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
+import useBackHandler from 'hooks/useBackHandler';
+import { APP_ROUTE, HOME_ROUTE, SETTING_ROUTE, TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useEffect, useMemo, useState } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { Linking, Text, TouchableOpacity, View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
-import { generateDataSaveOrderOption, generateNewOrder, generateOrderQR, isIos, showActionQR } from 'utilities/helper';
+import {
+    generateDataSaveOrderOption,
+    generateNewOrder,
+    generateOrderQR,
+    isIos,
+    showActionQR,
+    titleOrder,
+} from 'utilities/helper';
 import { DiscountType, MODAL_ID, orderGuide, OrderTypeMenu, POPUP_TYPE, staticValue } from 'utilities/staticData';
 
 const ItemCoupon = (props: any) => {
@@ -111,7 +120,18 @@ const StepItem = (item: any) => (
         </View>
         <StyledImage source={item?.item?.icon} customStyle={styles.icStep} />
         <View style={styles.containView}>
+            <Text style={[styles.title, styles.textGuide]}>
+                {item?.item?.name}
+                <Text style={[styles.contentName, styles.textGuide]}>{item?.item?.contentName}</Text>
+            </Text>
             <StyledText originValue={item?.item?.content} isBlack customStyle={styles.textGuide} />
+            <View>
+                <TextUnderline
+                    onPress={() => Linking.openURL(item?.item?.link)}
+                    title={item?.item?.textLink}
+                    color={Themes.COLORS.primary}
+                />
+            </View>
         </View>
     </View>
 );
@@ -190,7 +210,7 @@ const OrderQrCodeScreen = (props: any) => {
             MODAL_ID.ORDER_GUIDE,
             <ModalGuide />,
             {
-                modalHeight: scale(550),
+                modalHeight: scale(570),
                 scrollViewProps: {
                     contentContainerStyle: { flexGrow: 1 },
                 },
@@ -198,6 +218,16 @@ const OrderQrCodeScreen = (props: any) => {
             { title: 'order.qrGuide' },
         );
     };
+    const handleBack = () => {
+        if (orderType === OrderTypeMenu.DEFAULT_ORDER) {
+            navigate(APP_ROUTE.MAIN_TAB, { screen: SETTING_ROUTE.ROOT });
+        } else {
+            navigate(APP_ROUTE.MAIN_TAB, { screen: HOME_ROUTE.HOME });
+        }
+        return true;
+    };
+
+    useBackHandler(handleBack);
 
     return (
         <>
@@ -206,9 +236,15 @@ const OrderQrCodeScreen = (props: any) => {
                     title={'setting.orderDefaultTitle'}
                     textRight={'order.cancelOrderDefault'}
                     onPressRight={cancelOrderMobile}
+                    onPressBack={handleBack}
                 />
             ) : (
-                <StyledHeader title={'mobileOrder.title'} iconRight={Images.icons.question} onPressRight={showModal} />
+                <StyledHeader
+                    title={titleOrder(orderType, 'mobileOrder.title')}
+                    iconRight={Images.icons.question}
+                    onPressRight={showModal}
+                    onPressBack={handleBack}
+                />
             )}
             <View style={styles.container}>
                 <StyledKeyboardAware customStyle={styles.scrollView}>
@@ -233,7 +269,7 @@ const OrderQrCodeScreen = (props: any) => {
                                 onPress={edit}
                                 customStyle={styles.buttonSave}
                             />
-                            {orderType !== OrderTypeMenu.DEFAULT_ORDER && (
+                            {orderType === OrderTypeMenu.MOBILE_ORDER && (
                                 <StyledButton
                                     isNormal={true}
                                     title={'mobileOrder.qr.cancel'}
@@ -255,6 +291,7 @@ const OrderQrCodeScreen = (props: any) => {
                                         saveOrder={orderQr}
                                         notGoDetail={true}
                                         hideDashView={orderQr?.dishes?.length - 1 === index}
+                                        orderType={orderType}
                                     />
                                 );
                             })}
@@ -420,5 +457,10 @@ const styles = ScaledSheet.create({
     headerStep: {
         paddingHorizontal: '20@s',
         marginBottom: '10@s',
+    },
+    contentName: {
+        fontWeight: 'normal',
+        color: Themes.COLORS.textSecondary,
+        fontSize: '14@ms0.3',
     },
 });

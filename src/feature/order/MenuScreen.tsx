@@ -13,7 +13,7 @@ import { ImageBackground, View } from 'react-native';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
 import { funcFilterStatus, isIos, sumTotalAmount } from 'utilities/helper';
-import { MODAL_ID, staticValue } from 'utilities/staticData';
+import { MODAL_ID, OrderTypeMenu, staticValue } from 'utilities/staticData';
 import ButtonCart from './components/ButtonCart';
 import ListViewSelect from './components/ListViewSelect';
 import ModalDetailMenu from './components/ModalDetailMenu';
@@ -29,7 +29,7 @@ const ItemMenu = (props: any) => {
         });
     const isSetting = false;
     const gotoNew = () => {
-        navigate(ORDER_ROUTE.DETAIL_MEAL, { id: props?.item?.id, isNew: true });
+        navigate(ORDER_ROUTE.DETAIL_MEAL, { id: props?.item?.id, isNew: true, orderType: OrderTypeMenu.CART_ORDER });
     };
     return (
         <StyledTouchable onPress={num > 0 ? props?.goToDetailModal : gotoNew}>
@@ -102,7 +102,7 @@ const MenuScreen = () => {
     };
 
     const gotoCart = () => {
-        navigate(ORDER_ROUTE.CART);
+        navigate(ORDER_ROUTE.CART, { orderType: OrderTypeMenu.CART_ORDER });
     };
     const showModal = () => {
         modalize.show(
@@ -123,7 +123,12 @@ const MenuScreen = () => {
 
         modalize.show(
             MODAL_ID.DETAIL_MENU,
-            <ModalDetailMenu dishes={dishes} id={id} closeModal={() => modalize.dismiss(MODAL_ID.DETAIL_MENU)} />,
+            <ModalDetailMenu
+                dishes={dishes}
+                id={id}
+                closeModal={() => modalize.dismiss(MODAL_ID.DETAIL_MENU)}
+                orderType
+            />,
             {
                 modalHeight: Metrics.screenHeight * 0.8,
                 snapPoint: point,

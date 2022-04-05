@@ -16,16 +16,8 @@ const OrderItemCart = (props: any) => {
     const { subDishes, createDate, mainDish, totalAmount } = props?.data;
     const dispatch = useDispatch();
     const { name, image } = mainDish;
-    const {
-        cancelItem,
-        canChange,
-        goDetailMenu,
-        notGoDetail,
-        saveOrder,
-        isDefaultOrder,
-        SaveAllOrderCart,
-        orderType = OrderTypeMenu.CART_ORDER,
-    } = props;
+    const { cancelItem, canChange, goDetailMenu, notGoDetail, saveOrder, isDefaultOrder, SaveAllOrderCart, orderType } =
+        props;
     const num = mainDish?.amount;
     const updateOrder = (currentNum: number) => {
         const cartDishOrder = saveOrder?.dishes || [];
