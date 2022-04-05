@@ -3,14 +3,15 @@ import { StyledButton, StyledText } from 'components/base';
 import { AUTHENTICATE_ROUTE, HOME_ROUTE, ORDER_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React from 'react';
-import { Clipboard, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { QR_TAB_TYPE } from 'utilities/enumData';
+import { showActionQR } from 'utilities/helper';
 import { QR_TAB_DATA, staticValue } from 'utilities/staticData';
 
 const ShowQrTab = (props: any) => {
-    const { type = QR_TAB_TYPE.ORDER_DEFAULT, qrValue, onPress } = props;
+    const { type = QR_TAB_TYPE.ORDER_DEFAULT, qrValue, onPress, newOrder = '' } = props;
     const qrComponentData: any = QR_TAB_DATA[type];
     const { background, textButton, content1, content2, navigateScreen, orderType, createButton } = qrComponentData;
 
@@ -39,7 +40,9 @@ const ShowQrTab = (props: any) => {
                         <TouchableOpacity
                             activeOpacity={1}
                             onLongPress={() => {
-                                Clipboard.setString(qrValue);
+                                type === QR_TAB_TYPE.CHECK_IN
+                                    ? showActionQR(qrValue, newOrder, 'QR Check In', 'QR Check In')
+                                    : showActionQR(qrValue, newOrder);
                             }}
                         >
                             <QRCode

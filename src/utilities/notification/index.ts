@@ -81,13 +81,10 @@ export const useOnesignal = (user?: any) => {
                 OneSignal.setNotificationWillShowInForegroundHandler(onReceived);
                 OneSignal.setNotificationOpenedHandler(handleNavigateNotification);
                 const deviceState = await OneSignal.getDeviceState();
-                // console.log(deviceState, isPushDisabled);
-                console.log('setTimeout -> isPushDisabled', isPushDisabled, deviceState?.isPushDisabled);
                 if (
                     typeof deviceState?.isPushDisabled === 'boolean' &&
                     isPushDisabled !== deviceState?.isPushDisabled
                 ) {
-                    console.log('setTimeout -> disablePush', isPushDisabled);
                     OneSignal.disablePush(isPushDisabled);
                 }
             } catch (error) {

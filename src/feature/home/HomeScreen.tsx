@@ -23,7 +23,7 @@ import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { SceneMap } from 'react-native-tab-view';
 import { useSelector } from 'react-redux';
 import { QR_TAB_TYPE } from 'utilities/enumData';
-import { filterResources, generateCheckInQR, generateOrderQR } from 'utilities/helper';
+import { filterResources, generateCheckInQR, generateNewOrder, generateOrderQR } from 'utilities/helper';
 import { useOnesignal } from 'utilities/notification';
 import {
     CouponStoreKeyByStatus,
@@ -112,6 +112,11 @@ const HomeScreen: FunctionComponent = () => {
     const { order, userInfo } = useSelector((state: RootState) => state);
     const { user } = userInfo;
     const { mobileOrder, defaultOrderLocal } = order;
+    const newOrderMobile = useMemo(() => generateNewOrder(mobileOrder, user), [mobileOrder, user]);
+    const newOrderDefault = useMemo(
+        () => generateNewOrder(defaultOrderLocal, user, OrderType.DEFAULT),
+        [mobileOrder, user],
+    );
     const mobileOrderQR = useMemo(() => generateOrderQR(mobileOrder, user), [mobileOrder, user]);
     const defaultOrderQR = useMemo(
         () => generateOrderQR(defaultOrderLocal, user, OrderType.DEFAULT),
@@ -154,8 +159,10 @@ const HomeScreen: FunctionComponent = () => {
         console.log('showGuideCheckIn');
     };
     const renderScene = SceneMap({
-        qrDefault: () => <ShowQrTab type={QR_TAB_TYPE.ORDER_DEFAULT} qrValue={defaultOrderQR} />,
-        qrMobile: () => <ShowQrTab type={QR_TAB_TYPE.MOBILE_ORDER} qrValue={mobileOrderQR} />,
+        qrDefault: () => (
+            <ShowQrTab type={QR_TAB_TYPE.ORDER_DEFAULT} qrValue={defaultOrderQR} newOrder={newOrderDefault} />
+        ),
+        qrMobile: () => <ShowQrTab type={QR_TAB_TYPE.MOBILE_ORDER} qrValue={mobileOrderQR} newOrder={newOrderMobile} />,
         qrCheckIn: () => <ShowQrTab type={QR_TAB_TYPE.CHECK_IN} qrValue={checkInQR} onPress={showGuideCheckIn} />,
     });
     return (
