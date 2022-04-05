@@ -120,17 +120,11 @@ const StepItem = (item: any) => (
         </View>
         <StyledImage source={item?.item?.icon} customStyle={styles.icStep} />
         <View style={styles.containView}>
-            <Text style={[styles.title, styles.textGuide]}>
-                {item?.item?.name}
-                <Text style={[styles.contentName, styles.textGuide]}>{item?.item?.contentName}</Text>
-            </Text>
-            <StyledText originValue={item?.item?.content} isBlack customStyle={styles.textGuide} />
-            <View>
-                <TextUnderline
-                    onPress={() => Linking.openURL(item?.item?.link)}
-                    title={item?.item?.textLink}
-                    color={Themes.COLORS.primary}
-                />
+            <View style={styles.containView}>
+                <Text style={styles.textGuide}>
+                    {item?.item?.content}
+                    <Text style={styles.textLink}>{item?.item?.textLink}</Text>
+                </Text>
             </View>
         </View>
     </View>
@@ -462,5 +456,12 @@ const styles = ScaledSheet.create({
         fontWeight: 'normal',
         color: Themes.COLORS.textSecondary,
         fontSize: '14@ms0.3',
+    },
+    textLink: {
+        lineHeight: scale(24),
+        color: Themes.COLORS.primary,
+        fontWeight: 'bold',
+        fontSize: '14@ms0.3',
+        textDecorationLine: 'underline',
     },
 });
