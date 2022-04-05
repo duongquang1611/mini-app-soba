@@ -19,11 +19,11 @@ import OrderItemCart from 'feature/order/components/OrderItemCart';
 import { APP_ROUTE, HOME_ROUTE, TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useEffect, useMemo, useState } from 'react';
-import { View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
-import { generateDataSaveOrderOption, generateOrderQR, isIos } from 'utilities/helper';
+import { generateDataSaveOrderOption, generateNewOrder, generateOrderQR, isIos, showActionQR } from 'utilities/helper';
 import { DiscountType, MODAL_ID, orderGuide, OrderTypeMenu, POPUP_TYPE, staticValue } from 'utilities/staticData';
 
 const ItemCoupon = (props: any) => {
@@ -139,6 +139,7 @@ const OrderQrCodeScreen = (props: any) => {
     const { user } = userInfo;
     const modalize = ModalizeManager();
     const mobileOrderQR = useMemo(() => generateOrderQR(orderQr, user), [orderQr, user]);
+    const newOrderTest = useMemo(() => generateNewOrder(orderQr, user), [orderQr, user]);
     const mobileOrderSaveOrderOption = useMemo(() => generateDataSaveOrderOption(orderQr), [orderQr]);
     const dispatch = useDispatch();
     useEffect(() => {
@@ -213,7 +214,16 @@ const OrderQrCodeScreen = (props: any) => {
                 <StyledKeyboardAware customStyle={styles.scrollView}>
                     <View style={styles.body}>
                         <View style={styles.qrView}>
-                            {!!mobileOrderQR && <QRCode value={mobileOrderQR} size={scale(staticValue.QR_SIZE)} />}
+                            {!!mobileOrderQR && (
+                                <TouchableOpacity
+                                    activeOpacity={1}
+                                    onLongPress={() => {
+                                        showActionQR(mobileOrderQR, newOrderTest);
+                                    }}
+                                >
+                                    <QRCode value={mobileOrderQR} size={scale(staticValue.QR_SIZE)} />
+                                </TouchableOpacity>
+                            )}
                             <StyledButton
                                 title={
                                     orderType === OrderTypeMenu.DEFAULT_ORDER

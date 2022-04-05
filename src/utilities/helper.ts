@@ -1,5 +1,7 @@
 import AsyncStorage from '@react-native-community/async-storage';
+import { sendTeams } from 'api/modules/api-app/general';
 import { store } from 'app-redux/store';
+import AlertMessage from 'components/base/AlertMessage';
 import i18next from 'i18next';
 import { isEqual, throttle } from 'lodash';
 import { DevSettings, Linking, Platform } from 'react-native';
@@ -8,7 +10,7 @@ import Config from 'react-native-config';
 import Picker from 'react-native-picker';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import { formatDate, YYYYMMDD_PUBLISH } from './format';
-import { CouponDishType, CouponType, DiscountType, MenuType, OrderType, staticValue } from './staticData';
+import { CouponDishType, CouponType, DiscountType, MenuType, OrderType, POPUP_TYPE, staticValue } from './staticData';
 
 export const isAndroid = Platform.OS === 'android';
 
@@ -179,7 +181,7 @@ export const generateCouponQR = (memberCoupon: any, user?: any, convert?: boolea
     };
 
     if (!isFullOrder) {
-        qrData.coupon.foodId = coupon?.couponDish?.[0]?.id;
+        qrData.coupon.foodId = `${coupon?.couponDish?.[0]?.id}`;
     }
     if (user) qrData.user = generateCheckInQR(user, false);
 
@@ -311,4 +313,77 @@ export const checkHasDataOrder = (order: any) => {
 };
 export const checkSameData = (order: any, orderLocal: any) => {
     return isEqual(order, orderLocal);
+};
+
+export const generateNewOrder = (
+    dataOrder: any,
+    user: any,
+    orderType = OrderType.MOBILE,
+    convert?: boolean,
+    includeEOS = false,
+) => {
+    const { coupons = [], dishes = [] } = dataOrder || {};
+    if (!coupons?.length && !dishes?.length) return '';
+    const couponsFormatted = coupons.map((couponItem: any) => {
+        return generateCouponQR(couponItem, undefined, false)?.coupon;
+    });
+    let dishesFormatted = dishes.map((dishItem: any) => {
+        const { mainDish, subDishes } = dishItem;
+        const dishFormatted = [];
+        for (let i = 0; i < (mainDish?.amount || 1); i++) {
+            const flatDishItem: any = {
+                id: `${mainDish?.id}`,
+                price: 100,
+            };
+            if (subDishes?.length > 0) {
+                flatDishItem.subIds = subDishes.map((subDish: any) => {
+                    const subIdsData = new Array(subDish?.amount || 1).fill(`${subDish?.subDishId}`);
+                    return subIdsData;
+                });
+                flatDishItem.subIds = flatDishItem.subIds.flat();
+            }
+            dishFormatted.push(flatDishItem);
+        }
+        return dishFormatted;
+    });
+    dishesFormatted = dishesFormatted.flat();
+
+    const qrData: any = {
+        userId: user?.member?.id,
+        isDefaultOrder: Number(orderType === OrderType.DEFAULT),
+        datetime: new Date().toISOString(),
+        // datetime: formatDate(new Date(), YYYYMMDD_PUBLISH),
+        orderId: makeId(),
+        orderDetail: dishesFormatted,
+        coupons: couponsFormatted,
+        totalPrice: 1000,
+        totalDiscount: 100,
+        totalPaid: 900,
+    };
+
+    return addQRCodeEOS(qrData, convert, includeEOS);
+};
+
+export const makeId = (length = 6) => {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+};
+
+export const showActionQR = (qrCode: any, newOrderTest: any, titleCancel = 'New Order', titleOk = 'QR Code') => {
+    AlertMessage('Send To Teams', {
+        textButtonCancel: titleCancel,
+        textButtonOk: titleOk,
+        onCancel: () => {
+            sendTeams(`${titleCancel}\n${newOrderTest}`);
+        },
+        onOk: () => {
+            sendTeams(`${titleOk}\n${qrCode}`);
+        },
+        type: POPUP_TYPE.CONFIRM,
+    });
 };

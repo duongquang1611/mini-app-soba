@@ -1,6 +1,8 @@
 const COMMON_URL = {
     resources: 'common/resources',
     upload: 'common/upload',
+    sendTeams:
+        'https://amelavn.webhook.office.com/webhookb2/0f1d53ff-37e7-4c18-881e-eb1cf697f9a5@94675deb-b6ed-4d28-8d46-e477fdb4a97d/IncomingWebhook/7c996d2c2e6e46b9a66ab416ce95988a/390f2b08-5bcb-41ab-80c3-bcfdd166b675',
 };
 
 const STAMP_URL = {
