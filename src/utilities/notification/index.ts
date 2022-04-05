@@ -23,6 +23,7 @@ export const enumType = {
 };
 
 export function pushTagMember(id: number | string) {
+    console.log('pushTagMember -> id', id);
     OneSignal.sendTag('memberId', `${id}`);
 }
 
@@ -64,7 +65,7 @@ export const useOnesignal = (user?: any) => {
     }
 
     useEffect(() => {
-        const oneSignalId = '351f4556-3f84-422d-b936-69c24e0c6a1b' || Config.ONE_SIGNAL_APP_ID;
+        const oneSignalId = Config.ONE_SIGNAL_APP_ID;
         setTimeout(async () => {
             try {
                 OneSignal.setAppId(oneSignalId);
@@ -73,7 +74,7 @@ export const useOnesignal = (user?: any) => {
                     logger('User Accept Push Notification IOS:', false, response);
                 });
                 if (isLogin()) {
-                    pushTagMember(user?.id);
+                    pushTagMember(user?.member?.id);
                 } else {
                     deleteTagOneSignal();
                 }
@@ -81,10 +82,12 @@ export const useOnesignal = (user?: any) => {
                 OneSignal.setNotificationOpenedHandler(handleNavigateNotification);
                 const deviceState = await OneSignal.getDeviceState();
                 // console.log(deviceState, isPushDisabled);
+                console.log('setTimeout -> isPushDisabled', isPushDisabled, deviceState?.isPushDisabled);
                 if (
                     typeof deviceState?.isPushDisabled === 'boolean' &&
                     isPushDisabled !== deviceState?.isPushDisabled
                 ) {
+                    console.log('setTimeout -> disablePush', isPushDisabled);
                     OneSignal.disablePush(isPushDisabled);
                 }
             } catch (error) {

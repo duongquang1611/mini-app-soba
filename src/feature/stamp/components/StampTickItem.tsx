@@ -11,13 +11,13 @@ const itemHeight = 67;
 const separatorBottom = 10;
 const separatorTop = 10;
 
-// open box: couponsCumulative length > 0
-// noodle on: createdDate &&  couponsCumulative length <= 0
+// open box: isOpen = positionBox <= stampTicks.length
+// noodle on: createdDate
 // noodle off: normal
-// close box: couponsExchange (item?.stampAmount)
+// close box: couponsCumulative
 
-const StampTickItem = ({ item, numCol, onPress }: any) => {
-    const { couponsCumulative, createdDate } = item;
+const StampTickItem = ({ item, numCol, onPress, isOpen = false }: any) => {
+    const { createdDate } = item;
 
     const handlePressItem = () => {
         onPress?.();
@@ -27,13 +27,13 @@ const StampTickItem = ({ item, numCol, onPress }: any) => {
         <StyledTouchable
             onPress={handlePressItem}
             activeOpacity={0.9}
-            disabled={!couponsCumulative?.length && !item?.stampAmount}
+            disabled={!item?.positionBox}
             customStyle={[
                 s.wrapItem,
                 {
-                    backgroundColor: couponsCumulative?.length
+                    backgroundColor: isOpen
                         ? Themes.COLORS.headerBackground
-                        : item?.stampAmount
+                        : item?.positionBox
                         ? Themes.COLORS.redOxide
                         : createdDate
                         ? Themes.COLORS.headerBackground
@@ -48,22 +48,18 @@ const StampTickItem = ({ item, numCol, onPress }: any) => {
         >
             <StyledImage
                 source={
-                    couponsCumulative?.length
-                        ? Images?.icons?.[`giftOpen${numCol}`]
-                        : item?.stampAmount
-                        ? Images.icons.giftClose
+                    isOpen
+                        ? Images?.icons?.[`giftOpen${numCol}`] // open box
+                        : item?.positionBox
+                        ? Images.icons.giftClose // close box
                         : createdDate
-                        ? Images.icons.noodlesOn
-                        : Images.icons.noodlesOff
+                        ? Images.icons.noodlesOn // noodle on
+                        : Images.icons.noodlesOff // noodle off
                 }
                 customStyle={{
-                    width: couponsCumulative?.length
-                        ? '100%'
-                        : scale(numCol > staticValue.COLUMNS_STAMP_TICK[1] ? 32 : 40),
-                    height: couponsCumulative?.length
-                        ? '100%'
-                        : scale(numCol > staticValue.COLUMNS_STAMP_TICK[1] ? 32 : 40),
-                    marginBottom: item?.stampAmount ? scale(7) : 0,
+                    width: isOpen ? '100%' : scale(numCol > staticValue.COLUMNS_STAMP_TICK[1] ? 32 : 40),
+                    height: isOpen ? '100%' : scale(numCol > staticValue.COLUMNS_STAMP_TICK[1] ? 32 : 40),
+                    marginBottom: item?.positionBox ? scale(7) : 0,
                 }}
             />
             {!!createdDate && (

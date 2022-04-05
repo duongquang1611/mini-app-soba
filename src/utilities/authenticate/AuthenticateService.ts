@@ -42,7 +42,7 @@ const AuthenticateService = {
     handlerLogin: (token: Record<string, string>) => {
         const { userInfo } = store.getState();
         store.dispatch(userInfoActions.updateToken(token));
-        pushTagMember(userInfo.user?.id as number);
+        pushTagMember(userInfo.user?.member?.id as number);
     },
 };
 

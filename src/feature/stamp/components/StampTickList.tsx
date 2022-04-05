@@ -13,21 +13,25 @@ const separatorBottom = 10;
 const separatorTop = 10;
 
 const StampTickList = ({
-    onPressItemHistory,
+    onPressItemStampTick,
     stampDetail,
     numCol = staticValue.DEFAULT_STAMP_TICK_COLUMN,
     data = [],
 }: any) => {
     const { leftAmount, stamp = {} } = stampDetail || {};
+    const { stampTicks = [] } = stamp;
     const isExchange = useMemo(() => stamp.cardType === StampCardType.EXCHANGE, [stamp.cardType]);
 
-    // open box: couponsCumulative length > 0
-    // noodle on: createdDate &&  couponsCumulative length <= 0
-    // noodle off: normal
-    // close box: couponsExchange
-
     const renderItem = ({ item }: any) => {
-        return <StampTickItem item={item} numCol={numCol} onPress={onPressItemHistory} />;
+        const isOpen = item?.positionBox <= stampTicks.length;
+        return (
+            <StampTickItem
+                item={item}
+                numCol={numCol}
+                onPress={() => onPressItemStampTick(item?.positionBox, isOpen)}
+                isOpen={isOpen}
+            />
+        );
     };
 
     const goToExchangeCoupon = () => {
@@ -76,9 +80,7 @@ const styles = ScaledSheet.create({
         paddingTop: '10@vs',
         maxHeight: scale(itemHeight * 4) + verticalScale(separatorBottom * 3 + separatorTop),
     },
-    dashView: {
-        marginTop: '10@vs',
-    },
+    dashView: {},
     btnExchange: {
         alignSelf: 'center',
         marginBottom: '20@vs',

@@ -13,7 +13,6 @@ import DashView from 'components/common/DashView';
 import StyledHeaderImage from 'components/common/StyledHeaderImage';
 import StyledTabTopView from 'components/common/StyledTabTopView';
 import { SIZE_LIMIT } from 'hooks/usePaging';
-import { isEqual } from 'lodash';
 import { HOME_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { FunctionComponent, useEffect, useMemo, useState } from 'react';
