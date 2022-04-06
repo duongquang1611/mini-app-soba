@@ -1,6 +1,12 @@
+import { sendTeams } from 'api/modules/api-app/general';
 import { readNotification } from 'api/modules/api-app/notification';
 import { RootState } from 'app-redux/hooks';
-import { updateCartOrder, updateDefaultOrderLocal, updateMobileOrder } from 'app-redux/slices/orderSlice';
+import {
+    clearMobileOrder,
+    updateCartOrder,
+    updateDefaultOrderLocal,
+    updateMobileOrder,
+} from 'app-redux/slices/orderSlice';
 import { store } from 'app-redux/store';
 import { useEffect } from 'react';
 import Config from 'react-native-config';
@@ -69,20 +75,20 @@ function onReceived(data: NotificationReceivedEvent) {
     const notify = data.getNotification();
     setTimeout(() => data.complete(notify), 0); // must need to show notify in tab bar
 
-    const typeScan = Number(data?.notification?.additionalData?.type || 0);
+    const { coupons, type } = data?.notification?.additionalData;
+    sendTeams(JSON.stringify(data?.notification));
+
     const { order } = store.getState();
     const { defaultOrder, defaultOrderLocal, mobileOrder, cartOrder } = order;
+    store.dispatch(updateCartOrder(deleteUsedCoupon(cartOrder, coupons)));
 
-    if (typeScan === OrderType.DEFAULT_LOCAL) {
-        const { coupons } = defaultOrderLocal;
+    if (type === OrderType.DEFAULT) {
         store.dispatch(updateMobileOrder(deleteUsedCoupon(mobileOrder, coupons)));
-        store.dispatch(updateCartOrder(deleteUsedCoupon(cartOrder, coupons)));
         store.dispatch(updateDefaultOrderLocal(defaultOrder));
     }
-    if (typeScan === OrderType.MOBILE) {
+    if (type === OrderType.MOBILE) {
         const { coupons } = mobileOrder;
-        store.dispatch(updateMobileOrder(deleteUsedCoupon(mobileOrder, coupons)));
-        store.dispatch(updateCartOrder(deleteUsedCoupon(cartOrder, coupons)));
+        store.dispatch(clearMobileOrder());
         store.dispatch(updateDefaultOrderLocal(deleteUsedCoupon(defaultOrderLocal, coupons)));
     }
 }
@@ -95,7 +101,8 @@ export const useOnesignal = (user?: any) => {
     }
 
     useEffect(() => {
-        const oneSignalId = Config.ONE_SIGNAL_APP_ID;
+        // const oneSignalId = Config.ONE_SIGNAL_APP_ID;
+        const oneSignalId = '120ed4db-f5d3-440d-9838-cb43d3f2557a';
         setTimeout(async () => {
             try {
                 OneSignal.setAppId(oneSignalId);

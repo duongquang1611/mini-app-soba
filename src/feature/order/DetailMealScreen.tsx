@@ -72,13 +72,13 @@ const DetailMealScreen = (props: any) => {
         },
         subDishes: subDishDetail,
     });
+    const [checkSave, setCheckSave] = useState(false);
     const numOrder = createDate ? findIdStore?.mainDish?.amount : 1;
     const totalNum = sumTotalAmount(saveOrder);
-
-    const newAmountOrder = createDate
-        ? totalNum + amountValue - (findIdStore?.totalAmount || 0)
-        : totalNum + amountValue;
+    let newAmountOrder = createDate ? totalNum + amountValue - (findIdStore?.totalAmount || 0) : totalNum + amountValue;
+    if (checkSave) newAmountOrder = totalNum;
     const goToSaveOrder = () => {
+        setCheckSave(true);
         const dishesStore = isNew
             ? saveOrder?.dishes || []
             : saveOrder?.dishes?.filter((item: any) => item.createDate !== createDate) || [];
@@ -103,12 +103,12 @@ const DetailMealScreen = (props: any) => {
                       ],
                   }
                 : {};
+        goBack();
+
         setOrder?.({ ...paramOrder, coupons: saveOrder?.coupons });
         if (orderType === OrderTypeMenu.CART_ORDER) {
             dispatch(updateCartOrder({ ...paramOrder, coupons: saveOrder?.coupons }));
         }
-
-        goBack();
     };
     return (
         <View style={styles.container}>

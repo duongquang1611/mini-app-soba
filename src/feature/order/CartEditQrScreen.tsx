@@ -15,7 +15,7 @@ import AlertMessage from 'components/base/AlertMessage';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeader from 'components/common/StyledHeader';
-import { HOME_ROUTE, ORDER_ROUTE, TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
+import { APP_ROUTE, HOME_ROUTE, ORDER_ROUTE, SETTING_ROUTE, TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useRef, useState } from 'react';
 import { View } from 'react-native';
@@ -119,11 +119,14 @@ const CartEditQrScreen = (props: any) => {
         }
         if (orderType === OrderTypeMenu.DEFAULT_ORDER) {
             dispatch(clearDefaultOrder());
+            navigate(APP_ROUTE.MAIN_TAB, { screen: SETTING_ROUTE.ROOT });
         }
         if (orderType === OrderTypeMenu.DEFAULT_ORDER_LOCAL) {
             dispatch(updateDefaultOrderLocal(defaultOrder));
         }
-        navigate(HOME_ROUTE.ROOT);
+        if (orderType !== OrderTypeMenu.DEFAULT_ORDER) {
+            navigate(APP_ROUTE.MAIN_TAB, { screen: HOME_ROUTE.ROOT });
+        }
     };
 
     const cancelCart = () => {

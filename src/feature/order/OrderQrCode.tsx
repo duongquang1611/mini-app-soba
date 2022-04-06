@@ -7,8 +7,9 @@ import {
     updateDefaultOrderLocal,
 } from 'app-redux/slices/orderSlice';
 import Images from 'assets/images';
+import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
-import { StyledButton, StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
+import { StyledButton, StyledIcon, StyledText, StyledTouchable } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
@@ -20,7 +21,7 @@ import useBackHandler from 'hooks/useBackHandler';
 import { APP_ROUTE, HOME_ROUTE, SETTING_ROUTE, TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useEffect, useMemo, useState } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
@@ -32,7 +33,8 @@ import {
     showActionQR,
     titleOrder,
 } from 'utilities/helper';
-import { DiscountType, MODAL_ID, orderGuide, OrderTypeMenu, POPUP_TYPE, staticValue } from 'utilities/staticData';
+import { DiscountType, MODAL_ID, OrderTypeMenu, POPUP_TYPE, staticValue } from 'utilities/staticData';
+import ModalGuideMenu from './components/ModalGuideMenu';
 
 const ItemCoupon = (props: any) => {
     const { cancelCouponItem, data } = props;
@@ -97,37 +99,6 @@ const ItemCoupon = (props: any) => {
         </View>
     );
 };
-const ModalGuide = () => (
-    <View>
-        <StyledText originValue={orderGuide?.content} isBlack customStyle={styles.contentGuide} />
-        <StyledText originValue={orderGuide?.header} isBlack customStyle={styles.headerStep} />
-        <View>
-            <StyledImage source={Images.photo.line} customStyle={styles.line1} />
-            <StyledImage source={Images.photo.line} customStyle={styles.line2} />
-            <View>
-                {orderGuide?.steps?.map((item, index) => (
-                    <StepItem key={index} item={item} largeView={isIos && index === 2} />
-                ))}
-            </View>
-        </View>
-    </View>
-);
-const StepItem = (item: any) => (
-    <View style={styles.rowStep}>
-        <View style={styles.numberView}>
-            <StyledText originValue={item?.item?.index} customStyle={styles.numberValue} />
-        </View>
-        <StyledImage source={item?.item?.icon} customStyle={styles.icStep} />
-        <View style={styles.containView}>
-            <View style={styles.containView}>
-                <Text style={styles.textGuide}>
-                    {item?.item?.content}
-                    <Text style={styles.textLink}>{item?.item?.textLink}</Text>
-                </Text>
-            </View>
-        </View>
-    </View>
-);
 
 const OrderQrCodeScreen = (props: any) => {
     const { orderType } = props?.route?.params;
@@ -201,9 +172,9 @@ const OrderQrCodeScreen = (props: any) => {
     const showModal = () => {
         modalize.show(
             MODAL_ID.ORDER_GUIDE,
-            <ModalGuide />,
+            <ModalGuideMenu />,
             {
-                modalHeight: scale(570),
+                modalHeight: isIos ? scale(425) + Metrics.safeBottomPadding : scale(465) + Metrics.safeBottomPadding,
                 scrollViewProps: {
                     contentContainerStyle: { flexGrow: 1 },
                 },

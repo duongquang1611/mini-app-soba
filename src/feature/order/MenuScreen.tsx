@@ -127,7 +127,7 @@ const MenuScreen = () => {
                 dishes={dishes}
                 id={id}
                 closeModal={() => modalize.dismiss(MODAL_ID.DETAIL_MENU)}
-                orderType
+                orderType={OrderTypeMenu.CART_ORDER}
             />,
             {
                 modalHeight: Metrics.screenHeight * 0.8,
