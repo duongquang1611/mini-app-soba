@@ -30,7 +30,7 @@ const useNetwork = () => {
                 } else {
                     // categoryId exists
                     // check subDishes (dua vao subDishId)
-                    console.log('useEffect -> newDishes', newDishes);
+                    // console.log('useEffect -> newDishes', newDishes);
                 }
             }
         }
