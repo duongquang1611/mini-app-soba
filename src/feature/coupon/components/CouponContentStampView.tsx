@@ -88,7 +88,7 @@ const CouponContentItem = ({ item }: any) => {
                 )}
             </View>
             <StyledText originValue={description} isBlack customStyle={styles.textDescription} />
-            <DashView />
+            <DashView customStyle={{ alignSelf: 'center' }} />
         </>
     );
 };

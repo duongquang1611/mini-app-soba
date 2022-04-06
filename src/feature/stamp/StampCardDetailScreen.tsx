@@ -6,7 +6,6 @@ import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledText, StyledTouchable } from 'components/base';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
-import StyledOverlayLoading from 'components/base/StyledOverlayLoading';
 import StyledHeader from 'components/common/StyledHeader';
 import CouponContentStampView from 'feature/coupon/components/CouponContentStampView';
 import CouponContentView from 'feature/coupon/components/CouponContentView';
@@ -115,7 +114,7 @@ const StampCardDetailScreen = (props: any) => {
                     contentContainerStyle: { flexGrow: 1 },
                 },
             },
-            { title: 'stampDetail.historyExchange' },
+            { title: isExchange ? 'stampDetail.historyExchange' : 'stampDetail.couponGetHistory' },
         );
     };
 

@@ -9,7 +9,7 @@ import codePush from 'react-native-code-push';
 import Config from 'react-native-config';
 import Picker from 'react-native-picker';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
-import { formatDate, YYYYMMDD_PUBLISH } from './format';
+import { formatDate, YMDHms, YYYYMMDD_PUBLISH } from './format';
 import {
     CouponDishType,
     CouponType,
@@ -172,6 +172,7 @@ export const generateCheckInQR = (user: any, convert?: boolean, includeEOS?: boo
     return addQRCodeEOS(qrData, convert, includeEOS);
 };
 
+// foodId: is "stringId"
 export const generateCouponQR = (memberCoupon: any, user?: any, convert?: boolean, includeEOS?: boolean) => {
     const { coupon } = memberCoupon;
     const isFullOrder = Number(coupon?.discountType === DiscountType.ALL_ORDER);
@@ -186,18 +187,19 @@ export const generateCouponQR = (memberCoupon: any, user?: any, convert?: boolea
             isFree,
             price,
             isAccounted,
-            publishDatetime: formatDate(memberCoupon?.receivedDate, YYYYMMDD_PUBLISH),
+            publishDatetime: formatDate(memberCoupon?.receivedDate, YMDHms),
         },
     };
 
     if (!isFullOrder) {
-        qrData.coupon.foodId = `${coupon?.couponDish?.[0]?.id}`;
+        qrData.coupon.foodId = `${coupon?.couponDish?.[0]?.dish?.stringId}`;
     }
     if (user) qrData.user = generateCheckInQR(user, false);
 
     return addQRCodeEOS(qrData, convert, includeEOS);
 };
 
+// id send is "stringId"
 export const generateOrderQR = (
     dataOrder: any,
     user: any,
@@ -215,12 +217,12 @@ export const generateOrderQR = (
         const dishFormatted = [];
         for (let i = 0; i < (mainDish?.amount || 1); i++) {
             const flatDishItem: any = {
-                id: `${mainDish?.id}`,
+                id: `${mainDish?.stringId}`,
                 name: mainDish?.name,
             };
             if (subDishes?.length > 0) {
                 flatDishItem.subIds = subDishes.map((subDish: any) => {
-                    const subIdsData = new Array(subDish?.amount || 1).fill(`${subDish?.subDishId}`);
+                    const subIdsData = new Array(subDish?.amount || 1).fill(`${subDish?.stringId}`);
                     return subIdsData;
                 });
                 flatDishItem.subIds = flatDishItem.subIds.flat();
@@ -241,6 +243,7 @@ export const generateOrderQR = (
     return addQRCodeEOS(qrData, convert, includeEOS);
 };
 
+// id dish send is: "id"
 export const generateDataSaveOrderOption = (dataOrder: any, orderType = OrderType.MOBILE) => {
     const totalAmount = sumTotalAmount(dataOrder);
     const { coupons = [], dishes = [] } = dataOrder;
@@ -325,6 +328,7 @@ export const checkSameData = (order: any, orderLocal: any) => {
     return isEqual(order, orderLocal);
 };
 
+// mainDish, subDish id is "stringId"
 export const generateNewOrder = (
     dataOrder: any,
     user: any,
@@ -342,12 +346,12 @@ export const generateNewOrder = (
         const dishFormatted = [];
         for (let i = 0; i < (mainDish?.amount || 1); i++) {
             const flatDishItem: any = {
-                id: `${mainDish?.id}`,
+                id: `${mainDish?.stringId}`,
                 price: 100,
             };
             if (subDishes?.length > 0) {
                 flatDishItem.subIds = subDishes.map((subDish: any) => {
-                    const subIdsData = new Array(subDish?.amount || 1).fill(`${subDish?.subDishId}`);
+                    const subIdsData = new Array(subDish?.amount || 1).fill(`${subDish?.stringId}`);
                     return subIdsData;
                 });
                 flatDishItem.subIds = flatDishItem.subIds.flat();
@@ -361,8 +365,7 @@ export const generateNewOrder = (
     const qrData: any = {
         userId: user?.member?.id,
         isDefaultOrder: Number(orderType === OrderType.DEFAULT),
-        datetime: new Date().toISOString(),
-        // datetime: formatDate(new Date(), YYYYMMDD_PUBLISH),
+        datetime: formatDate(new Date(), YYYYMMDD_PUBLISH),
         orderId: makeId(),
         orderDetail: dishesFormatted,
         coupons: couponsFormatted,
