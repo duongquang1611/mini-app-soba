@@ -189,7 +189,7 @@ const MenuEditQrScreen = (props: any) => {
     };
     const saveDefaultOrder = () => {
         dispatch(updateDefaultOrder(orderEditMenu));
-        if (!checkHasDataOrder(defaultOrderLocal) || !checkSameData(defaultOrder, defaultOrderLocal)) {
+        if (!checkHasDataOrder(defaultOrderLocal) || checkSameData(defaultOrder, defaultOrderLocal)) {
             dispatch(updateDefaultOrderLocal(orderEditMenu));
         }
         navigate(ORDER_ROUTE.ORDER_QR_CODE, { orderType });
