@@ -356,6 +356,7 @@ export const MODAL_ID = {
     IMG_PICKER: 60,
     DETAIL_MENU: 61,
     BOX_RECEIVE_TICK: 62,
+    CHECK_IN_GUIDE: 63,
 };
 
 export const INFORMATION = [
@@ -915,7 +916,7 @@ export const dataFakeDishCoupon = [
 export enum OrderType {
     DEFAULT = 1,
     MOBILE = 2,
-    DEFAULT_LOCAL = 3,
+    // DEFAULT_LOCAL = 3,
 }
 
 // coupon.type

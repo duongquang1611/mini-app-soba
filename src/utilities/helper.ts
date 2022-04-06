@@ -187,7 +187,7 @@ export const generateCouponQR = (memberCoupon: any, user?: any, convert?: boolea
             isFree,
             price,
             isAccounted,
-            publishDatetime: formatDate(memberCoupon?.receivedDate, YMDHms),
+            publishDatetime: memberCoupon?.receivedDate,
         },
     };
 

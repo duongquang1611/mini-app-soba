@@ -6,14 +6,16 @@ import { updateCoupon } from 'app-redux/slices/couponSlice';
 import { resourceActions } from 'app-redux/slices/resourceSlice';
 import { store } from 'app-redux/store';
 import Images from 'assets/images';
+import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText } from 'components/base';
+import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import DashView from 'components/common/DashView';
 import StyledHeaderImage from 'components/common/StyledHeaderImage';
 import StyledTabTopView from 'components/common/StyledTabTopView';
 import { SIZE_LIMIT } from 'hooks/usePaging';
-import { HOME_ROUTE } from 'navigation/config/routes';
+import { APP_ROUTE, HOME_ROUTE, STAMP_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { FunctionComponent, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -28,11 +30,13 @@ import { useOnesignal } from 'utilities/notification';
 import {
     CouponStoreKeyByStatus,
     imagesList,
+    MODAL_ID,
     netWorkList,
     OrderType,
     staticValue,
     TabCouponStatus,
 } from 'utilities/staticData';
+import ModalGuideCheckIn from './components/ModalGuideCheckIn';
 import ShowQrTab from './components/ShowQrTab';
 
 const netWorkItem = (data: any) => {
@@ -125,7 +129,7 @@ const HomeScreen: FunctionComponent = () => {
     const checkInQR = useMemo(() => generateCheckInQR(user), [user]);
     const [indexTab, setIndexTab] = useState(1);
     const [listNews, setListNews] = useState([]);
-
+    const modalize = ModalizeManager();
     useEffect(() => {
         getNotification();
         getCouponData();
@@ -154,9 +158,22 @@ const HomeScreen: FunctionComponent = () => {
         { key: 'qrMobile', title: t('qrHome.mobile.title') },
         { key: 'qrCheckIn', title: t('qrHome.checkIn.title') },
     ];
-
+    const goToStamp = () => {
+        modalize.dismiss(MODAL_ID.CHECK_IN_GUIDE);
+        navigate(APP_ROUTE.MAIN_TAB, { screen: STAMP_ROUTE.ROOT });
+    };
     const showGuideCheckIn = () => {
-        console.log('showGuideCheckIn');
+        modalize.show(
+            MODAL_ID.CHECK_IN_GUIDE,
+            <ModalGuideCheckIn goToStamp={goToStamp} />,
+            {
+                modalHeight: scale(550) + Metrics.safeBottomPadding,
+                scrollViewProps: {
+                    contentContainerStyle: { flexGrow: 1 },
+                },
+            },
+            { title: 'order.qrGuide' },
+        );
     };
     const renderScene = SceneMap({
         qrDefault: () => (

@@ -49,6 +49,7 @@ const OrderItemCart = (props: any) => {
 };
 const ModalDetailMenu = (props: any) => {
     const { id, dishes, isDefaultOrder, order, setOrder, orderType = OrderTypeMenu.CART_ORDER } = props;
+    console.log({ orderType });
     const getListFromDishes = dishes?.filter((item: any) => item?.mainDish?.id === id) || [];
     const goDetailNew = () => {
         props?.closeModal();
