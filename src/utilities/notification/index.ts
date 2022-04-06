@@ -1,16 +1,21 @@
 import { readNotification } from 'api/modules/api-app/notification';
 import { RootState } from 'app-redux/hooks';
+import { updateCartOrder, updateDefaultOrderLocal, updateMobileOrder } from 'app-redux/slices/orderSlice';
 import { store } from 'app-redux/store';
+import { APP_ROUTE } from 'navigation/config/routes';
+import { navigate, reset } from 'navigation/NavigationService';
 import { useEffect } from 'react';
 import Config from 'react-native-config';
 import OneSignal from 'react-native-onesignal';
 import { useSelector } from 'react-redux';
 import { isLogin } from 'utilities/authenticate/AuthenticateService';
 import { logger } from 'utilities/helper';
+import { OrderType } from 'utilities/staticData';
 
 type NotificationReceivedEvent = {
     complete: (notification?: any) => void;
     getNotification: () => any;
+    notification: any;
 };
 
 export const enumType = {
@@ -48,13 +53,40 @@ export function handleNavigateNotification(data: any) {
         onMoveNavigation(additionalData);
     }
 }
+const deleteUsedCoupon = (order: any, couponsUsed: any) => {
+    const { coupons } = order || {};
+    const newCoupons =
+        coupons?.filter(
+            (itemCoupon: any) =>
+                !couponsUsed.find(
+                    (itemUsed: any) =>
+                        itemUsed.id === itemCoupon.id && itemUsed?.receivedDate === itemCoupon?.receivedDate,
+                ),
+        ) || [];
+    return { ...order, coupons: newCoupons };
+};
 
 function onReceived(data: NotificationReceivedEvent) {
     logger('onReceived', undefined, data);
     const notify = data.getNotification();
-
-    // Complete with null means don't show a notification.
     setTimeout(() => data.complete(notify), 0); // must need to show notify in tab bar
+
+    const typeScan = Number(data?.notification?.additionalData?.type || 0);
+    const { order } = store.getState();
+    const { defaultOrder, defaultOrderLocal, mobileOrder, cartOrder } = order;
+
+    if (typeScan === OrderType.DEFAULT_LOCAL) {
+        const { coupons } = defaultOrderLocal;
+        store.dispatch(updateMobileOrder(deleteUsedCoupon(mobileOrder, coupons)));
+        store.dispatch(updateCartOrder(deleteUsedCoupon(cartOrder, coupons)));
+        store.dispatch(updateDefaultOrderLocal(defaultOrder));
+    }
+    if (typeScan === OrderType.MOBILE) {
+        const { coupons } = mobileOrder;
+        store.dispatch(updateMobileOrder(deleteUsedCoupon(mobileOrder, coupons)));
+        store.dispatch(updateCartOrder(deleteUsedCoupon(cartOrder, coupons)));
+        store.dispatch(updateDefaultOrderLocal(deleteUsedCoupon(defaultOrderLocal, coupons)));
+    }
 }
 
 export const useOnesignal = (user?: any) => {

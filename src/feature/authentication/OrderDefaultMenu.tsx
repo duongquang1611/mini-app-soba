@@ -159,7 +159,7 @@ const OrderDefaultMenu = (props: any) => {
     };
     const saveDefaultOrder = () => {
         dispatch(updateDefaultOrder(orderDefault));
-        if (!checkHasDataOrder(defaultOrderLocal) || !checkSameData(defaultOrder, defaultOrderLocal)) {
+        if (!checkHasDataOrder(defaultOrderLocal) || checkSameData(defaultOrder, defaultOrderLocal)) {
             dispatch(updateDefaultOrderLocal(orderDefault));
         }
         dispatch(updateGlobalData({ skipOrderDefault: true }));

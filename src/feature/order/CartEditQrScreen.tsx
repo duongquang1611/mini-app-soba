@@ -173,7 +173,7 @@ const CartEditQrScreen = (props: any) => {
         }
         if (orderType === OrderTypeMenu.DEFAULT_ORDER) {
             dispatch(updateDefaultOrder(saveOrderCart));
-            if (!checkHasDataOrder(defaultOrderLocal) || !checkSameData(defaultOrder, defaultOrderLocal)) {
+            if (!checkHasDataOrder(defaultOrderLocal) || checkSameData(defaultOrder, defaultOrderLocal)) {
                 dispatch(updateDefaultOrderLocal(saveOrderCart));
             }
         }
@@ -184,7 +184,7 @@ const CartEditQrScreen = (props: any) => {
     };
     const saveDefaultOrder = () => {
         dispatch(updateDefaultOrder(saveOrderCart));
-        if (!checkHasDataOrder(defaultOrderLocal) || !checkSameData(defaultOrder, defaultOrderLocal)) {
+        if (!checkHasDataOrder(defaultOrderLocal) || checkSameData(defaultOrder, defaultOrderLocal)) {
             dispatch(updateDefaultOrderLocal(saveOrderCart));
         }
         dispatch(updateGlobalData({ skipOrderDefault: true }));
