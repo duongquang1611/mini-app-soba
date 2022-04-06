@@ -55,6 +55,7 @@ const StampCardDetailScreen = (props: any) => {
         title: titleStamp,
     } = stamp;
 
+    console.log('StampCardDetailScreen -> stampTicks', stampTicks);
     const isExchange = useMemo(() => cardType === StampCardType.EXCHANGE, [cardType]);
 
     useEffect(() => {

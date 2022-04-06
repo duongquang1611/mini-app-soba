@@ -2,8 +2,6 @@ import { readNotification } from 'api/modules/api-app/notification';
 import { RootState } from 'app-redux/hooks';
 import { updateCartOrder, updateDefaultOrderLocal, updateMobileOrder } from 'app-redux/slices/orderSlice';
 import { store } from 'app-redux/store';
-import { APP_ROUTE } from 'navigation/config/routes';
-import { navigate, reset } from 'navigation/NavigationService';
 import { useEffect } from 'react';
 import Config from 'react-native-config';
 import OneSignal from 'react-native-onesignal';
