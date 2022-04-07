@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useIsFocused } from '@react-navigation/native';
-import { getCouponList } from 'api/modules/api-app/coupon';
-import { getDetailMemberStamp } from 'api/modules/api-app/stamp';
+import { getDetailMemberStamp, getExchangeCouponHistory } from 'api/modules/api-app/stamp';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledText, StyledTouchable } from 'components/base';
@@ -9,11 +8,10 @@ import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledHeader from 'components/common/StyledHeader';
 import CouponContentStampView from 'feature/coupon/components/CouponContentStampView';
 import CouponContentView from 'feature/coupon/components/CouponContentView';
-import { SIZE_LIMIT } from 'hooks/usePaging';
 import React, { useEffect, useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { ScaledSheet, verticalScale } from 'react-native-size-matters';
-import { MemberCouponType, StampCardType, StampSettingBox } from 'utilities/enumData';
+import { StampCardType, StampSettingBox } from 'utilities/enumData';
 import { MODAL_ID, staticValue } from 'utilities/staticData';
 import HistoryExchangeModal from './components/HistoryExchangeModal';
 import StampItem from './components/StampItem';
@@ -55,7 +53,6 @@ const StampCardDetailScreen = (props: any) => {
         title: titleStamp,
     } = stamp;
 
-    console.log('StampCardDetailScreen -> stampTicks', stampTicks);
     const isExchange = useMemo(() => cardType === StampCardType.EXCHANGE, [cardType]);
 
     useEffect(() => {
@@ -64,10 +61,7 @@ const StampCardDetailScreen = (props: any) => {
 
     const getInitDataDetail = async () => {
         try {
-            const response = await Promise.all([
-                getDetailMemberStamp(item.id),
-                getCouponList({ params: { take: SIZE_LIMIT, type: MemberCouponType.STAMP } }),
-            ]);
+            const response = await Promise.all([getDetailMemberStamp(item.id), getExchangeCouponHistory(stamp?.id)]);
             setStateData({
                 stampDetail: response?.[0]?.data,
                 histories: response?.[1]?.data,
@@ -98,10 +92,14 @@ const StampCardDetailScreen = (props: any) => {
         if (!isExchange) {
             couponsCumulative.forEach((element: any) => {
                 if (element?.positionBox - 1 <= dataListTicks?.length) {
-                    dataListTicks[element?.positionBox - 1] = element;
+                    dataListTicks[element?.positionBox - 1] = {
+                        ...dataListTicks[element?.positionBox - 1],
+                        ...element,
+                    };
                 }
             });
         }
+
         return dataListTicks;
     }, [stampTicks, boxAmount, settingBox, couponsCumulative, numCol]);
 

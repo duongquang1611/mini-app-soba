@@ -28,7 +28,8 @@ const StampList = (props: StampListProps) => {
         'stamps',
     );
     const { list, refreshing } = pagingData;
-    const { stamps = [], untickedStamps = 0 } = list;
+    const { stamps = [], untickedStamps = {} } = list;
+    const { untickStampsAmount = 0 } = untickedStamps;
 
     const goToDetail = (item: any) => {
         navigate(STAMP_ROUTE.STAMP_CARD_DETAIL, { item });
@@ -40,14 +41,14 @@ const StampList = (props: StampListProps) => {
 
     return (
         <View style={styles.container}>
-            {canUse ? (
+            {untickStampsAmount ? (
                 <>
                     <StyledTouchable onPress={showEarnStamp}>
                         <LinearView style={styles.wrapNote}>
                             <StyledIcon source={Images.icons.message} size={20} />
                             <StyledText
                                 i18nText={'stamp.noteUse'}
-                                i18nParams={{ count: untickedStamps }}
+                                i18nParams={{ count: untickStampsAmount }}
                                 customStyle={styles.noteUse}
                             />
                         </LinearView>
@@ -87,6 +88,7 @@ const styles = ScaledSheet.create({
         marginTop: '5@vs',
         backgroundColor: Themes.COLORS.white,
         flexGrow: 1,
+        paddingBottom: '20@vs',
     },
 });
 export default StampList;

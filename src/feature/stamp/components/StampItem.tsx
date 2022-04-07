@@ -62,25 +62,21 @@ const StampItem = (props: IProps) => {
                     />
 
                     <View style={styles.wrapCount}>
-                        {isExpired ? (
-                            <StyledText i18nText={''} customStyle={styles.textCount} />
-                        ) : (
-                            <>
-                                <StyledText
-                                    i18nText={isExchange ? 'stamp.remain' : 'stamp.titleCount'}
-                                    customStyle={styles.textTitleCount}
-                                />
-                                <StyledText
-                                    i18nText={'stamp.count'}
-                                    i18nParams={{ count: (isExchange ? leftAmount : totalAmount) || 0 }}
-                                    customStyle={styles.textCount}
-                                />
-                            </>
-                        )}
+                        <StyledText
+                            i18nText={isExchange ? 'stamp.remain' : 'stamp.titleCount'}
+                            customStyle={styles.textTitleCount}
+                        />
+                        <StyledText
+                            i18nText={'stamp.count'}
+                            i18nParams={{ count: (isExchange ? leftAmount : totalAmount) || 0 }}
+                            customStyle={styles.textCount}
+                        />
                     </View>
                 </View>
                 <StampTypeView isExchange={isExchange} />
-                {!!isExpired && <StyledIcon source={Images.icons.stampUsed} size={90} customStyle={styles.stampUsed} />}
+                {!!isExpired && isBottomTab && (
+                    <StyledIcon source={Images.icons.stampUsed} size={90} customStyle={styles.stampUsed} />
+                )}
             </StyledTouchable>
         </Animatable.View>
     );

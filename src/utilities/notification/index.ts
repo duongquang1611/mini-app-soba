@@ -33,7 +33,7 @@ export const enumType = {
 
 export function pushTagMember(id: number | string) {
     console.log('pushTagMember -> id', id);
-    OneSignal.sendTag('memberId', `${id}`);
+    id && OneSignal.sendTag('memberId', `${id}`);
 }
 
 export function deleteTagOneSignal() {

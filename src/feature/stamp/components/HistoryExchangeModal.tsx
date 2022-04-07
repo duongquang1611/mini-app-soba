@@ -6,8 +6,10 @@ import { ScaledSheet } from 'react-native-size-matters';
 import { formatDate } from 'utilities/format';
 
 const ItemHistory = ({ item }: any) => {
-    const { receivedDate, coupon = {}, stampAmount } = item;
-    const { title = '' } = coupon;
+    const { receivedDate, coupon = {} } = item;
+    const { title = '', stampCoupon = {} } = coupon?.[0] || {};
+    const { stampAmount } = stampCoupon;
+
     return (
         <View style={styles.wrapItem}>
             <View style={styles.wrapTitleDate}>

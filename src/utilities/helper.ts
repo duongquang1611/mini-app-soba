@@ -9,7 +9,7 @@ import codePush from 'react-native-code-push';
 import Config from 'react-native-config';
 import Picker from 'react-native-picker';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
-import { formatDate, YMDHms, YYYYMMDD_PUBLISH } from './format';
+import { formatDate, YYYYMMDD_PUBLISH } from './format';
 import {
     CouponDishType,
     CouponType,
