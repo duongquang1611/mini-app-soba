@@ -1,4 +1,5 @@
 import { login } from 'api/modules/api-app/authenticate';
+import { getOrder } from 'api/modules/api-app/order';
 import request from 'api/request';
 import { clearCoupon } from 'app-redux/slices/couponSlice';
 import { clearGlobalData, updateGlobalData } from 'app-redux/slices/globalDataSlice';
@@ -9,7 +10,9 @@ import { AxiosRequestConfig } from 'axios';
 import AlertMessage from 'components/base/AlertMessage';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { updateOrderStore } from 'utilities/helper';
 import { deleteTagOneSignal, pushTagMember } from 'utilities/notification';
+import { OrderType } from 'utilities/staticData';
 
 const AUTH_URL_REFRESH_TOKEN = '/refreshToken';
 export interface LoginRequestParams extends AxiosRequestConfig {
@@ -39,13 +42,29 @@ const AuthenticateService = {
         store.dispatch(userInfoActions.logOut());
         deleteTagOneSignal();
     },
-    handlerLogin: (token: Record<string, string>) => {
+    handlerLogin: async (token: Record<string, string>) => {
         const { userInfo } = store.getState();
         store.dispatch(userInfoActions.updateToken(token));
         pushTagMember(userInfo.user?.member?.id as number);
     },
 };
-
+const getOrderData = async () => {
+    // const getOrderDefaultSetting = await getOrder(OrderType.DEFAULT_SETTING);
+    // const getOrderMobile = await getOrder(OrderType.MOBILE);
+    // const getOrderDefaultHome = await getOrder(OrderType.DEFAULT_HOME);
+    const res = await Promise.all([
+        getOrder(OrderType.DEFAULT_SETTING),
+        getOrder(OrderType.MOBILE),
+        // getOrder(OrderType.DEFAULT_HOME)
+    ]);
+    console.log('🚀 ~ file: AuthenticateService.ts ~ line 59 ~ getOrderData ~ res', res?.[0]?.data);
+    updateOrderStore(res);
+    // console.log({
+    //     getOrderDefaultSetting: getOrderDefaultSetting.data,
+    //     getOrderMobile: getOrderMobile.data,
+    //     getOrderDefaultHome: getOrderDefaultHome.data,
+    // });
+};
 export const useLogin = (): LoginRequest => {
     const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
@@ -55,9 +74,11 @@ export const useLogin = (): LoginRequest => {
             setLoading(true);
             const response = await login(options);
             setLoading(false);
+
             dispatch(updateGlobalData({ skipOrderDefault: true }));
             dispatch(userInfoActions.getUserInfoRequest(response?.data?.token));
             AuthenticateService.handlerLogin({ ...response.data });
+            getOrderData();
         } catch (e) {
             setLoading(false);
             console.log('file: AuthenticateService.ts -> line 52 -> requestLogin -> e', e);

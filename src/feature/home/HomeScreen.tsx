@@ -115,15 +115,15 @@ const HomeScreen: FunctionComponent = () => {
     const { t } = useTranslation();
     const { order, userInfo } = useSelector((state: RootState) => state);
     const { user } = userInfo;
-    const { mobileOrder, defaultOrderLocal } = order;
+    const { mobileOrder, defaultOrderLocal, defaultOrder } = order;
     const newOrderMobile = useMemo(() => generateNewOrder(mobileOrder, user), [mobileOrder, user]);
     const newOrderDefault = useMemo(
-        () => generateNewOrder(defaultOrderLocal, user, OrderType.DEFAULT),
-        [mobileOrder, user],
+        () => generateNewOrder(defaultOrderLocal, user, OrderType.DEFAULT_HOME),
+        [defaultOrder, user],
     );
     const mobileOrderQR = useMemo(() => generateOrderQR(mobileOrder, user), [mobileOrder, user]);
     const defaultOrderQR = useMemo(
-        () => generateOrderQR(defaultOrderLocal, user, OrderType.DEFAULT),
+        () => generateOrderQR(defaultOrderLocal, user, OrderType.DEFAULT_HOME),
         [defaultOrderLocal, user],
     );
     const checkInQR = useMemo(() => generateCheckInQR(user), [user]);

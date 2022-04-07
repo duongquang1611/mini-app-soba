@@ -17,7 +17,7 @@ import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeader from 'components/common/StyledHeader';
 import { APP_ROUTE, HOME_ROUTE, ORDER_ROUTE, SETTING_ROUTE, TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View } from 'react-native';
 import { ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
@@ -106,6 +106,9 @@ const CartEditQrScreen = (props: any) => {
         }
     };
     const [saveOrderCart, setSaveOrderCart] = useState(getOrderFromType());
+    useEffect(() => {
+        setSaveOrderCart(getOrderFromType());
+    }, [mobileOrder, defaultOrder, defaultOrderLocal]);
     const dispatch = useDispatch();
     let num = useRef(0).current;
     saveOrderCart?.dishes?.forEach(async (rating: any) => {

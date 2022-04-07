@@ -62,9 +62,10 @@ const deleteUsedCoupon = (order: any, couponsUsed: any) => {
     const newCoupons =
         coupons?.filter(
             (itemCoupon: any) =>
-                !couponsUsed.find(
+                !couponsUsed?.find(
                     (itemUsed: any) =>
-                        itemUsed.id === itemCoupon.id && itemUsed?.receivedDate === itemCoupon?.receivedDate,
+                        itemUsed?.couponId === itemCoupon?.coupon?.id &&
+                        itemUsed?.receivedDate === itemCoupon?.receivedDate,
                 ),
         ) || [];
     return { ...order, coupons: newCoupons };
@@ -74,20 +75,18 @@ function onReceived(data: NotificationReceivedEvent) {
     logger('onReceived', undefined, data);
     const notify = data.getNotification();
     setTimeout(() => data.complete(notify), 0); // must need to show notify in tab bar
-
-    const { coupons, type } = data?.notification?.additionalData;
+    const { coupons = [], type } = data?.notification?.additionalData || {};
     sendTeams(JSON.stringify(data?.notification));
 
     const { order } = store.getState();
     const { defaultOrder, defaultOrderLocal, mobileOrder, cartOrder } = order;
     store.dispatch(updateCartOrder(deleteUsedCoupon(cartOrder, coupons)));
 
-    if (type === OrderType.DEFAULT) {
+    if (Number(type) === OrderType.DEFAULT_SETTING) {
         store.dispatch(updateMobileOrder(deleteUsedCoupon(mobileOrder, coupons)));
         store.dispatch(updateDefaultOrderLocal(defaultOrder));
     }
-    if (type === OrderType.MOBILE) {
-        const { coupons } = mobileOrder;
+    if (Number(type) === OrderType.MOBILE) {
         store.dispatch(clearMobileOrder());
         store.dispatch(updateDefaultOrderLocal(deleteUsedCoupon(defaultOrderLocal, coupons)));
     }

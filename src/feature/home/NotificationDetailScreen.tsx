@@ -26,14 +26,15 @@ const CouponItemNotification = (item: any) => {
     );
 };
 
-const NotificationDetailScreen = () => {
+const NotificationDetailScreen = (props: any) => {
+    const { id } = props.route?.params || {};
     const [coupon, setCoupon] = useState([]);
     useEffect(() => {
         getNotification();
     }, []);
     const getNotification = async () => {
         try {
-            const res = await getNotificationCoupon(1);
+            const res = await getNotificationCoupon(id);
             setCoupon(res?.data);
         } catch (error) {
             logger(error);
