@@ -18,6 +18,8 @@ const separatorTop = 10;
 
 const StampTickItem = ({ item, numCol, onPress, isOpen = false }: any) => {
     const { createdDate } = item;
+    const isDisabled = !isOpen && !item?.positionBox && !createdDate;
+    const isCloseBox = item?.positionBox && !isOpen;
 
     const handlePressItem = () => {
         onPress?.();
@@ -44,6 +46,7 @@ const StampTickItem = ({ item, numCol, onPress, isOpen = false }: any) => {
                             scale(40 + (numCol === staticValue.COLUMNS_STAMP_TICK[0] ? 15 : 9) * (numCol - 1))) /
                         numCol,
                 },
+                (isDisabled || isCloseBox) && { justifyContent: 'center' },
             ]}
         >
             <StyledImage
@@ -59,11 +62,15 @@ const StampTickItem = ({ item, numCol, onPress, isOpen = false }: any) => {
                 customStyle={{
                     width: isOpen ? '100%' : scale(numCol > staticValue.COLUMNS_STAMP_TICK[1] ? 32 : 40),
                     height: isOpen ? '100%' : scale(numCol > staticValue.COLUMNS_STAMP_TICK[1] ? 32 : 40),
-                    marginBottom: item?.positionBox ? scale(7) : 0,
+                    marginTop: isCloseBox ? scale(-8) : isOpen || isDisabled ? 0 : scale(8),
                 }}
             />
             {!!createdDate && (
-                <StyledText originValue={formatDate(createdDate, DDMM)} isBlack customStyle={s.textDate} />
+                <StyledText
+                    originValue={formatDate(createdDate, DDMM)}
+                    isBlack
+                    customStyle={[s.textDate, { position: 'absolute', bottom: scale(2) }]}
+                />
             )}
         </StyledTouchable>
     );
@@ -74,7 +81,6 @@ const s = ScaledSheet.create({
         borderRadius: 5,
         marginBottom: verticalScale(separatorBottom),
         alignItems: 'center',
-        justifyContent: 'center',
         height: scale(itemHeight),
         overflow: 'hidden',
     },
@@ -95,7 +101,7 @@ const s = ScaledSheet.create({
         marginBottom: '20@vs',
     },
     textDate: {
-        fontSize: '12@ms0.3',
+        fontSize: '12@s',
         marginTop: '2@vs',
     },
 });
