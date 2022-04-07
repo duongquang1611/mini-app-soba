@@ -8,3 +8,5 @@ export const getCart = () => request.get(MENU_URL.cart);
 
 // save order mobile, order default order
 export const saveOrderOption = (params: any) => request.post(ORDER_URL.saveOrder, params);
+
+export const getOrder = (orderType: number) => request.get(ORDER_URL.getOrder(orderType));

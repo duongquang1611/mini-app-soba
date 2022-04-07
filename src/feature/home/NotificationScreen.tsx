@@ -13,13 +13,17 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { ScaledSheet } from 'react-native-size-matters';
 import { logger } from 'utilities/helper';
 
-const NotificationItem = (item: any) => {
+const NotificationItem = (props: any) => {
+    const { item } = props;
     return (
-        <TouchableOpacity style={styles.notificationItem} onPress={() => navigate(HOME_ROUTE.NOTIFICATION_DETAIL)}>
-            <StyledIcon source={getIcon(item.item?.img)} size={30} customStyle={styles.notificationImage} />
+        <TouchableOpacity
+            style={styles.notificationItem}
+            onPress={() => navigate(HOME_ROUTE.NOTIFICATION_DETAIL, { id: item?.id })}
+        >
+            <StyledIcon source={getIcon(item?.img)} size={30} customStyle={styles.notificationImage} />
             <View style={styles.contentText}>
-                <StyledText originValue={item.item.content} customStyle={styles.content} />
-                <StyledText originValue={item.item.time} customStyle={styles.time} />
+                <StyledText originValue={item.content} customStyle={styles.content} />
+                <StyledText originValue={item.time} customStyle={styles.time} />
             </View>
         </TouchableOpacity>
     );
@@ -55,7 +59,7 @@ const NotificationScreen = () => {
     };
     return (
         <View style={styles.container}>
-            <StyledHeader title={'通知一覧 '} textRight="すべて既読" />
+            <StyledHeader title={'notification.notificationTiTle'} textRight={'notification.readAllNotification'} />
             <StyledKeyboardAware>
                 <View style={styles.body}>
                     {listNoti?.map((item, index) => (

@@ -120,7 +120,10 @@ export default {
     },
     home: {},
     account: {},
-    notification: {},
+    notification: {
+        notificationTiTle: '通知一覧',
+        readAllNotification: 'すべて既読',
+    },
     order: {
         menuTitle: 'メニュー',
         changeCart: 'カートに 5商品追加 （注文数：11/10商品）',

@@ -914,9 +914,9 @@ export const dataFakeDishCoupon = [
 
 // orderType: api /order/save-order-options
 export enum OrderType {
-    DEFAULT = 1,
+    DEFAULT_SETTING = 1,
     MOBILE = 2,
-    // DEFAULT_LOCAL = 3,
+    DEFAULT_HOME = 3,
 }
 
 // coupon.type
@@ -956,3 +956,10 @@ export const QR_TAB_DATA = [
         background: Themes.COLORS.qrCheckIn,
     },
 ];
+export enum NotificationCategory {
+    PROMOTION = 1,
+    COUPON = 2,
+    STAMP = 3,
+    OTHER = 4,
+    SUCCESS_PAYMENT = 5,
+}

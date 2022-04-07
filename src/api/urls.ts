@@ -14,9 +14,9 @@ const STAMP_URL = {
 };
 
 const NOTIFICATION_URL = {
-    list: 'notifications',
-    coupon: (id: string | number) => `notifications/${id}`,
-    read: (id: string | number) => `notifications/${id}`,
+    list: 'notification',
+    coupon: (id: string | number) => `notification/${id}`,
+    read: (id: string | number) => `notification/${id}`,
 };
 
 const MENU_URL = {
@@ -27,6 +27,7 @@ const MENU_URL = {
 
 const ORDER_URL = {
     saveOrder: 'order/save-order-options',
+    getOrder: (orderType: number) => `order?orderType=${orderType}`,
 };
 
 const HOME_URL = {

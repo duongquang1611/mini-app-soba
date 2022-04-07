@@ -236,7 +236,7 @@ export const generateOrderQR = (
     const qrData: any = {
         orderDetail: dishesFormatted,
         coupons: couponsFormatted,
-        isDefaultOrder: Number(orderType === OrderType.DEFAULT),
+        isDefaultOrder: Number(orderType === OrderType.DEFAULT_SETTING || orderType === OrderType.DEFAULT_HOME),
     };
     if (user) qrData.user = generateCheckInQR(user, false);
 
@@ -364,7 +364,7 @@ export const generateNewOrder = (
 
     const qrData: any = {
         userId: user?.member?.id,
-        isDefaultOrder: Number(orderType === OrderType.DEFAULT),
+        isDefaultOrder: Number(orderType === OrderType.DEFAULT_SETTING || orderType === OrderType.DEFAULT_HOME),
         datetime: formatDate(new Date(), YYYYMMDD_PUBLISH),
         orderId: makeId(),
         orderDetail: dishesFormatted,
@@ -402,8 +402,27 @@ export const showActionQR = (qrCode: any, newOrderTest: any, titleCancel = 'New 
 };
 
 export const titleOrder = (orderType: any, defaultTitle: string) => {
-    if (orderType === OrderTypeMenu.DEFAULT_ORDER || orderType === OrderTypeMenu.DEFAULT_ORDER_LOCAL) {
+    if (orderType === OrderTypeMenu.DEFAULT_ORDER || orderType === OrderType.DEFAULT_HOME) {
         return 'setting.orderDefaultTitle';
     }
     return defaultTitle;
+};
+
+const changeOrderApiToStore = (orderData: any) => {
+    const { coupons, orderDish } = orderData;
+    const newCoupons = coupons?.map((itemCoupon: any) => ({
+        id: itemCoupon?.id,
+        receivedDate: itemCoupon?.memberCoupon?.receivedDate,
+        coupon: itemCoupon?.coupon,
+    }));
+    const newDishes = orderDish?.map((itemDish: any) => ({
+        createDate: itemDish?.createDate,
+        totalAmount: itemDish?.amount,
+        mainDish: { name: itemDish?.dish?.title, id: itemDish?.dish?.id },
+    }));
+};
+export const updateOrderStore = (data: any) => {
+    const dataDefaultSetting = data?.[0] || {};
+    const dataMobile = data?.[1] || {};
+    const dataDefaultHome = data?.[2] || {};
 };

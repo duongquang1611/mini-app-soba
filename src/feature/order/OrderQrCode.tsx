@@ -33,7 +33,7 @@ import {
     showActionQR,
     titleOrder,
 } from 'utilities/helper';
-import { DiscountType, MODAL_ID, OrderTypeMenu, POPUP_TYPE, staticValue } from 'utilities/staticData';
+import { DiscountType, MODAL_ID, OrderType, OrderTypeMenu, POPUP_TYPE, staticValue } from 'utilities/staticData';
 import ModalGuideMenu from './components/ModalGuideMenu';
 
 const ItemCoupon = (props: any) => {
@@ -116,25 +116,43 @@ const OrderQrCodeScreen = (props: any) => {
                 return mobileOrder;
         }
     };
-    const [orderQr, setOrderQr] = useState(getOrder);
+    const [orderQr, setOrderQr] = useState(getOrder());
     useEffect(() => {
-        setOrderQr(getOrder);
+        setOrderQr(getOrder());
     }, [mobileOrder, defaultOrder, defaultOrderLocal]);
     const { user } = userInfo;
     const modalize = ModalizeManager();
-    const mobileOrderQR = useMemo(() => generateOrderQR(orderQr, user), [orderQr, user]);
+    const orderQR = useMemo(() => generateOrderQR(orderQr, user), [orderQr, user]);
     const newOrderTest = useMemo(() => generateNewOrder(orderQr, user), [orderQr, user]);
     const mobileOrderSaveOrderOption = useMemo(() => generateDataSaveOrderOption(orderQr), [orderQr]);
+    console.log(
+        '🚀 ~ file: OrderQrCode.tsx ~ line 130 ~ OrderQrCodeScreen ~ mobileOrderSaveOrderOption',
+        mobileOrderSaveOrderOption,
+    );
+    const defaultOrderSettingSaveOrderOption = useMemo(
+        () => generateDataSaveOrderOption(orderQr, OrderType.DEFAULT_SETTING),
+        [orderQr],
+    );
+    const defaultOrderHomeSaveOrderOption = useMemo(
+        () => generateDataSaveOrderOption(defaultOrderLocal, OrderType.DEFAULT_HOME),
+        [orderQr],
+    );
     const dispatch = useDispatch();
+    const getSaveOption = () => {
+        if (orderType === OrderTypeMenu.DEFAULT_ORDER) return defaultOrderSettingSaveOrderOption;
+        if (orderType === OrderTypeMenu.DEFAULT_ORDER_LOCAL) defaultOrderHomeSaveOrderOption;
+        return mobileOrderSaveOrderOption;
+    };
     useEffect(() => {
-        if (orderType === OrderTypeMenu.MOBILE_ORDER) {
-            saveOrderMobile();
-        }
-    }, []);
+        saveOrder();
+    }, [orderQr]);
 
-    const saveOrderMobile = async () => {
+    const saveOrder = async () => {
         try {
-            const res = await saveOrderOption(mobileOrderSaveOrderOption);
+            const res = await saveOrderOption(getSaveOption());
+            if (orderType === OrderTypeMenu.DEFAULT_ORDER) {
+                await saveOrderOption(defaultOrderHomeSaveOrderOption);
+            }
             console.log('saveOrderMobile -> res', res);
         } catch (error) {
             console.log('saveOrderMobile -> error', error);
@@ -214,14 +232,14 @@ const OrderQrCodeScreen = (props: any) => {
                 <StyledKeyboardAware customStyle={styles.scrollView}>
                     <View style={styles.body}>
                         <View style={styles.qrView}>
-                            {!!mobileOrderQR && (
+                            {!!orderQR && (
                                 <TouchableOpacity
                                     activeOpacity={1}
                                     onLongPress={() => {
-                                        showActionQR(mobileOrderQR, newOrderTest);
+                                        showActionQR(orderQR, newOrderTest);
                                     }}
                                 >
-                                    <QRCode value={mobileOrderQR} size={scale(staticValue.QR_SIZE)} />
+                                    <QRCode value={orderQR} size={scale(staticValue.QR_SIZE)} />
                                 </TouchableOpacity>
                             )}
                             <StyledButton
