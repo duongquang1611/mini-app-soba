@@ -418,7 +418,14 @@ const changeOrderApiToStore = (orderData: any) => {
     const newDishes = orderDish?.map((itemDish: any) => ({
         createDate: itemDish?.createDate,
         totalAmount: itemDish?.amount,
-        mainDish: { name: itemDish?.dish?.title, id: itemDish?.dish?.id },
+        mainDish: {
+            name: itemDish?.dish?.title,
+            id: itemDish?.dish?.id,
+            stringId: itemDish?.dish?.stringId,
+            title: itemDish?.dish?.title,
+            image: itemDish?.dish?.thumbnail,
+        },
+        subDishes: [],
     }));
 };
 export const updateOrderStore = (data: any) => {

@@ -119,7 +119,7 @@ const HomeScreen: FunctionComponent = () => {
     const newOrderMobile = useMemo(() => generateNewOrder(mobileOrder, user), [mobileOrder, user]);
     const newOrderDefault = useMemo(
         () => generateNewOrder(defaultOrderLocal, user, OrderType.DEFAULT_HOME),
-        [defaultOrder, user],
+        [defaultOrderLocal, user],
     );
     const mobileOrderQR = useMemo(() => generateOrderQR(mobileOrder, user), [mobileOrder, user]);
     const defaultOrderQR = useMemo(
