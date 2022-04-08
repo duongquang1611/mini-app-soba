@@ -2,6 +2,7 @@ import { saveOrderOption } from 'api/modules/api-app/order';
 import { RootState } from 'app-redux/hooks';
 import {
     clearDefaultOrder,
+    clearDefaultOrderLocal,
     clearMobileOrder,
     updateCartOrder,
     updateDefaultOrderLocal,
@@ -26,6 +27,7 @@ import QRCode from 'react-native-qrcode-svg';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+    checkSameData,
     generateDataSaveOrderOption,
     generateNewOrder,
     generateOrderQR,
@@ -173,6 +175,9 @@ const OrderQrCodeScreen = (props: any) => {
         }
         if (orderType === OrderTypeMenu.DEFAULT_ORDER) {
             dispatch(clearDefaultOrder());
+            if (checkSameData(defaultOrder, defaultOrderLocal)) {
+                dispatch(clearDefaultOrderLocal());
+            }
         }
         if (orderType === OrderTypeMenu.DEFAULT_ORDER_LOCAL) {
             dispatch(updateDefaultOrderLocal(defaultOrder));
