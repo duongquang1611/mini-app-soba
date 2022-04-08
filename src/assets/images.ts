@@ -96,6 +96,7 @@ const Images = {
         used: require('./photo/pt_used.png'),
         line: require('./photo/pt_line.png'),
         ptLogin: require('./photo/pt_login.png'),
+        couponAmount: require('./photo/img_coupon_amount.png'),
     },
     lottie: {
         loadingNoodleJp: require('./lotties/loadingNoodleJp.json'),

@@ -8,7 +8,8 @@ const COMMON_URL = {
 const STAMP_URL = {
     list: 'stamp',
     detailMemberStamp: (id: string | number) => `stamp/member-stamp/${id}`,
-    exchangeCoupon: 'exchange-coupon',
+    exchangeCoupon: (stampId: string | number, couponId: string | number) =>
+        `stamp/${stampId}/exchange-coupon/${couponId}`,
     exchangeCouponHistory: (id: string | number) => `stamp/${id}/coupon-exchange-history`, // stamp.id
     tickStamp: (id: string | number) => `stamp/tick-stamp/${id}`,
 };

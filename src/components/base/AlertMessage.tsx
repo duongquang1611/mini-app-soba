@@ -17,6 +17,7 @@ interface IProps {
     dismissModalOnOk?: boolean;
     dismissModalOnCancel?: boolean;
     onClosedModalize?: any;
+    nonPaddingVertical?: boolean;
 }
 
 export const dismissModal = (id: any) => {
@@ -63,7 +64,6 @@ const AlertMessage = (message: any, popupProps?: IProps, checkNetworkError = tru
                 onOk={handleOk}
                 type={type}
                 onCancel={handleCancel}
-                nonPaddingVertical={type === POPUP_TYPE.SUCCESS}
                 content={message || content}
                 title={titleByType}
                 onPressIconClose={handlePressIconClose}

@@ -5,7 +5,7 @@ import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
 import React, { useMemo } from 'react';
-import { View } from 'react-native';
+import { ImageBackground, Text, View } from 'react-native';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
 import { formatDate, YYYYMMDD } from 'utilities/format';
@@ -23,8 +23,10 @@ export const CouponItem = (props: any) => {
         isTabCoupon = false,
         orderType,
         order,
+        isExchangeCoupon = false,
     } = props;
-    const { coupon, usedDate, status, id: idMemberCoupon, receivedDate } = item;
+    const { coupon, usedDate, status, id: idMemberCoupon, receivedDate, stampAmount = 0 } = item;
+
     const { image, title, startDate, endDate, dateType } = coupon;
     // const isInCartAPI = useMemo(() => status === MemberCouponStatus.IN_CART, [status]);
     const checkChooseTemp = cartOrderState?.coupons?.find((itemCoupon: any) => itemCoupon?.id === idMemberCoupon);
@@ -38,18 +40,68 @@ export const CouponItem = (props: any) => {
     };
 
     const getIcon = () => {
+        if (isExchangeCoupon) return Images.icons.next;
         if (disabledUse) return Images.icons.nextGrey;
         return checkChooseTemp ? Images.icons.nextSecondary : Images.icons.next;
     };
 
     const getText = () => {
+        if (isExchangeCoupon) return 'exchangeCoupon.btnExchange';
         if (disabledUse) return 'coupon.btnInCart';
         return checkChooseTemp ? 'coupon.btnUnUse' : isTabCoupon ? 'coupon.btnUseTabCoupon' : 'coupon.btnUse';
+    };
+
+    const renderActionRight = () => {
+        return (
+            <>
+                {canUse ? (
+                    <StyledTouchable
+                        customStyle={styles.btnCanUSe}
+                        onPress={handleUseCoupon}
+                        disabled={isExchangeCoupon ? false : disabledUse}
+                        hitSlop={staticValue.DEFAULT_HIT_SLOP}
+                    >
+                        <StyledText
+                            i18nText={getText()}
+                            customStyle={[
+                                styles.useText,
+                                {
+                                    color:
+                                        !checkChooseTemp || isExchangeCoupon
+                                            ? Themes.COLORS.primary
+                                            : Themes.COLORS.secondary,
+                                },
+                            ]}
+                            disabled={isExchangeCoupon ? false : disabledUse}
+                        />
+                        <StyledIcon source={getIcon()} size={20} />
+                    </StyledTouchable>
+                ) : (
+                    !usedDate && (
+                        <View style={styles.btnCanUSe}>
+                            <StyledText
+                                i18nText={'coupon.btnExpired'}
+                                customStyle={styles.textDisable}
+                                disabled={true}
+                            />
+                        </View>
+                    )
+                )}
+            </>
+        );
     };
 
     return (
         <>
             <StyledTouchable customStyle={styles.couponItem} onPress={handleGoToDetail}>
+                {!!isExchangeCoupon && (
+                    <ImageBackground source={Images.photo.couponAmount} style={styles.imgCouponAmount}>
+                        <Text style={styles.textCouponAmount}>
+                            {stampAmount}
+                            <Text style={styles.textCurrency}>{'個'}</Text>
+                        </Text>
+                    </ImageBackground>
+                )}
                 <StyledImage resizeMode={'cover'} source={{ uri: image }} customStyle={styles.couponImage} />
                 <View style={styles.content}>
                     <StyledText originValue={title} numberOfLines={1} customStyle={styles.title} />
@@ -62,36 +114,7 @@ export const CouponItem = (props: any) => {
                             }}
                             customStyle={styles.time}
                         />
-                        {canUse ? (
-                            <StyledTouchable
-                                customStyle={styles.btnCanUSe}
-                                onPress={handleUseCoupon}
-                                disabled={disabledUse}
-                                hitSlop={staticValue.DEFAULT_HIT_SLOP}
-                            >
-                                <StyledText
-                                    i18nText={getText()}
-                                    customStyle={[
-                                        styles.useText,
-                                        {
-                                            color: checkChooseTemp ? Themes.COLORS.secondary : Themes.COLORS.primary,
-                                        },
-                                    ]}
-                                    disabled={disabledUse}
-                                />
-                                <StyledIcon source={getIcon()} size={20} />
-                            </StyledTouchable>
-                        ) : (
-                            !usedDate && (
-                                <View style={styles.btnCanUSe}>
-                                    <StyledText
-                                        i18nText={'coupon.btnExpired'}
-                                        customStyle={styles.textDisable}
-                                        disabled={true}
-                                    />
-                                </View>
-                            )
-                        )}
+                        {renderActionRight()}
                     </View>
                 </View>
                 {!!usedDate && <StyledIcon source={Images.icons.couponUsed} size={70} customStyle={styles.stampUsed} />}
@@ -161,5 +184,24 @@ const styles = ScaledSheet.create({
         position: 'absolute',
         top: '-2@vs',
         right: 0,
+    },
+    imgCouponAmount: {
+        width: '26@s',
+        height: '26@s',
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'absolute',
+        top: '15@s',
+        left: '23@s',
+        zIndex: 1,
+    },
+    textCouponAmount: {
+        fontWeight: 'bold',
+        color: Themes.COLORS.headerBackground,
+        fontSize: '12@s',
+    },
+    textCurrency: {
+        fontSize: '8@s',
+        textAlign: 'center',
     },
 });

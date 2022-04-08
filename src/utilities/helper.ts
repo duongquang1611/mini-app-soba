@@ -108,11 +108,10 @@ export const openURL = (url: string, cbNotSupport?: any) => {
     });
 };
 
-export const checkExpired = (endDate: any) => {
+export const checkExpired = (endDate: any, compareDate = new Date()) => {
     if (!endDate) return false;
-    const d1 = new Date(endDate);
-    const d2 = new Date();
-    return d2 >= d1;
+    const endDateFormat = new Date(endDate);
+    return compareDate >= endDateFormat;
 };
 
 export const sumAmount = (item: any) => {
