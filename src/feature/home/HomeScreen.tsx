@@ -115,7 +115,7 @@ const HomeScreen: FunctionComponent = () => {
     const { t } = useTranslation();
     const { order, userInfo } = useSelector((state: RootState) => state);
     const { user } = userInfo;
-    const { mobileOrder, defaultOrderLocal, defaultOrder } = order;
+    const { mobileOrder, defaultOrderLocal } = order;
     const newOrderMobile = useMemo(() => generateNewOrder(mobileOrder, user), [mobileOrder, user]);
     const newOrderDefault = useMemo(
         () => generateNewOrder(defaultOrderLocal, user, OrderType.DEFAULT_HOME),

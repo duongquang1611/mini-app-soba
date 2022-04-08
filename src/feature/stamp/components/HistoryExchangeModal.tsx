@@ -45,6 +45,7 @@ const styles = ScaledSheet.create({
     },
     wrapTitleDate: {
         flexDirection: 'row',
+        flex: 1,
     },
     textDate: {
         color: Themes.COLORS.mineShaft,
@@ -52,6 +53,8 @@ const styles = ScaledSheet.create({
     textTitle: {
         fontWeight: 'bold',
         color: Themes.COLORS.primary,
+        flexShrink: 1,
+        marginRight: '10@s',
     },
     wrapCount: {
         width: '26@s',
