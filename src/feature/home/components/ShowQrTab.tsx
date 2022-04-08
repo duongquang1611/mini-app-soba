@@ -41,7 +41,7 @@ const ShowQrTab = (props: any) => {
                             activeOpacity={1}
                             onLongPress={() => {
                                 type === QR_TAB_TYPE.CHECK_IN
-                                    ? showActionQR(qrValue, newOrder, 'QR Check In', 'QR Check In')
+                                    ? showActionQR(qrValue, qrValue, 'QR Check In', 'QR Check In')
                                     : showActionQR(qrValue, newOrder);
                             }}
                         >

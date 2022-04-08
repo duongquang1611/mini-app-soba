@@ -11,7 +11,7 @@ import AlertMessage from 'components/base/AlertMessage';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { updateOrderStore } from 'utilities/helper';
-import { deleteTagOneSignal, pushTagMember } from 'utilities/notification';
+import { deleteTagOneSignal } from 'utilities/notification';
 import { OrderType } from 'utilities/staticData';
 
 const AUTH_URL_REFRESH_TOKEN = '/refreshToken';
@@ -43,9 +43,7 @@ const AuthenticateService = {
         deleteTagOneSignal();
     },
     handlerLogin: async (token: Record<string, string>) => {
-        const { userInfo } = store.getState();
         store.dispatch(userInfoActions.updateToken(token));
-        pushTagMember(userInfo.user?.member?.id as number);
     },
 };
 const getOrderData = async () => {
