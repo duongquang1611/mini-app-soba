@@ -1,10 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import AsyncStorage from '@react-native-community/async-storage';
 import { sendTeams } from 'api/modules/api-app/general';
+import { updateDefaultOrder, updateDefaultOrderLocal, updateMobileOrder } from 'app-redux/slices/orderSlice';
 import { store } from 'app-redux/store';
 import AlertMessage from 'components/base/AlertMessage';
 import i18next from 'i18next';
 import { isEqual, throttle } from 'lodash';
+import { reset } from 'navigation/NavigationService';
+import { useRef } from 'react';
 import { DevSettings, Linking, Platform } from 'react-native';
 import codePush from 'react-native-code-push';
 import Config from 'react-native-config';
@@ -122,7 +125,6 @@ export const sumAmount = (item: any) => {
 };
 
 export const checkPasswordMatch = ({ password, confirmPassword }: any) => {
-    console.log(password, confirmPassword);
     if (confirmPassword && password && password !== confirmPassword) {
         return 'error.passwordNotMatch';
     }
@@ -409,28 +411,43 @@ export const titleOrder = (orderType: any, defaultTitle: string) => {
     return defaultTitle;
 };
 
-const changeOrderApiToStore = (orderData: any) => {
-    const { coupons, orderDish } = orderData;
-    const newCoupons = coupons?.map((itemCoupon: any) => ({
-        id: itemCoupon?.id,
-        receivedDate: itemCoupon?.memberCoupon?.receivedDate,
-        coupon: itemCoupon?.coupon,
-    }));
-    const newDishes = orderDish?.map((itemDish: any) => ({
-        createDate: itemDish?.createDate,
-        totalAmount: itemDish?.amount,
-        mainDish: {
-            name: itemDish?.dish?.title,
-            id: itemDish?.dish?.id,
-            stringId: itemDish?.dish?.stringId,
-            title: itemDish?.dish?.title,
-            image: itemDish?.dish?.thumbnail,
-        },
-        subDishes: [],
-    }));
+const getTotalAmount = (itemDish: any) => {
+    const { orderSubDish = [], amount } = itemDish || {};
+    let sum = 0;
+    orderSubDish.forEach(async (item: any) => {
+        sum += item?.amount || 1;
+    });
+    return sum * amount + amount;
 };
-export const updateOrderStore = (data: any) => {
-    const dataDefaultSetting = data?.[0] || {};
-    const dataMobile = data?.[1] || {};
-    const dataDefaultHome = data?.[2] || {};
+export const changeOrderApiToStore = (orderData: any) => {
+    const { coupons, orderDish } = orderData;
+    const newCoupons =
+        coupons?.map((itemCoupon: any) => ({
+            id: itemCoupon?.id,
+            receivedDate: itemCoupon?.memberCoupon?.receivedDate,
+            coupon: itemCoupon?.coupon,
+        })) || [];
+    const newDishes =
+        orderDish?.map((itemDish: any) => ({
+            createDate: itemDish?.createdDate,
+            totalAmount: getTotalAmount(itemDish),
+            mainDish: {
+                name: itemDish?.dish?.title,
+                id: itemDish?.dish?.id,
+                stringId: itemDish?.dish?.stringId,
+                image: itemDish?.dish?.thumbnail,
+                amount: itemDish?.amount,
+            },
+            subDishes: itemDish?.orderSubDish?.map((itemSubDish: any) => ({
+                id: itemSubDish?.id,
+                title: itemSubDish?.subDish?.title,
+                selected: itemSubDish?.selected,
+                amount: itemSubDish?.amount,
+                dishOption: itemSubDish?.dishOption,
+                subDishId: itemSubDish?.subDish?.id,
+                stringId: itemSubDish?.subDish?.stringId,
+            })),
+        })) || [];
+    const newOrder = { dishes: newDishes, coupons: newCoupons };
+    return newOrder;
 };

@@ -2,6 +2,7 @@ import { RootState } from 'app-redux/hooks';
 import { updateGlobalData } from 'app-redux/slices/globalDataSlice';
 import {
     clearDefaultOrder,
+    clearDefaultOrderLocal,
     clearMobileOrder,
     updateCartOrder,
     updateDefaultOrder,
@@ -121,6 +122,9 @@ const CartEditQrScreen = (props: any) => {
             dispatch(clearMobileOrder());
         }
         if (orderType === OrderTypeMenu.DEFAULT_ORDER) {
+            if (checkSameData(defaultOrder, defaultOrderLocal)) {
+                dispatch(clearDefaultOrderLocal());
+            }
             dispatch(clearDefaultOrder());
             navigate(APP_ROUTE.MAIN_TAB, { screen: SETTING_ROUTE.ROOT });
         }

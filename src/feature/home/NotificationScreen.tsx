@@ -4,6 +4,7 @@ import { Themes } from 'assets/themes';
 import { StyledIcon, StyledText } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
+import DashView from 'components/common/DashView';
 import StyledHeader from 'components/common/StyledHeader';
 import { HOME_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
@@ -15,17 +16,24 @@ import { logger } from 'utilities/helper';
 
 const NotificationItem = (props: any) => {
     const { item } = props;
+    const { id, img, content, time, isRead } = item;
     return (
-        <TouchableOpacity
-            style={styles.notificationItem}
-            onPress={() => navigate(HOME_ROUTE.NOTIFICATION_DETAIL, { id: item?.id })}
-        >
-            <StyledIcon source={getIcon(item?.img)} size={30} customStyle={styles.notificationImage} />
-            <View style={styles.contentText}>
-                <StyledText originValue={item.content} customStyle={styles.content} />
-                <StyledText originValue={item.time} customStyle={styles.time} />
-            </View>
-        </TouchableOpacity>
+        <>
+            <TouchableOpacity
+                style={[
+                    styles.notificationItem,
+                    { backgroundColor: isRead ? Themes.COLORS.white : Themes.COLORS.readNotificationBackground },
+                ]}
+                onPress={() => navigate(HOME_ROUTE.NOTIFICATION_DETAIL, { id })}
+            >
+                <StyledIcon source={getIcon(img)} size={30} customStyle={styles.notificationImage} />
+                <View style={styles.contentText}>
+                    <StyledText originValue={content} customStyle={styles.content} />
+                    <StyledText originValue={time} customStyle={styles.time} />
+                </View>
+            </TouchableOpacity>
+            <DashView />
+        </>
     );
 };
 
@@ -86,7 +94,6 @@ const styles = ScaledSheet.create({
     notificationItem: {
         width: '100%',
         backgroundColor: Themes.COLORS.white,
-        marginVertical: '2@vs',
         paddingHorizontal: '20@s',
         flexDirection: 'row',
         justifyContent: 'space-between',

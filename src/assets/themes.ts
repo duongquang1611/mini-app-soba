@@ -49,6 +49,7 @@ const Light = {
         labelCouponUsed: 'rgba(34,34,34,0.4)',
         borderCheckbox: 'rgb(219,165,162)',
         qrCheckIn: '#00552E',
+        readNotificationBackground: 'rgba(254, 236, 210, 0.2)',
     },
     FONTS: {
         defaultFont: 'Montserrat-Regular',
