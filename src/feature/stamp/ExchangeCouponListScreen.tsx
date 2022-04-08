@@ -1,118 +1,110 @@
-import { postExchangeCoupon } from 'api/modules/api-app/stamp';
+import { getDetailMemberStamp, postExchangeCoupon } from 'api/modules/api-app/stamp';
 import Images from 'assets/images';
 import * as languageText from 'assets/locates/jp';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledList, StyledText } from 'components/base';
-import ModalizeManager from 'components/base/modal/ModalizeManager';
+import AlertMessage from 'components/base/AlertMessage';
 import CouponItem from 'components/common/CouponItem';
 import DashView from 'components/common/DashView';
-import PopupConfirm from 'components/common/PopupConfirm';
 import StyledHeader from 'components/common/StyledHeader';
 import { COUPON_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
-import React from 'react';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
-import { ScaledSheet, verticalScale } from 'react-native-size-matters';
-import { createStampItem, listCouponFake, MODAL_ID, POPUP_TYPE } from 'utilities/staticData';
+import { ScaledSheet } from 'react-native-size-matters';
+import { POPUP_TYPE } from 'utilities/staticData';
 import StampItem from './components/StampItem';
 
 const SeparatorView = () => <View style={s.separator} />;
-const itemStamp = createStampItem();
 
-const ExchangeCouponListScreen = () => {
-    const modalize = ModalizeManager();
+const ExchangeCouponListScreen = (props: any) => {
+    const { t } = useTranslation();
+    const [stampDetail, setStampDetail] = useState(props?.route?.params?.stampDetail || {});
+    const { stamp = {}, leftAmount = 0 } = stampDetail;
+    const { couponsExchange = [] } = stamp;
 
-    const goToDetail = (item: any, disabled = false) => {
+    const goToDetail = (item: any) => {
         navigate(COUPON_ROUTE.DETAIL_COUPON, {
             item,
             canUse: true,
-            itemStamp,
+            stampDetail,
             titleButton: 'exchangeCoupon.btnExchange',
-            exchangeCoupon,
-            disabled,
+            handleExchangeCoupon,
         });
     };
 
-    const dismissModal = (id: any) => {
-        modalize.dismiss(id);
-    };
-
-    const showPopUpConfirm = (id: number, type = POPUP_TYPE.CONFIRM, dataText = {}, onOk?: any, onCancel?: any) => {
-        modalize.show(
-            id,
-            <PopupConfirm
-                onOk={onOk}
-                type={type}
-                onCancel={() => {
-                    dismissModal(id);
-                    onCancel?.();
-                }}
-                nonPaddingVertical={type === POPUP_TYPE.SUCCESS}
-                {...dataText}
-            />,
-            {
-                scrollViewProps: {
-                    scrollEnabled: false,
-                },
-                modalHeight: verticalScale(470),
-            },
-        );
-    };
-
-    const exchangeCoupon = (item: any, cb?: () => any) => {
-        console.log(item);
-        showPopUpConfirm(MODAL_ID.CONFIRM, POPUP_TYPE.CONFIRM, languageText?.default?.exchangeCoupon?.confirm, () =>
-            onConfirmOk(cb),
-        );
-    };
-
-    const onConfirmOk = async (cb?: () => any) => {
-        try {
-            const res = await postExchangeCoupon({
-                amount: 5,
-                couponId: 1,
+    const handleExchangeCoupon = (item: any, cbSuccess?: any, cbError?: any) => {
+        const { stampAmount = 0 } = item || {};
+        if (stampAmount > leftAmount) {
+            AlertMessage('', {
+                ...languageText?.default?.exchangeCoupon?.error,
+                type: POPUP_TYPE.ERROR,
             });
-            console.log('file: ExchangeCouponListScreen.tsx -> line 75 -> onConfirmOk -> res', res);
-            cb?.();
+        } else
+            AlertMessage('', {
+                ...languageText?.default?.exchangeCoupon?.confirm,
+                content: t('exchangeCoupon.confirm.content', { amount: stampAmount }),
+                type: POPUP_TYPE.CONFIRM,
+                onOk: () => {
+                    exchangeCoupon(item, cbSuccess, cbError);
+                },
+            });
+    };
+
+    const exchangeCoupon = async (item: any, cbSuccess?: any, cbError?: any) => {
+        try {
+            await postExchangeCoupon({
+                stampId: stamp?.id,
+                couponId: item?.coupon?.id,
+            });
+            const resStampDetail = await getDetailMemberStamp(stampDetail?.id);
+            setStampDetail(resStampDetail?.data);
+            cbSuccess?.();
+            AlertMessage('', {
+                ...languageText?.default?.exchangeCoupon?.success,
+                onOk: () => {
+                    goToDetail(item);
+                },
+                type: POPUP_TYPE.SUCCESS,
+                nonPaddingVertical: true,
+            });
         } catch (error) {
-            cb?.();
-            console.log('file: ExchangeCouponListScreen.tsx -> line 77 -> onConfirmOk -> error', error);
+            cbError?.();
+            AlertMessage(error);
         }
-        modalize.dismiss(MODAL_ID.CONFIRM, () => {
-            if (Math.round(Math.random())) {
-                showPopUpConfirm(
-                    MODAL_ID.SUCCESS,
-                    POPUP_TYPE.SUCCESS,
-                    languageText?.default?.exchangeCoupon?.success,
-                    () => {
-                        dismissModal(MODAL_ID.SUCCESS);
-                        if (typeof cb !== 'function') {
-                            goToDetail({}, true);
-                        }
-                    },
-                );
-            } else
-                showPopUpConfirm(MODAL_ID.ERROR, POPUP_TYPE.ERROR, languageText?.default?.exchangeCoupon?.error, () =>
-                    dismissModal(MODAL_ID.ERROR),
-                );
-        });
     };
 
     const renderItem = ({ item }: any) => {
-        return <CouponItem canUse={true} item={item} goToDetail={goToDetail} handleUseCoupon={exchangeCoupon} />;
+        return (
+            <CouponItem
+                canUse={true}
+                item={item}
+                goToDetail={goToDetail}
+                handleUseCoupon={() => handleExchangeCoupon(item)}
+                isExchangeCoupon={true}
+            />
+        );
     };
 
     return (
         <View style={s.container}>
             <StyledHeader title={'exchangeCoupon.title'} />
             <SeparatorView />
-            <StampItem item={itemStamp} customStyle={s.customStyleItemStamp} animation />
+            <StampItem item={stampDetail} animation customStyle={s.customStyleItemStamp} />
+
             <SeparatorView />
             <View style={s.wrapTextCanExchange}>
                 <StyledIcon size={24} source={Images.icons.couponBlue} />
                 <StyledText i18nText={'exchangeCoupon.listCanExchange'} customStyle={s.textCanExchange} />
             </View>
-            <StyledList data={listCouponFake} renderItem={renderItem} ItemSeparatorComponent={DashView} />
+            <StyledList
+                data={couponsExchange}
+                renderItem={renderItem}
+                ItemSeparatorComponent={DashView}
+                noDataText={'coupon.noData'}
+                canRefresh={false}
+            />
         </View>
     );
 };

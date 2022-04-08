@@ -32,7 +32,7 @@ const PopupConfirm = (props: IProps) => {
         textButtonOk = 'common.yes',
         onCancel,
         onOk,
-        // nonPaddingVertical,
+        nonPaddingVertical = false,
         onPressIconClose,
     } = props;
 
@@ -54,11 +54,8 @@ const PopupConfirm = (props: IProps) => {
                             colors={COLORS_CANCEL}
                             customStyle={styles.cancelBtn}
                             onPress={onCancel}
-                            customStyleText={[
-                                styles.cancelBtnText,
-                                //  nonPaddingVertical && styles.lineHeightText
-                            ]}
-                            // customContentStyle={nonPaddingVertical && styles.nonPaddingVer}
+                            customStyleText={[styles.cancelBtnText, nonPaddingVertical && styles.lineHeightText]}
+                            customContentStyle={nonPaddingVertical && styles.nonPaddingVer}
                         />
                         <View style={styles.separator} />
                     </>
@@ -67,11 +64,8 @@ const PopupConfirm = (props: IProps) => {
                     title={textButtonOk}
                     customStyle={styles.okBtn}
                     onPress={onOk}
-                    customStyleText={[
-                        styles.okBtnText,
-                        // nonPaddingVertical && styles.lineHeightText
-                    ]}
-                    // customContentStyle={nonPaddingVertical && styles.nonPaddingVer}
+                    customStyleText={[styles.okBtnText, nonPaddingVertical && styles.lineHeightText]}
+                    customContentStyle={nonPaddingVertical && styles.nonPaddingVer}
                 />
             </View>
         </View>

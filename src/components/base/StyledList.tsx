@@ -21,6 +21,7 @@ interface Props extends FlatListProps<any> {
     customStyle?: any;
     onLoadMore?(): void;
     onNoDataRefresh?(): void;
+    canRefresh?: boolean;
 }
 
 const StyledList = (props: Props, ref: any) => {
@@ -36,6 +37,7 @@ const StyledList = (props: Props, ref: any) => {
         noDataText,
         noDataTextI18Key,
         noDataCanRefresh,
+        canRefresh = true,
     } = props;
     const contentContainerStyle: StyleProp<ViewStyle> = {};
     const hasData = data?.length !== 0;
@@ -101,12 +103,14 @@ const StyledList = (props: Props, ref: any) => {
             ListEmptyComponent={renderNoData}
             showsVerticalScrollIndicator={false}
             refreshControl={
-                <RefreshControl
-                    refreshing={!!refreshing}
-                    colors={[Themes.COLORS.primary]}
-                    tintColor={Themes.COLORS.primary}
-                    onRefresh={handleRefresh}
-                />
+                canRefresh ? (
+                    <RefreshControl
+                        refreshing={!!refreshing}
+                        colors={[Themes.COLORS.primary]}
+                        tintColor={Themes.COLORS.primary}
+                        onRefresh={handleRefresh}
+                    />
+                ) : null
             }
             ListFooterComponent={renderFooter}
             keyboardShouldPersistTaps={'never'}

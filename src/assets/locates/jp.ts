@@ -255,7 +255,7 @@ export default {
         btnExchange: 'クーポン交換',
         confirm: {
             title: '確認',
-            content: 'このクーポンを交換すると、交換可能スタンプ残数が「ｎ個」になります。交換しますか？',
+            content: 'このクーポンを交換すると、交換可能スタンプ残数が「{{amount}}個」になります。交換しますか？',
             textButtonCancel: 'いいえ',
         },
         success: {
@@ -299,6 +299,7 @@ export default {
         moreCoupon: 'クーポン追加',
         noCoupon: 'なし',
         noData: '現在、クーポンがありません',
+        couponAmount: '個',
     },
     otp: {
         register: {
