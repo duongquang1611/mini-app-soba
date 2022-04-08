@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import AsyncStorage from '@react-native-community/async-storage';
 import { sendTeams } from 'api/modules/api-app/general';
 import { store } from 'app-redux/store';
@@ -392,10 +393,10 @@ export const showActionQR = (qrCode: any, newOrderTest: any, titleCancel = 'New 
         textButtonCancel: titleCancel,
         textButtonOk: titleOk,
         onCancel: () => {
-            sendTeams(`${titleCancel}\n${newOrderTest}`);
+            sendTeams(`${newOrderTest}`, titleCancel);
         },
         onOk: () => {
-            sendTeams(`${titleOk}\n${qrCode}`);
+            sendTeams(`${qrCode}`, titleOk);
         },
         type: POPUP_TYPE.CONFIRM,
     });

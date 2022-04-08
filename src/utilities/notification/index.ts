@@ -9,7 +9,6 @@ import {
 } from 'app-redux/slices/orderSlice';
 import { store } from 'app-redux/store';
 import { useEffect } from 'react';
-import Config from 'react-native-config';
 import OneSignal from 'react-native-onesignal';
 import { useSelector } from 'react-redux';
 import { isLogin } from 'utilities/authenticate/AuthenticateService';
@@ -32,8 +31,7 @@ export const enumType = {
 };
 
 export function pushTagMember(id: number | string) {
-    console.log('pushTagMember -> id', id);
-    id && OneSignal.sendTag('memberId', `${id}`);
+    OneSignal.sendTag('memberId', `${id}`);
 }
 
 export function deleteTagOneSignal() {
@@ -76,7 +74,7 @@ function onReceived(data: NotificationReceivedEvent) {
     const notify = data.getNotification();
     setTimeout(() => data.complete(notify), 0); // must need to show notify in tab bar
     const { coupons = [], type } = data?.notification?.additionalData || {};
-    sendTeams(JSON.stringify(data?.notification));
+    sendTeams(JSON.stringify(data?.notification), 'Notification');
 
     const { order } = store.getState();
     const { defaultOrder, defaultOrderLocal, mobileOrder, cartOrder } = order;
@@ -109,7 +107,7 @@ export const useOnesignal = (user?: any) => {
                 OneSignal.promptForPushNotificationsWithUserResponse((response: any) => {
                     logger('User Accept Push Notification IOS:', false, response);
                 });
-                if (isLogin()) {
+                if (user?.member?.id) {
                     pushTagMember(user?.member?.id);
                 } else {
                     deleteTagOneSignal();
