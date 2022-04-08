@@ -88,7 +88,20 @@ const StampCardDetailScreen = (props: any) => {
 
         const newBoxAmount = settingBox === StampSettingBox.LIMIT ? boxAmount : settingInitBoxNoLimit;
         const dataListTicks = Array(newBoxAmount).fill(createItemStampTick(), 0, newBoxAmount);
-        dataListTicks.splice(0, stampTicks?.length, ...stampTicks);
+
+        const lengthStampTick = StampSettingBox.LIMIT
+            ? stampTicks?.length > boxAmount
+                ? boxAmount
+                : stampTicks?.length
+            : stampTicks?.length;
+
+        const newStampTicks = StampSettingBox.LIMIT
+            ? stampTicks?.length > boxAmount
+                ? stampTicks?.slice(0, boxAmount)
+                : stampTicks
+            : stampTicks;
+
+        dataListTicks.splice(0, lengthStampTick, ...newStampTicks);
         if (!isExchange) {
             couponsCumulative.forEach((element: any) => {
                 if (element?.positionBox - 1 <= dataListTicks?.length) {
