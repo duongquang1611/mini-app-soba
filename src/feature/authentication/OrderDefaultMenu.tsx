@@ -166,7 +166,7 @@ const OrderDefaultMenu = (props: any) => {
         if (!screen) {
             reset(APP_ROUTE.MAIN_TAB);
         } else {
-            navigate(ORDER_ROUTE.ORDER_QR_CODE, { orderType: OrderTypeMenu.DEFAULT_ORDER });
+            navigate(ORDER_ROUTE.ORDER_QR_CODE, { orderType: OrderTypeMenu.DEFAULT_ORDER, saveOrder: true });
         }
     };
     const handleBack = () => {

@@ -28,7 +28,8 @@ const CouponItemNotification = (item: any) => {
 
 const NotificationDetailScreen = (props: any) => {
     const { id } = props.route?.params || {};
-    const [coupon, setCoupon] = useState([]);
+    const [coupon, setCoupon] = useState<any>({});
+    const { title, content, receivedDate, listCoupon = [], listStamp = [] } = coupon;
     useEffect(() => {
         getNotification();
     }, []);
@@ -43,27 +44,21 @@ const NotificationDetailScreen = (props: any) => {
     };
     return (
         <View style={styles.container}>
-            <StyledHeader title={'通知'} />
+            <StyledHeader title={'notification.detailNotificationTitle'} />
             <StyledKeyboardAware>
                 <View style={styles.body}>
                     <View style={styles.contentContainer}>
-                        <StyledText originValue={'2021年11月2日'} customStyle={styles.time} />
-                        <StyledText originValue={'公式アプリリリースのお知らせ！'} customStyle={styles.title} />
+                        <StyledText originValue={receivedDate} customStyle={styles.time} />
+                        <StyledText originValue={title} customStyle={styles.title} />
                         <StyledImage customStyle={styles.img} source={Images.photo.defaultImage} />
-                        <StyledText
-                            originValue={
-                                '2/1に小諸そば公式アプリをリリースしました。 このアプリでは様々なお得な情報をお届けします。 http://～～～'
-                            }
-                            isBlack
-                            customStyle={styles.normalText}
-                        />
+                        <StyledText originValue={content} isBlack customStyle={styles.normalText} />
                     </View>
                     <View style={styles.contentContainer}>
                         <View style={styles.titleCoupon}>
                             <StyledIcon source={Images.icons.coupon} size={20} customStyle={styles.iconCoupon} />
-                            <StyledText i18nText={'クーポンリスト'} customStyle={styles.title} />
+                            <StyledText i18nText={'notification.couponList'} customStyle={styles.title} />
                         </View>
-                        {coupon.map((item, index) => (
+                        {listCoupon?.map((item: any, index: number) => (
                             <CouponItemNotification key={index} item={item} />
                         ))}
                     </View>

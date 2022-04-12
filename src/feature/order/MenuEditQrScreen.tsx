@@ -7,7 +7,7 @@ import { StyledButton, StyledIcon, StyledList, StyledText, StyledTouchable } fro
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledHeader from 'components/common/StyledHeader';
 import { getResourcesData } from 'feature/home/HomeScreen';
-import { ORDER_ROUTE } from 'navigation/config/routes';
+import { APP_ROUTE, HOME_ROUTE, ORDER_ROUTE } from 'navigation/config/routes';
 import { goBack, navigate } from 'navigation/NavigationService';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { ImageBackground, View } from 'react-native';
@@ -65,7 +65,7 @@ const ItemMenu = (props: any) => {
 const MenuEditQrScreen = (props: any) => {
     const { orderType, order, setOrder } = props?.route?.params || { orderType: OrderTypeMenu.CART_ORDER };
     const { resource } = useSelector((state: RootState) => state);
-    const { defaultOrderLocal, defaultOrder } = useSelector((state: RootState) => state.order);
+    const { defaultOrderLocal, defaultOrder, mobileOrder } = useSelector((state: RootState) => state.order);
     const [orderEditMenu, setOrderEditMenu] = useState(order);
     const { dishes } = orderEditMenu || [];
     const numOrder = sumTotalAmount(orderEditMenu);
@@ -104,6 +104,11 @@ const MenuEditQrScreen = (props: any) => {
             }
         }
     }, [listEnableCategory]);
+    useEffect(() => {
+        if (orderType === OrderTypeMenu.MOBILE_ORDER) {
+            navigate(APP_ROUTE.MAIN_TAB, { screen: HOME_ROUTE.HOME });
+        }
+    }, [mobileOrder]);
 
     const onPressRecommend = (item: any) => {
         setRecommendSelected(item.id);
@@ -159,7 +164,7 @@ const MenuEditQrScreen = (props: any) => {
         if (!checkHasDataOrder(defaultOrderLocal) || checkSameData(defaultOrder, defaultOrderLocal)) {
             dispatch(updateDefaultOrderLocal(orderEditMenu));
         }
-        navigate(ORDER_ROUTE.ORDER_QR_CODE, { orderType });
+        navigate(ORDER_ROUTE.ORDER_QR_CODE, { orderType, saveOrder: true });
     };
 
     const menuFilter = menuList?.filter((item: any) => {

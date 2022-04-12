@@ -17,7 +17,7 @@ const ShowQrTab = (props: any) => {
 
     const handleQrPress = () => {
         if (qrValue) {
-            type === QR_TAB_TYPE.CHECK_IN ? onPress?.() : navigate(navigateScreen, { orderType });
+            type === QR_TAB_TYPE.CHECK_IN ? onPress?.() : navigate(navigateScreen, { orderType, saveOrder: false });
         } else {
             switch (type) {
                 case QR_TAB_TYPE.ORDER_DEFAULT:

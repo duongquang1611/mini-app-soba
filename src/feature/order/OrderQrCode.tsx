@@ -103,7 +103,7 @@ const ItemCoupon = (props: any) => {
 };
 
 const OrderQrCodeScreen = (props: any) => {
-    const { orderType } = props?.route?.params;
+    const { orderType, saveOrder } = props?.route?.params;
     const { order, userInfo } = useSelector((state: RootState) => state);
     const { mobileOrder, defaultOrder, defaultOrderLocal } = order;
     const getOrder = () => {
@@ -146,13 +146,14 @@ const OrderQrCodeScreen = (props: any) => {
         return mobileOrderSaveOrderOption;
     };
     useEffect(() => {
-        saveOrder();
+        if (saveOrder) {
+            onSaveOrder();
+        }
     }, [orderQr]);
-
-    const saveOrder = async () => {
+    const onSaveOrder = async () => {
         try {
             const res = await saveOrderOption(getSaveOption());
-            if (orderType === OrderTypeMenu.DEFAULT_ORDER) {
+            if (orderType === OrderTypeMenu.DEFAULT_ORDER_LOCAL) {
                 await saveOrderOption(defaultOrderHomeSaveOrderOption);
             }
             console.log('saveOrderMobile -> res', res);
