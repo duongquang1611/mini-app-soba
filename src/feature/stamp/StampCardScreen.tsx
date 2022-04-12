@@ -1,16 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { RootState } from 'app-redux/hooks';
 import Images from 'assets/images';
+import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledButton } from 'components/base';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledHeader from 'components/common/StyledHeader';
 import StyledTabTopView from 'components/common/StyledTabTopView';
-import React, { useState } from 'react';
+import React, { memo, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
+import { Modalize } from 'react-native-modalize';
 import { ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { SceneMap } from 'react-native-tab-view';
-import { MODAL_ID } from 'utilities/staticData';
+import { useSelector } from 'react-redux';
+import { MODAL_ID, staticValue } from 'utilities/staticData';
 import ChooseStampList from './components/ChooseStampList';
 import GuideStamp from './components/GuideStamp';
 import StampList from './StampList';
@@ -18,6 +22,12 @@ import StampList from './StampList';
 const StampCardScreen = () => {
     const { t } = useTranslation();
     const modalize = ModalizeManager();
+    const { chooseTickStampIds = {} } = useSelector((state: RootState) => state.globalData);
+    const modalizeRef = useRef<Modalize>(null);
+    const userTicked = useMemo(() => {
+        const lengthTicked = Object.values(chooseTickStampIds).filter((item: any) => Boolean(item))?.length;
+        return lengthTicked || 0;
+    }, [chooseTickStampIds]);
 
     const routes = [
         { key: 'stampCanUse', title: t('stamp.canUse') },
@@ -29,20 +39,22 @@ const StampCardScreen = () => {
         stampUsed: () => <StampList showEarnStamp={showEarnStamp} />,
     });
 
-    const showEarnStamp = () => {
+    const showEarnStamp = (data = []) => {
         modalize.show(
             MODAL_ID.CHOOSE_STAMP,
-            <ChooseStampList onPress={() => modalize?.dismiss?.(MODAL_ID.CHOOSE_STAMP)} />,
+            <ChooseStampList onPress={() => modalize?.dismiss?.(MODAL_ID.CHOOSE_STAMP)} data={data} />,
             {
                 scrollViewProps: {
                     contentContainerStyle: styles.contentEarnStamp,
                 },
                 snapPoint: verticalScale(487),
+                modalHeight: Metrics.screenHeight * staticValue.PERCENT_HEIGHT_POPUP,
                 FloatingComponent: () => (
                     <StyledButton
                         title={'common.yes'}
                         customStyle={styles.footerButtonChooseStamp}
                         onPress={() => modalize?.dismiss?.(MODAL_ID.CHOOSE_STAMP)}
+                        disabled={!userTicked}
                     />
                 ),
             },
@@ -78,7 +90,7 @@ const StampCardScreen = () => {
     );
 };
 
-export default StampCardScreen;
+export default memo(StampCardScreen);
 
 const styles = ScaledSheet.create({
     container: {

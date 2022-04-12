@@ -18,7 +18,7 @@ const ItemHistory = ({ item }: any) => {
             </View>
             {!!stampAmount && (
                 <View style={styles.wrapCount}>
-                    <StyledText originValue={`${stampAmount}`} customStyle={styles.textCount} />
+                    <StyledText originValue={`-${stampAmount}`} customStyle={styles.textCount} />
                 </View>
             )}
         </View>

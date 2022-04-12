@@ -9,6 +9,7 @@ import { StyledButton } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
 import StyledHeader from 'components/common/StyledHeader';
 import StampItem from 'feature/stamp/components/StampItem';
+import { isEmpty } from 'lodash';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { goBack, navigate } from 'navigation/NavigationService';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -103,7 +104,7 @@ const DetailCouponScreen = (props: any) => {
     return (
         <View style={styles.container}>
             <StyledHeader title={title} />
-            {!!stampDetail && (
+            {!isEmpty(stampDetail) && (
                 <>
                     <SeparatorView />
                     <StampItem item={stampDetail} animation />

@@ -21,7 +21,7 @@ interface HeaderProps {
     onPress?: any;
 }
 
-const HeaderDefault = ({ title = '', customStyle, onPress }: HeaderProps) => {
+export const HeaderDefault = ({ title = '', customStyle, onPress }: HeaderProps) => {
     return (
         <View style={[styles.headerContainer, customStyle]}>
             <StyledText customStyle={styles.titleText} i18nText={title} numberOfLines={1} />

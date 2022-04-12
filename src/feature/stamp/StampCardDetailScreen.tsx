@@ -89,17 +89,19 @@ const StampCardDetailScreen = (props: any) => {
         const newBoxAmount = settingBox === StampSettingBox.LIMIT ? boxAmount : settingInitBoxNoLimit;
         const dataListTicks = Array(newBoxAmount).fill(createItemStampTick(), 0, newBoxAmount);
 
-        const lengthStampTick = StampSettingBox.LIMIT
-            ? stampTicks?.length > boxAmount
-                ? boxAmount
-                : stampTicks?.length
-            : stampTicks?.length;
+        const lengthStampTick =
+            settingBox === StampSettingBox.LIMIT
+                ? stampTicks?.length > boxAmount
+                    ? boxAmount
+                    : stampTicks?.length
+                : stampTicks?.length;
 
-        const newStampTicks = StampSettingBox.LIMIT
-            ? stampTicks?.length > boxAmount
-                ? stampTicks?.slice(0, boxAmount)
-                : stampTicks
-            : stampTicks;
+        const newStampTicks =
+            settingBox === StampSettingBox.LIMIT
+                ? stampTicks?.length > boxAmount
+                    ? stampTicks?.slice(0, boxAmount)
+                    : stampTicks
+                : stampTicks;
 
         dataListTicks.splice(0, lengthStampTick, ...newStampTicks);
         if (!isExchange) {
