@@ -169,7 +169,7 @@ const CartScreen = (props: any) => {
         // update mobile order
         dispatch(updateMobileOrder(cartOrder));
         // navigate(HOME_ROUTE.MOBILE_ORDER);
-        navigate(ORDER_ROUTE.ORDER_QR_CODE, { orderType });
+        navigate(ORDER_ROUTE.ORDER_QR_CODE, { orderType, saveOrder: true });
     };
     const saveDefaultOrder = () => {
         dispatch(updateDefaultOrder(saveOrderCart));
@@ -180,7 +180,7 @@ const CartScreen = (props: any) => {
         if (isDefaultOrder && !screen) {
             reset(APP_ROUTE.MAIN_TAB);
         } else {
-            navigate(ORDER_ROUTE.ORDER_QR_CODE, { orderType });
+            navigate(ORDER_ROUTE.ORDER_QR_CODE, { orderType, saveOrder: true });
         }
     };
     const getTextHeaderCancel = () => {

@@ -926,8 +926,8 @@ export enum CouponType {
 }
 export enum OrderTypeMenu {
     CART_ORDER = 0,
-    MOBILE_ORDER = 1,
-    DEFAULT_ORDER = 2,
+    DEFAULT_ORDER = 1,
+    MOBILE_ORDER = 2,
     DEFAULT_ORDER_LOCAL = 3,
 }
 
@@ -962,4 +962,20 @@ export enum NotificationCategory {
     STAMP = 3,
     OTHER = 4,
     SUCCESS_PAYMENT = 5,
+}
+export enum categoryNotification {
+    ORDER_HISTORY = 5,
+}
+export enum statusReadNotification {
+    UN_READ = 0,
+    READ = 1,
+}
+export enum NotificationType {
+    AUTO = 1,
+    BIRTHDAY = 2,
+    REGISTER = 3,
+}
+export enum NotificationStatus {
+    AVAILABLE = 1,
+    PUBLISHED = 2,
 }

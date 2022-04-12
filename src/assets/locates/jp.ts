@@ -123,6 +123,8 @@ export default {
     notification: {
         notificationTiTle: '通知一覧',
         readAllNotification: 'すべて既読',
+        couponList: 'クーポンリスト',
+        detailNotificationTitle: '通知',
     },
     order: {
         menuTitle: 'メニュー',

@@ -81,7 +81,7 @@ export const useLogin = (): LoginRequest => {
             dispatch(updateGlobalData({ skipOrderDefault: true }));
             dispatch(userInfoActions.getUserInfoRequest(response?.data?.token));
             AuthenticateService.handlerLogin({ ...response.data });
-            // getOrderData();
+            getOrderData();
         } catch (e) {
             setLoading(false);
             console.log('file: AuthenticateService.ts -> line 52 -> requestLogin -> e', e);

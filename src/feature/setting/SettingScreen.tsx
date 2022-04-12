@@ -82,7 +82,7 @@ const SettingScreen = () => {
     };
     const goToOrderDefault = () => {
         if (defaultOrderQR) {
-            navigate(ORDER_ROUTE.ORDER_QR_CODE, { orderType: OrderTypeMenu.DEFAULT_ORDER });
+            navigate(ORDER_ROUTE.ORDER_QR_CODE, { orderType: OrderTypeMenu.DEFAULT_ORDER, saveOrder: false });
         } else {
             navigate(AUTHENTICATE_ROUTE.ORDER_DEFAULT_MENU, { screen: SETTING_ROUTE.ORDER_DEFAULT_SETTING });
         }

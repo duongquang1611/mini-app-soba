@@ -190,7 +190,7 @@ const CartEditQrScreen = (props: any) => {
         if (orderType === OrderTypeMenu.DEFAULT_ORDER_LOCAL) {
             dispatch(updateDefaultOrderLocal(saveOrderCart));
         }
-        navigate(ORDER_ROUTE.ORDER_QR_CODE, { orderType });
+        navigate(ORDER_ROUTE.ORDER_QR_CODE, { orderType, saveOrder: true });
     };
     const saveDefaultOrder = () => {
         dispatch(updateDefaultOrder(saveOrderCart));
@@ -198,7 +198,7 @@ const CartEditQrScreen = (props: any) => {
             dispatch(updateDefaultOrderLocal(saveOrderCart));
         }
         dispatch(updateGlobalData({ skipOrderDefault: true }));
-        navigate(ORDER_ROUTE.ORDER_QR_CODE, { orderType });
+        navigate(ORDER_ROUTE.ORDER_QR_CODE, { orderType, saveOrder: true });
     };
     const getTextCancelTitle = () => {
         if (orderType === OrderTypeMenu.DEFAULT_ORDER_LOCAL) return 'order.resetOrderDefault';

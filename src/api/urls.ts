@@ -18,6 +18,7 @@ const NOTIFICATION_URL = {
     list: 'notification',
     coupon: (id: string | number) => `notification/${id}`,
     read: (id: string | number) => `notification/${id}`,
+    readAll: 'notification/read-all',
 };
 
 const MENU_URL = {
