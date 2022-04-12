@@ -125,6 +125,8 @@ export default {
         readAllNotification: 'すべて既読',
         couponList: 'クーポンリスト',
         detailNotificationTitle: '通知',
+        rangeDate: '{{start}} ~ {{end}}',
+        stampList: 'スタンプリスト',
     },
     order: {
         menuTitle: 'メニュー',
@@ -163,6 +165,7 @@ export default {
         editOrderDefault: 'いつもの！注文編集',
         resetOrderDefault: 'リセット',
         resetDefaultOrder: '注文をリセットしてもよろしいでしょうか？',
+        backHomeWhenPayment: '注文「{{orderId}}」の支払いが完了しました。更新するにはホーム画面へ戻ってください。',
     },
     setting: {
         editProfileTitle: 'マイページ編集',

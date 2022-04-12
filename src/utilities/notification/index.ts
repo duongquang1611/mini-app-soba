@@ -8,12 +8,16 @@ import {
     updateMobileOrder,
 } from 'app-redux/slices/orderSlice';
 import { store } from 'app-redux/store';
+import AlertMessage from 'components/base/AlertMessage';
+import i18next from 'i18next';
+import { APP_ROUTE, HOME_ROUTE } from 'navigation/config/routes';
+import { navigate, navigationRef } from 'navigation/NavigationService';
 import { useEffect } from 'react';
 import OneSignal from 'react-native-onesignal';
 import { useSelector } from 'react-redux';
 import { isLogin } from 'utilities/authenticate/AuthenticateService';
 import { logger } from 'utilities/helper';
-import { OrderType } from 'utilities/staticData';
+import { listScreenBackWhenPayment, OrderType } from 'utilities/staticData';
 
 type NotificationReceivedEvent = {
     complete: (notification?: any) => void;
@@ -43,7 +47,6 @@ export async function onMoveNavigation(data: any) {
     if (data?.id) {
         try {
             await readNotification(data.id);
-            // Navigate
         } catch (error) {
             console.log('file: index.ts -> line 38 -> onMoveNavigation -> error', error);
         }
@@ -68,25 +71,40 @@ const deleteUsedCoupon = (order: any, couponsUsed: any) => {
         ) || [];
     return { ...order, coupons: newCoupons };
 };
-
+const backHome = (orderId: string) => {
+    AlertMessage(
+        i18next.t('order.backHomeWhenPayment', { orderId }),
+        {
+            onClosedModalize: () => {
+                navigate(APP_ROUTE.MAIN_TAB, { screen: HOME_ROUTE.ROOT });
+            },
+        },
+        false,
+    );
+};
 function onReceived(data: NotificationReceivedEvent) {
     logger('onReceived', undefined, data);
     const notify = data.getNotification();
     setTimeout(() => data.complete(notify), 0); // must need to show notify in tab bar
-    const { coupons = [], type } = data?.notification?.additionalData || {};
+    const { coupons = [], type, orderId = '' } = data?.notification?.additionalData || {};
     sendTeams(JSON.stringify(data?.notification), 'Notification');
-
     const { order } = store.getState();
     const { defaultOrder, defaultOrderLocal, mobileOrder, cartOrder } = order;
     store.dispatch(updateCartOrder(deleteUsedCoupon(cartOrder, coupons)));
-
-    if (Number(type) === OrderType.DEFAULT_SETTING) {
+    const currentScreen = navigationRef?.current?.getCurrentRoute?.()?.name;
+    if (Number(type) === OrderType.DEFAULT_HOME) {
         store.dispatch(updateMobileOrder(deleteUsedCoupon(mobileOrder, coupons)));
         store.dispatch(updateDefaultOrderLocal(defaultOrder));
+        if (listScreenBackWhenPayment.find((screen: any) => currentScreen === screen)) {
+            backHome(orderId);
+        }
     }
     if (Number(type) === OrderType.MOBILE) {
         store.dispatch(clearMobileOrder());
         store.dispatch(updateDefaultOrderLocal(deleteUsedCoupon(defaultOrderLocal, coupons)));
+        if (listScreenBackWhenPayment.find((screen: any) => currentScreen === screen)) {
+            backHome(orderId);
+        }
     }
 }
 

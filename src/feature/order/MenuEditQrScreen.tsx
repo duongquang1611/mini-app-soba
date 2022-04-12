@@ -7,7 +7,7 @@ import { StyledButton, StyledIcon, StyledList, StyledText, StyledTouchable } fro
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledHeader from 'components/common/StyledHeader';
 import { getResourcesData } from 'feature/home/HomeScreen';
-import { APP_ROUTE, HOME_ROUTE, ORDER_ROUTE } from 'navigation/config/routes';
+import { ORDER_ROUTE } from 'navigation/config/routes';
 import { goBack, navigate } from 'navigation/NavigationService';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { ImageBackground, View } from 'react-native';
@@ -104,11 +104,6 @@ const MenuEditQrScreen = (props: any) => {
             }
         }
     }, [listEnableCategory]);
-    useEffect(() => {
-        if (orderType === OrderTypeMenu.MOBILE_ORDER) {
-            navigate(APP_ROUTE.MAIN_TAB, { screen: HOME_ROUTE.HOME });
-        }
-    }, [mobileOrder]);
 
     const onPressRecommend = (item: any) => {
         setRecommendSelected(item.id);

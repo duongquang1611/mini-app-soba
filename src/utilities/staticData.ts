@@ -980,3 +980,9 @@ export enum NotificationStatus {
     AVAILABLE = 1,
     PUBLISHED = 2,
 }
+export const listScreenBackWhenPayment = [
+    ORDER_ROUTE.MENU_EDIT_QR,
+    ORDER_ROUTE.ORDER_QR_CODE,
+    ORDER_ROUTE.CART_EDIT_QR,
+    ORDER_ROUTE.DETAIL_MEAL,
+];

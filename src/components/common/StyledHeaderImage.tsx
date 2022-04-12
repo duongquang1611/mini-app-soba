@@ -26,6 +26,8 @@ interface HeaderProps extends ViewProps {
     images?: any;
     content?: string;
     logo?: any;
+    heightImage?: any;
+    sliderWidth?: any;
 }
 
 const StyledHeaderImage = (props: HeaderProps) => {
@@ -46,6 +48,8 @@ const StyledHeaderImage = (props: HeaderProps) => {
         images,
         content,
         logo,
+        heightImage = verticalScale(260),
+        sliderWidth,
     } = props;
     const [index, setIndex] = useState(0);
 
@@ -66,7 +70,7 @@ const StyledHeaderImage = (props: HeaderProps) => {
                 <StyledImage
                     resizeMode={'stretch'}
                     source={{ uri: data?.item?.image || data?.item }}
-                    customStyle={styles.img}
+                    customStyle={[styles.img, { height: heightImage }]}
                 />
             </View>
         );
@@ -74,12 +78,12 @@ const StyledHeaderImage = (props: HeaderProps) => {
 
     return (
         <View style={[styles.container, customStyle, isShadow && styles.shadow]}>
-            <View style={styles.slide}>
+            <View style={[styles.slide, { height: heightImage }]}>
                 <Carousel
                     data={images}
                     renderItem={renderItem}
                     onSnapToItem={setIndex}
-                    sliderWidth={Metrics.screenWidth}
+                    sliderWidth={sliderWidth || Metrics.screenWidth}
                     itemWidth={Metrics.screenWidth}
                     loop={true}
                     loopClonesPerSide={images.length}
