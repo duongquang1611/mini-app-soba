@@ -9,7 +9,6 @@ import StyledHeader from 'components/common/StyledHeader';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
-import { logger } from 'utilities/helper';
 
 const CouponItemNotification = (item: any) => {
     return (
@@ -29,7 +28,7 @@ const CouponItemNotification = (item: any) => {
 const NotificationDetailScreen = (props: any) => {
     const { id } = props.route?.params || {};
     const [coupon, setCoupon] = useState<any>({});
-    const { title, content, receivedDate, listCoupon = [], listStamp = [] } = coupon;
+    const { title, content, receivedDate, listCoupon = [] } = coupon;
     useEffect(() => {
         getNotification();
     }, []);
@@ -38,7 +37,7 @@ const NotificationDetailScreen = (props: any) => {
             const res = await getNotificationCoupon(id);
             setCoupon(res?.data);
         } catch (error) {
-            logger(error);
+            console.log('getNotification -> error', error);
             AlertMessage(error);
         }
     };

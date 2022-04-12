@@ -11,7 +11,7 @@ const STAMP_URL = {
     exchangeCoupon: (stampId: string | number, couponId: string | number) =>
         `stamp/${stampId}/exchange-coupon/${couponId}`,
     exchangeCouponHistory: (id: string | number) => `stamp/${id}/coupon-exchange-history`, // stamp.id
-    tickStamp: (id: string | number) => `stamp/tick-stamp/${id}`,
+    tickStamp: `stamp/tick-stamp`,
 };
 
 const NOTIFICATION_URL = {

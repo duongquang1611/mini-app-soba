@@ -46,6 +46,7 @@ export const staticValue = {
     ],
     DEFAULT_STAMP_TICK_COLUMN: 5,
     NO_LIMIT_BOX: 200,
+    PERCENT_HEIGHT_POPUP: 0.8,
 };
 
 export const LINEAR_COLOR = {

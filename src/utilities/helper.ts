@@ -379,7 +379,7 @@ export const generateNewOrder = (
     return addQRCodeEOS(qrData, convert, includeEOS);
 };
 
-export const makeId = (length = 6) => {
+export const makeId = (length = 8) => {
     let result = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     const charactersLength = characters.length;

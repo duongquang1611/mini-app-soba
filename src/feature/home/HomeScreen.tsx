@@ -19,7 +19,7 @@ import { APP_ROUTE, HOME_ROUTE, STAMP_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { FunctionComponent, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ImageBackground, View } from 'react-native';
+import { ImageBackground, RefreshControl, View } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { SceneMap } from 'react-native-tab-view';
@@ -130,6 +130,8 @@ const HomeScreen: FunctionComponent = () => {
     const [indexTab, setIndexTab] = useState(1);
     const [listNews, setListNews] = useState([]);
     const modalize = ModalizeManager();
+    const [refreshing, setRefreshing] = useState(false);
+
     useEffect(() => {
         getNotification();
         getCouponData();
@@ -182,9 +184,30 @@ const HomeScreen: FunctionComponent = () => {
         qrMobile: () => <ShowQrTab type={QR_TAB_TYPE.MOBILE_ORDER} qrValue={mobileOrderQR} newOrder={newOrderMobile} />,
         qrCheckIn: () => <ShowQrTab type={QR_TAB_TYPE.CHECK_IN} qrValue={checkInQR} onPress={showGuideCheckIn} />,
     });
+
+    const handleRefresh = async () => {
+        try {
+            setRefreshing(true);
+            await Promise.all([getNotification(), getResourcesData()]);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setRefreshing(false);
+        }
+    };
+
     return (
         <View style={styles.container}>
-            <StyledKeyboardAware>
+            <StyledKeyboardAware
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        colors={[Themes.COLORS.primary]}
+                        tintColor={Themes.COLORS.primary}
+                        onRefresh={handleRefresh}
+                    />
+                }
+            >
                 <StyledHeaderImage
                     iconQr={Images.icons.tab.notification}
                     iconNoti={Images.icons.tab.notification}

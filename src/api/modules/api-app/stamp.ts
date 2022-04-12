@@ -11,6 +11,5 @@ export const postExchangeCoupon = ({ stampId, couponId }: any) =>
 export const getExchangeCouponHistory = (stampId: number | string) =>
     request.get(STAMP_URL.exchangeCouponHistory(stampId));
 
-// tick stamp: id member stamp
-export const tickStamp = ({ id: memberStampId, params }: any) =>
-    request.post(STAMP_URL.tickStamp(memberStampId), params);
+// tick stamp: "stampId", "createdDate" of bill, "stringBillId"
+export const tickStamp = (params: any) => request.post(STAMP_URL.tickStamp, params);
