@@ -9,9 +9,10 @@ import StyledHeader from 'components/common/StyledHeader';
 import { HOME_ROUTE, SETTING_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { RefreshControl, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { ScaledSheet } from 'react-native-size-matters';
+import { formatDate } from 'utilities/format';
 import { logger } from 'utilities/helper';
 import { categoryNotification, NotificationCategory, statusReadNotification } from 'utilities/staticData';
 
@@ -44,7 +45,7 @@ const NotificationItem = (props: any) => {
                 <StyledIcon source={getIcon(category)} size={30} customStyle={styles.notificationImage} />
                 <View style={styles.contentText}>
                     <StyledText originValue={content} customStyle={styles.content} />
-                    <StyledText originValue={receivedDate} customStyle={styles.time} />
+                    <StyledText originValue={formatDate(receivedDate)} customStyle={styles.time} />
                 </View>
             </TouchableOpacity>
             <DashView />
@@ -71,6 +72,17 @@ const getIcon = (category: any) => {
 const NotificationScreen = () => {
     const [listNoti, setListNoti] = useState([]);
     const [read, setRead] = useState(false);
+    const [refreshing, setRefreshing] = useState(false);
+    const handleRefresh = async () => {
+        try {
+            setRefreshing(true);
+            await getNotification();
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setRefreshing(false);
+        }
+    };
     useEffect(() => {
         getNotification();
     }, []);
@@ -99,7 +111,17 @@ const NotificationScreen = () => {
                 textRight={'notification.readAllNotification'}
                 onPressRight={readNotification}
             />
-            <StyledKeyboardAware>
+            <StyledKeyboardAware
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        colors={[Themes.COLORS.primary]}
+                        tintColor={Themes.COLORS.primary}
+                        onRefresh={handleRefresh}
+                    />
+                }
+            >
+                <View style={styles.grayView} />
                 <View style={styles.body}>
                     {listNoti?.map((item, index) => (
                         <NotificationItem key={index} item={item} read={read} />
@@ -119,6 +141,10 @@ const styles = ScaledSheet.create({
     body: {
         flex: 1,
 
+        backgroundColor: Themes.COLORS.lightGray,
+    },
+    grayView: {
+        height: '10@vs',
         backgroundColor: Themes.COLORS.lightGray,
     },
     buttonSave: {},

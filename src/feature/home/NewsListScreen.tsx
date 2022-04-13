@@ -4,14 +4,16 @@ import StyledHeader from 'components/common/StyledHeader';
 import React from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
-import { ListNewsItem } from './HomeScreen';
+import ListNewsItem from './components/ListNewsItem';
 
 const NewsListScreen = (props: any) => {
     const { listNews } = props?.route?.params;
+
     return (
         <View style={styles.container}>
+            <StyledHeader title={'home.newsTitle'} />
             <StyledKeyboardAware>
-                <StyledHeader title={'ニュース一覧'} />
+                <View style={styles.grayView} />
                 <View style={styles.body}>
                     {listNews.map((news: any, index: number) => (
                         <ListNewsItem key={index} data={news} />
@@ -31,6 +33,10 @@ const styles = ScaledSheet.create({
     body: {
         flex: 1,
 
+        backgroundColor: Themes.COLORS.lightGray,
+    },
+    grayView: {
+        height: '10@vs',
         backgroundColor: Themes.COLORS.lightGray,
     },
     buttonSave: {},

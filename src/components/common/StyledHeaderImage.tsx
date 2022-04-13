@@ -34,17 +34,12 @@ const StyledHeaderImage = (props: HeaderProps) => {
     const {
         isBack = true,
         title,
-        iconAction,
-        iconQr,
         iconNoti,
         customStyle,
-        onPressQr,
         onPressNoti,
-        onPressAction,
         isShadow = true,
         customHandleBackPress,
         style,
-        img,
         images,
         content,
         logo,
@@ -124,28 +119,24 @@ const StyledHeaderImage = (props: HeaderProps) => {
                 </View>
             </View>
             <View style={styles.viewHeader}>
-                {logo && <StyledImage source={Images.photo.logo} customStyle={styles.logo} />}
+                {logo && <StyledImage source={Images.photo.logoHeader} customStyle={styles.logo} />}
                 {isBack ? (
-                    <StyledTouchable onPress={onBack} customStyle={styles.buttonBack}>
-                        <StyledIcon source={Images.icons.back} size={20} customStyle={styles.iconBack} />
-                    </StyledTouchable>
+                    <View>
+                        <StyledTouchable onPress={onBack} customStyle={styles.buttonBack}>
+                            <StyledIcon source={Images.icons.back} size={20} customStyle={styles.iconBack} />
+                        </StyledTouchable>
+                    </View>
                 ) : (
                     <View style={styles.buttonBack} />
                 )}
                 <StyledText i18nText={title || ' '} customStyle={styles.title} numberOfLines={1} />
-                {(iconQr || iconNoti) && (
-                    <View style={styles.iconView}>
-                        <StyledTouchable onPress={onPressNoti} customStyle={styles.buttonActionNoti}>
-                            <StyledIcon source={iconNoti} size={17} customStyle={styles.iconAction} />
-                        </StyledTouchable>
-                    </View>
-                )}
-                {iconAction && (
-                    <StyledTouchable onPress={onPressAction} customStyle={styles.buttonAction}>
-                        <StyledIcon source={iconQr} size={15} customStyle={styles.iconAction} />
+                {iconNoti ? (
+                    <StyledTouchable onPress={onPressNoti} customStyle={styles.buttonActionNoti}>
+                        <StyledIcon source={iconNoti} size={25} customStyle={styles.iconAction} />
                     </StyledTouchable>
+                ) : (
+                    <View style={styles.buttonAction} />
                 )}
-                {!iconQr && !iconNoti && !iconAction && <View style={styles.buttonAction} />}
             </View>
         </View>
     );
@@ -158,10 +149,9 @@ const styles = ScaledSheet.create({
     viewHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
         width: '100%',
         marginBottom: '14@vs',
-        paddingHorizontal: '20@s',
+        paddingHorizontal: '15@s',
         position: 'absolute',
         top: '40@vs',
     },
@@ -190,6 +180,7 @@ const styles = ScaledSheet.create({
         alignItems: 'center',
         borderRadius: 25,
         backgroundColor: Themes.COLORS.backgroundButton,
+        marginTop: '25@vs',
     },
     iconView: {
         flexDirection: 'row',
@@ -216,7 +207,7 @@ const styles = ScaledSheet.create({
     },
     wrapDot: {
         width: '40@s',
-        height: '4@vs',
+        height: '5@vs',
         borderRadius: 2,
         backgroundColor: Themes.COLORS.disabled,
     },
@@ -240,9 +231,6 @@ const styles = ScaledSheet.create({
     logo: {
         width: '111@s',
         height: '58@s',
-        position: 'absolute',
-        left: '3.97@s',
-        top: '43.68@vs',
         borderRadius: 5,
     },
 });

@@ -11,7 +11,6 @@ import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText } from 'components/base';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
-import DashView from 'components/common/DashView';
 import StyledHeaderImage from 'components/common/StyledHeaderImage';
 import StyledTabTopView from 'components/common/StyledTabTopView';
 import { SIZE_LIMIT } from 'hooks/usePaging';
@@ -36,6 +35,7 @@ import {
     staticValue,
     TabCouponStatus,
 } from 'utilities/staticData';
+import ListNewsItem from './components/ListNewsItem';
 import ModalGuideCheckIn from './components/ModalGuideCheckIn';
 import ShowQrTab from './components/ShowQrTab';
 
@@ -58,24 +58,6 @@ const getColorTab = (key: number) => {
         default:
             return Themes.COLORS.secondary;
     }
-};
-export const ListNewsItem = (data: any) => {
-    return (
-        <View>
-            <TouchableOpacity
-                style={styles.listNewsView}
-                onPress={() => navigate(HOME_ROUTE.NEW_DETAIL, { id: data?.data?.id })}
-            >
-                <StyledIcon source={{ uri: data?.data?.img }} size={70} />
-                <View style={styles.newsTextView}>
-                    <StyledText originValue={data?.data?.name} customStyle={styles.titleNew} />
-                    <StyledText originValue={data?.data?.content} isBlack />
-                    <StyledText originValue={data?.data?.time} customStyle={styles.time} />
-                </View>
-            </TouchableOpacity>
-            <DashView />
-        </View>
-    );
 };
 
 export const getCouponData = async (status?: TabCouponStatus) => {
@@ -218,12 +200,12 @@ const HomeScreen: FunctionComponent = () => {
                     logo
                 />
                 <View style={styles.contScreen}>
-                    <View style={styles.qrView}>
+                    <View style={styles.searchView}>
                         <View style={styles.logoView}>
-                            <StyledIcon source={Images.icons.rectangle} size={70} customStyle={styles.icRectangle} />
+                            <StyledIcon source={Images.icons.rectangle} size={65} customStyle={styles.icRectangle} />
                             <StyledImage source={Images.photo.logo} customStyle={styles.logoIcon} />
                             <TouchableOpacity style={styles.buttonMobile}>
-                                <StyledText i18nText={'店舗検索'} customStyle={styles.textPrimary} />
+                                <StyledText i18nText={'home.storeSearch'} customStyle={styles.textPrimary} />
                                 <StyledIcon source={Images.icons.arrow_left} size={20} />
                             </TouchableOpacity>
                         </View>
@@ -246,13 +228,13 @@ const HomeScreen: FunctionComponent = () => {
                     <ImageBackground source={Images.photo.news} resizeMode="cover" style={styles.newsView}>
                         <View style={styles.buttonMobile}>
                             <StyledIcon source={Images.icons.document} customStyle={styles.iconLeft} size={20} />
-                            <StyledText i18nText={'ニュース'} customStyle={styles.titleNew} />
+                            <StyledText i18nText={'home.news'} customStyle={styles.titleNew} />
                         </View>
                         <TouchableOpacity
                             style={styles.buttonMobile}
                             onPress={() => navigate(HOME_ROUTE.NEW_LIST, { listNews })}
                         >
-                            <StyledText i18nText={'全て見る'} customStyle={styles.textNews} />
+                            <StyledText i18nText={'home.seeAll'} customStyle={styles.textNews} />
                         </TouchableOpacity>
                     </ImageBackground>
                     {listNews.map((news, index) => (
@@ -288,7 +270,6 @@ const styles = ScaledSheet.create({
         marginRight: '15@s',
     },
     iconNetwork: {
-        // backgroundColor: Themes.COLORS.red,
         marginRight: '15@s',
     },
     rowView: {
@@ -327,18 +308,7 @@ const styles = ScaledSheet.create({
     textNews: {
         color: Themes.COLORS.primary,
     },
-    listNewsView: {
-        width: '100%',
-        paddingVertical: '10@vs',
-        paddingHorizontal: '20@s',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        backgroundColor: Themes.COLORS.white,
-    },
-    newsTextView: {
-        width: '75%',
-        justifyContent: 'space-between',
-    },
+
     titleNew: {
         fontSize: '16@ms0.3',
         fontWeight: 'bold',
@@ -348,22 +318,18 @@ const styles = ScaledSheet.create({
         width: '70@s',
         height: '70@s',
     },
-    time: {
-        color: Themes.COLORS.silver,
-        fontSize: '12@ms0.3',
-    },
     iconLeft: {
         marginRight: '5@s',
     },
-    qrView: {
+    searchView: {
         backgroundColor: Themes.COLORS.headerBackground,
-        paddingVertical: '10@vs',
+        paddingBottom: '10@vs',
         paddingHorizontal: '20@s',
     },
     logoIcon: {
         width: '137@s',
-        height: '50@vs',
-        marginLeft: '-17@s',
+        height: '70@vs',
+        marginLeft: '-13@s',
     },
     textPrimary: {
         color: Themes.COLORS.primary,
@@ -373,9 +339,9 @@ const styles = ScaledSheet.create({
     },
     icRectangle: {
         position: 'absolute',
-        top: '-10@vs',
+        top: '0@vs',
         left: '-20@s',
-        tintColor: '#FBE3C0',
+        tintColor: Themes.COLORS.astra,
     },
     tabContainerStyle: {
         height: verticalScale(138) + scale(staticValue.QR_SIZE_HOME),

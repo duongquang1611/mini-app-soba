@@ -422,7 +422,7 @@ export const changeOrderApiToStore = (orderData: any) => {
     const { coupons, orderDish } = orderData;
     const newCoupons =
         coupons?.map((itemCoupon: any) => ({
-            id: itemCoupon?.id,
+            id: itemCoupon?.memberCoupon?.id,
             receivedDate: itemCoupon?.memberCoupon?.receivedDate,
             coupon: itemCoupon?.coupon,
         })) || [];
