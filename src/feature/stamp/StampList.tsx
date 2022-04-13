@@ -15,7 +15,7 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { ScaledSheet, verticalScale } from 'react-native-size-matters';
-import { staticValue } from 'utilities/staticData';
+import { POPUP_TYPE, staticValue } from 'utilities/staticData';
 import ChooseStampList from './components/ChooseStampList';
 import StampItem from './components/StampItem';
 
@@ -78,6 +78,7 @@ const StampList = (props: StampListProps) => {
             await tickStamp({ tickStamps: dataTicks });
             setChooseTickStampIds({});
             onRefresh?.();
+            AlertMessage('stamp.tickSuccess', { type: POPUP_TYPE.SUCCESS });
         } catch (error) {
             AlertMessage(error);
         }

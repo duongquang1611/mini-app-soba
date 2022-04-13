@@ -180,56 +180,12 @@ export const listOrderDefault = [
         quantity: 1,
     },
 ];
-export const listCouponFake = [
-    {
-        id: 1,
-        title: 'string',
-        image: exLinkImageSquare,
-        startDate: '2022-03-10',
-        endDate: '2022-03-10',
-    },
-    {
-        id: 2,
-        title: 'string',
-        image: exLinkImageSquare,
-        startDate: '2022-03-10',
-        endDate: '2022-03-10',
-    },
-    {
-        id: 3,
-        title: 'string',
-        image: exLinkImageSquare,
-        startDate: '2022-03-10',
-        endDate: '2022-03-10',
-    },
-    {
-        id: 4,
-        title: 'string',
-        image: exLinkImageSquare,
-        startDate: '2022-03-10',
-        endDate: '2022-03-10',
-    },
-    {
-        id: 5,
-        title: 'string',
-        image: exLinkImageSquare,
-        startDate: '2022-03-10',
-        endDate: '2022-03-10',
-    },
-];
+
 export const coupon = [
     { id: 1, name: '80％割引' },
     { id: 2, name: '新年会クーポン' },
     { id: 3, name: '新年会クーポン' },
 ];
-export const detailCouponFake = {
-    id: 1,
-    title: 'string',
-    image: exLinkImageSquare,
-    startDate: '2022-03-11',
-    endDate: '2022-07-11',
-    description: 'string',
-};
 
 export const listButton = [
     {
@@ -298,48 +254,6 @@ export const orderHistoryListFake = [
         price: '￥1,000',
         img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQb4km6pqiEE1QzzbLxzOOeHSqawgslw-wX5Q&usqp=CAU',
     },
-];
-
-export const createStampItem = (rd = Math.random()) => {
-    return {
-        id: rd,
-        title: `通常時ログイン用 ${Math.round(rd * 100)}`,
-        price: Math.round(rd * 2),
-        status: Math.round(rd),
-        startDate: '2022-03-08',
-        endDate: '2022-03-08',
-        used: Boolean(Math.round(Math.random())),
-        count: Math.round(rd * 5),
-        image: IMG_URL.IMG_1,
-        type: 0,
-        amount: 0,
-        usedAmount: 0,
-        box: 0,
-        stampTicks: [
-            {
-                id: 1,
-                date: '2022-03-08',
-            },
-        ],
-        coupons: [
-            {
-                id: 1,
-                position: 1,
-            },
-        ],
-    };
-};
-
-export const STAMP_DATA = [
-    createStampItem(),
-    createStampItem(),
-    createStampItem(),
-    createStampItem(),
-    createStampItem(),
-    createStampItem(),
-    createStampItem(),
-    createStampItem(),
-    createStampItem(),
 ];
 
 // id to show modal avoid duplicate id
@@ -783,70 +697,6 @@ export const OPTION_SELECT_IMAGE = [
         name: 'common.optionFolder',
     },
 ];
-export const listCategoryResource = [
-    {
-        title: 'おすすめ',
-        id: 1,
-        listSub: [
-            { title: 'おすすめセット', id: 1 },
-            { title: 'おすすめ季節商品', id: 2 },
-        ],
-    },
-    {
-        title: 'おすすめ季節商品',
-        id: 2,
-        listSub: [
-            { title: 'おすすめセット', id: 1 },
-            { title: 'おすすめ季節商品', id: 2 },
-            { title: 'おすすめセット', id: 3 },
-        ],
-    },
-    {
-        title: 'おすすめ季節商品',
-        id: 3,
-        listSub: [
-            { title: 'おすすめ季節商品', id: 4 },
-            { title: 'おすすめセット', id: 5 },
-            { title: 'おすすめ季節商品', id: 6 },
-        ],
-    },
-    {
-        title: 'おすすめ季節商品',
-        id: 4,
-        listSub: [
-            { title: 'おすすめセット', id: 1 },
-            { title: 'おすすめ季節商品', id: 2 },
-            { title: 'おすすめセット', id: 5 },
-            { title: 'おすすめ季節商品', id: 6 },
-        ],
-    },
-    {
-        title: 'おすすめ季節商品おすすめ季節商品',
-        id: 5,
-        listSub: [
-            { title: 'おすすめセット', id: 1 },
-            { title: 'おすすめ季節商品', id: 2 },
-            { title: 'おすすめセット', id: 3 },
-            { title: 'おすすめ季節商品', id: 4 },
-            { title: 'おすすめセット', id: 5 },
-            { title: 'おすすめ季節商品', id: 6 },
-        ],
-    },
-];
-export const fakeDataEditMenu = [
-    {
-        id: 1,
-        name: 'string',
-        size: 1,
-        image: 'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
-        amount: 1,
-        subDish: [
-            { id: 0, title: 'string', value: 1 },
-            { id: 2, title: 'string', value: 2 },
-            { id: 3, title: 'string', value: 3 },
-        ],
-    },
-];
 
 export const TEXT_OTP = [
     {
@@ -898,20 +748,10 @@ export enum DiscountType {
     EACH_DISH = 2,
 }
 
-// coupon.couponDish[0].type
-export enum CouponDishType {
-    SETTING_DISCOUNT = 1,
-    FREE = 2,
-}
-
 export enum MenuType {
     ENABLE = 1,
     DISABLE = 0,
 }
-export const dataFakeDishCoupon = [
-    { title: 'mon 1', image: exLinkImageSquare, id: 1 },
-    { title: 'mon 2', image: exLinkImageSquare, id: 2 },
-];
 
 // orderType: api /order/save-order-options
 export enum OrderType {
@@ -920,11 +760,6 @@ export enum OrderType {
     DEFAULT_HOME = 3,
 }
 
-// coupon.type
-export enum CouponType {
-    COMPANY = 1, // isAccounted: 1
-    RESTAURANT = 0, // isAccounted: 0
-}
 export enum OrderTypeMenu {
     CART_ORDER = 0,
     DEFAULT_ORDER = 1,
@@ -986,3 +821,5 @@ export const listScreenBackWhenPayment = [
     ORDER_ROUTE.CART_EDIT_QR,
     ORDER_ROUTE.DETAIL_MEAL,
 ];
+
+export const tickTypeText = ['', '自動付与スタンプカード', '選択付与スタンプカード'];

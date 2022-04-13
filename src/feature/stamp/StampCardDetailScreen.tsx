@@ -12,7 +12,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { StampCardType, StampSettingBox } from 'utilities/enumData';
-import { MODAL_ID, staticValue } from 'utilities/staticData';
+import { MODAL_ID, staticValue, tickTypeText } from 'utilities/staticData';
 import HistoryExchangeModal from './components/HistoryExchangeModal';
 import StampItem from './components/StampItem';
 import StampTickList from './components/StampTickList';
@@ -51,6 +51,7 @@ const StampCardDetailScreen = (props: any) => {
         stampDishes = [],
         couponsCumulative = [],
         title: titleStamp,
+        tickType = 0,
     } = stamp;
 
     const isExchange = useMemo(() => cardType === StampCardType.EXCHANGE, [cardType]);
@@ -132,19 +133,6 @@ const StampCardDetailScreen = (props: any) => {
         );
     };
 
-    const showModalGetCoupon = () => {
-        modalize.show(
-            MODAL_ID.GET_COUPON_STAMP,
-            <CouponContentView isModal customStyle={styles.contentCoupon} data={{}} />,
-            {
-                scrollViewProps: {
-                    contentContainerStyle: { flexGrow: 1 },
-                },
-            },
-            { title: 'stampDetail.modalGetCoupon' },
-        );
-    };
-
     const onPressItemStampTick = (positionBox: any, isOpen = false) => {
         const couponsCumulativeChoose = couponsCumulative.filter((item: any) => item?.positionBox === positionBox);
         modalize.show(
@@ -207,11 +195,17 @@ const StampCardDetailScreen = (props: any) => {
                         />
                     </View>
                     <View style={styles.wrapNoteText}>
+                        <StyledText i18nText={'stampDetail.note'} customStyle={styles.noteText} />
+                        <StyledText
+                            i18nText={'stampDetail.tickType'}
+                            i18nParams={{ type: tickTypeText[tickType] }}
+                            customStyle={styles.tickTypeText}
+                        />
                         <StyledText
                             i18nText={
                                 stampDishes?.length ? 'stampDetail.dishesApplyEach' : 'stampDetail.dishesApplyAll'
                             }
-                            customStyle={styles.noteText}
+                            customStyle={styles.noteTextApply}
                         />
                         {stampDishes?.map((item: any) => {
                             return (
@@ -277,6 +271,14 @@ const styles = ScaledSheet.create({
         paddingHorizontal: '20@s',
     },
     noteText: {
+        color: Themes.COLORS.mineShaft,
+        lineHeight: '22@vs',
+    },
+    tickTypeText: {
+        color: Themes.COLORS.mineShaft,
+        lineHeight: '22@vs',
+    },
+    noteTextApply: {
         color: Themes.COLORS.mineShaft,
         lineHeight: '22@vs',
     },

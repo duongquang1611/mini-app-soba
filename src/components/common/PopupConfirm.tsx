@@ -99,7 +99,7 @@ const styles = ScaledSheet.create({
         flex: 1,
     },
     nonPaddingVer: {
-        paddingVertical: 0,
+        paddingVertical: '2@vs',
     },
     lineHeightText: {
         lineHeight: '25@vs',

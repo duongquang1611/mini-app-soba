@@ -65,7 +65,7 @@ const ItemMenu = (props: any) => {
 const MenuEditQrScreen = (props: any) => {
     const { orderType, order, setOrder } = props?.route?.params || { orderType: OrderTypeMenu.CART_ORDER };
     const { resource } = useSelector((state: RootState) => state);
-    const { defaultOrderLocal, defaultOrder, mobileOrder } = useSelector((state: RootState) => state.order);
+    const { defaultOrderLocal, defaultOrder } = useSelector((state: RootState) => state.order);
     const [orderEditMenu, setOrderEditMenu] = useState(order);
     const { dishes } = orderEditMenu || [];
     const numOrder = sumTotalAmount(orderEditMenu);

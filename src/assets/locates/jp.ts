@@ -54,6 +54,7 @@ export default {
         chooseImgTitle: '写真を選択',
         optionCamera: '写真を撮る',
         optionFolder: 'フォトライブラリ',
+        menuNoData: '商品がありません。',
     },
 
     // screens
@@ -234,6 +235,7 @@ export default {
         guideTitle: 'スタンプカードの詳細',
         noData: '現在、スタンプカードがありません',
         remain: '残数',
+        tickSuccess: 'スタンプを貯まりました',
     },
     chooseStamp: {
         earnStamp: 'スタンプが貯まる',
@@ -253,8 +255,10 @@ export default {
         couponExchangeBtn: 'クーポン交換',
         couponGetHistory: 'クーポンGET履歴',
         modalGetCoupon: 'クーポンGET',
-        dishesApplyAll: '注意\nスタンプ対象商品設定：なし',
-        dishesApplyEach: '注意\nスタンプ対象商品設定：',
+        dishesApplyAll: 'スタンプ対象商品設定：なし',
+        dishesApplyEach: 'スタンプ対象商品設定：',
+        note: '注意',
+        tickType: 'スタンプの貯め方: {{type}}',
     },
     exchangeCoupon: {
         title: 'クーポン交換',

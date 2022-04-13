@@ -1,29 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import AsyncStorage from '@react-native-community/async-storage';
 import { sendTeams } from 'api/modules/api-app/general';
-import { updateDefaultOrder, updateDefaultOrderLocal, updateMobileOrder } from 'app-redux/slices/orderSlice';
 import { store } from 'app-redux/store';
 import AlertMessage from 'components/base/AlertMessage';
 import i18next from 'i18next';
 import { isEqual, throttle } from 'lodash';
-import { reset } from 'navigation/NavigationService';
-import { useRef } from 'react';
 import { DevSettings, Linking, Platform } from 'react-native';
 import codePush from 'react-native-code-push';
 import Config from 'react-native-config';
 import Picker from 'react-native-picker';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
+import { CouponDishType, CouponType } from './enumData';
 import { formatDate, YYYYMMDD_PUBLISH } from './format';
-import {
-    CouponDishType,
-    CouponType,
-    DiscountType,
-    MenuType,
-    OrderType,
-    OrderTypeMenu,
-    POPUP_TYPE,
-    staticValue,
-} from './staticData';
+import { DiscountType, MenuType, OrderType, OrderTypeMenu, POPUP_TYPE, staticValue } from './staticData';
 
 export const isAndroid = Platform.OS === 'android';
 

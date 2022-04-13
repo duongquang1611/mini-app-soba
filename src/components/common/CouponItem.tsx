@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 import { formatDate, YYYYMMDD } from 'utilities/format';
 import { DateType, MemberCouponStatus, OrderTypeMenu, staticValue } from 'utilities/staticData';
 import DashView from './DashView';
+import PointExchangeView from './PointExchangeView';
 
 export const CouponItem = (props: any) => {
     const { cartOrder } = useSelector((state: RootState) => state.order);
@@ -95,12 +96,7 @@ export const CouponItem = (props: any) => {
         <>
             <StyledTouchable customStyle={styles.couponItem} onPress={handleGoToDetail}>
                 {!!isExchangeCoupon && (
-                    <ImageBackground source={Images.photo.couponAmount} style={styles.imgCouponAmount}>
-                        <Text style={styles.textCouponAmount}>
-                            {stampAmount}
-                            <Text style={styles.textCurrency}>{'個'}</Text>
-                        </Text>
-                    </ImageBackground>
+                    <PointExchangeView stampAmount={stampAmount} customStyle={styles.stylePointExchange} />
                 )}
                 <StyledImage resizeMode={'cover'} source={{ uri: image }} customStyle={styles.couponImage} />
                 <View style={styles.content}>
@@ -203,5 +199,11 @@ const styles = ScaledSheet.create({
     textCurrency: {
         fontSize: '8@s',
         textAlign: 'center',
+    },
+    stylePointExchange: {
+        position: 'absolute',
+        top: '15@s',
+        left: '23@s',
+        zIndex: 1,
     },
 });

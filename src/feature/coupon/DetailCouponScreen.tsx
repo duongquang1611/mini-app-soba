@@ -111,7 +111,7 @@ const DetailCouponScreen = (props: any) => {
                     <SeparatorView />
                 </>
             )}
-            <CouponContentView canUse={canUse} data={detailMemberCoupon} />
+            <CouponContentView canUse={canUse} data={detailMemberCoupon} initDetailNavigate={item} />
 
             {(canUse === TabCouponStatus.CAN_USE || handleExchangeCoupon) && (
                 <View style={[styles.wrapButton, commonStyles.shadow]}>

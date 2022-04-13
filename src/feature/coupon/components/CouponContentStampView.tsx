@@ -3,12 +3,13 @@ import { Themes } from 'assets/themes';
 import { StyledIcon, StyledText } from 'components/base';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import DashView from 'components/common/DashView';
-import { isArray } from 'lodash';
+import { isArray, orderBy } from 'lodash';
 import React from 'react';
 import { ImageBackground, StyleProp, View, ViewStyle } from 'react-native';
 import { scale, ScaledSheet } from 'react-native-size-matters';
+import { CouponDishType } from 'utilities/enumData';
 import { formatDate } from 'utilities/format';
-import { CouponDishType, DateType, DiscountType } from 'utilities/staticData';
+import { DateType, DiscountType } from 'utilities/staticData';
 
 interface IProps {
     canUse?: boolean;
@@ -84,7 +85,9 @@ const CouponContentItem = ({ item }: any) => {
                 ) : (
                     isArray(couponDish) &&
                     couponDish.length > 0 &&
-                    couponDish.map((item: any, index: number) => <CouponDishItem item={item} key={index.toString()} />)
+                    orderBy(couponDish, ['id'], ['asc']).map((item: any, index: number) => (
+                        <CouponDishItem item={item} key={index.toString()} />
+                    ))
                 )}
             </View>
             <StyledText originValue={description} isBlack customStyle={styles.textDescription} />

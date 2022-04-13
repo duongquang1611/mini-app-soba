@@ -45,3 +45,15 @@ export enum QR_TAB_TYPE {
     MOBILE_ORDER = 1,
     CHECK_IN = 2,
 }
+
+// coupon.type
+export enum CouponType {
+    COMPANY = 1, // isAccounted: 1
+    RESTAURANT = 0, // isAccounted: 0
+}
+
+// coupon.couponDish[0].type
+export enum CouponDishType {
+    SETTING_DISCOUNT = 1,
+    FREE = 2,
+}

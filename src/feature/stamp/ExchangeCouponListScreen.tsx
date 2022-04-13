@@ -7,6 +7,7 @@ import AlertMessage from 'components/base/AlertMessage';
 import CouponItem from 'components/common/CouponItem';
 import DashView from 'components/common/DashView';
 import StyledHeader from 'components/common/StyledHeader';
+import { orderBy } from 'lodash';
 import { COUPON_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useState } from 'react';
@@ -24,11 +25,11 @@ const ExchangeCouponListScreen = (props: any) => {
     const { stamp = {}, leftAmount = 0 } = stampDetail;
     const { couponsExchange = [] } = stamp;
 
-    const goToDetail = (item: any) => {
+    const goToDetail = (item: any, newStampDetail?: any) => {
         navigate(COUPON_ROUTE.DETAIL_COUPON, {
             item,
             canUse: true,
-            stampDetail,
+            stampDetail: newStampDetail || stampDetail,
             titleButton: 'exchangeCoupon.btnExchange',
             handleExchangeCoupon,
         });
@@ -64,7 +65,7 @@ const ExchangeCouponListScreen = (props: any) => {
             AlertMessage('', {
                 ...languageText?.default?.exchangeCoupon?.success,
                 onOk: () => {
-                    goToDetail(item);
+                    goToDetail(item, resStampDetail?.data);
                 },
                 type: POPUP_TYPE.SUCCESS,
                 nonPaddingVertical: true,
@@ -75,7 +76,7 @@ const ExchangeCouponListScreen = (props: any) => {
         }
     };
 
-    const renderItem = ({ item }: any) => {
+    const renderCouponItem = ({ item }: any) => {
         return (
             <CouponItem
                 canUse={true}
@@ -99,8 +100,8 @@ const ExchangeCouponListScreen = (props: any) => {
                 <StyledText i18nText={'exchangeCoupon.listCanExchange'} customStyle={s.textCanExchange} />
             </View>
             <StyledList
-                data={couponsExchange}
-                renderItem={renderItem}
+                data={orderBy(couponsExchange, ['id'], ['asc'])}
+                renderItem={renderCouponItem}
                 ItemSeparatorComponent={DashView}
                 noDataText={'coupon.noData'}
                 canRefresh={false}
