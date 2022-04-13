@@ -1,16 +1,14 @@
 import { Themes } from 'assets/themes';
 import { StyledText } from 'components/base';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { View } from 'react-native';
-import { moderateScale, ScaledSheet } from 'react-native-size-matters';
+import { ScaledSheet } from 'react-native-size-matters';
 import { formatDate } from 'utilities/format';
 
 const ItemHistory = ({ item }: any) => {
     const { receivedDate, coupon = {} } = item;
     const { title = '', stampCoupon = {} } = coupon?.[0] || {};
     const { stampAmount } = stampCoupon;
-
-    const isLongText = useMemo(() => stampAmount && `${stampAmount}`?.length >= 2, [stampAmount]);
 
     return (
         <View style={styles.wrapItem}>
@@ -20,10 +18,7 @@ const ItemHistory = ({ item }: any) => {
             </View>
             {!!stampAmount && (
                 <View style={styles.wrapCount}>
-                    <StyledText
-                        originValue={`-${stampAmount}`}
-                        customStyle={[styles.textCount, isLongText && { fontSize: moderateScale(12, 0.3) }]}
-                    />
+                    <StyledText originValue={`-${stampAmount}`} customStyle={styles.textCount} />
                 </View>
             )}
         </View>
@@ -72,7 +67,7 @@ const styles = ScaledSheet.create({
         alignItems: 'center',
     },
     textCount: {
-        fontSize: '16@ms0.3',
+        fontSize: '12@ms0.3',
         fontWeight: 'bold',
         color: Themes.COLORS.thunderbird,
     },

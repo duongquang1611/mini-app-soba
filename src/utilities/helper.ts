@@ -368,7 +368,7 @@ export const generateNewOrder = (
     return addQRCodeEOS(qrData, convert, includeEOS);
 };
 
-export const makeId = (length = 8) => {
+export const makeId = (length = 12) => {
     let result = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     const charactersLength = characters.length;
@@ -378,18 +378,29 @@ export const makeId = (length = 8) => {
     return result;
 };
 
-export const showActionQR = (qrCode: any, newOrderTest: any, titleCancel = 'New Order', titleOk = 'QR Code') => {
-    AlertMessage('Send To Teams', {
-        textButtonCancel: titleCancel,
-        textButtonOk: titleOk,
-        onCancel: () => {
-            sendTeams(`${newOrderTest}`, titleCancel);
-        },
-        onOk: () => {
-            sendTeams(`${qrCode}`, titleOk);
-        },
-        type: POPUP_TYPE.CONFIRM,
-    });
+export const showActionQR = (qrCode: any, newOrder: any, titleCancel = 'New Order', titleOk = 'QR Code') => {
+    try {
+        AlertMessage('Send To Teams', {
+            textButtonCancel: titleCancel,
+            textButtonOk: titleOk,
+            onCancel: () => {
+                if (titleCancel === 'New Order') {
+                    let newOrderFormat = JSON.parse(newOrder);
+                    newOrderFormat.orderId = makeId();
+                    newOrderFormat = addQRCodeEOS(newOrderFormat, true, false);
+                    sendTeams(`${newOrderFormat}`, titleCancel);
+                } else {
+                    sendTeams(`${newOrder}`, titleCancel);
+                }
+            },
+            onOk: () => {
+                sendTeams(`${qrCode}`, titleOk);
+            },
+            type: POPUP_TYPE.CONFIRM,
+        });
+    } catch (error) {
+        console.log('showActionQR -> error', error);
+    }
 };
 
 export const titleOrder = (orderType: any, defaultTitle: string) => {
