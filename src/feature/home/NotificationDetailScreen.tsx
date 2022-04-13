@@ -12,23 +12,24 @@ import StampTypeView from 'feature/stamp/components/StampTypeView';
 import { COUPON_ROUTE, STAMP_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useEffect, useMemo, useState } from 'react';
-import { View } from 'react-native';
+import { RefreshControl, View } from 'react-native';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { StampCardType } from 'utilities/enumData';
 import { formatDate } from 'utilities/format';
 
 const CouponItemNotification = (props: any) => {
     const { item, dash, goToDetailCoupon } = props || {};
+    const { coupon } = item;
     return (
         <StyledTouchable onPress={() => goToDetailCoupon(item)}>
             <View style={styles.couponItemNotification}>
-                <StyledImage source={{ uri: item?.image }} customStyle={styles.couponImage} />
+                <StyledImage source={{ uri: coupon?.image }} customStyle={styles.couponImage} />
                 <View style={styles.couponName}>
-                    <StyledText originValue={item?.title} customStyle={styles.title} />
+                    <StyledText originValue={coupon?.title} customStyle={styles.title} />
                     <StyledText
                         i18nParams={{
-                            start: formatDate(item?.startDate || new Date(), 'YYYY/MM/DD'),
-                            end: formatDate(item?.endDate || new Date(), 'YYYY/MM/DD'),
+                            start: formatDate(coupon?.startDate || new Date(), 'YYYY/MM/DD'),
+                            end: formatDate(coupon?.endDate || new Date(), 'YYYY/MM/DD'),
                         }}
                         i18nText={'notification.rangeDate'}
                         customStyle={styles.timeItem}
@@ -41,18 +42,19 @@ const CouponItemNotification = (props: any) => {
 };
 const StampItemNotification = (props: any) => {
     const { item, dash, goToDetailStamp } = props || {};
-    const { cardType } = item;
+    const { stamp } = item || {};
+    const { cardType } = stamp;
     const isExchange = useMemo(() => cardType === StampCardType.EXCHANGE, [cardType]);
     return (
         <StyledTouchable onPress={() => goToDetailStamp(item)}>
             <View style={styles.couponItemNotification}>
-                <StyledImage source={{ uri: item?.image }} customStyle={styles.couponImage} />
+                <StyledImage source={{ uri: stamp?.image }} customStyle={styles.couponImage} />
                 <View style={styles.stampName}>
-                    <StyledText originValue={item?.title} customStyle={styles.title} />
+                    <StyledText originValue={stamp?.title} customStyle={styles.title} />
                     <StyledText
                         i18nParams={{
-                            start: formatDate(item?.startDate || new Date(), 'YYYY/MM/DD'),
-                            end: formatDate(item?.endDate || new Date(), 'YYYY/MM/DD'),
+                            start: formatDate(stamp?.startDate || new Date(), 'YYYY/MM/DD'),
+                            end: formatDate(stamp?.endDate || new Date(), 'YYYY/MM/DD'),
                         }}
                         i18nText={'notification.rangeDate'}
                         customStyle={styles.timeItem}
@@ -69,7 +71,18 @@ const NotificationDetailScreen = (props: any) => {
     const { id } = props.route?.params || {};
     const [coupon, setCoupon] = useState<any>({});
     const { title, content, receivedDate, notification } = coupon;
-    const { images = [], coupons, stamps } = notification || {};
+    const { images = [], memberStamps, memberCoupons } = notification || {};
+    const [refreshing, setRefreshing] = useState(false);
+    const handleRefresh = async () => {
+        try {
+            setRefreshing(true);
+            await getNotification();
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setRefreshing(false);
+        }
+    };
     useEffect(() => {
         getNotification();
     }, []);
@@ -93,38 +106,49 @@ const NotificationDetailScreen = (props: any) => {
     return (
         <View style={styles.container}>
             <StyledHeader title={'notification.detailNotificationTitle'} />
-            <StyledKeyboardAware>
+            <StyledKeyboardAware
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        colors={[Themes.COLORS.primary]}
+                        tintColor={Themes.COLORS.primary}
+                        onRefresh={handleRefresh}
+                    />
+                }
+            >
+                <View style={styles.grayView} />
                 <View style={styles.body}>
                     <View style={styles.contentContainer}>
                         <StyledText originValue={receivedDate} customStyle={styles.time} />
                         <StyledText originValue={title} customStyle={styles.title} />
-                        <StyledHeaderImage
-                            isBack={false}
-                            images={listImage}
-                            heightImage={verticalScale(335)}
-                            customStyle={styles.sliceImage}
-                            sliderWidth={Metrics.screenWidth - scale(40)}
-                        />
+                        {listImage.length > 0 && (
+                            <StyledHeaderImage
+                                isBack={false}
+                                images={listImage}
+                                heightImage={verticalScale(335)}
+                                customStyle={styles.sliceImage}
+                                sliderWidth={Metrics.screenWidth - scale(40)}
+                            />
+                        )}
                         <StyledText originValue={content} isBlack customStyle={styles.normalText} />
                     </View>
-                    {coupons && (
+                    {memberCoupons && (
                         <View style={styles.contentContainer}>
                             <View style={styles.titleCoupon}>
                                 <StyledIcon source={Images.icons.coupon} size={20} customStyle={styles.iconCoupon} />
                                 <StyledText i18nText={'notification.couponList'} customStyle={styles.title} />
                             </View>
-                            {coupons?.map((item: any, index: number) => (
+                            {memberCoupons?.map((item: any, index: number) => (
                                 <CouponItemNotification
                                     key={index}
                                     item={item}
-                                    dash={index < coupons.length - 1}
+                                    dash={index < memberCoupons.length - 1}
                                     goToDetailCoupon={goToDetailCoupon}
-                                    handleUseCoupon={handleUseCoupon}
                                 />
                             ))}
                         </View>
                     )}
-                    {stamps && (
+                    {memberStamps && (
                         <View style={styles.contentContainer}>
                             <View style={styles.titleCoupon}>
                                 <StyledIcon
@@ -134,11 +158,11 @@ const NotificationDetailScreen = (props: any) => {
                                 />
                                 <StyledText i18nText={'notification.stampList'} customStyle={styles.title} />
                             </View>
-                            {stamps?.map((item: any, index: number) => (
+                            {memberStamps?.map((item: any, index: number) => (
                                 <StampItemNotification
                                     key={index}
                                     item={item}
-                                    dash={index < stamps.length - 1}
+                                    dash={index < memberStamps.length - 1}
                                     goToDetailStamp={goToDetailStamp}
                                 />
                             ))}
@@ -155,6 +179,10 @@ export default NotificationDetailScreen;
 const styles = ScaledSheet.create({
     container: {
         flex: 1,
+        backgroundColor: Themes.COLORS.white,
+    },
+    grayView: {
+        height: '10@vs',
         backgroundColor: Themes.COLORS.lightGray,
     },
     contentContainer: {
@@ -162,7 +190,7 @@ const styles = ScaledSheet.create({
         backgroundColor: Themes.COLORS.white,
         marginBottom: '10@vs',
         paddingHorizontal: '20@s',
-        paddingVertical: '10@vs',
+        paddingBottom: '10@vs',
     },
     body: {
         flex: 1,

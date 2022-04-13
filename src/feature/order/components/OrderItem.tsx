@@ -11,7 +11,7 @@ import { MenuType, staticValue } from 'utilities/staticData';
 export const OrderChild = (data: any) => {
     const { isRequired, item, subDishDetail, setSubDishDetail, dishOptionsId } = data;
     const { dish, id } = item;
-    const checkChooseItem = subDishDetail?.find((item: any) => item.subDishId === id)?.amount;
+    const checkChooseItem = subDishDetail?.find((item: any) => item?.stringId === dish?.stringId)?.amount;
     const checkChooseDishOption = subDishDetail?.find(
         (item: any) => item?.dishOption?.dishOptionsId === dishOptionsId,
     )?.amount;
@@ -60,7 +60,7 @@ export const OrderChild = (data: any) => {
 const OrderChildCanChange = (data: any) => {
     const { item, subDishDetail, setSubDishDetail, dishOptionsId } = data || {};
     const { dish } = item;
-    const checkChoose = subDishDetail?.find((itemSub: any) => itemSub?.subDishId === item?.id)?.amount || 0;
+    const checkChoose = subDishDetail?.find((itemSub: any) => itemSub?.stringId === dish?.stringId)?.amount || 0;
     const [num, setNum] = useState(checkChoose);
     useEffect(() => {
         setNum(checkChoose);
@@ -68,10 +68,10 @@ const OrderChildCanChange = (data: any) => {
     const onChoose = (numChoose: number) => {
         setNum(numChoose);
         if (numChoose === 0) {
-            setSubDishDetail(subDishDetail.filter((itemSub: any) => itemSub.subDishId !== item.id));
+            setSubDishDetail(subDishDetail.filter((itemSub: any) => itemSub.stringId !== dish?.stringId));
         } else {
             setSubDishDetail([
-                ...subDishDetail.filter((itemSub: any) => itemSub.subDishId !== item.id),
+                ...subDishDetail.filter((itemSub: any) => itemSub.stringId !== dish?.stringId),
                 {
                     dishOption: {
                         dishOptionsId,

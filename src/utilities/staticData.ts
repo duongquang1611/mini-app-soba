@@ -101,16 +101,14 @@ export const dataFakeOderDefault = [
         ],
     },
 ];
+const exImageBanner =
+    'https://aos-app-order-soba-8e35e74.s3-ap-southeast-1.amazonaws.com/2399c0cd-8544-43d5-b5d0-ab1fd51041a5-1648112724452-4a47a0db6e60853dedfcfdf08a5ca249.png';
 export const exLinkImage =
     'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg';
 export const exLinkImageSquare =
     'https://kenh14cdn.com/203336854389633024/2021/9/1/photo-1-16304832141231584345047.jpg';
 
-export const imagesList: any = [
-    'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
-
-    'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
-];
+export const imagesList: any = [exImageBanner, exImageBanner];
 
 export const netWorkList: any = [
     {

@@ -50,6 +50,7 @@ const Light = {
         borderCheckbox: 'rgb(219,165,162)',
         qrCheckIn: '#00552E',
         readNotificationBackground: 'rgba(254, 236, 210, 0.2)',
+        astra: '#FBE3C0',
     },
     FONTS: {
         defaultFont: 'Montserrat-Regular',

@@ -19,13 +19,13 @@ import * as yup from 'yup';
 
 const DEFAULT_FORM: any = __DEV__
     ? {
-          email: 'yeuquaimo@love.you',
-          password: 'loveyou3000',
+          //   email: 'yeuquaimo@love.you',
+          //   password: 'loveyou3000',
 
-          // email: 'phong.trieu@amela.vn',
-          // password: '123456',
+          email: 'test1@gmail.com',
+          password: 'abc12345',
 
-          //   email: 'test1@gmail.com',
+          //   email: 'test1@love.you',
           //   password: 'abc12345',
       }
     : {};

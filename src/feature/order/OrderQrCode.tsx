@@ -161,6 +161,20 @@ const OrderQrCodeScreen = (props: any) => {
             console.log('saveOrderMobile -> error', error);
         }
     };
+    const clearOrder = async () => {
+        try {
+            const saveOrderParams = {
+                orderType,
+                totalAmount: 0,
+                dishes: [],
+                coupons: [],
+            };
+            const res = await saveOrderOption(saveOrderParams);
+            console.log('saveOrderMobile -> res', res);
+        } catch (error) {
+            console.log('saveOrderMobile -> error', error);
+        }
+    };
 
     const edit = () => {
         navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.CART_EDIT_QR, {
@@ -170,7 +184,7 @@ const OrderQrCodeScreen = (props: any) => {
         });
     };
 
-    const onClearOrder = () => {
+    const onClearOrder = async () => {
         if (orderType === OrderTypeMenu.MOBILE_ORDER) {
             dispatch(clearMobileOrder());
         }
@@ -183,6 +197,7 @@ const OrderQrCodeScreen = (props: any) => {
         if (orderType === OrderTypeMenu.DEFAULT_ORDER_LOCAL) {
             dispatch(updateDefaultOrderLocal(defaultOrder));
         }
+        clearOrder();
         navigate(APP_ROUTE.MAIN_TAB, { screen: HOME_ROUTE.HOME });
     };
 

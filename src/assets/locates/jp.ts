@@ -119,7 +119,12 @@ export default {
             sendButtonTitle: '次へ',
         },
     },
-    home: {},
+    home: {
+        news: 'ニュース',
+        seeAll: '全て見る',
+        newsTitle: 'ニュース一覧',
+        storeSearch: '店舗検索',
+    },
     account: {},
     notification: {
         notificationTiTle: '通知一覧',
