@@ -192,6 +192,7 @@ const MenuScreen = () => {
                     )}
                     onRefresh={getResourcesData}
                     refreshing={false}
+                    noDataText={'common.menuNoData'}
                 />
             </View>
             {numOrder > staticValue.MAX_ORDER && (

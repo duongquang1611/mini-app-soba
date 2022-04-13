@@ -2,18 +2,21 @@ import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText } from 'components/base';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
-import { isArray } from 'lodash';
+import PointExchangeView from 'components/common/PointExchangeView';
+import { isArray, orderBy } from 'lodash';
 import React from 'react';
 import { ImageBackground, StyleProp, View, ViewStyle } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
+import { CouponDishType } from 'utilities/enumData';
 import { formatDate } from 'utilities/format';
-import { CouponDishType, DateType, DiscountType } from 'utilities/staticData';
+import { DateType, DiscountType } from 'utilities/staticData';
 
 interface IProps {
     canUse?: boolean;
     customStyle?: StyleProp<ViewStyle>;
     isModal?: boolean;
     data: any;
+    initDetailNavigate?: any;
 }
 const CouponDishItem = ({ item }: any) => {
     const { type, dish, discount } = item;
@@ -36,7 +39,7 @@ const WrapComponent = ({ children, isModal, customStyle }: any) => {
 };
 
 const CouponContentView = (props: IProps) => {
-    const { customStyle, isModal = false, data = {}, canUse } = props;
+    const { customStyle, isModal = false, data = {}, canUse, initDetailNavigate } = props;
     const { coupon = {}, usedDate } = data;
     const {
         title,
@@ -67,7 +70,10 @@ const CouponContentView = (props: IProps) => {
                             customStyle={styles.textId}
                         />
                     )}
-                    <StyledText originValue={title} customStyle={styles.title} />
+                    <View style={styles.wrapTitle}>
+                        <StyledText originValue={title} customStyle={styles.title} />
+                        <PointExchangeView stampAmount={initDetailNavigate?.stampAmount} bigSize />
+                    </View>
                     <ImageBackground style={styles.img} source={{ uri: image }}>
                         {!canUse && (
                             <View style={styles.transparent}>
@@ -112,7 +118,7 @@ const CouponContentView = (props: IProps) => {
                         ) : (
                             isArray(couponDish) &&
                             couponDish.length > 0 &&
-                            couponDish.map((item: any, index: number) => (
+                            orderBy(couponDish, ['id'], ['asc']).map((item: any, index: number) => (
                                 <CouponDishItem item={item} key={index.toString()} />
                             ))
                         )}
@@ -221,6 +227,11 @@ const styles = ScaledSheet.create({
     },
     textDescription: {
         lineHeight: '21@vs',
+    },
+    wrapTitle: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
     },
 });
 
