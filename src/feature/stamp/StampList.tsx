@@ -108,7 +108,7 @@ const StampList = (props: StampListProps) => {
                 withReactModal={true}
                 FloatingComponent={() => (
                     <StyledButton
-                        title={'common.yes'}
+                        title={'chooseStamp.btn'}
                         customStyle={styles.footerButtonChooseStamp}
                         onPress={confirmTickStamp}
                         disabled={!userTicked}

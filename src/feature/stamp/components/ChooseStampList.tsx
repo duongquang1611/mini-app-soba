@@ -1,18 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { RootState } from 'app-redux/hooks';
-import { updateChooseTickStampIds } from 'app-redux/slices/globalDataSlice';
-import { store } from 'app-redux/store';
 import { Themes } from 'assets/themes';
-import { StyledButton, StyledImage, StyledText, StyledTouchable } from 'components/base';
-import ModalizeManager from 'components/base/modal/ModalizeManager';
+import { StyledImage, StyledText, StyledTouchable } from 'components/base';
+import DashView from 'components/common/DashView';
 import RadioCheckView from 'components/common/RadioCheckView';
-import { cloneDeep } from 'lodash';
-import React, { memo, useCallback, useMemo, useState } from 'react';
+import React, { memo, useMemo } from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
-import { useDispatch, useSelector } from 'react-redux';
 import { StampSettingBox } from 'utilities/enumData';
-import { MODAL_ID } from 'utilities/staticData';
 
 const ItemChooseStamp = memo(({ item, onPress, check, billId, chooseTickStampIds }: any) => {
     const { totalAmount, stamp = {} } = item;
@@ -76,9 +70,10 @@ const ChooseStampList = ({ data, chooseTickStampIds, updateChooseIds }: any) => 
         const { memberStamps = [], stringId = '', id: billId, createdDate } = item;
         return (
             <View key={`${createdDate}-${billId}`}>
-                <StyledText originValue={stringId} customStyle={styles.textOrder} />
+                <StyledText i18nText={'chooseStamp.orderId'} i18nParams={{ stringId }} customStyle={styles.textOrder} />
                 <StyledText i18nText={'chooseStamp.pleaseChoose'} customStyle={styles.textPlsChoose} />
                 {memberStamps.map((itemMemberStamp: any) => renderItemMemberStamp(itemMemberStamp, `${billId}`))}
+                <DashView customStyle={styles.dashView} />
             </View>
         );
     };
@@ -162,6 +157,9 @@ const styles = ScaledSheet.create({
     wrapTextStamp: {
         flexShrink: 1,
         marginRight: '10@s',
+    },
+    dashView: {
+        alignSelf: 'center',
     },
 });
 

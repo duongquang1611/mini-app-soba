@@ -52,11 +52,11 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>App need the location permission</string>
 	<key>NSCameraUsageDescription</key>
-	<string>プロフィール画像を更新できるため、$(PRODUCT_NAME)がカメラへのアクセス権限を求めています。</string>
+	<string>プロフィール画像を更新するにはアプリにカメラへのアクセスを許可する必要があります。</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>プロフィール画像を更新できるため、$(PRODUCT_NAME)がライブラリーへのアクセス権限を求めています。</string>
+	<string>プロフィール画像を更新するにはアプリに写真へのアクセスを許可する必要があります。</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>プロフィール画像を更新できるため、$(PRODUCT_NAME)がライブラリーへのアクセス権限を求めています。</string>
+	<string>プロフィール画像を更新するにはアプリに写真へのアクセスを許可する必要があります。</string>
 	<key>PHPhotoLibraryPreventAutomaticLimitedAccessAlert</key>
 	<true/>
 	<key>UIBackgroundModes</key>

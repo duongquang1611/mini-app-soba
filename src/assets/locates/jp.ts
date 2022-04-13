@@ -238,11 +238,12 @@ export default {
         tickSuccess: 'スタンプを貯まりました',
     },
     chooseStamp: {
-        earnStamp: 'スタンプが貯まる',
-        orderId: '注文ID: ADDS',
+        earnStamp: '貯まるスタンプを選択',
+        orderId: '注文ID: {{stringId}}',
         pleaseChoose: '貯まるスタンプを選択してください',
         tickStampNote: '{{ticked}}/{{total}}貯まるスタンプを選択した',
         tickedNote: '(貯めたスタンプ: {{ticked}}/{{total}})',
+        btn: '保存',
     },
     stampDetail: {
         title: '新年スタンプカード',
