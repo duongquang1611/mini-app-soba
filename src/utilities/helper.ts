@@ -427,13 +427,12 @@ export const changeOrderApiToStore = (orderData: any) => {
                 amount: itemDish?.amount,
             },
             subDishes: itemDish?.orderSubDish?.map((itemSubDish: any) => ({
-                id: itemSubDish?.id,
-                title: itemSubDish?.subDish?.title,
+                title: itemSubDish?.subDish?.dish?.title,
                 selected: itemSubDish?.selected,
                 amount: itemSubDish?.amount,
-                dishOption: itemSubDish?.dishOption,
+                dishOption: { dishOptionsId: itemSubDish?.subDish?.dishOptionId },
                 subDishId: itemSubDish?.subDish?.id,
-                stringId: itemSubDish?.subDish?.stringId,
+                stringId: itemSubDish?.subDish?.dish?.stringId,
             })),
         })) || [];
     const newOrder = { dishes: newDishes, coupons: newCoupons };

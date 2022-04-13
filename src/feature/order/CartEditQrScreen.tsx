@@ -1,3 +1,4 @@
+import { saveOrderOption } from 'api/modules/api-app/order';
 import { RootState } from 'app-redux/hooks';
 import { updateGlobalData } from 'app-redux/slices/globalDataSlice';
 import {
@@ -116,7 +117,22 @@ const CartEditQrScreen = (props: any) => {
         num += rating?.totalAmount;
     });
     num += saveOrderCart?.coupons?.length || 0;
-    const onClear = () => {
+
+    const onClearOrder = async () => {
+        try {
+            const saveOrderParams = {
+                orderType,
+                totalAmount: 0,
+                dishes: [],
+                coupons: [],
+            };
+            const res = await saveOrderOption(saveOrderParams);
+            console.log('saveOrderMobile -> res', res);
+        } catch (error) {
+            console.log('saveOrderMobile -> error', error);
+        }
+    };
+    const onClear = async () => {
         setSaveOrderCart({});
         if (orderType === OrderTypeMenu.MOBILE_ORDER) {
             dispatch(clearMobileOrder());
@@ -134,6 +150,7 @@ const CartEditQrScreen = (props: any) => {
         if (orderType !== OrderTypeMenu.DEFAULT_ORDER) {
             navigate(APP_ROUTE.MAIN_TAB, { screen: HOME_ROUTE.ROOT });
         }
+        onClearOrder();
     };
 
     const cancelCart = () => {
