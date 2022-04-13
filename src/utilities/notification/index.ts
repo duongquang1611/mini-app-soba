@@ -92,19 +92,16 @@ function onReceived(data: NotificationReceivedEvent) {
     const { defaultOrder, defaultOrderLocal, mobileOrder, cartOrder } = order;
     store.dispatch(updateCartOrder(deleteUsedCoupon(cartOrder, coupons)));
     const currentScreen = navigationRef?.current?.getCurrentRoute?.()?.name;
-    if (Number(type) === OrderType.DEFAULT_HOME) {
+    if (Number(type) === OrderType.DEFAULT_SETTING) {
         store.dispatch(updateMobileOrder(deleteUsedCoupon(mobileOrder, coupons)));
         store.dispatch(updateDefaultOrderLocal(defaultOrder));
-        if (listScreenBackWhenPayment.find((screen: any) => currentScreen === screen)) {
-            backHome(orderId);
-        }
     }
     if (Number(type) === OrderType.MOBILE) {
         store.dispatch(clearMobileOrder());
         store.dispatch(updateDefaultOrderLocal(deleteUsedCoupon(defaultOrderLocal, coupons)));
-        if (listScreenBackWhenPayment.find((screen: any) => currentScreen === screen)) {
-            backHome(orderId);
-        }
+    }
+    if (listScreenBackWhenPayment.find((screen: any) => currentScreen === screen)) {
+        backHome(orderId);
     }
 }
 
