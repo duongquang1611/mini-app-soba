@@ -4,7 +4,7 @@ import { sendTeams } from 'api/modules/api-app/general';
 import { store } from 'app-redux/store';
 import AlertMessage from 'components/base/AlertMessage';
 import i18next from 'i18next';
-import { isEqual, throttle } from 'lodash';
+import { cloneDeep, isEqual, throttle } from 'lodash';
 import { DevSettings, Linking, Platform } from 'react-native';
 import codePush from 'react-native-code-push';
 import Config from 'react-native-config';
@@ -448,4 +448,81 @@ export const changeOrderApiToStore = (orderData: any) => {
         })) || [];
     const newOrder = { dishes: newDishes, coupons: newCoupons };
     return newOrder;
+};
+
+export const filterOrderStore = ({ menu, categories, order }: any) => {
+    const { dishes = [] } = order || {};
+    const newDishes = cloneDeep(dishes);
+    if (newDishes?.length > 0) {
+        // check mainDish id and check exist category of this menu item
+        const newDishesFilterCategory = newDishes.filter((itemDish: any) => {
+            const menuItem = menu?.find((itemMenu: any) => itemMenu.id === itemDish?.mainDish?.id);
+            if (!menuItem) return false;
+            const categoryItem = categories?.find(
+                (itemCategory: any) => itemCategory?.id === menuItem?.category?.[0]?.categoryId,
+            );
+            if (!categoryItem) return false;
+
+            // check subCategory
+            // some categoryItem dont have subCategories => dont check
+            if (categoryItem?.subCategories?.length <= 0) {
+                return true;
+            }
+            const subCategoryItem = categoryItem?.subCategories?.find(
+                (item: any) => item?.id === menuItem?.subCategory?.[0]?.subCategoryId,
+            );
+            return Boolean(subCategoryItem);
+        });
+        const newDishFilterSubDishes = newDishesFilterCategory.map((itemDish: any) => {
+            const menuItem = menu.find((itemMenu: any) => itemMenu.id === itemDish?.mainDish?.id);
+            const newSubDishes = itemDish?.subDishes?.filter((itemSubDish: any) => {
+                const dishOptionItem = menuItem?.dishOptions?.find(
+                    (itemDishOption: any) => itemDishOption?.id === itemSubDish?.dishOption?.dishOptionsId,
+                );
+                if (!dishOptionItem) return false;
+                const subDishItem = dishOptionItem?.subDish?.find((itemSubDishOfDishOption: any) => {
+                    return itemSubDishOfDishOption?.dish?.stringId === itemSubDish?.stringId;
+                });
+                return Boolean(subDishItem);
+            });
+            return { ...itemDish, subDishes: newSubDishes };
+        });
+        // console.log({ menu, categories, newDishes });
+
+        // calculate totalAmount after filter
+        newDishFilterSubDishes?.forEach((dishItem: any, index: number) => {
+            let totalAmount = 0;
+            let totalAmountSubDishes = 0;
+            totalAmountSubDishes = dishItem?.subDishes?.reduce((sum: any, item: any) => {
+                return (item?.selected || 0) * (item?.amount || 0) + sum;
+            }, 0);
+            totalAmount = (totalAmountSubDishes + 1) * dishItem?.mainDish?.amount || 0;
+            newDishFilterSubDishes[index].totalAmount = totalAmount;
+        });
+
+        newDishFilterSubDishes?.forEach((itemDish: any, indexDish: number) => {
+            // update info mainDish and subDish by menu
+            const menuItem = menu.find((itemMenu: any) => itemMenu.id === itemDish?.mainDish?.id);
+            newDishFilterSubDishes[indexDish].mainDish = {
+                ...newDishFilterSubDishes[indexDish].mainDish,
+                image: menuItem?.thumbnail,
+                name: menuItem?.title,
+            };
+            itemDish?.subDishes?.forEach((itemSubDish: any, indexSubDish: number) => {
+                const dishOptionItem = menuItem?.dishOptions?.find(
+                    (itemDishOption: any) => itemDishOption?.id === itemSubDish?.dishOption?.dishOptionsId,
+                );
+                const subDishItem = dishOptionItem?.subDish?.find((itemSubDishOfDishOption: any) => {
+                    return itemSubDishOfDishOption?.dish?.stringId === itemSubDish?.stringId;
+                });
+                newDishFilterSubDishes[indexDish].subDishes[indexSubDish] = {
+                    ...newDishFilterSubDishes[indexDish].subDishes[indexSubDish],
+                    title: subDishItem?.dish?.title,
+                };
+            });
+        });
+
+        return newDishFilterSubDishes;
+    }
+    return [];
 };
