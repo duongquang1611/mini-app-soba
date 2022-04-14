@@ -24,17 +24,42 @@ const useNetwork = () => {
         const { dishes = [] } = cartOrder || {};
         const newDishes = cloneDeep(dishes);
         if (newDishes?.length > 0) {
-            for (let i = 0; i < newDishes.length; i++) {
-                if (!menuIds.includes(newDishes?.[i]?.mainDish?.id)) {
-                    newDishes.splice(i, 1);
-                } else {
-                    // categoryId exists
-                    // check subDishes (dua vao subDishId)
-                    // console.log('useEffect -> newDishes', newDishes);
-                }
-            }
+            // check mainDish id and check exist category of this menu item
+            const newDishesFilterCategory = newDishes.filter((itemDish: any) => {
+                const menuItem = menu.find((itemMenu: any) => itemMenu.id === itemDish?.mainDish?.id);
+                if (!menuItem) return false;
+                const categoryItem = categories.find(
+                    (itemCategory: any) => itemCategory?.id === menuItem?.category?.[0]?.categoryId,
+                );
+                if (!categoryItem) return false;
+
+                // check subCategory
+                // some categoryItem dont have subCategories => dont check
+                if (categoryItem?.subCategories?.length <= 0) return true;
+                const subCategoryItem = categoryItem?.subCategories?.find(
+                    (item: any) => item?.id === menuItem?.subCategory?.[0]?.subCategoryId,
+                );
+                return Boolean(subCategoryItem);
+            });
+
+            const newDishFilterSubDishes = newDishesFilterCategory.map((itemDish: any) => {
+                const menuItem = menu.find((itemMenu: any) => itemMenu.id === itemDish?.mainDish?.id);
+                const newSubDishes = itemDish?.subDishes?.filter((itemSubDish: any) => {
+                    const dishOptionItem = menuItem?.dishOptions?.find(
+                        (itemDishOption: any) => itemDishOption?.id === itemSubDish?.dishOption?.dishOptionsId,
+                    );
+                    if (!dishOptionItem) return false;
+                    const subDishItem = dishOptionItem?.subDish?.find((itemSubDishOfDishOption: any) => {
+                        return itemSubDishOfDishOption?.dish?.stringId === itemSubDish?.stringId;
+                    });
+                    return Boolean(subDishItem);
+                });
+                return { ...itemDish, subDishes: newSubDishes };
+            });
+
+            // check subDishes
+            // dispatch(updateDishesCartOrder(newDishesFilterCategory));
         }
-        // dispatch(updateDishesCartOrder(newDishes));
     }, [JSON.stringify({ menu, categories })]);
 
     useEffect(() => {

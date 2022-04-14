@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Themes } from 'assets/themes';
-import { StyledImage, StyledText, StyledTouchable } from 'components/base';
+import { StyledImage, StyledList, StyledText, StyledTouchable } from 'components/base';
 import DashView from 'components/common/DashView';
 import RadioCheckView from 'components/common/RadioCheckView';
 import React, { memo, useMemo } from 'react';
@@ -66,7 +66,7 @@ const ChooseStampList = ({ data, chooseTickStampIds, updateChooseIds }: any) => 
         );
     };
 
-    const renderBlockOrder = (item: any) => {
+    const renderBlockOrder = ({ item }: any) => {
         const { memberStamps = [], stringId = '', id: billId, createdDate } = item;
         return (
             <View key={`${createdDate}-${billId}`}>
@@ -87,7 +87,12 @@ const ChooseStampList = ({ data, chooseTickStampIds, updateChooseIds }: any) => 
                     customStyle={styles.textNoteCurrentChoose}
                 />
             )}
-            <View style={styles.listChoose}>{data.map((item: any) => renderBlockOrder(item))}</View>
+            <StyledList
+                data={data}
+                renderItem={renderBlockOrder}
+                style={styles.listChoose}
+                removeClippedSubviews={true}
+            />
         </View>
     );
 };
