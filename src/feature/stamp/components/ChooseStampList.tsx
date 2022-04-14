@@ -32,14 +32,15 @@ const ItemChooseStamp = memo(({ item, onPress, check, billId, chooseTickStampIds
                 <StyledImage source={{ uri: image }} customStyle={styles.imgItem} resizeMode={'cover'} />
                 <View style={styles.wrapTextStamp}>
                     <StyledText originValue={title} customStyle={styles.textName} disabled={disabled} />
-                    {settingBox === StampSettingBox.LIMIT && (
-                        <StyledText
-                            i18nText={'chooseStamp.tickedNote'}
-                            i18nParams={{ ticked: totalAmount + currentAmountChoose || 0, total: boxAmount || 0 }}
-                            customStyle={styles.textTicked}
-                            disabled={disabled}
-                        />
-                    )}
+                    <StyledText
+                        i18nText={'chooseStamp.tickedNote'}
+                        i18nParams={{
+                            ticked: totalAmount + currentAmountChoose || 0,
+                            total: settingBox === StampSettingBox.LIMIT ? `/${boxAmount || 0}` : '',
+                        }}
+                        customStyle={styles.textTicked}
+                        disabled={disabled}
+                    />
                 </View>
             </View>
             <RadioCheckView check={check} />
@@ -70,9 +71,15 @@ const ChooseStampList = ({ data, chooseTickStampIds, updateChooseIds }: any) => 
         const { memberStamps = [], stringId = '', id: billId, createdDate } = item;
         return (
             <View key={`${createdDate}-${billId}`}>
-                <StyledText i18nText={'chooseStamp.orderId'} i18nParams={{ stringId }} customStyle={styles.textOrder} />
-                <StyledText i18nText={'chooseStamp.pleaseChoose'} customStyle={styles.textPlsChoose} />
-                {memberStamps.map((itemMemberStamp: any) => renderItemMemberStamp(itemMemberStamp, `${billId}`))}
+                <View style={styles.contentBlock}>
+                    <StyledText
+                        i18nText={'chooseStamp.orderId'}
+                        i18nParams={{ stringId }}
+                        customStyle={styles.textOrder}
+                    />
+                    <StyledText i18nText={'chooseStamp.pleaseChoose'} customStyle={styles.textPlsChoose} />
+                    {memberStamps.map((itemMemberStamp: any) => renderItemMemberStamp(itemMemberStamp, `${billId}`))}
+                </View>
                 <DashView customStyle={styles.dashView} />
             </View>
         );
@@ -100,7 +107,6 @@ const ChooseStampList = ({ data, chooseTickStampIds, updateChooseIds }: any) => 
 const styles = ScaledSheet.create({
     container: {
         flex: 1,
-        paddingHorizontal: '20@s',
     },
     btnYes: {
         marginBottom: '25@vs',
@@ -158,6 +164,7 @@ const styles = ScaledSheet.create({
         color: Themes.COLORS.primary,
         marginVertical: '15@vs',
         fontWeight: 'bold',
+        marginHorizontal: '20@s',
     },
     wrapTextStamp: {
         flexShrink: 1,
@@ -165,6 +172,9 @@ const styles = ScaledSheet.create({
     },
     dashView: {
         alignSelf: 'center',
+    },
+    contentBlock: {
+        paddingHorizontal: '20@s',
     },
 });
 

@@ -129,7 +129,7 @@ const StampList = (props: StampListProps) => {
                 </Modalize>
             </Portal>
 
-            {untickStampsAmount ? (
+            {untickStampsAmount && canUse ? (
                 <>
                     <StyledTouchable onPress={openChooseStampTick}>
                         <LinearView style={styles.wrapNote}>
@@ -143,6 +143,7 @@ const StampList = (props: StampListProps) => {
                     </StyledTouchable>
                 </>
             ) : null}
+            <View style={styles.separator} />
             <StyledList
                 data={stamps}
                 renderItem={renderItemStamp}
@@ -173,7 +174,6 @@ const styles = ScaledSheet.create({
         paddingHorizontal: '42@s',
     },
     listStamp: {
-        marginTop: '5@vs',
         backgroundColor: Themes.COLORS.white,
         flexGrow: 1,
         paddingBottom: '20@vs',
@@ -193,6 +193,10 @@ const styles = ScaledSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: 10,
+    },
+    separator: {
+        height: '5@vs',
+        backgroundColor: Themes.COLORS.lightGray,
     },
 });
 export default StampList;

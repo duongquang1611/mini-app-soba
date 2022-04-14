@@ -56,6 +56,7 @@ const StyledTabTopView = (propsTab: IProps) => {
 
     return (
         <View style={[styles.container, containerStyle]}>
+            <View style={styles.separator} />
             <TabView
                 swipeEnabled={swipeEnable}
                 navigationState={{ index, routes }}
@@ -94,7 +95,6 @@ const styles = ScaledSheet.create({
     },
     tabBar: {
         backgroundColor: Themes.COLORS.disabled,
-        marginTop: '10@vs',
     },
     indicatorTabBar: {
         height: '100%',
@@ -113,6 +113,10 @@ const styles = ScaledSheet.create({
         borderRadius: '20@vs',
         borderWidth: 1,
         flex: 1,
+    },
+    separator: {
+        height: '10@vs',
+        backgroundColor: Themes.COLORS.lightGray,
     },
 });
 
