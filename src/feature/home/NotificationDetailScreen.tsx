@@ -1,4 +1,5 @@
-import { getNotificationCoupon } from 'api/modules/api-app/notification';
+import { getNotificationCoupon, readNotification } from 'api/modules/api-app/notification';
+import { updateNotificationUnRead } from 'app-redux/slices/globalDataSlice';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
@@ -12,10 +13,12 @@ import StampTypeView from 'feature/stamp/components/StampTypeView';
 import { COUPON_ROUTE, STAMP_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useEffect, useMemo, useState } from 'react';
-import { RefreshControl, View } from 'react-native';
+import { Linking, RefreshControl, View } from 'react-native';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
-import { StampCardType } from 'utilities/enumData';
+import { useDispatch } from 'react-redux';
+import { StampCardType, StampSettingDuration } from 'utilities/enumData';
 import { formatDate } from 'utilities/format';
+import { DateType } from 'utilities/staticData';
 
 const CouponItemNotification = (props: any) => {
     const { item, dash, goToDetailCoupon } = props || {};
@@ -25,15 +28,20 @@ const CouponItemNotification = (props: any) => {
             <View style={styles.couponItemNotification}>
                 <StyledImage source={{ uri: coupon?.image }} customStyle={styles.couponImage} />
                 <View style={styles.couponName}>
-                    <StyledText originValue={coupon?.title} customStyle={styles.title} />
-                    <StyledText
-                        i18nParams={{
-                            start: formatDate(coupon?.startDate || new Date(), 'YYYY/MM/DD'),
-                            end: formatDate(coupon?.endDate || new Date(), 'YYYY/MM/DD'),
-                        }}
-                        i18nText={'notification.rangeDate'}
-                        customStyle={styles.timeItem}
-                    />
+                    <StyledText originValue={coupon?.title} customStyle={styles.title} numberOfLines={1} />
+
+                    {coupon?.dateType === DateType.EXPIRED_DATE ? (
+                        <StyledText
+                            i18nParams={{
+                                start: formatDate(coupon?.startDate),
+                                end: formatDate(coupon?.endDate),
+                            }}
+                            i18nText={'notification.rangeDate'}
+                            customStyle={styles.timeItem}
+                        />
+                    ) : (
+                        <StyledText i18nText={'stamp.noExpiredDate'} customStyle={styles.timeItem} />
+                    )}
                 </View>
             </View>
             {dash && <DashView />}
@@ -43,26 +51,27 @@ const CouponItemNotification = (props: any) => {
 const StampItemNotification = (props: any) => {
     const { item, dash, goToDetailStamp } = props || {};
     const { stamp } = item || {};
-    const { cardType } = stamp;
+    const { cardType, settingDuration } = stamp;
     const isExchange = useMemo(() => cardType === StampCardType.EXCHANGE, [cardType]);
     return (
         <StyledTouchable onPress={() => goToDetailStamp(item)}>
             <View style={styles.couponItemNotification}>
                 <StyledImage source={{ uri: stamp?.image }} customStyle={styles.couponImage} />
                 <View style={styles.stampName}>
-                    <StyledText originValue={stamp?.title} customStyle={styles.title} />
+                    <StyledText originValue={stamp?.title} customStyle={styles.title} numberOfLines={1} />
                     <StyledText
-                        i18nParams={{
-                            start: formatDate(stamp?.startDate || new Date(), 'YYYY/MM/DD'),
-                            end: formatDate(stamp?.endDate || new Date(), 'YYYY/MM/DD'),
-                        }}
-                        i18nText={'notification.rangeDate'}
+                        i18nText={
+                            settingDuration === StampSettingDuration.NO_EXPIRED_DATE
+                                ? 'stamp.noExpiredDate'
+                                : 'stamp.rangeDate'
+                        }
+                        i18nParams={{ start: formatDate(stamp?.startDate), end: formatDate(stamp?.endDate) }}
                         customStyle={styles.timeItem}
                     />
                 </View>
                 <StampTypeView isExchange={isExchange} />
             </View>
-            {dash && <DashView />}
+            {dash && <DashView customStyle={styles.dash} />}
         </StyledTouchable>
     );
 };
@@ -71,8 +80,9 @@ const NotificationDetailScreen = (props: any) => {
     const { id } = props.route?.params || {};
     const [coupon, setCoupon] = useState<any>({});
     const { title, content, receivedDate, notification } = coupon;
-    const { images = [], memberStamps, memberCoupons } = notification || {};
+    const { images = [], memberStamps, memberCoupons, link } = notification || {};
     const [refreshing, setRefreshing] = useState(false);
+    const dispatch = useDispatch();
     const handleRefresh = async () => {
         try {
             setRefreshing(true);
@@ -89,6 +99,8 @@ const NotificationDetailScreen = (props: any) => {
     const getNotification = async () => {
         try {
             const res = await getNotificationCoupon(id);
+            const readRes = await readNotification(id);
+            dispatch(updateNotificationUnRead(readRes?.data || 0));
             setCoupon(res?.data);
         } catch (error) {
             console.log('getNotification -> error', error);
@@ -100,7 +112,7 @@ const NotificationDetailScreen = (props: any) => {
         navigate(STAMP_ROUTE.STAMP_CARD_DETAIL, { item });
     };
     const goToDetailCoupon = (item: any) => {
-        navigate(COUPON_ROUTE.DETAIL_COUPON, { item });
+        navigate(COUPON_ROUTE.DETAIL_COUPON, { item, canUse: true });
     };
 
     return (
@@ -116,10 +128,10 @@ const NotificationDetailScreen = (props: any) => {
                     />
                 }
             >
-                <View style={styles.grayView} />
                 <View style={styles.body}>
+                    <View style={styles.grayView} />
                     <View style={styles.contentContainer}>
-                        <StyledText originValue={receivedDate} customStyle={styles.time} />
+                        <StyledText originValue={formatDate(receivedDate)} customStyle={styles.time} />
                         <StyledText originValue={title} customStyle={styles.title} />
                         {listImage.length > 0 && (
                             <StyledHeaderImage
@@ -131,42 +143,61 @@ const NotificationDetailScreen = (props: any) => {
                             />
                         )}
                         <StyledText originValue={content} isBlack customStyle={styles.normalText} />
+                        {link && (
+                            <StyledText
+                                onPress={() => Linking.openURL(link)}
+                                originValue={link}
+                                isBlack
+                                customStyle={styles.linkText}
+                            />
+                        )}
                     </View>
+
                     {memberCoupons && (
-                        <View style={styles.contentContainer}>
-                            <View style={styles.titleCoupon}>
-                                <StyledIcon source={Images.icons.coupon} size={20} customStyle={styles.iconCoupon} />
-                                <StyledText i18nText={'notification.couponList'} customStyle={styles.title} />
+                        <>
+                            <View style={styles.grayView} />
+                            <View style={styles.contentContainer}>
+                                <View style={styles.titleCoupon}>
+                                    <StyledIcon
+                                        source={Images.icons.coupon}
+                                        size={25}
+                                        customStyle={styles.iconCoupon}
+                                    />
+                                    <StyledText i18nText={'notification.couponList'} customStyle={styles.title} />
+                                </View>
+                                {memberCoupons?.map((item: any, index: number) => (
+                                    <CouponItemNotification
+                                        key={index}
+                                        item={item}
+                                        dash={index < memberCoupons.length - 1}
+                                        goToDetailCoupon={goToDetailCoupon}
+                                    />
+                                ))}
                             </View>
-                            {memberCoupons?.map((item: any, index: number) => (
-                                <CouponItemNotification
-                                    key={index}
-                                    item={item}
-                                    dash={index < memberCoupons.length - 1}
-                                    goToDetailCoupon={goToDetailCoupon}
-                                />
-                            ))}
-                        </View>
+                        </>
                     )}
                     {memberStamps && (
-                        <View style={styles.contentContainer}>
-                            <View style={styles.titleCoupon}>
-                                <StyledIcon
-                                    source={Images.icons.stamp_card}
-                                    size={20}
-                                    customStyle={styles.iconCoupon}
-                                />
-                                <StyledText i18nText={'notification.stampList'} customStyle={styles.title} />
+                        <>
+                            <View style={styles.grayView} />
+                            <View style={styles.contentStampContainer}>
+                                <View style={styles.titleCoupon}>
+                                    <StyledIcon
+                                        source={Images.icons.stamp_card}
+                                        size={25}
+                                        customStyle={styles.iconCoupon}
+                                    />
+                                    <StyledText i18nText={'notification.stampList'} customStyle={styles.title} />
+                                </View>
+                                {memberStamps?.map((item: any, index: number) => (
+                                    <StampItemNotification
+                                        key={index}
+                                        item={item}
+                                        dash={index < memberStamps.length - 1}
+                                        goToDetailStamp={goToDetailStamp}
+                                    />
+                                ))}
                             </View>
-                            {memberStamps?.map((item: any, index: number) => (
-                                <StampItemNotification
-                                    key={index}
-                                    item={item}
-                                    dash={index < memberStamps.length - 1}
-                                    goToDetailStamp={goToDetailStamp}
-                                />
-                            ))}
-                        </View>
+                        </>
                     )}
                 </View>
             </StyledKeyboardAware>
@@ -184,26 +215,33 @@ const styles = ScaledSheet.create({
     grayView: {
         height: '10@vs',
         backgroundColor: Themes.COLORS.lightGray,
+        marginBottom: '15@vs',
     },
     contentContainer: {
         width: '100%',
         backgroundColor: Themes.COLORS.white,
-        marginBottom: '10@vs',
         paddingHorizontal: '20@s',
+        paddingBottom: '10@vs',
+    },
+    contentStampContainer: {
+        width: '100%',
+        backgroundColor: Themes.COLORS.white,
+        paddingLeft: '20@s',
         paddingBottom: '10@vs',
     },
     body: {
         flex: 1,
-        marginTop: '10@vs',
     },
     time: {
         fontSize: '12@ms0.3',
         color: Themes.COLORS.silver,
         marginBottom: '10@vs',
+        marginTop: '5@vs',
     },
     timeItem: {
         fontSize: '12@ms0.3',
         color: Themes.COLORS.silver,
+        marginTop: '10@vs',
     },
     title: {
         fontSize: '16@ms0.3',
@@ -218,12 +256,13 @@ const styles = ScaledSheet.create({
     },
     titleCoupon: {
         flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: '20@vs',
     },
     iconCoupon: {
         marginRight: '15@s',
         tintColor: Themes.COLORS.secondary,
         alignItems: 'center',
-        marginBottom: '10@vs',
     },
     couponItemNotification: {
         width: '100%',
@@ -243,17 +282,29 @@ const styles = ScaledSheet.create({
         flexShrink: 1,
         marginRight: '40@s',
         justifyContent: 'space-between',
+        paddingBottom: '10@vs',
     },
     stampName: {
         flexShrink: 1,
-        marginRight: '60@s',
+        marginRight: '65@s',
         justifyContent: 'space-between',
+        paddingBottom: '10@vs',
     },
     normalText: {
         lineHeight: '27@vs',
-        marginBottom: '10@vs',
     },
     sliceImage: {
         marginVertical: '20@vs',
+        borderRadius: 10,
+        overflow: 'hidden',
+    },
+    linkText: {
+        textDecorationLine: 'underline',
+        color: Themes.COLORS.linkDefault,
+        marginBottom: '10@vs',
+    },
+    dash: {
+        width: Metrics.screenWidth,
+        alignSelf: 'center',
     },
 });

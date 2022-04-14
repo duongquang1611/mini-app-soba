@@ -57,6 +57,7 @@ const CouponContentView = (props: IProps) => {
 
     return (
         <WrapComponent customStyle={[styles.container, customStyle]} isModal={isModal}>
+            <View style={styles.grayView} />
             <View style={styles.body}>
                 <View style={styles.contentContainer}>
                     {isModal ? (
@@ -134,7 +135,7 @@ const CouponContentView = (props: IProps) => {
 const styles = ScaledSheet.create({
     container: {
         flex: 1,
-        backgroundColor: Themes.COLORS.backgroundPrimary,
+        backgroundColor: Themes.COLORS.white,
     },
     contentContainer: {
         width: '100%',
@@ -142,7 +143,6 @@ const styles = ScaledSheet.create({
         marginBottom: '10@vs',
         paddingHorizontal: '20@s',
         paddingBottom: '15@vs',
-        marginVertical: '10@vs',
     },
     body: {
         flex: 1,
@@ -233,6 +233,11 @@ const styles = ScaledSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
+    },
+    grayView: {
+        height: '10@vs',
+        backgroundColor: Themes.COLORS.lightGray,
+        marginBottom: '15@vs',
     },
 });
 

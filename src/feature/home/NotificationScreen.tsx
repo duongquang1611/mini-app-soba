@@ -1,24 +1,26 @@
 import { getNotificationList, readAllNotification } from 'api/modules/api-app/notification';
+import { updateNotificationUnRead } from 'app-redux/slices/globalDataSlice';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
-import { StyledIcon, StyledText } from 'components/base';
+import { StyledIcon, StyledList, StyledText } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
-import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import DashView from 'components/common/DashView';
 import StyledHeader from 'components/common/StyledHeader';
+import usePaging from 'hooks/usePaging';
 import { HOME_ROUTE, SETTING_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useEffect, useState } from 'react';
-import { RefreshControl, View } from 'react-native';
+import { View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { ScaledSheet } from 'react-native-size-matters';
+import { useDispatch } from 'react-redux';
 import { formatDate } from 'utilities/format';
 import { categoryNotification, NotificationCategory, statusReadNotification } from 'utilities/staticData';
 
 const NotificationItem = (props: any) => {
     const { item, read } = props;
-    const { id, content, isRead, receivedDate, category } = item;
-    const [readItem, setReadItem] = useState(read);
+    const { id, content, isRead, receivedDate, category, title } = item;
+    const [readItem, setReadItem] = useState(false);
     const goToHistoryOrder = () => {
         setReadItem(true);
         navigate(SETTING_ROUTE.ORDER_HISTORY);
@@ -27,6 +29,11 @@ const NotificationItem = (props: any) => {
         setReadItem(true);
         navigate(HOME_ROUTE.NOTIFICATION_DETAIL, { id });
     };
+    const getTitleItem = () => {
+        if (category === NotificationCategory.CANCEL_PAYMENT || category === NotificationCategory.SUCCESS_PAYMENT)
+            return content || '';
+        return title || '';
+    };
     return (
         <>
             <TouchableOpacity
@@ -34,7 +41,7 @@ const NotificationItem = (props: any) => {
                     styles.notificationItem,
                     {
                         backgroundColor:
-                            isRead === statusReadNotification.READ || readItem
+                            isRead === statusReadNotification.READ || read || readItem
                                 ? Themes.COLORS.white
                                 : Themes.COLORS.readNotificationBackground,
                     },
@@ -43,7 +50,7 @@ const NotificationItem = (props: any) => {
             >
                 <StyledIcon source={getIcon(category)} size={30} customStyle={styles.notificationImage} />
                 <View style={styles.contentText}>
-                    <StyledText originValue={content} customStyle={styles.content} />
+                    <StyledText originValue={getTitleItem()} customStyle={styles.content} />
                     <StyledText originValue={formatDate(receivedDate)} customStyle={styles.time} />
                 </View>
             </TouchableOpacity>
@@ -69,40 +76,26 @@ const getIcon = (category: any) => {
     }
 };
 const NotificationScreen = () => {
-    const [listNoti, setListNoti] = useState([]);
     const [read, setRead] = useState(false);
-    const [refreshing, setRefreshing] = useState(false);
-    const handleRefresh = async () => {
-        try {
-            setRefreshing(true);
-            await getNotification();
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setRefreshing(false);
-        }
-    };
+    const { pagingData, onRefresh, onLoadMore } = usePaging(getNotificationList, {}, 'notifications');
+    const { list, refreshing } = pagingData;
+    const { notifications = [], totalUnread = {} } = list;
     useEffect(() => {
-        getNotification();
-    }, []);
-
-    const getNotification = async () => {
-        try {
-            const res = await getNotificationList();
-            setListNoti(res?.data);
-        } catch (error) {
-            console.log('getNotification -> error', error);
-            AlertMessage(error);
-        }
-    };
+        dispatch(updateNotificationUnRead(totalUnread));
+    }, [totalUnread]);
+    const dispatch = useDispatch();
     const readNotification = async () => {
         try {
             await readAllNotification();
+            dispatch(updateNotificationUnRead(0));
             setRead(true);
         } catch (error) {
             console.log('readNotification -> error', error);
             AlertMessage(error);
         }
+    };
+    const renderItemNoti = ({ item }: any) => {
+        return <NotificationItem item={item} read={read} />;
     };
     return (
         <View style={styles.container}>
@@ -111,23 +104,18 @@ const NotificationScreen = () => {
                 textRight={'notification.readAllNotification'}
                 onPressRight={readNotification}
             />
-            <StyledKeyboardAware
-                refreshControl={
-                    <RefreshControl
-                        refreshing={refreshing}
-                        colors={[Themes.COLORS.primary]}
-                        tintColor={Themes.COLORS.primary}
-                        onRefresh={handleRefresh}
-                    />
-                }
-            >
-                <View style={styles.grayView} />
-                <View style={styles.body}>
-                    {listNoti?.map((item, index) => (
-                        <NotificationItem key={index} item={item} read={read} />
-                    ))}
-                </View>
-            </StyledKeyboardAware>
+            <View style={styles.grayView} />
+            <StyledList
+                data={notifications}
+                renderItem={renderItemNoti}
+                ItemSeparatorComponent={DashView}
+                ListFooterComponent={DashView}
+                customStyle={styles.body}
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                noDataText={'stamp.noData'}
+                onEndReached={onLoadMore}
+            />
         </View>
     );
 };
@@ -139,8 +127,8 @@ const styles = ScaledSheet.create({
         flex: 1,
     },
     body: {
-        flex: 1,
-        backgroundColor: Themes.COLORS.white,
+        flexGrow: 1,
+        paddingBottom: '20@vs',
     },
     grayView: {
         height: '10@vs',

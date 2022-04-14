@@ -206,7 +206,7 @@ const OrderDefaultMenu = (props: any) => {
             )}
             <View style={styles.container}>
                 <StyledKeyboardAware>
-                    {!checkHomeScreen && (
+                    {!checkHomeScreen ? (
                         <View style={styles.rowContent}>
                             <StyledIcon customStyle={styles.icQuestion} source={Images.icons.question} size={20} />
                             <StyledText
@@ -214,6 +214,8 @@ const OrderDefaultMenu = (props: any) => {
                                 customStyle={styles.contentName}
                             />
                         </View>
+                    ) : (
+                        <View style={styles.grayView} />
                     )}
                     <View style={styles.categoryContainer}>
                         <ListViewSelect
@@ -276,10 +278,9 @@ export default OrderDefaultMenu;
 const styles = ScaledSheet.create({
     container: {
         flex: 1,
-        backgroundColor: Themes.COLORS.lightGray,
+        backgroundColor: Themes.COLORS.white,
     },
     categoryContainer: {
-        marginTop: '10@vs',
         paddingVertical: '15@vs',
         backgroundColor: Themes.COLORS.white,
     },
@@ -453,7 +454,8 @@ const styles = ScaledSheet.create({
         width: '100%',
         justifyContent: 'space-between',
         paddingHorizontal: '20@s',
-        marginTop: '15@vs',
+        paddingVertical: '15@vs',
+        backgroundColor: Themes.COLORS.lightGray,
     },
     buttonCategory: {
         width: '20@s',
@@ -478,5 +480,9 @@ const styles = ScaledSheet.create({
     },
     icQuestion: {
         tintColor: Themes.COLORS.silver,
+    },
+    grayView: {
+        backgroundColor: Themes.COLORS.lightGray,
+        height: '10@vs',
     },
 });

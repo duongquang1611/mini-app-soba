@@ -17,7 +17,7 @@ const STAMP_URL = {
 const NOTIFICATION_URL = {
     list: 'notification',
     coupon: (id: string | number) => `notification/${id}`,
-    read: (id: string | number) => `notification/${id}`,
+    read: (id: string | number) => `notification/read/${id}`,
     readAll: 'notification/read-all',
 };
 

@@ -57,3 +57,8 @@ export enum CouponDishType {
     SETTING_DISCOUNT = 1,
     FREE = 2,
 }
+
+export enum CommonStatusBE {
+    ACTIVE = 1,
+    INACTIVE = 0,
+}
