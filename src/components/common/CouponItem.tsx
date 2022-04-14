@@ -25,10 +25,10 @@ export const CouponItem = (props: any) => {
         orderType,
         order,
         isExchangeCoupon = false,
-    } = props;
+    } = props || {};
     const { coupon, usedDate, status, id: idMemberCoupon, receivedDate, stampAmount = 0 } = item;
 
-    const { image, title, startDate, endDate, dateType } = coupon;
+    const { image, title, startDate, endDate, dateType } = coupon || {};
     // const isInCartAPI = useMemo(() => status === MemberCouponStatus.IN_CART, [status]);
     const checkChooseTemp = cartOrderState?.coupons?.find((itemCoupon: any) => itemCoupon?.id === idMemberCoupon);
     const checkChooseInCart = (order || cartOrder)?.coupons?.find(

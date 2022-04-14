@@ -14,6 +14,7 @@ import { navigate } from 'navigation/NavigationService';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
+import { Portal } from 'react-native-portalize';
 import { ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { POPUP_TYPE, staticValue } from 'utilities/staticData';
 import ChooseStampList from './components/ChooseStampList';
@@ -94,37 +95,40 @@ const StampList = (props: StampListProps) => {
 
     return (
         <View style={styles.container}>
-            <Modalize
-                ref={modalizeRef}
-                withHandle={false}
-                scrollViewProps={{
-                    keyboardShouldPersistTaps: 'handled',
-                    contentContainerStyle: styles.contentEarnStamp,
-                }}
-                overlayStyle={styles.overlayStyle}
-                HeaderComponent={<HeaderDefault onPress={closeChooseStampTick} title={'chooseStamp.earnStamp'} />}
-                snapPoint={verticalScale(487)}
-                modalHeight={Metrics.screenHeight * staticValue.PERCENT_HEIGHT_POPUP}
-                withReactModal={true}
-                FloatingComponent={() => (
-                    <StyledButton
-                        title={'chooseStamp.btn'}
-                        customStyle={styles.footerButtonChooseStamp}
-                        onPress={confirmTickStamp}
-                        disabled={!userTicked}
+            <Portal>
+                <Modalize
+                    ref={modalizeRef}
+                    withHandle={false}
+                    scrollViewProps={{
+                        keyboardShouldPersistTaps: 'handled',
+                        contentContainerStyle: styles.contentEarnStamp,
+                        nestedScrollEnabled: true,
+                    }}
+                    overlayStyle={styles.overlayStyle}
+                    HeaderComponent={<HeaderDefault onPress={closeChooseStampTick} title={'chooseStamp.earnStamp'} />}
+                    snapPoint={verticalScale(487)}
+                    modalHeight={Metrics.screenHeight * staticValue.PERCENT_HEIGHT_POPUP}
+                    FloatingComponent={() => (
+                        <StyledButton
+                            title={'chooseStamp.btn'}
+                            customStyle={styles.footerButtonChooseStamp}
+                            onPress={confirmTickStamp}
+                            disabled={!userTicked}
+                        />
+                    )}
+                    modalStyle={{
+                        minHeight: 0,
+                        backgroundColor: Themes.COLORS.white,
+                    }}
+                >
+                    <ChooseStampList
+                        data={bill}
+                        chooseTickStampIds={chooseTickStampIds}
+                        updateChooseIds={updateChooseIds}
                     />
-                )}
-                modalStyle={{
-                    minHeight: 0,
-                    backgroundColor: Themes.COLORS.white,
-                }}
-            >
-                <ChooseStampList
-                    data={bill}
-                    chooseTickStampIds={chooseTickStampIds}
-                    updateChooseIds={updateChooseIds}
-                />
-            </Modalize>
+                </Modalize>
+            </Portal>
+
             {untickStampsAmount ? (
                 <>
                     <StyledTouchable onPress={openChooseStampTick}>

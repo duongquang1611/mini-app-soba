@@ -40,6 +40,7 @@ const orderSlice = createSlice({
                     dishes: action.payload,
                 },
             };
+            return state;
         },
         updateDefaultOrderLocal: (state, action: PayloadAction<any>) => {
             state = { ...state, defaultOrderLocal: action.payload };
