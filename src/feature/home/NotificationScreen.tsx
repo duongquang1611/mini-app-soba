@@ -13,7 +13,6 @@ import { RefreshControl, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { ScaledSheet } from 'react-native-size-matters';
 import { formatDate } from 'utilities/format';
-import { logger } from 'utilities/helper';
 import { categoryNotification, NotificationCategory, statusReadNotification } from 'utilities/staticData';
 
 const NotificationItem = (props: any) => {
@@ -86,12 +85,13 @@ const NotificationScreen = () => {
     useEffect(() => {
         getNotification();
     }, []);
+
     const getNotification = async () => {
         try {
             const res = await getNotificationList();
             setListNoti(res?.data);
         } catch (error) {
-            logger(error);
+            console.log('getNotification -> error', error);
             AlertMessage(error);
         }
     };
@@ -100,7 +100,7 @@ const NotificationScreen = () => {
             await readAllNotification();
             setRead(true);
         } catch (error) {
-            logger(error);
+            console.log('readNotification -> error', error);
             AlertMessage(error);
         }
     };
@@ -140,8 +140,7 @@ const styles = ScaledSheet.create({
     },
     body: {
         flex: 1,
-
-        backgroundColor: Themes.COLORS.lightGray,
+        backgroundColor: Themes.COLORS.white,
     },
     grayView: {
         height: '10@vs',
