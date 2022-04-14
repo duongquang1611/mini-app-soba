@@ -2,11 +2,12 @@ import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledIcon, StyledImage, StyledText } from 'components/base';
+import { StyledImageBackground } from 'components/base/StyledImage';
 import LinearView from 'components/common/LinearView';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React from 'react';
-import { ImageBackground, View } from 'react-native';
+import { View } from 'react-native';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 
 const MyPageScreen = () => {
@@ -20,7 +21,7 @@ const MyPageScreen = () => {
                     <StyledText customStyle={styles.title} i18nText={'Edit Profile'} />
                     <StyledIcon source={Images.icons.eyeOff} size={40} />
                 </View>
-                <ImageBackground source={Images.photo.backgroundMyPage} style={styles.background}>
+                <StyledImageBackground source={Images.photo.backgroundMyPage} style={styles.background}>
                     <View style={styles.profileRow}>
                         <StyledImage source={Images.photo.avatarDefault} customStyle={styles.avatar} />
                         <View>
@@ -39,7 +40,7 @@ const MyPageScreen = () => {
                     <View style={styles.desView}>
                         <StyledText originValue={'￥5000を支払うと、ダイヤモンドメンバー に昇格します'} />
                     </View>
-                </ImageBackground>
+                </StyledImageBackground>
             </View>
             <View style={styles.body}>
                 <StyledButton title={'editProfile'} onPress={editProfile} customStyle={styles.buttonSave} />

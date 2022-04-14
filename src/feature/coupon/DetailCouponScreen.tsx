@@ -38,7 +38,7 @@ const DetailCouponScreen = (props: any) => {
     const [stampDetail, setStampDetail] = useState(props?.route?.params?.stampDetail || {});
 
     const [detailMemberCoupon, setDetailMemberCoupon] = useState(item);
-    const { coupon, id: idMemberCoupon, status: statusCoupon } = detailMemberCoupon;
+    const { coupon, id: idMemberCoupon, status: statusCoupon } = detailMemberCoupon || {};
     const { title = '' } = coupon || {};
     // const isInCartAPI = useMemo(() => item?.status === MemberCouponStatus.IN_CART, [statusCoupon]);
     const checkChooseInCart = order.cartOrder?.coupons?.find((itemCoupon: any) => itemCoupon?.id === idMemberCoupon);
@@ -74,8 +74,8 @@ const DetailCouponScreen = (props: any) => {
                     coupons: [
                         ...newCoupons,
                         {
-                            id: coupon.id,
-                            title: coupon.title,
+                            id: coupon?.id,
+                            title: coupon?.title,
                         },
                     ],
                 }),

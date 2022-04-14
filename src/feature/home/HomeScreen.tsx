@@ -10,6 +10,7 @@ import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText } from 'components/base';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
+import { StyledImageBackground } from 'components/base/StyledImage';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeaderImage from 'components/common/StyledHeaderImage';
 import StyledTabTopView from 'components/common/StyledTabTopView';
@@ -18,7 +19,7 @@ import { APP_ROUTE, HOME_ROUTE, STAMP_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { FunctionComponent, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ImageBackground, RefreshControl, View } from 'react-native';
+import { RefreshControl, View } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { SceneMap } from 'react-native-tab-view';
@@ -225,7 +226,7 @@ const HomeScreen: FunctionComponent = () => {
                         renderScene={renderScene}
                         customIndicatorStyle={{ backgroundColor: getColorTab(indexTab) }}
                     />
-                    <ImageBackground source={Images.photo.news} resizeMode="cover" style={styles.newsView}>
+                    <StyledImageBackground source={Images.photo.news} resizeMode="cover" style={styles.newsView}>
                         <View style={styles.buttonMobile}>
                             <StyledIcon source={Images.icons.document} customStyle={styles.iconLeft} size={20} />
                             <StyledText i18nText={'home.news'} customStyle={styles.titleNew} />
@@ -236,7 +237,7 @@ const HomeScreen: FunctionComponent = () => {
                         >
                             <StyledText i18nText={'home.seeAll'} customStyle={styles.textNews} />
                         </TouchableOpacity>
-                    </ImageBackground>
+                    </StyledImageBackground>
                     {listNews.map((news, index) => (
                         <ListNewsItem key={index} data={news} />
                     ))}

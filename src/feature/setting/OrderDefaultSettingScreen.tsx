@@ -4,12 +4,13 @@ import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledIcon, StyledText } from 'components/base';
+import { StyledImageBackground } from 'components/base/StyledImage';
 import LinearView from 'components/common/LinearView';
 import StyledHeader from 'components/common/StyledHeader';
-import { SETTING_ROUTE, TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
+import { SETTING_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useRef, useState } from 'react';
-import { ImageBackground, View } from 'react-native';
+import { View } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import { listImage } from 'utilities/staticData';
@@ -29,13 +30,13 @@ const ItemOrder = (item: any) => {
     };
     return (
         <TouchableOpacity onPress={gotoDetail}>
-            <ImageBackground
+            <StyledImageBackground
                 source={{ uri: item?.item?.img }}
                 style={[styles.image, { borderColor: choose ? Themes.COLORS.primary : Themes.COLORS.white }]}
             >
                 <StyledText originValue={item?.item?.name} customStyle={styles.name} />
                 {choose ? <StyledIcon source={Images.icons.tick} size={20} /> : null}
-            </ImageBackground>
+            </StyledImageBackground>
         </TouchableOpacity>
     );
 };
@@ -104,9 +105,9 @@ const OrderDefaultSettingScreen = () => {
                 />
             </View>
             <View style={styles.secondaryView}>
-                <ImageBackground source={Images.icons.rectangle} style={styles.rectangle}>
+                <StyledImageBackground source={Images.icons.rectangle} style={styles.rectangle}>
                     <StyledIcon source={Images.icons.bag_happy} size={35} customStyle={styles.icBag} />
-                </ImageBackground>
+                </StyledImageBackground>
                 <TouchableOpacity style={styles.rowCart}>
                     <StyledText i18nText={'setting.viewCart'} customStyle={styles.textCart} />
                     <StyledText originValue={'（4）'} customStyle={styles.textCart} />

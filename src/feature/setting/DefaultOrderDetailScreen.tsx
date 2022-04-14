@@ -2,12 +2,13 @@ import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText } from 'components/base';
+import { StyledImageBackground } from 'components/base/StyledImage';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeaderImage from 'components/common/StyledHeaderImage';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useState } from 'react';
-import { ImageBackground, View } from 'react-native';
+import { View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import { dataFakeOderDefault, imagesList } from 'utilities/staticData';
@@ -83,9 +84,9 @@ const DefaultOrderDetailScreen = () => {
                 </TouchableOpacity>
             </View>
             <View style={styles.secondaryView}>
-                <ImageBackground source={Images.icons.rectangle} style={styles.rectangle}>
+                <StyledImageBackground source={Images.icons.rectangle} style={styles.rectangle}>
                     <StyledIcon source={Images.icons.bag_happy} size={35} customStyle={styles.icBag} />
-                </ImageBackground>
+                </StyledImageBackground>
                 <TouchableOpacity style={styles.rowCart} onPress={goToSaveOrder}>
                     <StyledText i18nText={'setting.viewCart'} customStyle={styles.textCart} />
                     <StyledText originValue={'（4）'} customStyle={styles.textCart} />

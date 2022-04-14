@@ -2,10 +2,11 @@
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledIcon, StyledImage, StyledText } from 'components/base';
+import { StyledImageBackground } from 'components/base/StyledImage';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeader from 'components/common/StyledHeader';
 import React from 'react';
-import { ImageBackground, View } from 'react-native';
+import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 
 const DetailCouponOrderScreen = (props: any) => {
@@ -19,13 +20,13 @@ const DetailCouponOrderScreen = (props: any) => {
                     <View style={styles.contentContainer}>
                         <StyledText originValue={'クーポンＩＤ：CP690001'} customStyle={styles.time} />
                         <StyledText originValue={'【リリース記念ＳＣ用】香味１杯　無料'} customStyle={styles.title} />
-                        <ImageBackground style={styles.img} source={Images.photo.ptCouponDetail}>
+                        <StyledImageBackground style={styles.img} source={Images.photo.ptCouponDetail}>
                             {/* {!canUse && (
                                 <View style={styles.transparent}>
                                     <StyledImage source={Images.photo.used} customStyle={styles.imgQr} />
                                 </View>
                             )} */}
-                        </ImageBackground>
+                        </StyledImageBackground>
                         <StyledImage source={Images.photo.qrCode} customStyle={styles.imgQr} />
                         <View style={styles.rowView}>
                             <StyledIcon source={Images.icons.calendar} size={20} customStyle={styles.iconDate} />

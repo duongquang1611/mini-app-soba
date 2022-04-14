@@ -1,3 +1,5 @@
+/* eslint-disable prefer-const */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import NetInfo from '@react-native-community/netinfo';
 import { store } from 'app-redux/store';
 import axios from 'axios';
@@ -75,22 +77,22 @@ request.interceptors.response.use(
         const network: any = await NetInfo.fetch();
         const validNetwork = network.isInternetReachable && network.isConnected;
         // validNetwork on first render in iOS will return NULL
-        if (validNetwork === false && !hasAnyNetworkDialogShown) {
-            hasAnyNetworkDialogShown = true;
-            const getKey = apiLocal.find((item) => item.url === url)?.key;
-            const dataResult: any = store.getState();
-            if (!(getKey && dataResult[getKey])) {
-                AlertMessage(
-                    ERRORS.network,
-                    {
-                        onClosedModalize: () => {
-                            hasAnyNetworkDialogShown = false;
-                        },
-                    },
-                    false,
-                );
-            }
-        }
+        // if (validNetwork === false && !hasAnyNetworkDialogShown) {
+        //     hasAnyNetworkDialogShown = true;
+        //     const getKey = apiLocal.find((item) => item.url === url)?.key;
+        //     const dataResult: any = store.getState();
+        //     if (!(getKey && dataResult[getKey])) {
+        //         AlertMessage(
+        //             ERRORS.network,
+        //             {
+        //                 onClosedModalize: () => {
+        //                     hasAnyNetworkDialogShown = false;
+        //                 },
+        //             },
+        //             false,
+        //         );
+        //     }
+        // }
         // Any status codes that falls outside the range of 2xx cause this function to trigger
         // Do something with response error
         const { response } = error || {};
