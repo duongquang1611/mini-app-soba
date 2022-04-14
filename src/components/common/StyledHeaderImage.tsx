@@ -28,6 +28,7 @@ interface HeaderProps extends ViewProps {
     logo?: any;
     heightImage?: any;
     sliderWidth?: any;
+    notificationUnRead?: number;
 }
 
 const StyledHeaderImage = (props: HeaderProps) => {
@@ -45,6 +46,7 @@ const StyledHeaderImage = (props: HeaderProps) => {
         logo,
         heightImage = verticalScale(260),
         sliderWidth,
+        notificationUnRead = 0,
     } = props;
     const [index, setIndex] = useState(0);
 
@@ -133,6 +135,7 @@ const StyledHeaderImage = (props: HeaderProps) => {
                 {iconNoti ? (
                     <StyledTouchable onPress={onPressNoti} customStyle={styles.buttonActionNoti}>
                         <StyledIcon source={iconNoti} size={25} customStyle={styles.iconAction} />
+                        {notificationUnRead > 0 && <View style={styles.newNotification} />}
                     </StyledTouchable>
                 ) : (
                     <View style={styles.buttonAction} />
@@ -180,7 +183,6 @@ const styles = ScaledSheet.create({
         alignItems: 'center',
         borderRadius: 25,
         backgroundColor: Themes.COLORS.backgroundButton,
-        marginTop: '25@vs',
     },
     iconView: {
         flexDirection: 'row',
@@ -232,6 +234,15 @@ const styles = ScaledSheet.create({
         width: '111@s',
         height: '58@s',
         borderRadius: 5,
+    },
+    newNotification: {
+        width: '10@s',
+        height: '10@s',
+        backgroundColor: Themes.COLORS.primary,
+        borderRadius: 20,
+        position: 'absolute',
+        top: '8@s',
+        right: '8@s',
     },
 });
 

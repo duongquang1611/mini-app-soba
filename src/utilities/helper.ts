@@ -260,6 +260,7 @@ export const generateDataSaveOrderOption = (dataOrder: any, orderType = OrderTyp
     const newCoupons = coupons.map((couponItem: any) => {
         const formatCouponItem: any = {
             id: couponItem?.coupon?.id,
+            receivedDate: couponItem?.receivedDate,
         };
         if (couponItem?.coupon?.discountType === DiscountType.EACH_DISH) {
             formatCouponItem.dishId = couponItem?.choose?.dish?.id;

@@ -796,6 +796,7 @@ export enum NotificationCategory {
     STAMP = 3,
     OTHER = 4,
     SUCCESS_PAYMENT = 5,
+    CANCEL_PAYMENT = 6,
 }
 export enum categoryNotification {
     ORDER_HISTORY = 5,

@@ -51,6 +51,7 @@ const Light = {
         qrCheckIn: '#00552E',
         readNotificationBackground: 'rgba(254, 236, 210, 0.2)',
         astra: '#FBE3C0',
+        linkDefault: '#3373FA',
     },
     FONTS: {
         defaultFont: 'Montserrat-Regular',

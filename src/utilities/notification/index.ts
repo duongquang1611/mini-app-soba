@@ -1,6 +1,7 @@
 import { sendTeams } from 'api/modules/api-app/general';
 import { readNotification } from 'api/modules/api-app/notification';
 import { RootState } from 'app-redux/hooks';
+import { updateNotificationUnRead } from 'app-redux/slices/globalDataSlice';
 import {
     clearMobileOrder,
     updateCartOrder,
@@ -17,7 +18,7 @@ import OneSignal from 'react-native-onesignal';
 import { useSelector } from 'react-redux';
 import { isLogin } from 'utilities/authenticate/AuthenticateService';
 import { logger } from 'utilities/helper';
-import { listScreenBackWhenPayment, OrderType } from 'utilities/staticData';
+import { listScreenBackWhenPayment, NotificationCategory, OrderType } from 'utilities/staticData';
 
 type NotificationReceivedEvent = {
     complete: (notification?: any) => void;
@@ -86,21 +87,25 @@ function onReceived(data: NotificationReceivedEvent) {
     logger('onReceived', undefined, data);
     const notify = data.getNotification();
     setTimeout(() => data.complete(notify), 0); // must need to show notify in tab bar
-    const { coupons = [], type, orderId = '' } = data?.notification?.additionalData || {};
+    const { coupons = [], type, orderId = '', category } = data?.notification?.additionalData || {};
     sendTeams(JSON.stringify(data?.notification), 'Notification');
     const { order } = store.getState();
     const { defaultOrder, defaultOrderLocal, mobileOrder, cartOrder } = order;
     store.dispatch(updateCartOrder(deleteUsedCoupon(cartOrder, coupons)));
     const currentScreen = navigationRef?.current?.getCurrentRoute?.()?.name;
-    if (Number(type) === OrderType.DEFAULT_SETTING) {
+    store.dispatch(updateNotificationUnRead(1));
+    if (category === NotificationCategory.SUCCESS_PAYMENT && Number(type) === OrderType.DEFAULT_SETTING) {
         store.dispatch(updateMobileOrder(deleteUsedCoupon(mobileOrder, coupons)));
         store.dispatch(updateDefaultOrderLocal(defaultOrder));
     }
-    if (Number(type) === OrderType.MOBILE) {
+    if (category === NotificationCategory.SUCCESS_PAYMENT && Number(type) === OrderType.MOBILE) {
         store.dispatch(clearMobileOrder());
         store.dispatch(updateDefaultOrderLocal(deleteUsedCoupon(defaultOrderLocal, coupons)));
     }
-    if (listScreenBackWhenPayment.find((screen: any) => currentScreen === screen)) {
+    if (
+        category === NotificationCategory.SUCCESS_PAYMENT &&
+        listScreenBackWhenPayment.find((screen: any) => currentScreen === screen)
+    ) {
         backHome(orderId);
     }
 }

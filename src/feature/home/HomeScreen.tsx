@@ -1,8 +1,10 @@
 import { getCouponList } from 'api/modules/api-app/coupon';
 import { getResources } from 'api/modules/api-app/general';
 import { getNewsList } from 'api/modules/api-app/home';
+import { getNotificationList } from 'api/modules/api-app/notification';
 import { RootState } from 'app-redux/hooks';
 import { updateCoupon } from 'app-redux/slices/couponSlice';
+import { updateNotificationUnRead } from 'app-redux/slices/globalDataSlice';
 import { resourceActions } from 'app-redux/slices/resourceSlice';
 import { store } from 'app-redux/store';
 import Images from 'assets/images';
@@ -41,10 +43,11 @@ import ModalGuideCheckIn from './components/ModalGuideCheckIn';
 import ShowQrTab from './components/ShowQrTab';
 
 const netWorkItem = (data: any) => {
+    const { index, item } = data;
     return (
-        <TouchableOpacity style={styles.netWorkView}>
-            <StyledIcon source={data?.item?.img} size={30} customStyle={styles.iconNetwork} />
-            <StyledText originValue={data?.item?.name} isBlack />
+        <TouchableOpacity style={[styles.netWorkView, { marginLeft: index === 0 ? scale(20) : 0 }]}>
+            <StyledIcon source={item?.img} size={30} customStyle={styles.iconNetwork} />
+            <StyledText originValue={item?.name} isBlack />
         </TouchableOpacity>
     );
 };
@@ -96,8 +99,9 @@ export const getResourcesData = async () => {
 const HomeScreen: FunctionComponent = () => {
     useOnesignal();
     const { t } = useTranslation();
-    const { order, userInfo } = useSelector((state: RootState) => state);
+    const { order, userInfo, globalData } = useSelector((state: RootState) => state);
     const { user } = userInfo;
+    const { notificationUnRead } = globalData;
     const { mobileOrder, defaultOrderLocal } = order;
     const newOrderMobile = useMemo(() => generateNewOrder(mobileOrder, user), [mobileOrder, user]);
     const newOrderDefault = useMemo(
@@ -118,8 +122,17 @@ const HomeScreen: FunctionComponent = () => {
     useEffect(() => {
         getNotification();
         getCouponData();
+        notification();
     }, []);
-
+    const notification = async () => {
+        try {
+            const res = await getNotificationList();
+            const { totalUnread } = res?.data;
+            store.dispatch(updateNotificationUnRead(totalUnread));
+        } catch (error) {
+            console.log('file: HomeScreen.tsx -> line 130 -> notification -> error', error);
+        }
+    };
     const getNotification = async () => {
         try {
             const res = await getNewsList();
@@ -199,6 +212,7 @@ const HomeScreen: FunctionComponent = () => {
                     isBack={false}
                     images={imagesList}
                     logo
+                    notificationUnRead={notificationUnRead}
                 />
                 <View style={styles.contScreen}>
                     <View style={styles.searchView}>
@@ -285,6 +299,7 @@ const styles = ScaledSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        paddingHorizontal: '20@s',
     },
     newsView: {
         flexDirection: 'row',
@@ -325,7 +340,6 @@ const styles = ScaledSheet.create({
     searchView: {
         backgroundColor: Themes.COLORS.headerBackground,
         paddingBottom: '10@vs',
-        paddingHorizontal: '20@s',
     },
     logoIcon: {
         width: '137@s',

@@ -8,6 +8,7 @@ interface IGlobalDataState {
     skipOrderDefault: boolean;
     viewedOrderDefault: boolean;
     chooseTickStampIds: any;
+    notificationUnRead: number;
 }
 
 const initialState: IGlobalDataState = {
@@ -15,6 +16,7 @@ const initialState: IGlobalDataState = {
     skipOrderDefault: false,
     viewedOrderDefault: false,
     chooseTickStampIds: {},
+    notificationUnRead: 0,
 };
 
 const globalDataSlice = createSlice({
@@ -36,10 +38,15 @@ const globalDataSlice = createSlice({
         clearGlobalData: () => {
             return initialState;
         },
+        updateNotificationUnRead: (state, action: PayloadAction<any>) => {
+            state = { ...state, notificationUnRead: action.payload };
+            return state;
+        },
     },
 });
 
 const persistConfig = generatePersistConfig('globalData', Object.keys(initialState));
 
-export const { updateGlobalData, clearGlobalData, updateChooseTickStampIds } = globalDataSlice.actions;
+export const { updateGlobalData, clearGlobalData, updateChooseTickStampIds, updateNotificationUnRead } =
+    globalDataSlice.actions;
 export default persistReducer<IGlobalDataState>(persistConfig, globalDataSlice.reducer);
