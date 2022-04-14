@@ -32,11 +32,16 @@ const checkDisable = (dishOptions: any, subDishDetail: any) => {
 };
 const DetailMealScreen = (props: any) => {
     const { id, isNew, createDate, isDefaultOrder, order, setOrder, orderType } = props?.route?.params;
-    const { cartOrder } = useSelector((state: RootState) => state.order);
+    const {
+        order: orderStore,
+        resource: { data: dataResource },
+    } = useSelector((state: RootState) => state);
+    const { cartOrder } = orderStore;
+    const menuItem = dataResource?.menu?.find((item: any) => item?.id === id) || {};
     const saveOrder = order || cartOrder;
     const findIdStore = isNew ? null : saveOrder?.dishes?.find((item: any) => item.createDate === createDate);
     const [num, setNum] = useState(findIdStore?.mainDish?.amount || 1);
-    const [dish, setDish] = useState<any>({});
+    const [dish, setDish] = useState<any>(menuItem);
     const { title, description, dishOptions } = dish || {};
     const [subDishDetail, setSubDishDetail] = useState<any>(
         !createDate ? getDefaultSubDish(dishOptions) : findIdStore?.subDishes || [],

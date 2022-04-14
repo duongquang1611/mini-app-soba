@@ -1,7 +1,8 @@
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
+import { StyledImageBackground } from 'components/base/StyledImage';
 import React, { useMemo } from 'react';
-import { ImageBackground, Text } from 'react-native';
+import { Text } from 'react-native';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 
 const PointExchangeView = ({
@@ -14,7 +15,7 @@ const PointExchangeView = ({
     const isLongText = useMemo(() => stampAmount && `${stampAmount}`?.length >= 2, [stampAmount]);
 
     return stampAmount ? (
-        <ImageBackground
+        <StyledImageBackground
             source={Images.photo.couponAmount}
             style={[
                 styles.imgCouponAmount,
@@ -47,7 +48,7 @@ const PointExchangeView = ({
                     {'個'}
                 </Text>
             </Text>
-        </ImageBackground>
+        </StyledImageBackground>
     ) : null;
 };
 

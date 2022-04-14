@@ -4,12 +4,12 @@ import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
-import React, { useMemo } from 'react';
-import { ImageBackground, Text, View } from 'react-native';
+import React from 'react';
+import { View } from 'react-native';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
 import { formatDate, YYYYMMDD } from 'utilities/format';
-import { DateType, MemberCouponStatus, OrderTypeMenu, staticValue } from 'utilities/staticData';
+import { DateType, staticValue } from 'utilities/staticData';
 import DashView from './DashView';
 import PointExchangeView from './PointExchangeView';
 

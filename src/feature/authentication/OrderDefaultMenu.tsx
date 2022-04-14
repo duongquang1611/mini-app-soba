@@ -6,8 +6,8 @@ import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledIcon, StyledText, StyledTouchable } from 'components/base';
-import AlertMessage from 'components/base/AlertMessage';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
+import { StyledImageBackground } from 'components/base/StyledImage';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeader from 'components/common/StyledHeader';
 import ButtonCart from 'feature/order/components/ButtonCart';
@@ -18,7 +18,7 @@ import useBackHandler from 'hooks/useBackHandler';
 import { APP_ROUTE, HOME_ROUTE, ORDER_ROUTE, SETTING_ROUTE } from 'navigation/config/routes';
 import { navigate, reset } from 'navigation/NavigationService';
 import React, { useEffect, useRef, useState } from 'react';
-import { ImageBackground, View } from 'react-native';
+import { View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
@@ -45,7 +45,7 @@ const ItemMenu = (props: any) => {
     };
     return (
         <StyledTouchable onPress={num > 0 ? props?.goToDetailModal : gotoNew}>
-            <ImageBackground
+            <StyledImageBackground
                 source={{ uri: props?.item?.thumbnail }}
                 style={[
                     styles.image,
@@ -61,7 +61,7 @@ const ItemMenu = (props: any) => {
                         <StyledText originValue={`${num}`} customStyle={styles.numberChoose} />
                     </View>
                 ) : null}
-            </ImageBackground>
+            </StyledImageBackground>
         </StyledTouchable>
     );
 };
@@ -96,7 +96,6 @@ const OrderDefaultMenu = (props: any) => {
             setMenu(res?.data?.filter((item: any) => item?.status === MenuType.ENABLE));
         } catch (error) {
             console.log('getMenuList -> error', error);
-            AlertMessage(error);
         }
     };
     const onPressCategory = (item: any) => {

@@ -5,12 +5,13 @@ import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledIcon, StyledList, StyledText, StyledTouchable } from 'components/base';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
+import { StyledImageBackground } from 'components/base/StyledImage';
 import StyledHeader from 'components/common/StyledHeader';
 import { getResourcesData } from 'feature/home/HomeScreen';
 import { ORDER_ROUTE } from 'navigation/config/routes';
 import { goBack, navigate } from 'navigation/NavigationService';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { ImageBackground, View } from 'react-native';
+import { View } from 'react-native';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -41,7 +42,7 @@ const ItemMenu = (props: any) => {
     };
     return (
         <StyledTouchable onPress={num > 0 ? props?.goToDetailModal : gotoNew}>
-            <ImageBackground
+            <StyledImageBackground
                 source={{ uri: props?.item?.thumbnail }}
                 style={[
                     styles.image,
@@ -57,7 +58,7 @@ const ItemMenu = (props: any) => {
                         <StyledText originValue={`${num}`} customStyle={styles.numberChoose} />
                     </View>
                 ) : null}
-            </ImageBackground>
+            </StyledImageBackground>
         </StyledTouchable>
     );
 };

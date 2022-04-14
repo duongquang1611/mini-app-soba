@@ -5,13 +5,14 @@ import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
+import { StyledImageBackground } from 'components/base/StyledImage';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import DashView from 'components/common/DashView';
 import LinearView from 'components/common/LinearView';
 import { AUTHENTICATE_ROUTE, ORDER_ROUTE, SETTING_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useMemo } from 'react';
-import { ImageBackground, View } from 'react-native';
+import { View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
@@ -144,7 +145,7 @@ const SettingScreen = () => {
                     </TouchableOpacity>
                 </View>
 
-                <ImageBackground
+                <StyledImageBackground
                     resizeMode={'stretch'}
                     source={Images.photo.backgroundMyPage}
                     style={styles.background}
@@ -174,7 +175,7 @@ const SettingScreen = () => {
                             />
                         </View>
                     </View>
-                </ImageBackground>
+                </StyledImageBackground>
             </View>
             <StyledKeyboardAware>
                 <View style={styles.wrapListOptionSetting}>{listButton.map(renderItemSetting)}</View>

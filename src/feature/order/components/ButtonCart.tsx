@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Images from 'assets/images';
-import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledText, StyledTouchable } from 'components/base';
+import { StyledImageBackground } from 'components/base/StyledImage';
 import React from 'react';
-import { ImageBackground, TouchableOpacity, View } from 'react-native';
-import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
+import { View } from 'react-native';
+import { ScaledSheet } from 'react-native-size-matters';
 import { staticValue } from 'utilities/staticData';
 
 const ButtonCart = (props: any) => {
@@ -20,7 +20,7 @@ const ButtonCart = (props: any) => {
             ]}
             onPress={goToSaveOrder}
         >
-            <ImageBackground
+            <StyledImageBackground
                 source={!checkDisable ? Images.icons.rectangle : Images.icons.rectangleDisable}
                 style={[styles.rectangle]}
             >
@@ -32,7 +32,7 @@ const ButtonCart = (props: any) => {
                         { tintColor: checkDisable ? Themes.COLORS.silver : Themes.COLORS.secondary },
                     ]}
                 />
-            </ImageBackground>
+            </StyledImageBackground>
             <View style={[styles.rowCart]}>
                 {isMenu ? (
                     <View>

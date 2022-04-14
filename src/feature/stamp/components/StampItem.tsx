@@ -1,8 +1,9 @@
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledText, StyledTouchable } from 'components/base';
+import { StyledImageBackground } from 'components/base/StyledImage';
 import React, { useMemo } from 'react';
-import { ImageBackground, StyleProp, View, ViewStyle } from 'react-native';
+import { StyleProp, View, ViewStyle } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { ScaledSheet } from 'react-native-size-matters';
 import { StampCardType, StampSettingDuration } from 'utilities/enumData';
@@ -42,13 +43,13 @@ const StampItem = (props: IProps) => {
     return (
         <Animatable.View style={containerStyle} animation={animation ? staticValue.ANIMATION_ITEM : ''} useNativeDriver>
             <StyledTouchable customStyle={[styles.container, customStyle]} onPress={onPress} disabled={!onPress}>
-                <ImageBackground source={{ uri: image }} style={styles.imgStamp} resizeMode={'cover'}>
+                <StyledImageBackground source={{ uri: image }} style={styles.imgStamp} resizeMode={'cover'}>
                     {!!isExpired && !isBottomTab && (
                         <View style={styles.expiredImage}>
                             <StyledIcon size={60} source={Images.icons.stampUsedDetail} />
                         </View>
                     )}
-                </ImageBackground>
+                </StyledImageBackground>
                 <View style={styles.content}>
                     <StyledText originValue={title} customStyle={styles.nameStamp} {...titleProps} />
                     <StyledText

@@ -1,11 +1,12 @@
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledText } from 'components/base';
+import { StyledImageBackground } from 'components/base/StyledImage';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import DashView from 'components/common/DashView';
 import { isArray, orderBy } from 'lodash';
 import React from 'react';
-import { ImageBackground, StyleProp, View, ViewStyle } from 'react-native';
+import { StyleProp, View, ViewStyle } from 'react-native';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import { CouponDishType } from 'utilities/enumData';
 import { formatDate } from 'utilities/format';
@@ -56,7 +57,7 @@ const CouponContentItem = ({ item }: any) => {
         <>
             <StyledText i18nText={'coupon.detail.id'} i18nParams={{ id: stringId }} customStyle={styles.textId} />
             <StyledText originValue={title} customStyle={styles.title} />
-            <ImageBackground style={styles.img} source={{ uri: image }} />
+            <StyledImageBackground style={styles.img} source={{ uri: image }} />
             <View style={styles.rowView}>
                 <StyledIcon source={Images.icons.calendar} size={20} customStyle={styles.iconDate} />
                 <StyledText

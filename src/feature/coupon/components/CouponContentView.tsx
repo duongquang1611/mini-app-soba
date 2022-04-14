@@ -1,11 +1,12 @@
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText } from 'components/base';
+import { StyledImageBackground } from 'components/base/StyledImage';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import PointExchangeView from 'components/common/PointExchangeView';
 import { isArray, orderBy } from 'lodash';
 import React from 'react';
-import { ImageBackground, StyleProp, View, ViewStyle } from 'react-native';
+import { StyleProp, View, ViewStyle } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import { CouponDishType } from 'utilities/enumData';
 import { formatDate } from 'utilities/format';
@@ -39,7 +40,7 @@ const WrapComponent = ({ children, isModal, customStyle }: any) => {
 };
 
 const CouponContentView = (props: IProps) => {
-    const { customStyle, isModal = false, data = {}, canUse, initDetailNavigate } = props;
+    const { customStyle, isModal = false, data = {}, canUse, initDetailNavigate } = props || {};
     const { coupon = {}, usedDate } = data;
     const {
         title,
@@ -52,7 +53,7 @@ const CouponContentView = (props: IProps) => {
         discountType,
         discount,
         stringId = '',
-    } = coupon;
+    } = coupon || {};
 
     return (
         <WrapComponent customStyle={[styles.container, customStyle]} isModal={isModal}>
@@ -74,7 +75,7 @@ const CouponContentView = (props: IProps) => {
                         <StyledText originValue={title} customStyle={styles.title} />
                         <PointExchangeView stampAmount={initDetailNavigate?.stampAmount} bigSize />
                     </View>
-                    <ImageBackground style={styles.img} source={{ uri: image }}>
+                    <StyledImageBackground style={styles.img} source={{ uri: image }}>
                         {!canUse && (
                             <View style={styles.transparent}>
                                 {usedDate ? (
@@ -89,7 +90,7 @@ const CouponContentView = (props: IProps) => {
                                 )}
                             </View>
                         )}
-                    </ImageBackground>
+                    </StyledImageBackground>
                     <View style={styles.rowView}>
                         <StyledIcon source={Images.icons.calendar} size={20} customStyle={styles.iconDate} />
                         <StyledText
