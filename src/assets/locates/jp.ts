@@ -247,7 +247,7 @@ export default {
         orderId: '注文ID: {{stringId}}',
         pleaseChoose: '貯まるスタンプを選択してください',
         tickStampNote: '{{ticked}}/{{total}}貯まるスタンプを選択した',
-        tickedNote: '(貯めたスタンプ: {{ticked}}/{{total}})',
+        tickedNote: '(貯めたスタンプ: {{ticked}}{{total}})',
         btn: '保存',
     },
     stampDetail: {

@@ -95,7 +95,6 @@ export default memo(StampCardScreen);
 const styles = ScaledSheet.create({
     container: {
         flex: 1,
-        backgroundColor: Themes.COLORS.lightGray,
     },
     contentContainerTabBar: {
         alignItems: 'center',

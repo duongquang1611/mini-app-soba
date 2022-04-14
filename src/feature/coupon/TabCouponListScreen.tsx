@@ -79,7 +79,7 @@ export default TabCouponListScreen;
 const styles = ScaledSheet.create({
     container: {
         flex: 1,
-        backgroundColor: Themes.COLORS.backgroundPrimary,
+        backgroundColor: Themes.COLORS.white,
     },
     body: {
         justifyContent: 'center',

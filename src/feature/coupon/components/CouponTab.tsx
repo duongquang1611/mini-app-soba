@@ -49,6 +49,7 @@ const CouponTab = (props: CouponTabProps) => {
     };
     return (
         <View style={styles.container}>
+            <View style={styles.separator} />
             <StyledList
                 data={canUse ? couponsCanUse : couponsUsed}
                 renderItem={renderItem}
@@ -63,12 +64,15 @@ const CouponTab = (props: CouponTabProps) => {
 const styles = ScaledSheet.create({
     container: {
         flex: 1,
-        paddingTop: '10@vs',
     },
     listCoupon: {
         backgroundColor: Themes.COLORS.white,
         flexGrow: 1,
         paddingBottom: '10@vs',
+    },
+    separator: {
+        height: '5@vs',
+        backgroundColor: Themes.COLORS.lightGray,
     },
 });
 
