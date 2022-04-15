@@ -30,6 +30,8 @@ const MENU_URL = {
 const ORDER_URL = {
     saveOrder: 'order/save-order-options',
     getOrder: (orderType: number) => `order?orderType=${orderType}`,
+    listHistoryOrder: 'order/bill-history',
+    detailHistoryOrder: (id: number) => `order/bill-history/${id}`,
 };
 
 const HOME_URL = {

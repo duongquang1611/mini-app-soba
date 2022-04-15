@@ -15,7 +15,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { ScaledSheet } from 'react-native-size-matters';
 import { useDispatch } from 'react-redux';
 import { formatDate } from 'utilities/format';
-import { categoryNotification, NotificationCategory, statusReadNotification } from 'utilities/staticData';
+import { NotificationCategory, statusReadNotification } from 'utilities/staticData';
 
 const NotificationItem = (props: any) => {
     const { item, read } = props;
@@ -46,7 +46,13 @@ const NotificationItem = (props: any) => {
                                 : Themes.COLORS.readNotificationBackground,
                     },
                 ]}
-                onPress={() => (category === categoryNotification.ORDER_HISTORY ? goToHistoryOrder() : goToDetail())}
+                onPress={() =>
+                    !category ||
+                    category === NotificationCategory.CANCEL_PAYMENT ||
+                    category === NotificationCategory.SUCCESS_PAYMENT
+                        ? goToHistoryOrder()
+                        : goToDetail()
+                }
             >
                 <StyledIcon source={getIcon(category)} size={30} customStyle={styles.notificationImage} />
                 <View style={styles.contentText}>

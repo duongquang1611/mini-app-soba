@@ -172,6 +172,8 @@ export default {
         resetOrderDefault: 'リセット',
         resetDefaultOrder: '注文をリセットしてもよろしいでしょうか？',
         backHomeWhenPayment: '注文「{{orderId}}」の支払いが完了しました。更新するにはホーム画面へ戻ってください。',
+        rangeTimeHistoryOrder: '合計：￥{{totalPaid}}',
+        rangeHistoryTitleItem: '{{amount}}商品: {{title}}',
     },
     setting: {
         editProfileTitle: 'マイページ編集',

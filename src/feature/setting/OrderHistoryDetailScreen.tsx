@@ -1,13 +1,16 @@
+import { getDetailHistoryDetail } from 'api/modules/api-app/order';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledText } from 'components/base';
+import AlertMessage from 'components/base/AlertMessage';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import DashView from 'components/common/DashView';
 import StyledHeader from 'components/common/StyledHeader';
 import AmountOrder from 'feature/order/components/AmountOrder';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
+import { formatDate } from 'utilities/format';
 import { listOrderDefault } from 'utilities/staticData';
 
 const OrderItem = (data: any) => {
@@ -39,10 +42,21 @@ const OrderItem = (data: any) => {
         </>
     );
 };
-const OrderHistoryDetailScreen = () => {
-    // const confirm = () => {
-    //     navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.CART);
-    // };
+const OrderHistoryDetailScreen = (props: any) => {
+    const { id } = props?.route?.params;
+    const [historyDetail, setHistoryDetail] = useState<any>({});
+    const { createdDate } = historyDetail;
+    const getDetailHistory = async () => {
+        try {
+            const res = await getDetailHistoryDetail(id);
+            setHistoryDetail(res?.data);
+        } catch (error) {
+            AlertMessage(error);
+        }
+    };
+    useEffect(() => {
+        getDetailHistory();
+    }, []);
     return (
         <View style={styles.container}>
             <StyledHeader title={'setting.orderHistoryDetailTitle'} />
@@ -51,7 +65,11 @@ const OrderHistoryDetailScreen = () => {
                     <View style={styles.timeView}>
                         <StyledText i18nText={'setting.timeOrder'} isBlack />
                         <StyledText originValue={' : '} isBlack />
-                        <StyledText originValue={'2021年11月6日　5時36分'} isBlack customStyle={styles.timeValue} />
+                        <StyledText
+                            originValue={formatDate(createdDate, 'YYYY年MM月DD日　HH時mm分')}
+                            isBlack
+                            customStyle={styles.timeValue}
+                        />
                     </View>
                     <AmountOrder />
                     <View style={styles.orderView}>

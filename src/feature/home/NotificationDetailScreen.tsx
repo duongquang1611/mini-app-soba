@@ -44,7 +44,7 @@ const CouponItemNotification = (props: any) => {
                     )}
                 </View>
             </View>
-            {dash && <DashView />}
+            {dash && <DashView customStyle={styles.dash} />}
         </StyledTouchable>
     );
 };
@@ -71,7 +71,7 @@ const StampItemNotification = (props: any) => {
                 </View>
                 <StampTypeView isExchange={isExchange} />
             </View>
-            {dash && <DashView customStyle={styles.dash} />}
+            {dash && <DashView customStyle={styles.dashStamp} />}
         </StyledTouchable>
     );
 };
@@ -153,7 +153,7 @@ const NotificationDetailScreen = (props: any) => {
                         )}
                     </View>
 
-                    {memberCoupons && (
+                    {memberCoupons.length > 0 && (
                         <>
                             <View style={styles.grayView} />
                             <View style={styles.contentContainer}>
@@ -176,7 +176,7 @@ const NotificationDetailScreen = (props: any) => {
                             </View>
                         </>
                     )}
-                    {memberStamps && (
+                    {memberStamps.length > 0 && (
                         <>
                             <View style={styles.grayView} />
                             <View style={styles.contentStampContainer}>
@@ -306,5 +306,11 @@ const styles = ScaledSheet.create({
     dash: {
         width: Metrics.screenWidth,
         alignSelf: 'center',
+        marginLeft: '-20@s',
+    },
+    dashStamp: {
+        width: Metrics.screenWidth,
+        alignSelf: 'center',
+        marginLeft: '-20@s',
     },
 });
