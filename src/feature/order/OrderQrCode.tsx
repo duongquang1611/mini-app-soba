@@ -15,6 +15,7 @@ import AlertMessage from 'components/base/AlertMessage';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeader from 'components/common/StyledHeader';
+import { getResourcesData } from 'feature/home/HomeScreen';
 import AmountOrder from 'feature/order/components/AmountOrder';
 import ModalCoupon from 'feature/order/components/ModalCoupon';
 import OrderItemCart from 'feature/order/components/OrderItemCart';
@@ -104,6 +105,7 @@ const ItemCoupon = (props: any) => {
 
 const OrderQrCodeScreen = (props: any) => {
     const { orderType, saveOrder } = props?.route?.params;
+    const dispatch = useDispatch();
     const { order, userInfo } = useSelector((state: RootState) => state);
     const { mobileOrder, defaultOrder, defaultOrderLocal } = order;
     const getOrder = () => {
@@ -119,9 +121,6 @@ const OrderQrCodeScreen = (props: any) => {
         }
     };
     const [orderQr, setOrderQr] = useState(getOrder());
-    useEffect(() => {
-        setOrderQr(getOrder());
-    }, [mobileOrder, defaultOrder, defaultOrderLocal]);
     const { user } = userInfo;
     const modalize = ModalizeManager();
     const orderQR = useMemo(() => generateOrderQR(orderQr, user, orderType), [orderQr, user, orderType]);
@@ -135,17 +134,22 @@ const OrderQrCodeScreen = (props: any) => {
         () => generateDataSaveOrderOption(defaultOrderLocal, OrderType.DEFAULT_HOME),
         [orderQr],
     );
-    const dispatch = useDispatch();
     const getSaveOption = () => {
         if (orderType === OrderTypeMenu.DEFAULT_ORDER) return defaultOrderSettingSaveOrderOption;
         if (orderType === OrderTypeMenu.DEFAULT_ORDER_LOCAL) defaultOrderHomeSaveOrderOption;
         return mobileOrderSaveOrderOption;
     };
+
     useEffect(() => {
         if (saveOrder) {
             onSaveOrder();
         }
     }, [orderQr]);
+
+    useEffect(() => {
+        setOrderQr(getOrder());
+    }, [mobileOrder, defaultOrder, defaultOrderLocal]);
+
     const onSaveOrder = async () => {
         try {
             const res = await saveOrderOption(getSaveOption());
@@ -173,6 +177,7 @@ const OrderQrCodeScreen = (props: any) => {
     };
 
     const edit = () => {
+        getResourcesData();
         navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.CART_EDIT_QR, {
             orderType,
             setOrder: setOrderQr,
@@ -204,6 +209,7 @@ const OrderQrCodeScreen = (props: any) => {
             type: POPUP_TYPE.CONFIRM,
         });
     };
+
     const showModal = () => {
         modalize.show(
             MODAL_ID.ORDER_GUIDE,
@@ -217,6 +223,7 @@ const OrderQrCodeScreen = (props: any) => {
             { title: 'order.qrGuide' },
         );
     };
+
     const handleBack = () => {
         if (orderType === OrderTypeMenu.DEFAULT_ORDER) {
             navigate(APP_ROUTE.MAIN_TAB, { screen: SETTING_ROUTE.ROOT });
@@ -255,6 +262,7 @@ const OrderQrCodeScreen = (props: any) => {
                                     onLongPress={() => {
                                         showActionQR(orderQR, newOrderTest);
                                     }}
+                                    delayLongPress={staticValue.DELAY_LONG_PRESS}
                                 >
                                     <QRCode value={orderQR} size={scale(staticValue.QR_SIZE)} />
                                 </TouchableOpacity>

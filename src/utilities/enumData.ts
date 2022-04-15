@@ -62,3 +62,13 @@ export enum CommonStatusBE {
     ACTIVE = 1,
     INACTIVE = 0,
 }
+
+// type category of notification
+export enum NotificationCategory {
+    PROMOTION = 1,
+    COUPON = 2,
+    STAMP = 3,
+    OTHER = 4,
+    SUCCESS_PAYMENT = 5,
+    CANCEL_PAYMENT = 6,
+}

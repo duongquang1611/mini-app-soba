@@ -2,6 +2,7 @@ import { COUPON_URL } from 'api/urls';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { HOME_ROUTE, ORDER_ROUTE } from 'navigation/config/routes';
+import { Platform } from 'react-native';
 
 export const staticValue = {
     DEFAULT: 1,
@@ -47,6 +48,7 @@ export const staticValue = {
     DEFAULT_STAMP_TICK_COLUMN: 5,
     NO_LIMIT_BOX: 200,
     PERCENT_HEIGHT_POPUP: 0.8,
+    DELAY_LONG_PRESS: Platform.OS === 'ios' ? 400 : 350,
 };
 
 export const LINEAR_COLOR = {
@@ -790,17 +792,7 @@ export const QR_TAB_DATA = [
         background: Themes.COLORS.qrCheckIn,
     },
 ];
-export enum NotificationCategory {
-    PROMOTION = 1,
-    COUPON = 2,
-    STAMP = 3,
-    OTHER = 4,
-    SUCCESS_PAYMENT = 5,
-    CANCEL_PAYMENT = 6,
-}
-export enum categoryNotification {
-    ORDER_HISTORY = 5,
-}
+
 export enum statusReadNotification {
     UN_READ = 0,
     READ = 1,

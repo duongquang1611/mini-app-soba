@@ -4,6 +4,7 @@ import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledList, StyledText } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
+import StyledOverlayLoading from 'components/base/StyledOverlayLoading';
 import DashView from 'components/common/DashView';
 import StyledHeader from 'components/common/StyledHeader';
 import usePaging from 'hooks/usePaging';
@@ -14,8 +15,10 @@ import { View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { ScaledSheet } from 'react-native-size-matters';
 import { useDispatch } from 'react-redux';
+import { NotificationCategory } from 'utilities/enumData';
 import { formatDate } from 'utilities/format';
-import { NotificationCategory, statusReadNotification } from 'utilities/staticData';
+import { wait } from 'utilities/helper';
+import { statusReadNotification } from 'utilities/staticData';
 
 const NotificationItem = (props: any) => {
     const dispatch = useDispatch();
@@ -23,10 +26,14 @@ const NotificationItem = (props: any) => {
     const { id, content, isRead, receivedDate, category, title } = item;
     const [readItem, setReadItem] = useState(isRead);
 
-    const goToHistoryOrder = () => {
-        setReadItem(true);
-        navigate(SETTING_ROUTE.ORDER_HISTORY);
-    };
+    useEffect(() => {
+        if (isRead !== readItem) {
+            setReadItem(isRead);
+        }
+    }, [isRead]);
+
+    const isCategoryPayment =
+        category === NotificationCategory.CANCEL_PAYMENT || category === NotificationCategory.SUCCESS_PAYMENT;
 
     const goToDetail = async () => {
         let checkIsRead = item?.isRead;
@@ -40,12 +47,13 @@ const NotificationItem = (props: any) => {
         } catch (error) {
             console.log('goToDetail -> error', error);
         }
-        navigate(HOME_ROUTE.NOTIFICATION_DETAIL, { item: { ...item, isRead: checkIsRead } });
+        if (!category || isCategoryPayment) {
+            navigate(SETTING_ROUTE.ORDER_HISTORY);
+        } else navigate(HOME_ROUTE.NOTIFICATION_DETAIL, { item: { ...item, isRead: checkIsRead } });
     };
 
     const getTitleItem = () => {
-        if (category === NotificationCategory.CANCEL_PAYMENT || category === NotificationCategory.SUCCESS_PAYMENT)
-            return content || '';
+        if (isCategoryPayment) return content || '';
         return title || '';
     };
 
@@ -58,13 +66,7 @@ const NotificationItem = (props: any) => {
                         backgroundColor: readItem ? Themes.COLORS.white : Themes.COLORS.readNotificationBackground,
                     },
                 ]}
-                onPress={() =>
-                    !category ||
-                    category === NotificationCategory.CANCEL_PAYMENT ||
-                    category === NotificationCategory.SUCCESS_PAYMENT
-                        ? goToHistoryOrder()
-                        : goToDetail()
-                }
+                onPress={goToDetail}
             >
                 <StyledIcon source={getIcon(category)} size={30} customStyle={styles.notificationImage} />
                 <View style={styles.contentText}>
@@ -97,6 +99,7 @@ const NotificationScreen = () => {
     const { pagingData, onRefresh, onLoadMore } = usePaging(getNotificationList, {}, 'notifications');
     const { list, refreshing } = pagingData;
     const { notifications = [], totalUnread = 0 } = list;
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         dispatch(updateNotificationUnRead(totalUnread));
@@ -106,12 +109,16 @@ const NotificationScreen = () => {
 
     const handleReadAll = async () => {
         try {
+            setLoading(true);
             await readAllNotification();
             dispatch(updateNotificationUnRead(0));
             onRefresh?.();
         } catch (error) {
             console.log('readAllNotification -> error', error);
             AlertMessage(error);
+        } finally {
+            await wait(250);
+            setLoading(false);
         }
     };
 
@@ -121,6 +128,7 @@ const NotificationScreen = () => {
 
     return (
         <View style={styles.container}>
+            <StyledOverlayLoading visible={loading} />
             <StyledHeader
                 title={'notification.notificationTiTle'}
                 textRight={'notification.readAllNotification'}
