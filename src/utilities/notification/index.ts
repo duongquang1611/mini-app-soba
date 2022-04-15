@@ -11,14 +11,16 @@ import {
 import { store } from 'app-redux/store';
 import AlertMessage from 'components/base/AlertMessage';
 import i18next from 'i18next';
-import { APP_ROUTE, HOME_ROUTE } from 'navigation/config/routes';
+import { APP_ROUTE, HOME_ROUTE, SETTING_ROUTE } from 'navigation/config/routes';
 import { navigate, navigationRef } from 'navigation/NavigationService';
 import { useEffect } from 'react';
+import Config from 'react-native-config';
 import OneSignal from 'react-native-onesignal';
 import { useSelector } from 'react-redux';
 import { isLogin } from 'utilities/authenticate/AuthenticateService';
-import { logger } from 'utilities/helper';
-import { listScreenBackWhenPayment, NotificationCategory, OrderType } from 'utilities/staticData';
+import { NotificationCategory } from 'utilities/enumData';
+import { logger, wait } from 'utilities/helper';
+import { listScreenBackWhenPayment, OrderType } from 'utilities/staticData';
 
 type NotificationReceivedEvent = {
     complete: (notification?: any) => void;
@@ -45,20 +47,28 @@ export function deleteTagOneSignal() {
 }
 
 export async function onMoveNavigation(data: any) {
-    if (data?.id) {
+    const { memberNotiId, category } = data || {};
+    const isCategoryPayment =
+        category === NotificationCategory.CANCEL_PAYMENT || category === NotificationCategory.SUCCESS_PAYMENT;
+    if (data?.memberNotiId) {
         try {
-            await readNotification(data.id);
+            await readNotification(data?.memberNotiId);
+            if (!category || isCategoryPayment) {
+                navigate(SETTING_ROUTE.ORDER_HISTORY);
+            } else navigate(HOME_ROUTE.NOTIFICATION_DETAIL, { item: { id: memberNotiId, isRead: true } });
         } catch (error) {
-            console.log('file: index.ts -> line 38 -> onMoveNavigation -> error', error);
+            console.log('onMoveNavigation -> error', error);
         }
     }
 }
-export function handleNavigateNotification(data: any) {
+export const handleNavigateNotification = async (data: any) => {
     if (isLogin()) {
         const { additionalData } = data?.notification;
-        onMoveNavigation(additionalData);
+        setTimeout(() => {
+            onMoveNavigation(additionalData);
+        }, 300);
     }
-}
+};
 const deleteUsedCoupon = (order: any, couponsUsed: any) => {
     const { coupons } = order || {};
     const newCoupons =
@@ -72,6 +82,7 @@ const deleteUsedCoupon = (order: any, couponsUsed: any) => {
         ) || [];
     return { ...order, coupons: newCoupons };
 };
+
 const backHome = (orderId: string) => {
     AlertMessage(
         i18next.t('order.backHomeWhenPayment', { orderId }),
@@ -83,7 +94,8 @@ const backHome = (orderId: string) => {
         false,
     );
 };
-function onReceived(data: NotificationReceivedEvent) {
+
+const onReceived = (data: NotificationReceivedEvent) => {
     logger('onReceived', undefined, data);
     const notify = data.getNotification();
     setTimeout(() => data.complete(notify), 0); // must need to show notify in tab bar
@@ -108,7 +120,7 @@ function onReceived(data: NotificationReceivedEvent) {
     ) {
         backHome(orderId);
     }
-}
+};
 
 export const useOnesignal = (user?: any) => {
     const { isPushDisabled } = useSelector((state: RootState) => state.globalData);
@@ -118,8 +130,8 @@ export const useOnesignal = (user?: any) => {
     }
 
     useEffect(() => {
-        // const oneSignalId = Config.ONE_SIGNAL_APP_ID;
-        const oneSignalId = '120ed4db-f5d3-440d-9838-cb43d3f2557a';
+        const oneSignalId = Config.ONE_SIGNAL_APP_ID;
+
         setTimeout(async () => {
             try {
                 OneSignal.setAppId(oneSignalId);

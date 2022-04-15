@@ -44,6 +44,7 @@ const ShowQrTab = (props: any) => {
                                     ? showActionQR(qrValue, qrValue, 'QR Check In', 'QR Check In')
                                     : showActionQR(qrValue, newOrder);
                             }}
+                            delayLongPress={staticValue.DELAY_LONG_PRESS}
                         >
                             <QRCode
                                 value={qrValue}
