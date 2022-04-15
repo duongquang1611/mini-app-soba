@@ -133,7 +133,7 @@ const NotificationDetailScreen = (props: any) => {
                     <View style={styles.contentContainer}>
                         <StyledText originValue={formatDate(receivedDate)} customStyle={styles.time} />
                         <StyledText originValue={title} customStyle={styles.title} />
-                        {listImage.length > 0 && (
+                        {listImage?.length > 0 && (
                             <StyledHeaderImage
                                 isBack={false}
                                 images={listImage}
@@ -153,7 +153,7 @@ const NotificationDetailScreen = (props: any) => {
                         )}
                     </View>
 
-                    {memberCoupons.length > 0 && (
+                    {memberCoupons?.length > 0 && (
                         <>
                             <View style={styles.grayView} />
                             <View style={styles.contentContainer}>
@@ -176,7 +176,7 @@ const NotificationDetailScreen = (props: any) => {
                             </View>
                         </>
                     )}
-                    {memberStamps.length > 0 && (
+                    {memberStamps?.length > 0 && (
                         <>
                             <View style={styles.grayView} />
                             <View style={styles.contentStampContainer}>
