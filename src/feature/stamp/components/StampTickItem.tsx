@@ -16,7 +16,7 @@ const separatorTop = 10;
 // noodle off: normal
 // close box: couponsCumulative
 
-const StampTickItem = ({ item, numCol, onPress, isOpen = false }: any) => {
+const StampTickItem = ({ item, numCol, onPress, isOpen = false, index }: any) => {
     const { createdDate } = item;
     const isDisabled = !isOpen && !item?.positionBox && !createdDate;
     const isCloseBox = item?.positionBox && !isOpen;
@@ -24,7 +24,6 @@ const StampTickItem = ({ item, numCol, onPress, isOpen = false }: any) => {
     const handlePressItem = () => {
         onPress?.();
     };
-
     return (
         <StyledTouchable
             onPress={handlePressItem}
@@ -40,7 +39,8 @@ const StampTickItem = ({ item, numCol, onPress, isOpen = false }: any) => {
                         : createdDate
                         ? Themes.COLORS.headerBackground
                         : Themes.COLORS.disabled,
-                    marginRight: scale(numCol === staticValue.COLUMNS_STAMP_TICK[0] ? 15 : 9),
+                    marginRight:
+                        (index + 1) % numCol ? scale(numCol === staticValue.COLUMNS_STAMP_TICK[0] ? 15 : 9) : 0,
                     width:
                         (Metrics.screenWidth -
                             scale(40 + (numCol === staticValue.COLUMNS_STAMP_TICK[0] ? 15 : 9) * (numCol - 1))) /

@@ -1,4 +1,4 @@
-import { getNotificationList, readAllNotification } from 'api/modules/api-app/notification';
+import { getNotificationList, readAllNotification, readNotification } from 'api/modules/api-app/notification';
 import { updateNotificationUnRead } from 'app-redux/slices/globalDataSlice';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
@@ -18,32 +18,44 @@ import { formatDate } from 'utilities/format';
 import { NotificationCategory, statusReadNotification } from 'utilities/staticData';
 
 const NotificationItem = (props: any) => {
-    const { item, read } = props;
+    const dispatch = useDispatch();
+    const { item } = props;
     const { id, content, isRead, receivedDate, category, title } = item;
-    const [readItem, setReadItem] = useState(false);
+    const [readItem, setReadItem] = useState(isRead);
+
     const goToHistoryOrder = () => {
         setReadItem(true);
         navigate(SETTING_ROUTE.ORDER_HISTORY);
     };
-    const goToDetail = () => {
-        setReadItem(true);
-        navigate(HOME_ROUTE.NOTIFICATION_DETAIL, { id });
+
+    const goToDetail = async () => {
+        let checkIsRead = item?.isRead;
+        try {
+            if (!item?.isRead) {
+                const readData = await readNotification(id);
+                checkIsRead = statusReadNotification.READ;
+                dispatch(updateNotificationUnRead(readData?.data || 0));
+                setReadItem(true);
+            }
+        } catch (error) {
+            console.log('goToDetail -> error', error);
+        }
+        navigate(HOME_ROUTE.NOTIFICATION_DETAIL, { item: { ...item, isRead: checkIsRead } });
     };
+
     const getTitleItem = () => {
         if (category === NotificationCategory.CANCEL_PAYMENT || category === NotificationCategory.SUCCESS_PAYMENT)
             return content || '';
         return title || '';
     };
+
     return (
         <>
             <TouchableOpacity
                 style={[
                     styles.notificationItem,
                     {
-                        backgroundColor:
-                            isRead === statusReadNotification.READ || read || readItem
-                                ? Themes.COLORS.white
-                                : Themes.COLORS.readNotificationBackground,
+                        backgroundColor: readItem ? Themes.COLORS.white : Themes.COLORS.readNotificationBackground,
                     },
                 ]}
                 onPress={() =>
@@ -82,33 +94,37 @@ const getIcon = (category: any) => {
     }
 };
 const NotificationScreen = () => {
-    const [read, setRead] = useState(false);
     const { pagingData, onRefresh, onLoadMore } = usePaging(getNotificationList, {}, 'notifications');
     const { list, refreshing } = pagingData;
-    const { notifications = [], totalUnread = {} } = list;
+    const { notifications = [], totalUnread = 0 } = list;
+
     useEffect(() => {
         dispatch(updateNotificationUnRead(totalUnread));
     }, [totalUnread]);
+
     const dispatch = useDispatch();
-    const readNotification = async () => {
+
+    const handleReadAll = async () => {
         try {
             await readAllNotification();
             dispatch(updateNotificationUnRead(0));
-            setRead(true);
+            onRefresh?.();
         } catch (error) {
-            console.log('readNotification -> error', error);
+            console.log('readAllNotification -> error', error);
             AlertMessage(error);
         }
     };
+
     const renderItemNoti = ({ item }: any) => {
-        return <NotificationItem item={item} read={read} />;
+        return <NotificationItem item={item} />;
     };
+
     return (
         <View style={styles.container}>
             <StyledHeader
                 title={'notification.notificationTiTle'}
                 textRight={'notification.readAllNotification'}
-                onPressRight={readNotification}
+                onPressRight={handleReadAll}
             />
             <View style={styles.grayView} />
             <StyledList

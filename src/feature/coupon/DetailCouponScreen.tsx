@@ -33,6 +33,7 @@ const DetailCouponScreen = (props: any) => {
         item = {},
         handleUseCoupon,
         cartOrder: cartOrderState,
+        fromNotify = false,
     } = props?.route?.params || {};
     const [disabled, setDisabled] = useState(disabledProps);
     const [stampDetail, setStampDetail] = useState(props?.route?.params?.stampDetail || {});
@@ -112,7 +113,7 @@ const DetailCouponScreen = (props: any) => {
             )}
             <CouponContentView canUse={canUse} data={detailMemberCoupon} initDetailNavigate={item} />
 
-            {(canUse === TabCouponStatus.CAN_USE || handleExchangeCoupon) && (
+            {(canUse === TabCouponStatus.CAN_USE || handleExchangeCoupon) && !fromNotify && (
                 <View style={[styles.wrapButton, commonStyles.shadow]}>
                     <StyledButton
                         title={

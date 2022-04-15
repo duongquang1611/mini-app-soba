@@ -57,6 +57,7 @@ const CouponTab = (props: CouponTabProps) => {
                 onRefresh={() => getCouponData(canUse)}
                 refreshing={false}
                 noDataText={'coupon.noData'}
+                removeClippedSubviews={true}
             />
         </View>
     );

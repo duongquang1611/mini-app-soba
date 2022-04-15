@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { getStampList, tickStamp } from 'api/modules/api-app/stamp';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
@@ -11,7 +12,7 @@ import usePaging, { SIZE_LIMIT } from 'hooks/usePaging';
 import { cloneDeep } from 'lodash';
 import { STAMP_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { Portal } from 'react-native-portalize';
@@ -29,7 +30,8 @@ const StampList = (props: StampListProps) => {
     const { canUse = false } = props;
     const modalizeRef = useRef<Modalize>(null);
     const [chooseTickStampIds, setChooseTickStampIds] = useState({});
-
+    // const [refreshing, setRefreshing] = useState(false);
+    // const [list, setList] = useState<any>({});
     const userTicked = useMemo(() => {
         const lengthTicked = Object.values(chooseTickStampIds).filter((item: any) => Boolean(item))?.length;
         return lengthTicked || 0;
@@ -46,6 +48,30 @@ const StampList = (props: StampListProps) => {
     const { list, refreshing } = pagingData;
     const { stamps = [], untickedStamps = {} } = list;
     const { untickStampsAmount = 0, bill = [] } = untickedStamps;
+
+    // useEffect(() => {
+    //     getStampData(false);
+    // }, []);
+
+    // const getStampData = async (changeRefreshing = true) => {
+    //     console.log('getStampData -> changeRefreshing', changeRefreshing);
+    //     try {
+    //         changeRefreshing && setRefreshing(true);
+    //         const res = await getStampList({
+    //             params: {
+    //                 status: Number(canUse),
+    //                 take: SIZE_LIMIT,
+    //                 pageIndex: 1,
+    //             },
+    //         });
+    //         console.log('getStampData -> res', res);
+    //         setList(res?.data || {});
+    //     } catch (error) {
+    //         console.log('getStampData -> error', error);
+    //     } finally {
+    //         changeRefreshing && setRefreshing(false);
+    //     }
+    // };
 
     const goToDetail = (item: any) => {
         navigate(STAMP_ROUTE.STAMP_CARD_DETAIL, { item });
@@ -79,6 +105,7 @@ const StampList = (props: StampListProps) => {
             await tickStamp({ tickStamps: dataTicks });
             setChooseTickStampIds({});
             onRefresh?.();
+            // getStampData(false);
             AlertMessage('stamp.tickSuccess', { type: POPUP_TYPE.SUCCESS });
         } catch (error) {
             AlertMessage(error);
@@ -152,8 +179,10 @@ const StampList = (props: StampListProps) => {
                 customStyle={styles.listStamp}
                 refreshing={refreshing}
                 onRefresh={onRefresh}
+                // onRefresh={getStampData}
                 noDataText={'stamp.noData'}
                 onEndReached={onLoadMore}
+                removeClippedSubviews={true}
             />
         </View>
     );
