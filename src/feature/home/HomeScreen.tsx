@@ -120,11 +120,12 @@ const HomeScreen: FunctionComponent = () => {
     const [refreshing, setRefreshing] = useState(false);
 
     useEffect(() => {
-        getNotification();
+        getNewsData();
         getCouponData();
-        notification();
+        getNotification();
     }, []);
-    const notification = async () => {
+
+    const getNotification = async () => {
         try {
             const res = await getNotificationList({ params: { take: 1, pageIndex: 1 } });
             const { totalUnread } = res?.data;
@@ -133,7 +134,7 @@ const HomeScreen: FunctionComponent = () => {
             console.log('file: HomeScreen.tsx -> line 130 -> notification -> error', error);
         }
     };
-    const getNotification = async () => {
+    const getNewsData = async () => {
         try {
             const res = await getNewsList();
             setListNews(res?.data);
@@ -184,7 +185,7 @@ const HomeScreen: FunctionComponent = () => {
     const handleRefresh = async () => {
         try {
             setRefreshing(true);
-            await Promise.all([getNotification(), getResourcesData()]);
+            await Promise.all([getNotification(), getResourcesData(), getNewsData()]);
         } catch (error) {
             console.log(error);
         } finally {

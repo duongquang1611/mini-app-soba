@@ -124,13 +124,9 @@ const OrderQrCodeScreen = (props: any) => {
     }, [mobileOrder, defaultOrder, defaultOrderLocal]);
     const { user } = userInfo;
     const modalize = ModalizeManager();
-    const orderQR = useMemo(() => generateOrderQR(orderQr, user), [orderQr, user]);
-    const newOrderTest = useMemo(() => generateNewOrder(orderQr, user), [orderQr, user]);
+    const orderQR = useMemo(() => generateOrderQR(orderQr, user, orderType), [orderQr, user, orderType]);
+    const newOrderTest = useMemo(() => generateNewOrder(orderQr, user, orderType), [orderQr, user, orderType]);
     const mobileOrderSaveOrderOption = useMemo(() => generateDataSaveOrderOption(orderQr), [orderQr]);
-    console.log(
-        '🚀 ~ file: OrderQrCode.tsx ~ line 130 ~ OrderQrCodeScreen ~ mobileOrderSaveOrderOption',
-        mobileOrderSaveOrderOption,
-    );
     const defaultOrderSettingSaveOrderOption = useMemo(
         () => generateDataSaveOrderOption(orderQr, OrderType.DEFAULT_SETTING),
         [orderQr],
@@ -153,7 +149,7 @@ const OrderQrCodeScreen = (props: any) => {
     const onSaveOrder = async () => {
         try {
             const res = await saveOrderOption(getSaveOption());
-            if (orderType === OrderTypeMenu.DEFAULT_ORDER_LOCAL) {
+            if (orderType === OrderTypeMenu.DEFAULT_ORDER) {
                 await saveOrderOption(defaultOrderHomeSaveOrderOption);
             }
             console.log('saveOrderMobile -> res', res);

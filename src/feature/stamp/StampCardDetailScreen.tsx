@@ -34,7 +34,7 @@ const StampCardDetailScreen = (props: any) => {
     const [loading, setLoading] = useState(true);
     const modalize = ModalizeManager();
     const focused = useIsFocused();
-    const { item } = props?.route?.params || {};
+    const { item, fromNotify = false } = props?.route?.params || {};
     const [stateData, setStateData] = useState({
         stampDetail: item,
         histories: [],
@@ -192,6 +192,7 @@ const StampCardDetailScreen = (props: any) => {
                             stampDetail={stampDetail}
                             numCol={numCol}
                             data={dataTicks}
+                            fromNotify={fromNotify}
                         />
                     </View>
                     <View style={styles.wrapNoteText}>

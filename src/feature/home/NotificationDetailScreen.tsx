@@ -1,21 +1,18 @@
-import { getNotificationCoupon, readNotification } from 'api/modules/api-app/notification';
-import { updateNotificationUnRead } from 'app-redux/slices/globalDataSlice';
+import { getNotificationCoupon } from 'api/modules/api-app/notification';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
-import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import DashView from 'components/common/DashView';
 import StyledHeader from 'components/common/StyledHeader';
 import StyledHeaderImage from 'components/common/StyledHeaderImage';
 import StampTypeView from 'feature/stamp/components/StampTypeView';
 import { COUPON_ROUTE, STAMP_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
-import React, { useEffect, useMemo, useState } from 'react';
-import { Linking, RefreshControl, View } from 'react-native';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { Linking, RefreshControl, ScrollView, View } from 'react-native';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
-import { useDispatch } from 'react-redux';
 import { StampCardType, StampSettingDuration } from 'utilities/enumData';
 import { formatDate } from 'utilities/format';
 import { DateType } from 'utilities/staticData';
@@ -25,6 +22,7 @@ const CouponItemNotification = (props: any) => {
     const { coupon } = item;
     return (
         <StyledTouchable onPress={() => goToDetailCoupon(item)}>
+            <DashView customStyle={styles.dash} />
             <View style={styles.couponItemNotification}>
                 <StyledImage source={{ uri: coupon?.image }} customStyle={styles.couponImage} />
                 <View style={styles.couponName}>
@@ -53,36 +51,41 @@ const StampItemNotification = (props: any) => {
     const { stamp } = item || {};
     const { cardType, settingDuration } = stamp;
     const isExchange = useMemo(() => cardType === StampCardType.EXCHANGE, [cardType]);
+
     return (
-        <StyledTouchable onPress={() => goToDetailStamp(item)}>
-            <View style={styles.couponItemNotification}>
-                <StyledImage source={{ uri: stamp?.image }} customStyle={styles.couponImage} />
-                <View style={styles.stampName}>
-                    <StyledText originValue={stamp?.title} customStyle={styles.title} numberOfLines={1} />
-                    <StyledText
-                        i18nText={
-                            settingDuration === StampSettingDuration.NO_EXPIRED_DATE
-                                ? 'stamp.noExpiredDate'
-                                : 'stamp.rangeDate'
-                        }
-                        i18nParams={{ start: formatDate(stamp?.startDate), end: formatDate(stamp?.endDate) }}
-                        customStyle={styles.timeItem}
-                    />
+        <>
+            <DashView customStyle={styles.dash} />
+            <StyledTouchable onPress={() => goToDetailStamp(item)} customStyle={styles.btnStamp}>
+                <View style={styles.stampContentNotification}>
+                    <StyledImage source={{ uri: stamp?.image }} customStyle={styles.stampImage} />
+                    <View style={styles.stampName}>
+                        <StyledText originValue={stamp?.title} customStyle={styles.title} numberOfLines={1} />
+                        <StyledText
+                            i18nText={
+                                settingDuration === StampSettingDuration.NO_EXPIRED_DATE
+                                    ? 'stamp.noExpiredDate'
+                                    : 'stamp.rangeDate'
+                            }
+                            i18nParams={{ start: formatDate(stamp?.startDate), end: formatDate(stamp?.endDate) }}
+                            customStyle={styles.timeItem}
+                        />
+                    </View>
                 </View>
                 <StampTypeView isExchange={isExchange} />
-            </View>
-            {dash && <DashView customStyle={styles.dashStamp} />}
-        </StyledTouchable>
+            </StyledTouchable>
+            {dash && <DashView customStyle={styles.dash} />}
+        </>
     );
 };
 
 const NotificationDetailScreen = (props: any) => {
-    const { id } = props.route?.params || {};
+    const { item = {} } = props.route?.params || {};
+    const { id } = item;
     const [coupon, setCoupon] = useState<any>({});
     const { title, content, receivedDate, notification } = coupon;
     const { images = [], memberStamps, memberCoupons, link } = notification || {};
     const [refreshing, setRefreshing] = useState(false);
-    const dispatch = useDispatch();
+
     const handleRefresh = async () => {
         try {
             setRefreshing(true);
@@ -93,32 +96,35 @@ const NotificationDetailScreen = (props: any) => {
             setRefreshing(false);
         }
     };
+
     useEffect(() => {
         getNotification();
     }, []);
+
     const getNotification = async () => {
         try {
             const res = await getNotificationCoupon(id);
-            const readRes = await readNotification(id);
-            dispatch(updateNotificationUnRead(readRes?.data || 0));
             setCoupon(res?.data);
         } catch (error) {
             console.log('getNotification -> error', error);
             AlertMessage(error);
         }
     };
+
     const listImage = images?.map((item: any) => item?.image) || [];
-    const goToDetailStamp = (item: any) => {
-        navigate(STAMP_ROUTE.STAMP_CARD_DETAIL, { item });
-    };
+
+    const goToDetailStamp = useCallback((item: any) => {
+        navigate(STAMP_ROUTE.STAMP_CARD_DETAIL, { item, fromNotify: true });
+    }, []);
+
     const goToDetailCoupon = (item: any) => {
-        navigate(COUPON_ROUTE.DETAIL_COUPON, { item, canUse: true });
+        navigate(COUPON_ROUTE.DETAIL_COUPON, { item, canUse: true, fromNotify: true });
     };
 
     return (
         <View style={styles.container}>
             <StyledHeader title={'notification.detailNotificationTitle'} />
-            <StyledKeyboardAware
+            <ScrollView
                 refreshControl={
                     <RefreshControl
                         refreshing={refreshing}
@@ -127,6 +133,8 @@ const NotificationDetailScreen = (props: any) => {
                         onRefresh={handleRefresh}
                     />
                 }
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={styles.scrollView}
             >
                 <View style={styles.body}>
                     <View style={styles.grayView} />
@@ -169,7 +177,7 @@ const NotificationDetailScreen = (props: any) => {
                                     <CouponItemNotification
                                         key={index}
                                         item={item}
-                                        dash={index < memberCoupons.length - 1}
+                                        dash={index === memberCoupons.length - 1}
                                         goToDetailCoupon={goToDetailCoupon}
                                     />
                                 ))}
@@ -180,7 +188,7 @@ const NotificationDetailScreen = (props: any) => {
                         <>
                             <View style={styles.grayView} />
                             <View style={styles.contentStampContainer}>
-                                <View style={styles.titleCoupon}>
+                                <View style={styles.titleStamp}>
                                     <StyledIcon
                                         source={Images.icons.stamp_card}
                                         size={25}
@@ -192,7 +200,7 @@ const NotificationDetailScreen = (props: any) => {
                                     <StampItemNotification
                                         key={index}
                                         item={item}
-                                        dash={index < memberStamps.length - 1}
+                                        dash={index === memberStamps.length - 1}
                                         goToDetailStamp={goToDetailStamp}
                                     />
                                 ))}
@@ -200,7 +208,7 @@ const NotificationDetailScreen = (props: any) => {
                         </>
                     )}
                 </View>
-            </StyledKeyboardAware>
+            </ScrollView>
         </View>
     );
 };
@@ -211,6 +219,9 @@ const styles = ScaledSheet.create({
     container: {
         flex: 1,
         backgroundColor: Themes.COLORS.white,
+    },
+    scrollView: {
+        paddingBottom: '30@vs',
     },
     grayView: {
         height: '10@vs',
@@ -226,7 +237,6 @@ const styles = ScaledSheet.create({
     contentStampContainer: {
         width: '100%',
         backgroundColor: Themes.COLORS.white,
-        paddingLeft: '20@s',
         paddingBottom: '10@vs',
     },
     body: {
@@ -259,21 +269,35 @@ const styles = ScaledSheet.create({
         alignItems: 'center',
         marginBottom: '20@vs',
     },
+    titleStamp: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: '20@vs',
+        paddingHorizontal: '20@s',
+    },
     iconCoupon: {
         marginRight: '15@s',
         tintColor: Themes.COLORS.secondary,
         alignItems: 'center',
     },
     couponItemNotification: {
-        width: '100%',
         backgroundColor: Themes.COLORS.white,
         marginVertical: '2@vs',
         flexDirection: 'row',
-        flex: 1,
         paddingVertical: '10@vs',
-        overflow: 'hidden',
+    },
+    stampContentNotification: {
+        backgroundColor: Themes.COLORS.white,
+        marginVertical: '2@vs',
+        flexDirection: 'row',
+        paddingVertical: '10@vs',
     },
     couponImage: {
+        width: '60@s',
+        height: '60@s',
+        marginRight: '10@vs',
+    },
+    stampImage: {
         width: '60@s',
         height: '60@s',
         marginRight: '10@vs',
@@ -304,13 +328,15 @@ const styles = ScaledSheet.create({
         marginBottom: '10@vs',
     },
     dash: {
-        width: Metrics.screenWidth,
         alignSelf: 'center',
-        marginLeft: '-20@s',
     },
     dashStamp: {
         width: Metrics.screenWidth,
         alignSelf: 'center',
         marginLeft: '-20@s',
+    },
+    btnStamp: {
+        paddingLeft: '20@s',
+        overflow: 'hidden',
     },
 });

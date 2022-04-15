@@ -225,8 +225,8 @@ const styles = ScaledSheet.create({
         paddingBottom: 0,
     },
     background: {
-        width: '100%',
-        height: '170@s',
+        width: '335@s',
+        height: '172@s',
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,
         justifyContent: 'space-between',

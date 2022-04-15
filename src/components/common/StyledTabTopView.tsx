@@ -1,7 +1,7 @@
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledText } from 'components/base';
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import { TabBar, TabView } from 'react-native-tab-view';
@@ -120,4 +120,4 @@ const styles = ScaledSheet.create({
     },
 });
 
-export default StyledTabTopView;
+export default memo(StyledTabTopView);

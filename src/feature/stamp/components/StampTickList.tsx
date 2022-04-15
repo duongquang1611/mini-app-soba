@@ -4,7 +4,7 @@ import { STAMP_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { memo, useMemo } from 'react';
 import { View } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { StampCardType, StampSettingDuration } from 'utilities/enumData';
 import { checkExpired } from 'utilities/helper';
@@ -20,6 +20,7 @@ const StampTickList = ({
     stampDetail,
     numCol = staticValue.DEFAULT_STAMP_TICK_COLUMN,
     data = [],
+    fromNotify = false,
 }: any) => {
     const { leftAmount, stamp = {} } = stampDetail || {};
     const { stampTicks = [], settingDuration, endDate } = stamp;
@@ -29,7 +30,7 @@ const StampTickList = ({
         return isNoExpired ? false : checkExpired(endDate);
     }, [endDate, isNoExpired]);
 
-    const renderItem = ({ item }: any) => {
+    const renderItem = ({ item, index }: any) => {
         const isOpen = item?.positionBox <= stampTicks.length;
         return (
             <StampTickItem
@@ -37,6 +38,8 @@ const StampTickList = ({
                 numCol={numCol}
                 onPress={() => onPressItemStampTick(item?.positionBox, isOpen)}
                 isOpen={isOpen}
+                key={`${index}`}
+                index={index}
             />
         );
     };
@@ -49,16 +52,14 @@ const StampTickList = ({
         <>
             <DashView customStyle={styles.dashView} />
             <View style={styles.wrapListCoupon}>
-                <FlatList
-                    data={data}
-                    renderItem={renderItem}
-                    numColumns={numCol}
-                    contentContainerStyle={styles.listCoupon}
-                    keyExtractor={(item: any, index: number) => index.toString()}
-                />
+                <ScrollView contentContainerStyle={styles.listCoupon}>
+                    <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+                        {data.map((item: any, index: number) => renderItem({ item, index }))}
+                    </View>
+                </ScrollView>
             </View>
             <DashView customStyle={styles.dashView} />
-            {isExchange && (
+            {isExchange && !fromNotify && (
                 <StyledButton
                     title={'stampDetail.couponExchangeBtn'}
                     customStyle={styles.btnExchange}
