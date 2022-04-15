@@ -28,7 +28,6 @@ const NotificationItem = (props: any) => {
 
     useEffect(() => {
         if (isRead !== readItem) {
-            console.log('useEffect -> isRead', isRead);
             setReadItem(isRead);
         }
     }, [isRead]);

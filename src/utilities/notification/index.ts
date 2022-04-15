@@ -19,7 +19,7 @@ import OneSignal from 'react-native-onesignal';
 import { useSelector } from 'react-redux';
 import { isLogin } from 'utilities/authenticate/AuthenticateService';
 import { NotificationCategory } from 'utilities/enumData';
-import { logger, wait } from 'utilities/helper';
+import { logger } from 'utilities/helper';
 import { listScreenBackWhenPayment, OrderType } from 'utilities/staticData';
 
 type NotificationReceivedEvent = {
