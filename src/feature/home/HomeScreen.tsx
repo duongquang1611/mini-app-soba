@@ -126,7 +126,7 @@ const HomeScreen: FunctionComponent = () => {
     }, []);
     const notification = async () => {
         try {
-            const res = await getNotificationList();
+            const res = await getNotificationList({ params: { take: 1, pageIndex: 1 } });
             const { totalUnread } = res?.data;
             store.dispatch(updateNotificationUnRead(totalUnread));
         } catch (error) {
