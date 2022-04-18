@@ -211,14 +211,20 @@ export const generateOrderQR = (
                 id: `${mainDish?.stringId}`,
                 name: mainDish?.name,
             };
+            const subDishesData: any[] = [];
             if (subDishes?.length > 0) {
                 flatDishItem.subIds = subDishes.map((subDish: any) => {
                     const subIdsData = new Array(subDish?.amount || 1).fill(`${subDish?.stringId}`);
+                    const subDishData = new Array(subDish?.amount || 1).fill({
+                        id: `${subDish?.stringId}`,
+                        name: subDish?.title,
+                    });
+                    subDishesData.push(...subDishData);
                     return subIdsData;
                 });
                 flatDishItem.subIds = flatDishItem.subIds.flat();
             }
-            dishFormatted.push(flatDishItem);
+            dishFormatted.push(flatDishItem, ...subDishesData);
         }
         return dishFormatted;
     });
@@ -341,14 +347,20 @@ export const generateNewOrder = (
                 id: `${mainDish?.stringId}`,
                 price: 100,
             };
+            const subDishesData: any[] = [];
             if (subDishes?.length > 0) {
                 flatDishItem.subIds = subDishes.map((subDish: any) => {
                     const subIdsData = new Array(subDish?.amount || 1).fill(`${subDish?.stringId}`);
+                    const subDishData = new Array(subDish?.amount || 1).fill({
+                        id: `${subDish?.stringId}`,
+                        name: subDish?.title,
+                    });
+                    subDishesData.push(...subDishData);
                     return subIdsData;
                 });
                 flatDishItem.subIds = flatDishItem.subIds.flat();
             }
-            dishFormatted.push(flatDishItem);
+            dishFormatted.push(flatDishItem, ...subDishesData);
         }
         return dishFormatted;
     });
