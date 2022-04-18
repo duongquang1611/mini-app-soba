@@ -20,6 +20,7 @@ const common = {
     backgroundButton: 'rgba(34, 34, 34, 0.5)',
     thunderbird: '#DF2115',
     sweetPink: '#FBA29D',
+    netWorkItem: 'rgba(255, 255, 255, 0.5)',
 };
 
 const Light = {

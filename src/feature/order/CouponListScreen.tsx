@@ -6,8 +6,9 @@ import { StyledButton } from 'components/base';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledHeader from 'components/common/StyledHeader';
 import CouponTab from 'feature/coupon/components/CouponTab';
+import { getCouponData } from 'feature/home/HomeScreen';
 import { goBack } from 'navigation/NavigationService';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
@@ -22,6 +23,9 @@ const CouponListScreen = (props: any) => {
     const dispatch = useDispatch();
     const [cartListCouponOrder, setCartListCouponOrder] = useState(checkOrder);
     const modalize = ModalizeManager();
+    useEffect(() => {
+        getCouponData(TabCouponStatus.CAN_USE);
+    }, []);
     const updateCart = () => {
         if (orderType !== OrderTypeMenu.CART_ORDER) {
             setCartListCouponOrder(cartListCouponOrder);
