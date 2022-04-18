@@ -34,7 +34,8 @@ const OrderItemCart = (props: any) => {
                             {item?.amount > 1 && (
                                 <View style={styles.numView}>
                                     <StyledText
-                                        originValue={`x${item?.amount}`}
+                                        i18nParams={{ amount: item?.amount }}
+                                        i18nText={'order.rangeSubDish'}
                                         isBlack
                                         customStyle={styles.addValueText}
                                     />

@@ -10,7 +10,7 @@ import { formatDate } from 'utilities/format';
 
 const ListNewsItem = (props: any) => {
     const { data } = props || {};
-    const { id, thumbnail, title, description, publishDate } = data;
+    const { id, thumbnail, title, description, publishDate } = data || {};
     return (
         <View>
             <TouchableOpacity style={styles.listNewsView} onPress={() => navigate(HOME_ROUTE.NEW_DETAIL, { id })}>

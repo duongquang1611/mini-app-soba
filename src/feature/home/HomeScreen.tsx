@@ -136,11 +136,10 @@ const HomeScreen: FunctionComponent = () => {
     };
     const getNewsData = async () => {
         try {
-            const res = await getNewsList();
+            const res = await getNewsList({ params: { take: 5, pageIndex: 1 } });
             setListNews(res?.data);
         } catch (error) {
             console.log('file: HomeScreen.tsx -> line 100 -> getNotification -> error', error);
-            // AlertMessage(error);
         }
     };
 
@@ -267,7 +266,6 @@ const styles = ScaledSheet.create({
         flex: 1,
     },
     contScreen: {
-        // paddingHorizontal: '20@s',
         paddingBottom: '20@vs',
     },
     contModalContent: {
