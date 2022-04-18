@@ -220,6 +220,7 @@ const MenuEditQrScreen = (props: any) => {
                         />
                     )}
                     onRefresh={getResourcesData}
+                    noDataText={'common.menuNoData'}
                     refreshing={false}
                 />
             </View>

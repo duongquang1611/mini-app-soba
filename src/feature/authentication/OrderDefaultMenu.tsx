@@ -5,7 +5,7 @@ import { updateDefaultOrder, updateDefaultOrderLocal } from 'app-redux/slices/or
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
-import { StyledButton, StyledIcon, StyledText, StyledTouchable } from 'components/base';
+import { StyledButton, StyledIcon, StyledList, StyledText, StyledTouchable } from 'components/base';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import { StyledImageBackground } from 'components/base/StyledImage';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
@@ -19,7 +19,6 @@ import { APP_ROUTE, HOME_ROUTE, ORDER_ROUTE, SETTING_ROUTE } from 'navigation/co
 import { navigate, reset } from 'navigation/NavigationService';
 import React, { useEffect, useRef, useState } from 'react';
 import { View } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkHasDataOrder, checkSameData, isIos, sumTotalAmount } from 'utilities/helper';
@@ -237,11 +236,11 @@ const OrderDefaultMenu = (props: any) => {
                     )}
 
                     <View style={styles.body}>
-                        <FlatList
+                        <StyledList
                             numColumns={2}
                             data={menuFilter}
-                            keyExtractor={(item) => item.id}
-                            renderItem={({ item }) => (
+                            keyExtractor={(item: any) => item.id}
+                            renderItem={({ item }: any) => (
                                 <ItemMenu
                                     goToDetailModal={() => showModalDetail(item?.id)}
                                     key={item.id}
@@ -250,6 +249,7 @@ const OrderDefaultMenu = (props: any) => {
                                     setOrder={setOrderDefault}
                                 />
                             )}
+                            noDataText={'common.menuNoData'}
                         />
                     </View>
                 </StyledKeyboardAware>

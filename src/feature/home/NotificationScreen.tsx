@@ -143,7 +143,7 @@ const NotificationScreen = () => {
                 customStyle={styles.body}
                 refreshing={refreshing}
                 onRefresh={onRefresh}
-                noDataText={'stamp.noData'}
+                noDataText={'notification.noData'}
                 onEndReached={onLoadMore}
             />
         </View>

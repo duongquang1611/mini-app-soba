@@ -10,7 +10,7 @@ import { navigate } from 'navigation/NavigationService';
 import React from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
-import { formatDate } from 'utilities/format';
+import { formatDate, YMDHm } from 'utilities/format';
 
 const OrderItem = ({ item }: any) => {
     const { title, createdDate, amount, totalPaid, id } = item || {};
@@ -28,10 +28,7 @@ const OrderItem = ({ item }: any) => {
                         customStyle={styles.contentText}
                         numberOfLines={1}
                     />
-                    <StyledText
-                        originValue={formatDate(createdDate, 'YYYY年MM月DD日　HH時mm分')}
-                        customStyle={styles.time}
-                    />
+                    <StyledText originValue={formatDate(createdDate, YMDHm)} customStyle={styles.time} />
                     <View style={styles.priceRow}>
                         <StyledText
                             i18nParams={{ totalPaid }}

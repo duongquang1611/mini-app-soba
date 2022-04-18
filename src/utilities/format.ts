@@ -8,6 +8,7 @@ export const YYYYMMDD = 'YYYY年MM月DD日';
 export const DDMM = 'DD/MM';
 export const YYYYMMDD_PUBLISH = 'YYYY/MM/DD';
 export const YMDHms = 'YYYY/MM/DD hh:mm:ss';
+export const YMDHm = 'YYYY年MM月DD日　HH時mm分';
 
 export const changeLocale = (locale: string): void => {
     dayjs.locale(locale);

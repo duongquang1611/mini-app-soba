@@ -1,25 +1,35 @@
+import { getNewsList } from 'api/modules/api-app/home';
 import { Themes } from 'assets/themes';
-import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
+import { StyledList } from 'components/base';
+import DashView from 'components/common/DashView';
 import StyledHeader from 'components/common/StyledHeader';
+import usePaging from 'hooks/usePaging';
 import React from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import ListNewsItem from './components/ListNewsItem';
 
-const NewsListScreen = (props: any) => {
-    const { listNews } = props?.route?.params;
-
+const NewsListScreen = () => {
+    const { pagingData, onRefresh, onLoadMore } = usePaging(getNewsList);
+    const { list, refreshing } = pagingData;
+    const renderItemNews = ({ item }: any) => {
+        return <ListNewsItem data={item} />;
+    };
     return (
         <View style={styles.container}>
             <StyledHeader title={'home.newsTitle'} />
-            <StyledKeyboardAware>
-                <View style={styles.grayView} />
-                <View style={styles.body}>
-                    {listNews.map((news: any, index: number) => (
-                        <ListNewsItem key={index} data={news} />
-                    ))}
-                </View>
-            </StyledKeyboardAware>
+            <View style={styles.grayView} />
+            <StyledList
+                data={list}
+                renderItem={renderItemNews}
+                ItemSeparatorComponent={DashView}
+                ListFooterComponent={DashView}
+                customStyle={styles.body}
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                noDataText={'home.newsNoData'}
+                onEndReached={onLoadMore}
+            />
         </View>
     );
 };
@@ -29,11 +39,11 @@ export default NewsListScreen;
 const styles = ScaledSheet.create({
     container: {
         flex: 1,
+        backgroundColor: Themes.COLORS.white,
     },
     body: {
-        flex: 1,
-
-        backgroundColor: Themes.COLORS.lightGray,
+        flexGrow: 1,
+        paddingBottom: '20@vs',
     },
     grayView: {
         height: '10@vs',
