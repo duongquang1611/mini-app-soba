@@ -403,4 +403,7 @@ export default {
             button: '来店QRコードについて',
         },
     },
+    profile: {
+        updateSuccess: 'Update Info Success',
+    },
 };

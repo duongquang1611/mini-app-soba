@@ -1,224 +1,182 @@
-// import { StyledButton } from 'components/base';
-// import StyledHeader from 'components/common/StyledHeader';
-// import React from 'react';
-// import { View } from 'react-native';
-// import { ScaledSheet } from 'react-native-size-matters';
-
-// const EditProfileScreen = () => {
-//     const editProfile = () => {
-//         console.log('edit');
-//     };
-//     const cancel = () => {
-//         console.log('cancel');
-//     };
-//     return (
-//         <View style={styles.container}>
-//             <StyledHeader title={'EditProfile'} />
-//             <View style={styles.body}>
-//                 <StyledButton title={'editProfile'} onPress={editProfile} customStyle={styles.buttonSave} />
-//                 <StyledButton title={'cancel'} onPress={cancel} customStyle={styles.buttonSave} />
-//             </View>
-//         </View>
-//     );
-// };
-
-// export default EditProfileScreen;
-
-// const styles = ScaledSheet.create({
-//     container: {
-//         flex: 1,
-//     },
-//     body: {
-//         justifyContent: 'center',
-//         alignItems: 'center',
-//         flex: 1,
-//         marginHorizontal: '20@s',
-//     },
-//     buttonSave: {},
-// });
-
 /* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { yupResolver } from '@hookform/resolvers/yup';
+import { editProfile, getProfile } from 'api/modules/api-app/authenticate';
+import { userInfoActions } from 'app-redux/slices/userInfoSlice';
+import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
-import { StyledButton, StyledInputForm, StyledText } from 'components/base';
+import { StyledButton, StyledInputForm, StyledText, StyledTouchable } from 'components/base';
+import AlertMessage from 'components/base/AlertMessage';
+import { LabelInput } from 'components/base/StyledInput';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
+import RadioCheckView from 'components/common/RadioCheckView';
 import StyledHeader from 'components/common/StyledHeader';
+import TextUnderline from 'components/common/TextUnderline';
 import UpLoadAvatar from 'feature/authentication/components/UpLoadAvatar';
-import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
-import { navigate } from 'navigation/NavigationService';
-import React, { useRef, useState } from 'react';
+import { cloneDeep } from 'lodash';
+import { APP_ROUTE, AUTHENTICATE_ROUTE, SETTING_ROUTE } from 'navigation/config/routes';
+import { goBack, navigate } from 'navigation/NavigationService';
+import React, { useCallback, useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import { View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Keyboard, View } from 'react-native';
 import { scale, ScaledSheet } from 'react-native-size-matters';
+import { useDispatch, useSelector } from 'react-redux';
+import { GENDER_DATA, POPUP_TYPE, staticValue } from 'utilities/staticData';
+import yupValidate from 'utilities/yupValidate';
 import * as yup from 'yup';
 
 const EditProfileScreen = () => {
-    const goToRegis = () => {
-        // navigate(AUTHENTICATE_ROUTE.REGISTER_STEP_1);
-    };
-    const { t } = useTranslation();
-    const [stateGender, setStateGender] = useState({
-        gender: null,
-        maleButtonColor: Themes.COLORS.white,
-        femaleButtonColor: Themes.COLORS.white,
-        femaleBorderColor: Themes.COLORS.silver,
-        maleBorderColor: Themes.COLORS.silver,
-    });
-    const [rule, setRule] = useState(false);
+    const dispatch = useDispatch();
+    const [loading, setLoading] = useState(false);
+    const { user = {} } = useSelector((state: any) => state.userInfo);
     const birthdayRef = useRef<any>(null);
-    const nameRef = useRef<any>(null);
+    const fullNameRef = useRef<any>(null);
 
     const registerSchema = yup.object().shape({
-        // email: yupValidate.email(),
-        // password: yupValidate.password(),
-        // confirmPassword: yupValidate.password('password'),
+        fullName: yupValidate.fullName(),
+        birthday: yupValidate.birthday(),
+        gender: yupValidate.gender(),
     });
 
     const form = useForm({
         mode: 'onChange',
         resolver: yupResolver(registerSchema),
+        defaultValues: {
+            email: user?.member?.email,
+            birthday: user?.member?.birthday,
+            gender: `${user?.member?.gender}`,
+            fullName: user?.member?.fullName,
+            avatar: user?.member?.avatar,
+        },
     });
     const {
         formState: { isValid },
         setValue,
         handleSubmit,
+        watch,
     } = form;
 
-    const submit = async (user: any) => {
-        // const res = await checkIsExistEmail(user?.email);
-        // if (res?.data?.isExisted) {
-        //     AlertMessage(t('error.emailExisted'));
-        //     return;
-        // }
-        // await getVerifyCode(user?.email);
-        navigate(AUTHENTICATE_ROUTE.SEND_OTP, { ...user, register: true });
-    };
-    const changePass = () => {
+    const goToChangePass = () => {
         navigate(AUTHENTICATE_ROUTE.CHANGE_PASS);
     };
+
+    const saveEdit = useCallback(async (user: any) => {
+        try {
+            Keyboard.dismiss();
+            setLoading(true);
+            const newUser = cloneDeep(user);
+            delete newUser.email;
+            if (newUser?.gender) {
+                newUser.gender = Number(newUser.gender);
+            }
+            await editProfile(newUser);
+            const resProfile = await getProfile();
+            dispatch(userInfoActions.getUserInfoSuccess(resProfile?.data));
+            setLoading(false);
+            AlertMessage('profile.updateSuccess', {
+                onClosedModalize: () => navigate(APP_ROUTE.MAIN_TAB, { screen: SETTING_ROUTE.ROOT }),
+                type: POPUP_TYPE.SUCCESS,
+            });
+        } catch (error) {
+            setLoading(false);
+            AlertMessage(error);
+        }
+    }, []);
+
+    const setValueForm = (field: any, value: string | number) => {
+        setValue(field, value, staticValue.ACTION_WHENS_SET_VALUE);
+    };
+
+    const renderItemGender = (item: any) => {
+        return (
+            <StyledTouchable
+                customStyle={styles.buttonGender}
+                key={item.title}
+                onPress={() => setValueForm('gender', item.value)}
+            >
+                <RadioCheckView check={watch('gender') === item.value} />
+                <StyledText customStyle={styles.textGender} originValue={item.title} />
+            </StyledTouchable>
+        );
+    };
+
     return (
         <View style={styles.container}>
             <StyledHeader title={'setting.editProfileTitle'} />
-            <StyledKeyboardAware>
-                <SafeAreaView style={styles.body}>
-                    <FormProvider {...form}>
-                        <UpLoadAvatar setValue={setValue} />
-                        <StyledInputForm
-                            label={'common.email'}
-                            name={'email'}
-                            placeholder={t('authen.register.emailPlaceholder')}
-                            keyboardType="email-address"
-                            returnKeyType={'next'}
-                            onSubmitEditing={() => nameRef.current.focus()}
-                        />
-                        <StyledInputForm
-                            label={'common.name'}
-                            name={'name'}
-                            ref={nameRef}
-                            placeholder={t('authen.register.namePlaceholder')}
-                            returnKeyType={'next'}
-                            onSubmitEditing={() => birthdayRef.current.focus()}
-                        />
-                        <StyledInputForm
-                            label={'common.birthday'}
-                            name={'birthday'}
-                            placeholder={t('authen.register.birthdayPlaceholder')}
-                            ref={birthdayRef}
-                            secureTextEntry={true}
-                            returnKeyType={'next'}
-                            maxLength={32}
-                            // onSubmitEditing={() => passwordConfirmRef.current.focus()}
-                        />
-                        <StyledText customStyle={styles.titleGender} isBlack i18nText={'common.gender'} />
-                        <View style={styles.row}>
-                            <TouchableOpacity
-                                style={styles.buttonGender}
-                                onPress={() => {
-                                    setStateGender({
-                                        gender: 'male',
-                                        maleButtonColor: Themes.COLORS.primary,
-                                        femaleButtonColor: Themes.COLORS.white,
-                                        femaleBorderColor: Themes.COLORS.silver,
-                                        maleBorderColor: '#FBA29D',
-                                    });
-                                }}
-                            >
-                                <View
-                                    style={[
-                                        styles.button,
-                                        {
-                                            backgroundColor: stateGender.maleButtonColor,
-                                            borderColor: stateGender.maleBorderColor,
-                                        },
-                                    ]}
-                                />
-                                <StyledText customStyle={styles.textGender} i18nText={'male'} />
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={styles.buttonGender}
-                                onPress={() => {
-                                    setStateGender({
-                                        gender: 'female',
-                                        maleButtonColor: Themes.COLORS.white,
-                                        femaleButtonColor: Themes.COLORS.primary,
-                                        femaleBorderColor: '#FBA29D',
-                                        maleBorderColor: Themes.COLORS.silver,
-                                    });
-                                }}
-                            >
-                                <View
-                                    style={[
-                                        styles.button,
-                                        {
-                                            backgroundColor: stateGender.femaleButtonColor,
-                                            borderColor: stateGender.femaleBorderColor,
-                                        },
-                                    ]}
-                                />
-                                <StyledText customStyle={styles.textGender} i18nText={'Female'} />
-                            </TouchableOpacity>
-                        </View>
-                        {/* <TouchableOpacity
-                            style={[styles.buttonGender, { width: Metrics.screenWidth - scale(40) }]}
-                            onPress={() => {
-                                setRule(!rule);
-                            }}
-                        >
-                            <View
-                                style={[
-                                    styles.ruleButton,
-                                    {
-                                        backgroundColor: rule ? Themes.COLORS.primary : Themes.COLORS.white,
-                                        borderColor: rule ? '#FBA29D' : Themes.COLORS.silver,
-                                    },
-                                ]}
-                            />
-                            <StyledText customStyle={styles.textGender} i18nText={'rule'} />
-                        </TouchableOpacity> */}
-                    </FormProvider>
-                    <TouchableOpacity style={styles.buttonChangePass} onPress={changePass}>
-                        <StyledText customStyle={styles.changePass} i18nText={'パスワード変更'} />
-                    </TouchableOpacity>
-                    <View style={styles.row}>
-                        <StyledButton
-                            isNormal
-                            onPress={submit}
-                            title={'setting.cancel'}
-                            customStyle={styles.buttonCancel}
-                            customStyleText={styles.cancelText}
-                        />
-                        <StyledButton
-                            title={'setting.editProfile'}
-                            onPress={goToRegis}
-                            customStyle={styles.buttonSave}
-                        />
+            <StyledKeyboardAware
+                style={styles.scrollView}
+                customStyle={styles.contentScrollView}
+                enableResetScrollToCoords={false}
+                enableOnAndroid={false}
+            >
+                <FormProvider {...form}>
+                    <View style={styles.fakeFormInput}>
+                        <StyledInputForm name={'avatar'} />
+                        <StyledInputForm name={'gender'} />
                     </View>
-                </SafeAreaView>
+                    <UpLoadAvatar setValue={(img: any) => setValueForm('avatar', img)} />
+                    <StyledInputForm
+                        name={'email'}
+                        label={'authen.labelRegister.email'}
+                        customPlaceHolder={'authen.hintRegister.email'}
+                        keyboardType="email-address"
+                        returnKeyType={'next'}
+                        onSubmitEditing={() => fullNameRef.current.focus()}
+                        editable={false}
+                        containerStyle={styles.emailContainer}
+                        customStyle={styles.inputEmail}
+                        wrapInputStyle={styles.wrapInputEmail}
+                    />
+                    <StyledInputForm
+                        label={'common.name'}
+                        name={'fullName'}
+                        ref={fullNameRef}
+                        customPlaceHolder={'authen.hintRegister.fullName'}
+                        returnKeyType={'next'}
+                        onSubmitEditing={() => birthdayRef.current.focus()}
+                        containerStyle={styles.inputContainer}
+                    />
+                    <StyledInputForm
+                        name={'birthday'}
+                        label={'authen.labelRegister.birthday'}
+                        customPlaceHolder={'authen.hintRegister.birthday'}
+                        icBirthday={Images.icons.calendar}
+                        customStyle={styles.inputBirthday}
+                        editable={false}
+                        pointerEvents={'none'}
+                        handleConfirm={(text: string) => setValueForm('birthday', text)}
+                        containerStyle={styles.inputContainer}
+                    />
+                    <LabelInput
+                        label={'authen.labelRegister.gender'}
+                        customStyle={styles.titleGender}
+                        containerStyle={styles.containerStyleTitleGender}
+                    />
+                    {GENDER_DATA.map(renderItemGender)}
+                </FormProvider>
+                <TextUnderline
+                    onPress={goToChangePass}
+                    customStyle={styles.changePassBtn}
+                    title={'authen.login.forgotPasswordText'}
+                    customStyleText={styles.changePassText}
+                    color={Themes.COLORS.primary}
+                />
+                <View style={styles.rowBtnFooter}>
+                    <StyledButton
+                        isNormal
+                        onPress={goBack}
+                        title={'setting.cancel'}
+                        customStyle={styles.buttonCancel}
+                        customStyleText={styles.cancelText}
+                    />
+                    <View style={styles.separatorBtn} />
+                    <StyledButton
+                        title={'setting.editProfile'}
+                        onPress={handleSubmit(saveEdit)}
+                        customStyle={styles.buttonSave}
+                        disabled={!isValid}
+                    />
+                </View>
             </StyledKeyboardAware>
         </View>
     );
@@ -230,15 +188,18 @@ const styles = ScaledSheet.create({
     container: {
         flex: 1,
     },
-    body: {
+    contentScrollView: {
+        paddingBottom: '60@vs',
+    },
+    scrollView: {
         flex: 1,
-        alignItems: 'center',
+        paddingTop: '23@vs',
     },
     buttonSave: {
-        width: (Metrics.screenWidth - scale(60)) / 2,
+        flex: 1,
     },
     buttonCancel: {
-        width: (Metrics.screenWidth - scale(60)) / 2,
+        flex: 1,
         borderWidth: 1,
         borderColor: Themes.COLORS.primary,
     },
@@ -250,17 +211,15 @@ const styles = ScaledSheet.create({
     },
     buttonGender: {
         flexDirection: 'row',
-        width: (Metrics.screenWidth - scale(40)) / 2,
-        alignSelf: 'flex-start',
-        marginVertical: '15@vs',
+        marginTop: '12@vs',
+        marginHorizontal: '20@s',
+        alignItems: 'center',
     },
     textGender: {
         marginLeft: '15@s',
     },
     titleGender: {
         alignSelf: 'flex-start',
-        marginLeft: '20@s',
-        marginTop: '10@vs',
         fontWeight: 'bold',
     },
     ruleButton: {
@@ -273,7 +232,12 @@ const styles = ScaledSheet.create({
         flexDirection: 'row',
         width: '100%',
         justifyContent: 'space-between',
+    },
+    rowBtnFooter: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         paddingHorizontal: '20@s',
+        marginTop: '18@vs',
     },
     cancelText: {
         color: Themes.COLORS.secondary,
@@ -285,5 +249,43 @@ const styles = ScaledSheet.create({
     buttonChangePass: {
         width: Metrics.screenWidth - scale(40),
         paddingVertical: '10@s',
+    },
+    emailContainer: {
+        marginTop: '50@vs',
+    },
+    inputContainer: {
+        marginTop: '13@vs',
+    },
+    containerStyleTitleGender: {
+        marginBottom: 0,
+        marginLeft: '20@s',
+        marginTop: '13@vs',
+    },
+    changePassBtn: {
+        alignSelf: 'flex-start',
+        marginLeft: '20@s',
+        marginTop: '38@vs',
+    },
+    changePassText: {
+        fontWeight: 'bold',
+    },
+    inputBirthday: {
+        flex: 1,
+    },
+    inputEmail: {
+        backgroundColor: Themes.COLORS.disabled,
+        flex: 1,
+        paddingHorizontal: '15@s',
+    },
+    wrapInputEmail: {
+        paddingHorizontal: 0,
+        overflow: 'hidden',
+    },
+    separatorBtn: {
+        width: '10@s',
+    },
+    fakeFormInput: {
+        bottom: -99999999,
+        position: 'absolute',
     },
 });

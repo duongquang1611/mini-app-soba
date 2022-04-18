@@ -1,4 +1,5 @@
 import request from 'api/request';
+import { AUTH_URL } from 'api/urls';
 
 export const getProfile = (token?: string) =>
     request.get(`profile`, token ? { headers: { Authorization: `Bearer ${token}` } } : {});
@@ -9,3 +10,5 @@ export const checkIsExistEmail = (params: any) => request.post(`auth/check-email
 export const getVerifyCode = (params: any) => request.post(`auth/request-verified-code`, params);
 export const checkVerifyCode = (params: any) => request.post(`auth/check-verified-code`, params);
 export const resetPassword = (params: any) => request.post(`auth/reset-password`, params);
+
+export const editProfile = (params: any) => request.put(AUTH_URL.editProfile, params);
