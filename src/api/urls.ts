@@ -48,4 +48,8 @@ const COUPON_URL = {
     memberCoupon: (id: string | number) => `coupon/member-coupon/${id}`,
 };
 
-export { COMMON_URL, STAMP_URL, NOTIFICATION_URL, COUPON_URL, HOME_URL, MENU_URL, ORDER_URL };
+const AUTH_URL = {
+    editProfile: 'profile/edit',
+};
+
+export { COMMON_URL, STAMP_URL, NOTIFICATION_URL, COUPON_URL, HOME_URL, MENU_URL, ORDER_URL, AUTH_URL };

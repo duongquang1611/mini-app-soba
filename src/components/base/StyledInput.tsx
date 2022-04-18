@@ -24,6 +24,7 @@ import StyledText from './StyledText';
 
 export interface StyledInputProps extends TextInputProps {
     containerStyle?: StyleProp<ViewStyle>;
+    wrapInputStyle?: StyleProp<ViewStyle>;
     customStyle?: StyleProp<TextStyle>;
     customLabelStyle?: StyleProp<TextStyle>;
     customErrorStyle?: StyleProp<TextStyle>;
@@ -81,6 +82,7 @@ const StyledInput = (props: StyledInputProps, ref: any) => {
         handleConfirm,
         customErrorMessage,
         errorMessage,
+        wrapInputStyle,
     } = props;
 
     const [isFocused, setIsFocused] = useState(false);
@@ -122,6 +124,7 @@ const StyledInput = (props: StyledInputProps, ref: any) => {
                 customStyle={[
                     styles.containerInput,
                     styles.textInput,
+                    wrapInputStyle,
                     !isFocused &&
                         !!(errorMessage || customErrorMessage) && { borderColor: Themes.COLORS.borderInputError },
                 ]}
