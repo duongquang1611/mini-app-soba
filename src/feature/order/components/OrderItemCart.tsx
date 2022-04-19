@@ -76,7 +76,7 @@ const OrderItemCart = (props: any) => {
                 <View style={{ borderRadius: 1, overflow: 'hidden' }}>
                     <StyledIcon
                         source={{ uri: image }}
-                        resizeMode={'stretch'}
+                        resizeMode={'cover'}
                         size={70}
                         customStyle={{ alignSelf: 'flex-start' }}
                     />

@@ -11,18 +11,19 @@ import React, { useEffect, useRef, useState } from 'react';
 import { RefreshControl, View } from 'react-native';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { formatDate, YMDHm } from 'utilities/format';
+import { numberWithCommas } from 'utilities/helper';
 
 const OrderItem = (props: any) => {
     const { amount, billPrice, dish, subDishes, dishPrice } = props?.data;
     return (
         <>
             <View style={styles.orderItemView}>
-                <StyledIcon source={{ uri: dish?.thumbnail }} resizeMode={'stretch'} size={70} />
+                <StyledIcon source={{ uri: dish?.thumbnail }} resizeMode={'cover'} size={70} />
                 <View style={styles.orderTextView}>
                     <View style={[styles.rowPrice, { marginTop: scale(0) }]}>
                         <StyledText originValue={dish?.title} customStyle={styles.titleDish} />
                         <StyledText
-                            i18nParams={{ price: dishPrice }}
+                            i18nParams={{ price: numberWithCommas(dishPrice) }}
                             i18nText={'order.rangePrice'}
                             customStyle={styles.price}
                             isBlack
@@ -48,7 +49,7 @@ const OrderItem = (props: any) => {
                                 )}
                             </View>
                             <StyledText
-                                i18nParams={{ price: item?.price }}
+                                i18nParams={{ price: numberWithCommas(item?.price) }}
                                 i18nText={'order.rangePrice'}
                                 customStyle={styles.price}
                                 isBlack
@@ -68,7 +69,7 @@ const OrderItem = (props: any) => {
                             <StyledText i18nText={'order.subtotal'} customStyle={styles.titleDish} />
                             <StyledText
                                 i18nText={'order.rangePrice'}
-                                i18nParams={{ price: billPrice }}
+                                i18nParams={{ price: numberWithCommas(billPrice) }}
                                 customStyle={styles.price}
                                 isBlack
                             />
@@ -149,7 +150,7 @@ const OrderHistoryDetailScreen = (props: any) => {
                                 </View>
                                 <StyledText
                                     i18nText={'order.rangePrice'}
-                                    i18nParams={{ price: totalPrice }}
+                                    i18nParams={{ price: numberWithCommas(totalPrice) }}
                                     customStyle={styles.totalPrice}
                                     isBlack
                                 />
@@ -167,7 +168,7 @@ const OrderHistoryDetailScreen = (props: any) => {
                                         </View>
                                         <StyledText
                                             i18nText={'order.rangeCouponPrice'}
-                                            i18nParams={{ price: itemCoupon?.discount }}
+                                            i18nParams={{ price: numberWithCommas(itemCoupon?.discount) }}
                                             customStyle={styles.price}
                                             isBlack
                                         />
@@ -189,7 +190,7 @@ const OrderHistoryDetailScreen = (props: any) => {
                                 <StyledText i18nText={'order.total'} customStyle={styles.priceSumValue} />
                                 <StyledText
                                     i18nText={'order.rangePrice'}
-                                    i18nParams={{ price: totalPaid }}
+                                    i18nParams={{ price: numberWithCommas(totalPaid) }}
                                     customStyle={styles.sumValue}
                                 />
                             </View>

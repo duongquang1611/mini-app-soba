@@ -65,7 +65,7 @@ const StyledHeaderImage = (props: HeaderProps) => {
         return (
             <View>
                 <StyledImage
-                    resizeMode={'stretch'}
+                    resizeMode={'cover'}
                     source={{ uri: data?.item?.image || data?.item }}
                     customStyle={[styles.img, { height: heightImage }]}
                 />

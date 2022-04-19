@@ -19,7 +19,7 @@ const OrderDish = (props: any) => {
         <StyledTouchable customStyle={styles.containerItem} onPress={onChoose}>
             <View style={styles.itemRow}>
                 <StyledImage
-                    resizeMode={'stretch'}
+                    resizeMode={'cover'}
                     source={{ uri: item?.dish?.thumbnail }}
                     customStyle={styles.imgItem}
                 />

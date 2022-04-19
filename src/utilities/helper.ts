@@ -578,3 +578,6 @@ export const getIndexTab = (defaultOrder: any, mobileOrder: any) => {
     if (mobileOrder?.dishes?.length > 0 || mobileOrder?.coupon?.length > 0) return 1;
     return 2;
 };
+export function numberWithCommas(x: number) {
+    return (x || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}

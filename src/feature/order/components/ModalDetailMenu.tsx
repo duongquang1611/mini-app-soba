@@ -18,7 +18,7 @@ const OrderItemCart = (props: any) => {
         <StyledTouchable onPress={goDetailMenu}>
             <View style={styles.orderItemView}>
                 <TouchableOpacity onPress={props.goDetailMenu}>
-                    <StyledIcon resizeMode={'stretch'} source={{ uri: mainDish?.image }} size={70} />
+                    <StyledIcon resizeMode={'cover'} source={{ uri: mainDish?.image }} size={70} />
                 </TouchableOpacity>
                 <View style={styles.orderTextView}>
                     <View style={styles.rowDetail}>

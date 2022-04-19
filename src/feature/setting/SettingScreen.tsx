@@ -165,7 +165,7 @@ const SettingScreen = () => {
                     </TouchableOpacity>
                 </View>
 
-                <StyledImageBackground resizeMode={'stretch'} source={Images.photo.backgroundMyPage}>
+                <StyledImageBackground resizeMode={'cover'} source={Images.photo.backgroundMyPage}>
                     <View style={styles.background}>
                         <View style={styles.profileRow}>
                             <StyledImage source={Images.photo.avatarDefault} customStyle={styles.avatar} />

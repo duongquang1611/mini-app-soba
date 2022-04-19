@@ -37,11 +37,7 @@ export const OrderChild = (data: any) => {
         <StyledTouchable customStyle={styles.containerItem} onPress={onChoose}>
             <View style={styles.itemRow}>
                 <View style={styles.itemRow}>
-                    <StyledImage
-                        resizeMode={'stretch'}
-                        source={{ uri: dish?.thumbnail }}
-                        customStyle={styles.imgItem}
-                    />
+                    <StyledImage resizeMode={'cover'} source={{ uri: dish?.thumbnail }} customStyle={styles.imgItem} />
                     <StyledText originValue={dish?.title} customStyle={styles.nameOrder} />
                 </View>
                 <View
@@ -99,11 +95,7 @@ const OrderChildCanChange = (data: any) => {
         <View style={styles.containerItem}>
             <View style={styles.itemRow}>
                 <View style={styles.itemRow}>
-                    <StyledImage
-                        resizeMode={'stretch'}
-                        source={{ uri: dish?.thumbnail }}
-                        customStyle={styles.imgItem}
-                    />
+                    <StyledImage resizeMode={'cover'} source={{ uri: dish?.thumbnail }} customStyle={styles.imgItem} />
                     <StyledText originValue={dish?.title} customStyle={styles.nameOrder} />
                 </View>
                 <View style={styles.itemRow}>

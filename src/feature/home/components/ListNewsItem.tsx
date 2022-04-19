@@ -14,7 +14,7 @@ const ListNewsItem = (props: any) => {
     return (
         <View>
             <TouchableOpacity style={styles.listNewsView} onPress={() => navigate(HOME_ROUTE.NEW_DETAIL, { id })}>
-                <StyledIcon source={{ uri: thumbnail }} size={70} />
+                <StyledIcon source={{ uri: thumbnail }} size={70} resizeMode={'cover'} />
                 <View style={styles.newsTextView}>
                     <StyledText originValue={title} customStyle={styles.titleNew} numberOfLines={1} />
                     <StyledText originValue={description} isBlack customStyle={styles.contentNew} numberOfLines={2} />
