@@ -219,6 +219,7 @@ const HomeScreen: FunctionComponent = () => {
                     logo
                     notificationUnRead={notificationUnRead}
                 />
+                <View style={styles.grayView} />
                 <View style={styles.contScreen}>
                     <View style={styles.searchView}>
                         <View style={styles.logoView}>
@@ -241,13 +242,17 @@ const HomeScreen: FunctionComponent = () => {
                             keyExtractor={(item) => `${item.id}`}
                         />
                     </View>
+                    <View style={styles.grayView} />
                     <StyledTabTopView
                         setIndexTab={setIndexTab}
                         containerStyle={styles.tabContainerStyle}
                         routes={routes}
+                        customTabBar={{ backgroundColor: Themes.COLORS.white }}
                         renderScene={renderScene}
+                        isHome={true}
                         customIndicatorStyle={{ backgroundColor: getColorTab(indexTab) }}
                     />
+                    <View style={styles.grayView} />
                     <StyledImageBackground source={Images.photo.news} resizeMode="cover" style={styles.newsView}>
                         <View style={styles.buttonMobile}>
                             <StyledIcon source={Images.icons.document} customStyle={styles.iconLeft} size={20} />
@@ -315,7 +320,6 @@ const styles = ScaledSheet.create({
         alignItems: 'center',
         paddingHorizontal: '20@s',
         paddingVertical: '10@vs',
-        marginVertical: '10@vs',
         height: '50@vs',
     },
     logo: {
@@ -336,7 +340,6 @@ const styles = ScaledSheet.create({
     titleNew: {
         fontSize: '16@ms0.3',
         fontWeight: 'bold',
-        marginBottom: '5@vs',
     },
     imageNews: {
         width: '70@s',
@@ -367,7 +370,11 @@ const styles = ScaledSheet.create({
         tintColor: Themes.COLORS.astra,
     },
     tabContainerStyle: {
-        height: verticalScale(138) + scale(staticValue.QR_SIZE_HOME),
+        height: verticalScale(128) + scale(staticValue.QR_SIZE_HOME),
+    },
+    grayView: {
+        backgroundColor: Themes.COLORS.lightGray,
+        height: '5@vs',
     },
 });
 

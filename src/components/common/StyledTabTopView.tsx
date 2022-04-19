@@ -19,6 +19,7 @@ interface IProps {
     inactiveColor?: string;
     setIndexTab?(index: number): void;
     customIndicatorStyle?: StyleProp<ViewStyle>;
+    isHome?: boolean;
 }
 
 const StyledTabTopView = (propsTab: IProps) => {
@@ -35,6 +36,7 @@ const StyledTabTopView = (propsTab: IProps) => {
         inactiveColor,
         setIndexTab,
         customIndicatorStyle,
+        isHome = false,
     } = propsTab;
     const [index, setIndex] = useState(defaultIndex || 0);
 
@@ -47,7 +49,10 @@ const StyledTabTopView = (propsTab: IProps) => {
         <StyledText
             customStyle={[
                 styles.label,
-                { color: focused ? Themes.COLORS.headerBackground : Themes.COLORS.silver },
+                {
+                    color: focused ? Themes.COLORS.headerBackground : Themes.COLORS.silver,
+                    fontWeight: focused ? 'bold' : 'normal',
+                },
                 labelStyle,
             ]}
             originValue={route?.title || ''}
@@ -56,7 +61,7 @@ const StyledTabTopView = (propsTab: IProps) => {
 
     return (
         <View style={[styles.container, containerStyle]}>
-            <View style={styles.separator} />
+            {!isHome && <View style={styles.separator} />}
             <TabView
                 swipeEnabled={swipeEnable}
                 navigationState={{ index, routes }}
@@ -103,7 +108,6 @@ const styles = ScaledSheet.create({
     label: {
         fontSize: '14@ms0.3',
         textAlign: 'center',
-        fontWeight: 'bold',
     },
     viewLabel: {
         alignItems: 'center',

@@ -34,7 +34,6 @@ const styles = ScaledSheet.create({
         paddingVertical: '10@vs',
         paddingHorizontal: '20@s',
         flexDirection: 'row',
-        justifyContent: 'space-between',
         backgroundColor: Themes.COLORS.white,
         flex: 1,
     },
