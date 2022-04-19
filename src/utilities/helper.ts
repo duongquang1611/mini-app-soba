@@ -573,3 +573,8 @@ export const getInformationSetting = (data: any) => {
         },
     ];
 };
+export const getIndexTab = (defaultOrder: any, mobileOrder: any) => {
+    if (defaultOrder?.dishes?.length > 0 || defaultOrder?.coupon?.length > 0) return 0;
+    if (mobileOrder?.dishes?.length > 0 || mobileOrder?.coupon?.length > 0) return 1;
+    return 2;
+};

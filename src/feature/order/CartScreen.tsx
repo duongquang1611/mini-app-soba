@@ -323,6 +323,7 @@ const styles = ScaledSheet.create({
         width: '100%',
         justifyContent: 'space-between',
         marginTop: '10@vs',
+        alignItems: 'center',
     },
     nameCoupon: {
         width: '90%',

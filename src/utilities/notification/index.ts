@@ -111,24 +111,38 @@ const onReceived = async (data: NotificationReceivedEvent) => {
     if (category === NotificationCategory.SUCCESS_PAYMENT && Number(type) === OrderType.DEFAULT_SETTING) {
         store.dispatch(updateMobileOrder(deleteUsedCoupon(mobileOrder, coupons)));
         store.dispatch(updateDefaultOrderLocal(defaultOrder));
+        try {
+            const defaultOrderHomeSaveOrderOption = generateDataSaveOrderOption(defaultOrder, OrderType.DEFAULT_HOME);
+            await saveOrderOption(defaultOrderHomeSaveOrderOption);
+            const mobileSaveOrderOption = generateDataSaveOrderOption(
+                deleteUsedCoupon(mobileOrder, coupons),
+                OrderType.MOBILE,
+            );
+            await saveOrderOption(mobileSaveOrderOption);
+        } catch (error) {
+            console.log('saveOrder -> error', error);
+        }
     }
     if (category === NotificationCategory.SUCCESS_PAYMENT && Number(type) === OrderType.MOBILE) {
         store.dispatch(clearMobileOrder());
         store.dispatch(updateDefaultOrderLocal(deleteUsedCoupon(defaultOrderLocal, coupons)));
+        try {
+            const defaultOrderHomeSaveOrderOption = generateDataSaveOrderOption(
+                deleteUsedCoupon(defaultOrderLocal, coupons),
+                OrderType.DEFAULT_HOME,
+            );
+            await saveOrderOption(defaultOrderHomeSaveOrderOption);
+            const mobileSaveOrderOption = generateDataSaveOrderOption({}, OrderType.MOBILE);
+            await saveOrderOption(mobileSaveOrderOption);
+        } catch (error) {
+            console.log('saveOrder -> error', error);
+        }
     }
     if (
         category === NotificationCategory.SUCCESS_PAYMENT &&
         listScreenBackWhenPayment.find((screen: any) => currentScreen === screen)
     ) {
         backHome(orderId);
-    }
-    try {
-        const defaultOrderHomeSaveOrderOption = generateDataSaveOrderOption(defaultOrderLocal, OrderType.DEFAULT_HOME);
-        await saveOrderOption(defaultOrderHomeSaveOrderOption);
-        const mobileSaveOrderOption = generateDataSaveOrderOption(mobileOrder, OrderType.MOBILE);
-        await saveOrderOption(mobileSaveOrderOption);
-    } catch (error) {
-        console.log('saveOrder -> error', error);
     }
 };
 

@@ -27,7 +27,7 @@ import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { SceneMap } from 'react-native-tab-view';
 import { useSelector } from 'react-redux';
 import { QR_TAB_TYPE } from 'utilities/enumData';
-import { filterResources, generateCheckInQR, generateNewOrder, generateOrderQR } from 'utilities/helper';
+import { filterResources, generateCheckInQR, generateNewOrder, generateOrderQR, getIndexTab } from 'utilities/helper';
 import { useOnesignal } from 'utilities/notification';
 import { CouponStoreKeyByStatus, MODAL_ID, OrderType, staticValue, TabCouponStatus } from 'utilities/staticData';
 import ListNewsItem from './components/ListNewsItem';
@@ -123,13 +123,15 @@ const HomeScreen: FunctionComponent = () => {
     const [listNews, setListNews] = useState([]);
     const modalize = ModalizeManager();
     const [refreshing, setRefreshing] = useState(false);
+    const [tab, setTab] = useState(0);
 
     useEffect(() => {
         getNewsData();
         getCouponData();
         getNotification();
+        setTab(getIndexTab(defaultOrderLocal, mobileOrder));
     }, []);
-
+    console.log({ tab });
     const getNotification = async () => {
         try {
             const res = await getNotificationList({ params: { take: 1, pageIndex: 1 } });

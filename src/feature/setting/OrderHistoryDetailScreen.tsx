@@ -9,7 +9,7 @@ import StyledHeader from 'components/common/StyledHeader';
 import AmountOrder from 'feature/order/components/AmountOrder';
 import React, { useEffect, useRef, useState } from 'react';
 import { RefreshControl, View } from 'react-native';
-import { ScaledSheet, verticalScale } from 'react-native-size-matters';
+import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { formatDate, YMDHm } from 'utilities/format';
 
 const OrderItem = (props: any) => {
@@ -19,8 +19,8 @@ const OrderItem = (props: any) => {
             <View style={styles.orderItemView}>
                 <StyledIcon source={{ uri: dish?.thumbnail }} resizeMode={'stretch'} size={70} />
                 <View style={styles.orderTextView}>
-                    <View style={styles.rowPrice}>
-                        <StyledText originValue={dish?.title} customStyle={[styles.titleOrder, styles.subText]} />
+                    <View style={[styles.rowPrice, { marginTop: scale(0) }]}>
+                        <StyledText originValue={dish?.title} customStyle={styles.titleDish} />
                         <StyledText
                             i18nParams={{ price: dishPrice }}
                             i18nText={'order.rangePrice'}
@@ -55,9 +55,9 @@ const OrderItem = (props: any) => {
                             />
                         </View>
                     ))}
-                    <View style={styles.quantity}>
+                    <View style={styles.quantityItem}>
                         <View style={styles.rowPrice}>
-                            <StyledText i18nText={'order.quantity'} customStyle={styles.titleOrder} />
+                            <StyledText i18nText={'order.quantity'} customStyle={styles.titleDish} />
                             <StyledText
                                 originValue={amount < 10 ? `0${amount}` : amount}
                                 customStyle={styles.price}
@@ -65,7 +65,7 @@ const OrderItem = (props: any) => {
                             />
                         </View>
                         <View style={[styles.rowPrice, { marginTop: verticalScale(10) }]}>
-                            <StyledText i18nText={'order.subtotal'} customStyle={styles.titleOrder} />
+                            <StyledText i18nText={'order.subtotal'} customStyle={styles.titleDish} />
                             <StyledText
                                 i18nText={'order.rangePrice'}
                                 i18nParams={{ price: billPrice }}
@@ -150,29 +150,38 @@ const OrderHistoryDetailScreen = (props: any) => {
                                 <StyledText
                                     i18nText={'order.rangePrice'}
                                     i18nParams={{ price: totalPrice }}
-                                    customStyle={styles.price}
+                                    customStyle={styles.totalPrice}
                                     isBlack
                                 />
                             </View>
                             {billCoupon?.map((itemCoupon: any) => (
-                                <View style={styles.rowPrice}>
-                                    <View style={styles.contentRow}>
-                                        <StyledIcon
-                                            size={20}
-                                            source={Images.icons.coupon}
-                                            customStyle={styles.couponItem}
-                                        />
+                                <View>
+                                    <View style={styles.rowPrice}>
+                                        <View style={styles.contentRow}>
+                                            <StyledIcon
+                                                size={20}
+                                                source={Images.icons.coupon}
+                                                customStyle={styles.couponItem}
+                                            />
+                                            <StyledText originValue={itemCoupon?.coupon?.title} isBlack />
+                                        </View>
                                         <StyledText
-                                            originValue={itemCoupon?.coupon?.title}
-                                            customStyle={styles.titleOrder}
+                                            i18nText={'order.rangeCouponPrice'}
+                                            i18nParams={{ price: itemCoupon?.discount }}
+                                            customStyle={styles.price}
+                                            isBlack
                                         />
                                     </View>
-                                    <StyledText
-                                        i18nText={'order.rangeCouponPrice'}
-                                        i18nParams={{ price: itemCoupon?.discount }}
-                                        customStyle={styles.price}
-                                        isBlack
-                                    />
+                                    {itemCoupon?.dish && (
+                                        <StyledText
+                                            i18nText={'order.couponUse'}
+                                            i18nParams={{
+                                                dish: itemCoupon?.dish?.title,
+                                            }}
+                                            customStyle={styles.dishUse}
+                                            isBlack
+                                        />
+                                    )}
                                 </View>
                             ))}
 
@@ -181,7 +190,7 @@ const OrderHistoryDetailScreen = (props: any) => {
                                 <StyledText
                                     i18nText={'order.rangePrice'}
                                     i18nParams={{ price: totalPaid }}
-                                    customStyle={styles.priceSumValue}
+                                    customStyle={styles.sumValue}
                                 />
                             </View>
                         </View>
@@ -229,24 +238,40 @@ const styles = ScaledSheet.create({
         marginBottom: '5@vs',
         flexShrink: 1,
     },
+    titleDish: {
+        fontWeight: 'bold',
+        color: Themes.COLORS.secondary,
+        marginBottom: '5@vs',
+        flexShrink: 1,
+    },
     quantity: {
         backgroundColor: Themes.COLORS.lightGray,
         width: '100%',
         borderRadius: 5,
-        paddingVertical: '5@vs',
+        paddingVertical: '15@vs',
         paddingHorizontal: '20@s',
+        justifyContent: 'space-between',
+        marginTop: '15@vs',
+    },
+    quantityItem: {
+        backgroundColor: Themes.COLORS.lightGray,
+        width: '100%',
+        borderRadius: 5,
+        paddingVertical: '5@vs',
+        paddingHorizontal: '30@s',
         justifyContent: 'space-between',
         marginTop: '15@vs',
     },
     priceSum: {
         flexDirection: 'row',
-        paddingVertical: '10@vs',
+        paddingVertical: '15@vs',
+        alignItems: 'center',
     },
     orderView: {
         alignItems: 'center',
         width: '100%',
         backgroundColor: Themes.COLORS.white,
-        paddingVertical: '10@vs',
+        paddingBottom: '10@vs',
         marginBottom: '10@vs',
     },
     row: {
@@ -254,6 +279,7 @@ const styles = ScaledSheet.create({
     },
     subText: {
         flexShrink: 1,
+        fontSize: '12@ms0.3',
     },
     quantityText: {
         marginHorizontal: '10@s',
@@ -305,8 +331,14 @@ const styles = ScaledSheet.create({
         fontWeight: 'bold',
         marginLeft: '10@s',
     },
+    totalPrice: {
+        fontWeight: 'bold',
+        marginLeft: '10@s',
+        fontSize: '18@ms0.3',
+    },
     contentRow: {
         flexDirection: 'row',
+        alignItems: 'center',
     },
     rowSub: {
         justifyContent: 'space-between',
@@ -316,6 +348,11 @@ const styles = ScaledSheet.create({
     },
     priceSumValue: {
         fontSize: '16@ms0.3',
+        color: Themes.COLORS.primary,
+        fontWeight: 'bold',
+    },
+    sumValue: {
+        fontSize: '24@ms0.3',
         color: Themes.COLORS.primary,
         fontWeight: 'bold',
     },
@@ -365,5 +402,10 @@ const styles = ScaledSheet.create({
     couponItem: {
         tintColor: Themes.COLORS.primary,
         marginRight: '10@s',
+    },
+    dishUse: {
+        color: Themes.COLORS.silver,
+        fontSize: '12@ms0.3',
+        marginTop: '10@vs',
     },
 });
