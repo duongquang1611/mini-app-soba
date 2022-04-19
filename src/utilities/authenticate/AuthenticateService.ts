@@ -3,19 +3,14 @@ import { getOrder } from 'api/modules/api-app/order';
 import request from 'api/request';
 import { clearCoupon } from 'app-redux/slices/couponSlice';
 import { clearGlobalData, updateGlobalData } from 'app-redux/slices/globalDataSlice';
-import {
-    clearOrder,
-    updateDefaultOrder,
-    updateDefaultOrderLocal,
-    updateMobileOrder,
-} from 'app-redux/slices/orderSlice';
+import { clearOrder, updateAllOrder } from 'app-redux/slices/orderSlice';
 import { userInfoActions } from 'app-redux/slices/userInfoSlice';
 import { store } from 'app-redux/store';
 import { AxiosRequestConfig } from 'axios';
 import AlertMessage from 'components/base/AlertMessage';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { changeOrderApiToStore } from 'utilities/helper';
+import { changeOrderApiToStore, filterOrderStore } from 'utilities/helper';
 import { deleteTagOneSignal } from 'utilities/notification';
 import { OrderType } from 'utilities/staticData';
 
@@ -59,12 +54,31 @@ const getOrderData = async (token: any) => {
     ]);
 
     // update order into redux
-    const dataDefaultSetting = res?.[0]?.data || {};
-    const dataMobile = res?.[1]?.data || {};
-    const dataDefaultHome = res?.[2]?.data || {};
-    store.dispatch(updateDefaultOrder(changeOrderApiToStore(dataDefaultSetting)));
-    store.dispatch(updateMobileOrder(changeOrderApiToStore(dataMobile)));
-    store.dispatch(updateDefaultOrderLocal(changeOrderApiToStore(dataDefaultHome)));
+    const {
+        resource: { data: dataResource },
+    } = store.getState();
+    const { menu = [], categories = [] } = dataResource || {};
+
+    const dataDefaultSetting = changeOrderApiToStore(res?.[0]?.data || {});
+    const dataMobile = changeOrderApiToStore(res?.[1]?.data || {});
+    const dataDefaultHome = changeOrderApiToStore(res?.[2]?.data || {});
+    store.dispatch(
+        updateAllOrder({
+            defaultOrder: {
+                ...dataDefaultSetting,
+                dishes: filterOrderStore({ menu, categories, order: dataDefaultSetting }),
+            },
+            cartOrder: { dishes: [], coupons: [] },
+            mobileOrder: {
+                ...dataMobile,
+                dishes: filterOrderStore({ menu, categories, order: dataMobile }),
+            },
+            defaultOrderLocal: {
+                ...dataDefaultHome,
+                dishes: filterOrderStore({ menu, categories, order: dataDefaultHome }),
+            },
+        }),
+    );
 };
 
 export const useLogin = (): LoginRequest => {
