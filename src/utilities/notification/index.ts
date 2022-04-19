@@ -20,7 +20,7 @@ import { useSelector } from 'react-redux';
 import { isLogin } from 'utilities/authenticate/AuthenticateService';
 import { NotificationCategory } from 'utilities/enumData';
 import { logger } from 'utilities/helper';
-import { listScreenBackWhenPayment, OrderType } from 'utilities/staticData';
+import { listScreenBackWhenPayment, OrderType, POPUP_TYPE } from 'utilities/staticData';
 
 type NotificationReceivedEvent = {
     complete: (notification?: any) => void;
