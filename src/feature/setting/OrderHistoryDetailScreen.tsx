@@ -7,44 +7,62 @@ import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import DashView from 'components/common/DashView';
 import StyledHeader from 'components/common/StyledHeader';
 import AmountOrder from 'feature/order/components/AmountOrder';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { RefreshControl, View } from 'react-native';
 import { ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { formatDate, YMDHm } from 'utilities/format';
 
 const OrderItem = (props: any) => {
-    const { amount, billPrice, dish, subDishes } = props?.data;
+    const { amount, billPrice, dish, subDishes, dishPrice } = props?.data;
     return (
         <>
             <View style={styles.orderItemView}>
                 <StyledIcon source={{ uri: dish?.thumbnail }} resizeMode={'stretch'} size={70} />
                 <View style={styles.orderTextView}>
-                    <StyledText originValue={dish?.title} customStyle={styles.titleOrder} />
+                    <View style={styles.rowPrice}>
+                        <StyledText originValue={dish?.title} customStyle={[styles.titleOrder, styles.subText]} />
+                        <StyledText
+                            i18nParams={{ price: dishPrice }}
+                            i18nText={'order.rangePrice'}
+                            customStyle={styles.price}
+                            isBlack
+                        />
+                    </View>
                     {subDishes?.map((item: any, index: number) => (
                         <View key={index} style={styles.rowPrice}>
-                            <StyledText originValue={`+ ${item?.subDish?.title}`} isBlack />
+                            <View style={styles.rowSub}>
+                                <StyledText
+                                    originValue={`+ ${item?.subDish?.title}`}
+                                    isBlack
+                                    customStyle={styles.subText}
+                                />
+                                {item?.amount > 1 && (
+                                    <View style={styles.numView}>
+                                        <StyledText
+                                            i18nParams={{ amount: item?.amount }}
+                                            i18nText={'order.rangeSubDish'}
+                                            isBlack
+                                            customStyle={styles.addValueText}
+                                        />
+                                    </View>
+                                )}
+                            </View>
                             <StyledText
                                 i18nParams={{ price: item?.price }}
                                 i18nText={'order.rangePrice'}
                                 customStyle={styles.price}
                                 isBlack
                             />
-                            {item?.amount > 1 && (
-                                <View style={styles.numView}>
-                                    <StyledText
-                                        i18nParams={{ amount: item?.amount }}
-                                        i18nText={'order.rangeSubDish'}
-                                        isBlack
-                                        customStyle={styles.addValueText}
-                                    />
-                                </View>
-                            )}
                         </View>
                     ))}
                     <View style={styles.quantity}>
                         <View style={styles.rowPrice}>
                             <StyledText i18nText={'order.quantity'} customStyle={styles.titleOrder} />
-                            <StyledText originValue={amount} customStyle={styles.price} isBlack />
+                            <StyledText
+                                originValue={amount < 10 ? `0${amount}` : amount}
+                                customStyle={styles.price}
+                                isBlack
+                            />
                         </View>
                         <View style={[styles.rowPrice, { marginTop: verticalScale(10) }]}>
                             <StyledText i18nText={'order.subtotal'} customStyle={styles.titleOrder} />
@@ -66,6 +84,10 @@ const OrderHistoryDetailScreen = (props: any) => {
     const { id } = props?.route?.params;
     const [historyDetail, setHistoryDetail] = useState<any>({});
     const { createdDate, billDish = [], amount, totalPrice, billCoupon, totalPaid } = historyDetail;
+    let numDish = useRef(0).current;
+    billDish?.forEach(async (rating: any) => {
+        numDish += rating?.amount;
+    });
     const [refreshing, setRefreshing] = useState(false);
     const getDetailHistory = async () => {
         try {
@@ -89,82 +111,84 @@ const OrderHistoryDetailScreen = (props: any) => {
         getDetailHistory();
     }, []);
     return (
-        <View style={styles.container}>
+        <>
             <StyledHeader title={'setting.orderHistoryDetailTitle'} />
-            <StyledKeyboardAware
-                refreshControl={
-                    <RefreshControl
-                        refreshing={refreshing}
-                        colors={[Themes.COLORS.primary]}
-                        tintColor={Themes.COLORS.primary}
-                        onRefresh={handleRefresh}
-                    />
-                }
-            >
-                <View style={styles.body}>
-                    <View style={styles.timeView}>
-                        <StyledText i18nText={'setting.timeOrder'} isBlack />
-                        <StyledText
-                            originValue={formatDate(createdDate, YMDHm)}
-                            isBlack
-                            customStyle={styles.timeValue}
+            <View style={styles.container}>
+                <StyledKeyboardAware
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={refreshing}
+                            colors={[Themes.COLORS.primary]}
+                            tintColor={Themes.COLORS.primary}
+                            onRefresh={handleRefresh}
                         />
-                    </View>
-                    <AmountOrder customStyle={styles.amountStyle} total={amount} />
-                    <View style={styles.grayView} />
-                    <View style={styles.orderView}>
-                        {billDish.map((item: any, index: number) => (
-                            <OrderItem key={index} data={item} />
-                        ))}
-                    </View>
-                    <View style={styles.contentView}>
-                        <View style={styles.rowPrice}>
-                            <View style={styles.totalDish}>
-                                <StyledText i18nText={'order.numOrderItem'} isBlack />
-                                <StyledText originValue={amount} customStyle={styles.valueOrder} />
-                                <StyledText i18nText={'order.taste'} isBlack />
-                            </View>
+                    }
+                >
+                    <View style={styles.body}>
+                        <View style={styles.timeView}>
+                            <StyledText i18nText={'setting.timeOrder'} isBlack />
                             <StyledText
-                                i18nText={'order.rangePrice'}
-                                i18nParams={{ price: totalPrice }}
-                                customStyle={styles.price}
+                                originValue={formatDate(createdDate, YMDHm)}
                                 isBlack
+                                customStyle={styles.timeValue}
                             />
                         </View>
-                        {billCoupon?.map((itemCoupon: any) => (
+                        <AmountOrder customStyle={styles.amountStyle} total={amount} />
+                        <View style={styles.grayView} />
+                        <View style={styles.orderView}>
+                            {billDish.map((item: any, index: number) => (
+                                <OrderItem key={index} data={item} />
+                            ))}
+                        </View>
+                        <View style={styles.contentView}>
                             <View style={styles.rowPrice}>
-                                <View style={styles.contentRow}>
-                                    <StyledIcon
-                                        size={20}
-                                        source={Images.icons.coupon}
-                                        customStyle={styles.couponItem}
-                                    />
-                                    <StyledText
-                                        originValue={itemCoupon?.coupon?.title}
-                                        customStyle={styles.titleOrder}
-                                    />
+                                <View style={styles.totalDish}>
+                                    <StyledText i18nText={'order.numOrderItem'} isBlack />
+                                    <StyledText originValue={`${numDish}`} customStyle={styles.valueOrder} />
+                                    <StyledText i18nText={'order.taste'} isBlack />
                                 </View>
                                 <StyledText
-                                    i18nText={'order.rangeCouponPrice'}
-                                    i18nParams={{ price: itemCoupon?.discount }}
+                                    i18nText={'order.rangePrice'}
+                                    i18nParams={{ price: totalPrice }}
                                     customStyle={styles.price}
                                     isBlack
                                 />
                             </View>
-                        ))}
+                            {billCoupon?.map((itemCoupon: any) => (
+                                <View style={styles.rowPrice}>
+                                    <View style={styles.contentRow}>
+                                        <StyledIcon
+                                            size={20}
+                                            source={Images.icons.coupon}
+                                            customStyle={styles.couponItem}
+                                        />
+                                        <StyledText
+                                            originValue={itemCoupon?.coupon?.title}
+                                            customStyle={styles.titleOrder}
+                                        />
+                                    </View>
+                                    <StyledText
+                                        i18nText={'order.rangeCouponPrice'}
+                                        i18nParams={{ price: itemCoupon?.discount }}
+                                        customStyle={styles.price}
+                                        isBlack
+                                    />
+                                </View>
+                            ))}
 
-                        <View style={[styles.quantity, styles.priceSum]}>
-                            <StyledText i18nText={'order.total'} customStyle={styles.priceSumValue} />
-                            <StyledText
-                                i18nText={'order.rangePrice'}
-                                i18nParams={{ price: totalPaid }}
-                                customStyle={styles.priceSumValue}
-                            />
+                            <View style={[styles.quantity, styles.priceSum]}>
+                                <StyledText i18nText={'order.total'} customStyle={styles.priceSumValue} />
+                                <StyledText
+                                    i18nText={'order.rangePrice'}
+                                    i18nParams={{ price: totalPaid }}
+                                    customStyle={styles.priceSumValue}
+                                />
+                            </View>
                         </View>
                     </View>
-                </View>
-            </StyledKeyboardAware>
-        </View>
+                </StyledKeyboardAware>
+            </View>
+        </>
     );
 };
 
@@ -176,7 +200,7 @@ const styles = ScaledSheet.create({
         backgroundColor: Themes.COLORS.white,
     },
     body: {
-        flex: 1,
+        flexGrow: 1,
         paddingBottom: '20@vs',
     },
     productAddition: {
@@ -227,6 +251,9 @@ const styles = ScaledSheet.create({
     },
     row: {
         flexDirection: 'row',
+    },
+    subText: {
+        flexShrink: 1,
     },
     quantityText: {
         marginHorizontal: '10@s',
@@ -280,6 +307,12 @@ const styles = ScaledSheet.create({
     },
     contentRow: {
         flexDirection: 'row',
+    },
+    rowSub: {
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        flexShrink: 1,
     },
     priceSumValue: {
         fontSize: '16@ms0.3',

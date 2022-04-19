@@ -204,7 +204,7 @@ const OrderDefaultMenu = (props: any) => {
                 />
             )}
             <View style={styles.container}>
-                <StyledKeyboardAware>
+                <StyledKeyboardAware customStyle={styles.contentContainer}>
                     {!checkHomeScreen ? (
                         <View style={styles.rowContent}>
                             <StyledIcon customStyle={styles.icQuestion} source={Images.icons.question} size={20} />
@@ -249,6 +249,7 @@ const OrderDefaultMenu = (props: any) => {
                                     setOrder={setOrderDefault}
                                 />
                             )}
+                            customStyle={styles.contentContainer}
                             noDataText={'common.menuNoData'}
                         />
                     </View>
@@ -484,5 +485,8 @@ const styles = ScaledSheet.create({
     grayView: {
         backgroundColor: Themes.COLORS.lightGray,
         height: '10@vs',
+    },
+    contentContainer: {
+        flexGrow: 1,
     },
 });

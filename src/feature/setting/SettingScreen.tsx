@@ -1,26 +1,45 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { getProfile } from 'api/modules/api-app/authenticate';
 import { RootState } from 'app-redux/hooks';
+import { userInfoActions } from 'app-redux/slices/userInfoSlice';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
+import AlertMessage from 'components/base/AlertMessage';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import { StyledImageBackground } from 'components/base/StyledImage';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import DashView from 'components/common/DashView';
 import LinearView from 'components/common/LinearView';
-import { AUTHENTICATE_ROUTE, ORDER_ROUTE, SETTING_ROUTE } from 'navigation/config/routes';
+import { APP_ROUTE, AUTHENTICATE_ROUTE, ORDER_ROUTE, SETTING_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { scale, ScaledSheet } from 'react-native-size-matters';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import AuthenticateService from 'utilities/authenticate/AuthenticateService';
-import { generateOrderQR } from 'utilities/helper';
-import { INFORMATION, listButton, OrderTypeMenu } from 'utilities/staticData';
+import { generateOrderQR, getInformationSetting } from 'utilities/helper';
+import { INFORMATION, listButton, OrderTypeMenu, POPUP_TYPE } from 'utilities/staticData';
 import UserStatus from './components/UserStatus';
 
+const profile = {
+    member: {
+        id: 12,
+        email: 'yeuquaimo@love.you',
+        fullName: 'DuongQuang001',
+        gender: 2,
+        birthday: '2022-03-14T05:53:39.000Z',
+        avatar: '',
+        levelRank: null,
+        money: null,
+        isPaid: 0,
+        avatar_50: '',
+    },
+    nextRank: '',
+    moneyToNextRank: '',
+};
 const InfoItem = (data: any) => {
     return (
         <View style={styles.infoContainer}>
@@ -45,7 +64,7 @@ const SettingScreen = () => {
     const { user } = userInfo;
     const { defaultOrder } = order;
     const defaultOrderQR = useMemo(() => generateOrderQR(defaultOrder, user), [defaultOrder, user]);
-
+    const dispatch = useDispatch();
     const handleShowPicker = () => {
         modalize.show(
             'modalPickerBackdrop',
@@ -125,6 +144,7 @@ const SettingScreen = () => {
             default:
         }
     };
+    const information = getInformationSetting(user?.member || {});
 
     const renderItemSetting = (item: any) => (
         <View key={item.id} style={styles.wrapBtnOptionSetting}>
@@ -139,29 +159,26 @@ const SettingScreen = () => {
         <View style={styles.container}>
             <View style={styles.headerContainer}>
                 <View style={styles.row}>
-                    <StyledText customStyle={styles.title} i18nText={'マイページ'} />
+                    <StyledText customStyle={styles.title} i18nText={'tab.setting'} />
                     <TouchableOpacity onPress={goToMyPage} style={styles.editButton}>
                         <StyledIcon source={Images.icons.edit} size={20} />
                     </TouchableOpacity>
                 </View>
 
-                <StyledImageBackground
-                    resizeMode={'stretch'}
-                    source={Images.photo.backgroundMyPage}
-                    style={styles.background}
-                >
+                <StyledImageBackground resizeMode={'stretch'} source={Images.photo.backgroundMyPage}>
                     <View style={styles.background}>
                         <View style={styles.profileRow}>
                             <StyledImage source={Images.photo.avatarDefault} customStyle={styles.avatar} />
                             <View>
                                 <StyledText originValue={'田中　英雄'} customStyle={styles.name} />
-                                <TouchableOpacity onPress={handleShowPicker}>
-                                    <LinearView style={styles.linear} colors={['#F8D156', '#FEECD2']}>
-                                        <StyledText originValue={'ゴールドメンバー'} isBlack />
-                                        <StyledIcon source={Images.icons.gold} size={15} />
-                                    </LinearView>
-                                </TouchableOpacity>
+                                <LinearView style={styles.linear} colors={['#F8D156', '#FEECD2']}>
+                                    <StyledText originValue={'ゴールドメンバー'} isBlack />
+                                    <StyledIcon source={Images.icons.gold} size={15} />
+                                </LinearView>
                             </View>
+                            <StyledTouchable onPress={handleShowPicker} customStyle={styles.question}>
+                                <StyledIcon source={Images.icons.questionGray} size={24} />
+                            </StyledTouchable>
                         </View>
                         <StyledText originValue={'￥80,000'} customStyle={styles.price} />
                         <View style={styles.ratioContain}>
@@ -180,7 +197,7 @@ const SettingScreen = () => {
             <StyledKeyboardAware>
                 <View style={styles.wrapListOptionSetting}>{listButton.map(renderItemSetting)}</View>
                 <View style={styles.infoContainerView}>
-                    {INFORMATION.map((item, index) => (
+                    {information.map((item, index) => (
                         <InfoItem key={index} data={item} />
                     ))}
                 </View>
@@ -199,7 +216,7 @@ const styles = ScaledSheet.create({
     headerContainer: {
         width: '100%',
         backgroundColor: Themes.COLORS.headerBackground,
-        padding: '20@s',
+        paddingHorizontal: '20@s',
         paddingTop: Metrics.safeTopPadding,
     },
     row: {
@@ -223,9 +240,10 @@ const styles = ScaledSheet.create({
         alignItems: 'center',
         padding: '20@s',
         paddingBottom: 0,
+        width: '100%',
     },
     background: {
-        width: '335@s',
+        width: Metrics.screenWidth - scale(40),
         height: '172@s',
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,
@@ -326,6 +344,11 @@ const styles = ScaledSheet.create({
     },
     infoContainerView: {
         backgroundColor: Themes.COLORS.white,
+    },
+    question: {
+        position: 'absolute',
+        top: '12@vs',
+        right: '20@s',
     },
 });
 

@@ -6,6 +6,7 @@ import { CommonStatus } from './types';
 interface IUser {
     id: number;
     username: string;
+    member?: any;
     // ...
 }
 

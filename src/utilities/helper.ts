@@ -2,6 +2,7 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import { sendTeams } from 'api/modules/api-app/general';
 import { store } from 'app-redux/store';
+import Images from 'assets/images';
 import AlertMessage from 'components/base/AlertMessage';
 import i18next from 'i18next';
 import { cloneDeep, isEqual, throttle } from 'lodash';
@@ -12,7 +13,7 @@ import Picker from 'react-native-picker';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import { CouponDishType, CouponType } from './enumData';
 import { formatDate, YYYYMMDD_PUBLISH } from './format';
-import { DiscountType, MenuType, OrderType, OrderTypeMenu, POPUP_TYPE, staticValue } from './staticData';
+import { DiscountType, Gender, MenuType, OrderType, OrderTypeMenu, POPUP_TYPE, staticValue } from './staticData';
 
 export const isAndroid = Platform.OS === 'android';
 
@@ -547,4 +548,17 @@ export const filterOrderStore = ({ menu, categories, order }: any) => {
         return newDishFilterSubDishes;
     }
     return [];
+};
+export const getInformationSetting = (data: any) => {
+    const { email, fullName, birthday, gender } = data;
+    return [
+        { title: 'common.email', icon: Images.icons.email, value: email },
+        { title: 'common.name', icon: Images.icons.userName, value: fullName },
+        { title: 'common.birthday', icon: Images.icons.birthday, value: formatDate(birthday) },
+        {
+            title: 'common.gender',
+            icon: Images.icons.gender,
+            value: gender === Gender.MALE ? 'authen.register.male' : 'authen.register.female',
+        },
+    ];
 };

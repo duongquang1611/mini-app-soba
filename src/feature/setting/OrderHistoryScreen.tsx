@@ -47,21 +47,24 @@ const OrderHistoryScreen = () => {
     const { pagingData, onRefresh, onLoadMore } = usePaging(getListHistoryOrder);
     const { list, refreshing } = pagingData;
     return (
-        <View style={styles.container}>
+        <>
             <StyledHeader title={'setting.orderHistoryTitle'} />
-            <View style={styles.grayView} />
-            <StyledList
-                data={list}
-                renderItem={renderItemNoti}
-                ItemSeparatorComponent={DashView}
-                ListFooterComponent={DashView}
-                customStyle={styles.body}
-                refreshing={refreshing}
-                onRefresh={onRefresh}
-                noDataText={'stamp.noData'}
-                onEndReached={onLoadMore}
-            />
-        </View>
+
+            <View style={styles.container}>
+                <View style={styles.grayView} />
+                <StyledList
+                    data={list}
+                    renderItem={renderItemNoti}
+                    ItemSeparatorComponent={DashView}
+                    ListFooterComponent={DashView}
+                    customStyle={styles.body}
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                    noDataText={'stamp.noData'}
+                    onEndReached={onLoadMore}
+                />
+            </View>
+        </>
     );
 };
 
