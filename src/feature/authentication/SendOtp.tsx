@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useIsFocused } from '@react-navigation/native';
-import { checkVerifyCode, getVerifyCode, register } from 'api/modules/api-app/authenticate';
+import { changePass, checkVerifyCode, getVerifyCode, register } from 'api/modules/api-app/authenticate';
 import { userInfoActions } from 'app-redux/slices/userInfoSlice';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledText } from 'components/base';
@@ -10,7 +10,7 @@ import StyledOverlayLoading from 'components/base/StyledOverlayLoading';
 import StyledHeader from 'components/common/StyledHeader';
 import TextUnderline from 'components/common/TextUnderline';
 import useCountdown from 'hooks/useCountDown';
-import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
+import { AUTHENTICATE_ROUTE, SETTING_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { FunctionComponent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Keyboard, Text, View } from 'react-native';
@@ -18,7 +18,7 @@ import { CodeField, Cursor, useClearByFocusCell } from 'react-native-confirmatio
 import { ScaledSheet } from 'react-native-size-matters';
 import { useDispatch } from 'react-redux';
 import { wait } from 'utilities/helper';
-import { staticValue, TEXT_OTP, VerifiedCodeType } from 'utilities/staticData';
+import { POPUP_TYPE, staticValue, TEXT_OTP, VerifiedCodeType } from 'utilities/staticData';
 
 const SendOTP: FunctionComponent = ({ route }: any) => {
     const dispatch = useDispatch();
@@ -30,7 +30,7 @@ const SendOTP: FunctionComponent = ({ route }: any) => {
     const [wrongOtpCount, setWrongOtpCount] = useState(0);
     const [code, setCode] = useState('');
     const { user = {}, type = VerifiedCodeType.REGISTER } = route?.params || {};
-    const { email, password } = user;
+    const { email, newPassword, oldPassword } = user;
     const maxResend = useMemo(() => retryOtpCount === staticValue.MAX_RETRY_OTP, [retryOtpCount]);
     const maxWrongOtp = useMemo(() => wrongOtpCount >= staticValue.MAX_WRONG_OTP, [wrongOtpCount]);
     const disabledResend = useMemo(() => countdown > 0 || maxResend, [countdown, maxResend]);
@@ -78,12 +78,22 @@ const SendOTP: FunctionComponent = ({ route }: any) => {
 
     const handleConfirmChangePassword = async () => {
         // change password
-        const res = await checkVerifyCode({ email, verifiedCode: code });
-        setLoading(false);
-        if (res?.data?.isValid) {
-            navigate(AUTHENTICATE_ROUTE.CHANGE_PASS, { email, code });
-        } else {
-            AlertMessage('alert.invalidOTP');
+        try {
+            const res = await checkVerifyCode({ email, verifiedCode: code, type });
+            setLoading(false);
+            if (res?.data?.isValid) {
+                const resChangePass = await changePass({ newPassword, oldPassword });
+                AlertMessage('changePass.success', {
+                    onClosedModalize: () => navigate(SETTING_ROUTE.EDIT_PROFILE),
+                    type: POPUP_TYPE.SUCCESS,
+                });
+            } else {
+                handleWrongOtpMax();
+                wrongOtpCount + 1 < staticValue.MAX_WRONG_OTP && AlertMessage('otp.error.otpInvalid');
+            }
+        } catch (error) {
+            console.log('handleConfirmResetPassword -> error', error);
+            AlertMessage(error);
         }
     };
 

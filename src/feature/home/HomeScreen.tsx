@@ -66,6 +66,8 @@ const getColorTab = (key: number) => {
 
 export const getCouponData = async (status?: TabCouponStatus) => {
     try {
+        const { token }: any = store.getState().userInfo;
+        if (!token) return;
         if (status) {
             const res = await getCouponList({ params: { take: SIZE_LIMIT, status } });
             store.dispatch(updateCoupon({ [CouponStoreKeyByStatus[status]]: res?.data }));

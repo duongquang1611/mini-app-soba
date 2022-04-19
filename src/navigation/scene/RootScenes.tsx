@@ -5,6 +5,7 @@ import ChangePassword from 'feature/authentication/ChangePassword';
 import OrderDefaultMenu from 'feature/authentication/OrderDefaultMenu';
 import RegisterStep2 from 'feature/authentication/RegisterStep2';
 import RegisterStep3 from 'feature/authentication/RegisterStep3';
+import SendOTP from 'feature/authentication/SendOtp';
 import SendOtpForgotPass from 'feature/authentication/SendOtpForgotPass';
 import DetailCouponScreen from 'feature/coupon/DetailCouponScreen';
 import TabCouponListScreen from 'feature/coupon/TabCouponListScreen';
@@ -127,6 +128,7 @@ const AppStack = () => {
                     <MainStack.Screen name={SETTING_ROUTE.SETTING_NOTIFICATION} component={SettingNotificationScreen} />
                     <MainStack.Screen name={SETTING_ROUTE.ORDER_HISTORY_DETAIL} component={OrderHistoryDetailScreen} />
                     <MainStack.Screen name={AUTHENTICATE_ROUTE.CHANGE_PASS} component={ChangePassword} />
+                    <MainStack.Screen name={AUTHENTICATE_ROUTE.SEND_OTP} component={SendOTP} />
                     <MainStack.Screen name={SETTING_ROUTE.DEFAULT_ORDER_DETAIL} component={DefaultOrderDetailScreen} />
                     <MainStack.Screen name={SETTING_ROUTE.ORDER_SAVE} component={OrderSave} />
                     <MainStack.Screen name={AUTHENTICATE_ROUTE.SEND_OTP_FORGOT_PASS} component={SendOtpForgotPass} />

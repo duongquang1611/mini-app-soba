@@ -50,6 +50,7 @@ const COUPON_URL = {
 
 const AUTH_URL = {
     editProfile: 'profile/edit',
+    changePass: 'auth/change-password',
 };
 
 export { COMMON_URL, STAMP_URL, NOTIFICATION_URL, COUPON_URL, HOME_URL, MENU_URL, ORDER_URL, AUTH_URL };

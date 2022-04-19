@@ -72,3 +72,9 @@ export enum NotificationCategory {
     SUCCESS_PAYMENT = 5,
     CANCEL_PAYMENT = 6,
 }
+
+// type check password matches
+export enum CheckPasswordType {
+    CHECK_CONFIRM_PASS = 1,
+    CHECK_NEW_PASS = 2,
+}

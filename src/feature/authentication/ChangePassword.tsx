@@ -1,127 +1,166 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { resetPassword } from 'api/modules/api-app/authenticate';
+import { getVerifyCode } from 'api/modules/api-app/authenticate';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledButton } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
 import StyledInputForm from 'components/base/StyledInputForm';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
+import StyledOverlayLoading from 'components/base/StyledOverlayLoading';
 import StyledHeader from 'components/common/StyledHeader';
 import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
-import React, { FunctionComponent, useRef } from 'react';
+import React, { FunctionComponent, useCallback, useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import { SafeAreaView, TextInput, View } from 'react-native';
+import { Keyboard, View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
+import { useSelector } from 'react-redux';
+import { CheckPasswordType } from 'utilities/enumData';
+import { checkPasswordMatch } from 'utilities/helper';
+import { VerifiedCodeType } from 'utilities/staticData';
+import { PASSWORD_MAX_LENGTH } from 'utilities/validate';
 import yupValidate from 'utilities/yupValidate';
 import * as yup from 'yup';
 
-const ChangePassword: FunctionComponent = ({ route }: any) => {
-    const { email } = route?.params || {};
-    const { t } = useTranslation();
+const changePassForm = __DEV__
+    ? {
+          oldPassword: 'loveyou3000',
+          newPassword: 'abc12345',
+          confirmNewPassword: 'abc12345',
+      }
+    : {};
 
-    const passwordConfirmRef = useRef<TextInput>(null);
-    const newPasswordRef = useRef<TextInput>(null);
+const ChangePassword: FunctionComponent = () => {
+    const { user } = useSelector((state: any) => state.userInfo);
+    const newPassRef = useRef<any>(null);
+    const oldPassRef = useRef<any>(null);
+    const confirmNewPassRef = useRef<any>(null);
+    const [loading, setLoading] = useState(false);
 
     const changePasswordSchema = yup.object().shape({
-        newPassword: yupValidate.password('oldPassword', false),
-        confirmNewPassword: yupValidate.password('newPassword'),
+        oldPassword: yupValidate.password(),
+        newPassword: yupValidate.password(),
+        confirmNewPassword: yupValidate.password(),
     });
     const form = useForm({
         mode: 'all',
         resolver: yupResolver(changePasswordSchema),
+        defaultValues: changePassForm,
     });
     const {
         handleSubmit,
         formState: { isValid },
+        watch,
     } = form;
 
-    const confirm = async ({ password }: any) => {
+    const checkConfirmPassword = useCallback(() => {
+        const { newPassword: password, confirmNewPassword: confirmPassword } = watch();
+        return checkPasswordMatch({ password, confirmPassword });
+    }, [watch]);
+
+    const checkNewPassword = useCallback(() => {
+        const { newPassword: password, oldPassword } = watch();
+        return checkPasswordMatch({ password, oldPassword, type: CheckPasswordType.CHECK_NEW_PASS });
+    }, [watch]);
+
+    const handleGetVerifyCode = async ({ oldPassword, newPassword }: any) => {
+        const email = user?.member?.email;
         try {
-            await resetPassword(email, password);
-            navigate(AUTHENTICATE_ROUTE.LOGIN);
+            Keyboard.dismiss();
+            setLoading(true);
+            await getVerifyCode({ email, type: VerifiedCodeType.CHANGE_PASSWORD });
+            setLoading(false);
+            navigate(AUTHENTICATE_ROUTE.SEND_OTP, {
+                user: { oldPassword, newPassword, email },
+                type: VerifiedCodeType.CHANGE_PASSWORD,
+            });
         } catch (error) {
+            setLoading(false);
             AlertMessage(error);
         }
     };
 
     return (
-        <SafeAreaView style={styles.flex1}>
-            <StyledHeader title={'changePass'} />
+        <>
+            <StyledHeader title={'changePass.title'} />
+            <StyledOverlayLoading visible={loading} />
             <View style={styles.container}>
-                <StyledKeyboardAware style={styles.content} customStyle={styles.contentContainer}>
+                <StyledKeyboardAware customStyle={styles.contentScrollView}>
                     <FormProvider {...form}>
-                        {/* <StyledInputForm
-                            label={'oldPassword'}
-                            name={'oldPassword'}
-                            placeholder={t('authen.register.passwordPlaceholder')}
-                            maxLength={32}
-                            onSubmitEditing={() => newPasswordRef?.current?.focus()}
-                        /> */}
                         <StyledInputForm
-                            label={'newPassword'}
-                            name={'newPassword'}
-                            ref={newPasswordRef}
-                            returnKeyType={'next'}
-                            maxLength={20}
-                            onSubmitEditing={() => passwordConfirmRef?.current?.focus()}
+                            ref={oldPassRef}
+                            name={'oldPassword'}
+                            label={'changePass.oldPassLabel'}
+                            customPlaceHolder={'changePass.oldPassPlaceholder'}
+                            maxLength={PASSWORD_MAX_LENGTH}
                             isSecureTextEntry={true}
                             icYeyOff={Images.icons.eyeOff}
                             icYeyOn={Images.icons.eyeOn}
+                            onSubmitEditing={() => newPassRef?.current?.focus()}
+                            customStyle={styles.inputPassword}
+                            containerStyle={styles.inputContainer}
                         />
                         <StyledInputForm
-                            label={'confirmNewPassword'}
-                            name={'confirmNewPassword'}
-                            ref={passwordConfirmRef}
-                            placeholder={t('authen.register.passwordPlaceholder')}
-                            returnKeyType={'next'}
-                            maxLength={32}
-                            onSubmitEditing={handleSubmit(confirm)}
+                            ref={newPassRef}
+                            name={'newPassword'}
+                            label={'changePass.newPassLabel'}
+                            customPlaceHolder={'changePass.newPassPlaceholder'}
+                            maxLength={PASSWORD_MAX_LENGTH}
+                            onSubmitEditing={() => confirmNewPassRef?.current?.focus()}
                             isSecureTextEntry={true}
-                            icYeyOff={Images.icons.selected}
-                            icYeyOn={Images.icons.selected}
+                            icYeyOff={Images.icons.eyeOff}
+                            icYeyOn={Images.icons.eyeOn}
+                            customStyle={styles.inputPassword}
+                            customErrorMessage={checkNewPassword()}
+                            containerStyle={styles.inputContainer}
+                        />
+
+                        <StyledInputForm
+                            ref={confirmNewPassRef}
+                            name={'confirmNewPassword'}
+                            label={'changePass.confirmNewPassLabel'}
+                            customPlaceHolder={'changePass.confirmNewPassPlaceholder'}
+                            returnKeyType={'done'}
+                            maxLength={PASSWORD_MAX_LENGTH}
+                            isSecureTextEntry={true}
+                            icYeyOff={Images.icons.eyeOff}
+                            icYeyOn={Images.icons.eyeOn}
+                            customStyle={styles.inputPassword}
+                            customErrorMessage={checkConfirmPassword()}
+                            onSubmitEditing={Keyboard.dismiss}
+                            containerStyle={styles.inputContainer}
                         />
                     </FormProvider>
                     <StyledButton
-                        title={'authen.register.confirm'}
-                        onPress={handleSubmit(confirm)}
-                        disabled={!isValid}
-                        customStyle={[styles.buttonSave, !isValid && { backgroundColor: 'lightgray' }]}
+                        disabled={!(isValid && !checkConfirmPassword() && !checkNewPassword())}
+                        title={'common.next'}
+                        onPress={handleSubmit(handleGetVerifyCode)}
+                        customStyle={styles.buttonSave}
                     />
                 </StyledKeyboardAware>
             </View>
-        </SafeAreaView>
+        </>
     );
 };
 
 const styles = ScaledSheet.create({
-    titleStyleSaveButton: {
-        color: Themes.COLORS.white,
-        fontWeight: 'bold',
+    contentScrollView: {
+        paddingTop: '5@vs',
     },
     container: {
         flex: 1,
     },
-    flex1: {
-        flex: 1,
-    },
-    contentContainer: {
-        alignItems: 'center',
-    },
-    content: {
-        backgroundColor: Themes.COLORS.white,
-        borderRadius: 10,
-        marginTop: 15,
-        marginBottom: 30,
-        paddingVertical: 40,
-    },
-    header: {
-        marginVertical: 10,
-    },
     buttonSave: {
         backgroundColor: Themes.COLORS.white,
-        marginTop: 30,
+        alignSelf: 'center',
+        marginTop: '50@vs',
+    },
+    inputPassword: {
+        flex: 1,
+    },
+    inputContainer: {
+        marginBottom: 0,
+        marginTop: '25@vs',
     },
 });
 
