@@ -53,7 +53,7 @@ export async function onMoveNavigation(data: any) {
     if (data?.memberNotiId) {
         try {
             await readNotification(data?.memberNotiId);
-            if (!category || isCategoryPayment) {
+            if (isCategoryPayment) {
                 navigate(SETTING_ROUTE.ORDER_HISTORY);
             } else navigate(HOME_ROUTE.NOTIFICATION_DETAIL, { item: { id: memberNotiId, isRead: true } });
         } catch (error) {

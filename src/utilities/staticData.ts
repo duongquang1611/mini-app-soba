@@ -671,7 +671,7 @@ export const FAKER = {};
 export enum VerifiedCodeType {
     REGISTER = 1,
     RESET_PASSWORD = 2,
-    CHANGE_EMAIL = 3,
+    CHANGE_PASSWORD = 3,
 }
 
 // gender in register, profile
@@ -714,7 +714,7 @@ export const TEXT_OTP = [
         confirm: 'common.next',
     },
     {
-        id: VerifiedCodeType.CHANGE_EMAIL,
+        id: VerifiedCodeType.CHANGE_PASSWORD,
         title: 'otp.register.title',
         titleInputOtp: 'otp.register.titleInputOtp',
         note: 'otp.register.note',
