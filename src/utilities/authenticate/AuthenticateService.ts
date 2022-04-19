@@ -1,4 +1,4 @@
-import { login } from 'api/modules/api-app/authenticate';
+import { getProfile, login } from 'api/modules/api-app/authenticate';
 import { getOrder } from 'api/modules/api-app/order';
 import request from 'api/request';
 import { clearCoupon } from 'app-redux/slices/couponSlice';
@@ -57,10 +57,8 @@ const getOrderData = async (token: any) => {
         getOrder(OrderType.MOBILE, token),
         getOrder(OrderType.DEFAULT_HOME, token),
     ]);
-    console.log('🚀 ~ file: AuthenticateService.ts ~ line 59 ~ getOrderData ~ res', res?.[0]?.data);
-    updateOrderStore(res);
-};
-const updateOrderStore = (res: any) => {
+
+    // update order into redux
     const dataDefaultSetting = res?.[0]?.data || {};
     const dataMobile = res?.[1]?.data || {};
     const dataDefaultHome = res?.[2]?.data || {};
@@ -68,6 +66,7 @@ const updateOrderStore = (res: any) => {
     store.dispatch(updateMobileOrder(changeOrderApiToStore(dataMobile)));
     store.dispatch(updateDefaultOrderLocal(changeOrderApiToStore(dataDefaultHome)));
 };
+
 export const useLogin = (): LoginRequest => {
     const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
@@ -76,12 +75,12 @@ export const useLogin = (): LoginRequest => {
         try {
             setLoading(true);
             const response = await login(options);
-            setLoading(false);
-
             dispatch(updateGlobalData({ skipOrderDefault: true }));
-            dispatch(userInfoActions.getUserInfoRequest(response?.data?.token));
+            const resProfile = await getProfile(response?.data?.token);
+            dispatch(userInfoActions.getUserInfoSuccess(resProfile?.data));
+            await getOrderData(response?.data?.token);
+            setLoading(false);
             AuthenticateService.handlerLogin({ ...response.data });
-            getOrderData(response?.data?.token);
         } catch (e) {
             setLoading(false);
             console.log('file: AuthenticateService.ts -> line 52 -> requestLogin -> e', e);

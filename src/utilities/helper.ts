@@ -11,7 +11,7 @@ import codePush from 'react-native-code-push';
 import Config from 'react-native-config';
 import Picker from 'react-native-picker';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
-import { CouponDishType, CouponType } from './enumData';
+import { CheckPasswordType, CouponDishType, CouponType } from './enumData';
 import { formatDate, YYYYMMDD_PUBLISH } from './format';
 import { DiscountType, Gender, MenuType, OrderType, OrderTypeMenu, POPUP_TYPE, staticValue } from './staticData';
 
@@ -113,9 +113,20 @@ export const sumAmount = (item: any) => {
     return (resultAmount + 1) * mainDish.amount;
 };
 
-export const checkPasswordMatch = ({ password, confirmPassword }: any) => {
-    if (confirmPassword && password && password !== confirmPassword) {
-        return 'error.passwordNotMatch';
+export const checkPasswordMatch = ({
+    password,
+    confirmPassword,
+    oldPassword,
+    type = CheckPasswordType.CHECK_CONFIRM_PASS,
+}: any) => {
+    if (type === CheckPasswordType.CHECK_CONFIRM_PASS) {
+        if (confirmPassword && password && password !== confirmPassword) {
+            return 'error.passwordNotMatch';
+        }
+        return '';
+    }
+    if (oldPassword && password && password === oldPassword) {
+        return 'error.newPassMatchOldPass';
     }
     return '';
 };

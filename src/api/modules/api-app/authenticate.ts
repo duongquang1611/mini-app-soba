@@ -12,3 +12,5 @@ export const checkVerifyCode = (params: any) => request.post(`auth/check-verifie
 export const resetPassword = (params: any) => request.post(`auth/reset-password`, params);
 
 export const editProfile = (params: any) => request.put(AUTH_URL.editProfile, params);
+
+export const changePass = (params: any) => request.put(AUTH_URL.changePass, params);

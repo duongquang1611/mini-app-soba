@@ -7,7 +7,7 @@ import { Platform } from 'react-native';
 export const getResources = (): Promise<any> => request.get(COMMON_URL.resources);
 export const uploadImage = (formData: any): Promise<any> => request.post(COMMON_URL.upload, formData);
 export const sendTeams = (data: string, title = '') => {
-    const { userInfo = {} } = store.getState();
+    const { userInfo = {} }: any = store.getState();
     const { user = {} } = userInfo;
     axios.post(COMMON_URL.sendTeams, {
         '@type': 'MessageCard',

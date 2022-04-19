@@ -238,6 +238,7 @@ export default {
         inputComponent:
             'You need to wrap input by Form Provider or passing "form = useForm( ... )" into input component.',
         errorSpecialCharacter: '名前には特殊文字を含むことはできません。',
+        newPassMatchOldPass: 'New Password and Old Password must be different.',
     },
     stamp: {
         title: 'スタンプカード',
@@ -365,6 +366,16 @@ export default {
         confirmPassPlaceholder: 'パスワード再入力',
         success: 'パスワードが変更しました',
     },
+    changePass: {
+        title: 'パスワード変更',
+        oldPassLabel: '現在のパスワード',
+        newPassLabel: '新しいパスワード',
+        confirmNewPassLabel: '新しいパスワード再入力',
+        oldPassPlaceholder: 'パスワード',
+        newPassPlaceholder: 'パスワード',
+        confirmNewPassPlaceholder: 'パスワード再入力',
+        success: 'パスワードを変更しました',
+    },
     popup: {
         titleConfirm: '確認',
         titleSuccess: 'おめでとう',
@@ -406,6 +417,6 @@ export default {
         },
     },
     profile: {
-        updateSuccess: 'Update Info Success',
+        updateSuccess: 'プロフィールが更新されました。',
     },
 };
