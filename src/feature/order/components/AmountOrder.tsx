@@ -25,7 +25,7 @@ const AmountOrder = (props: AmountOrderProps) => {
     return (
         <View style={[styles.numOrderView, customStyle]}>
             <View style={styles.row}>
-                <StyledIcon source={Images.icons.bagTick} size={17} customStyle={styles.icBag} />
+                <StyledIcon source={Images.icons.bagTick} size={20} customStyle={styles.icBag} />
                 <StyledText i18nText={'order.numOrder'} customStyle={styles.contentText} />
             </View>
             <View style={styles.row}>

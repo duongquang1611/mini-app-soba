@@ -22,7 +22,7 @@ const DEFAULT_FORM: any = __DEV__
           email: 'yeuquaimo001@love.you',
           password: 'loveyou3000',
 
-          //   email: 'test1@gmail.com',
+          //   email: 'test01@gmail.com',
           //   password: 'abc12345',
 
           //   email: 'test1@love.you',
