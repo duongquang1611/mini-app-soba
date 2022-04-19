@@ -345,6 +345,7 @@ export const generateNewOrder = (
         for (let i = 0; i < (mainDish?.amount || 1); i++) {
             const flatDishItem: any = {
                 id: `${mainDish?.stringId}`,
+                name: mainDish?.name,
                 price: 100,
             };
             const subDishesData: any[] = [];
@@ -354,6 +355,7 @@ export const generateNewOrder = (
                     const subDishData = new Array(subDish?.amount || 1).fill({
                         id: `${subDish?.stringId}`,
                         name: subDish?.title,
+                        price: 100,
                     });
                     subDishesData.push(...subDishData);
                     return subIdsData;
@@ -366,6 +368,13 @@ export const generateNewOrder = (
     });
     dishesFormatted = dishesFormatted.flat();
 
+    // calc sum price in dishesFormatted
+    const totalPrice = dishesFormatted.reduce((sum: number, dish: any) => {
+        return sum + (dish?.price || 0);
+    }, 0);
+
+    const totalDiscount = 100;
+
     const qrData: any = {
         userId: user?.member?.id,
         isDefaultOrder: Number(orderType === OrderType.DEFAULT_SETTING || orderType === OrderType.DEFAULT_HOME),
@@ -373,9 +382,9 @@ export const generateNewOrder = (
         orderId: makeId(),
         orderDetail: dishesFormatted,
         coupons: couponsFormatted,
-        totalPrice: 1000,
-        totalDiscount: 100,
-        totalPaid: 900,
+        totalPrice,
+        totalDiscount,
+        totalPaid: totalPrice - totalDiscount,
     };
 
     return addQRCodeEOS(qrData, convert, includeEOS);

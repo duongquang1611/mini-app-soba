@@ -47,7 +47,7 @@ const NotificationItem = (props: any) => {
         } catch (error) {
             console.log('goToDetail -> error', error);
         }
-        if (!category || isCategoryPayment) {
+        if (isCategoryPayment) {
             navigate(SETTING_ROUTE.ORDER_HISTORY);
         } else navigate(HOME_ROUTE.NOTIFICATION_DETAIL, { item: { ...item, isRead: checkIsRead } });
     };
