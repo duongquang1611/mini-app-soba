@@ -2,6 +2,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledInputForm } from 'components/base';
+import AlertMessage from 'components/base/AlertMessage';
 import StyledHeader from 'components/common/StyledHeader';
 import React, { useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -12,8 +13,8 @@ import * as yup from 'yup';
 
 const ContactScreen = () => {
     const registerSchema = yup.object().shape({
-        position: yup.string().required(),
-        content: yup.string().required(),
+        title: yup.string().required(),
+        description: yup.string().required(),
     });
 
     const form = useForm({
@@ -28,8 +29,13 @@ const ContactScreen = () => {
     const contentRef = useRef<any>(null);
     const { t } = useTranslation();
 
-    const sendContact = (formData: any) => {
-        console.log('sendContact -> formData', formData);
+    const sendContact = async (formData: any) => {
+        try {
+            // const contact = await contact(formData);
+        } catch (error) {
+            console.log('sendContact -> formData', formData);
+            AlertMessage(error);
+        }
     };
 
     return (
@@ -39,7 +45,7 @@ const ContactScreen = () => {
                 <FormProvider {...form}>
                     <StyledInputForm
                         label={'setting.position'}
-                        name={'position'}
+                        name={'title'}
                         placeholder={t('setting.position')}
                         keyboardType="email-address"
                         returnKeyType={'next'}
@@ -47,7 +53,7 @@ const ContactScreen = () => {
                     />
                     <StyledInputForm
                         label={'setting.content'}
-                        name={'content'}
+                        name={'description'}
                         returnKeyType={'done'}
                         ref={contentRef}
                         placeholder={t('setting.content')}

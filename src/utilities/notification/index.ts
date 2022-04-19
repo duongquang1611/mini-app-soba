@@ -1,5 +1,6 @@
 import { sendTeams } from 'api/modules/api-app/general';
 import { readNotification } from 'api/modules/api-app/notification';
+import { saveOrderOption } from 'api/modules/api-app/order';
 import { RootState } from 'app-redux/hooks';
 import { updateNotificationUnRead } from 'app-redux/slices/globalDataSlice';
 import {
@@ -19,7 +20,7 @@ import OneSignal from 'react-native-onesignal';
 import { useSelector } from 'react-redux';
 import { isLogin } from 'utilities/authenticate/AuthenticateService';
 import { NotificationCategory } from 'utilities/enumData';
-import { logger } from 'utilities/helper';
+import { generateDataSaveOrderOption, logger } from 'utilities/helper';
 import { listScreenBackWhenPayment, OrderType, POPUP_TYPE } from 'utilities/staticData';
 
 type NotificationReceivedEvent = {
@@ -96,7 +97,7 @@ const backHome = (orderId: string) => {
     );
 };
 
-const onReceived = (data: NotificationReceivedEvent) => {
+const onReceived = async (data: NotificationReceivedEvent) => {
     logger('onReceived', undefined, data);
     const notify = data.getNotification();
     setTimeout(() => data.complete(notify), 0); // must need to show notify in tab bar
@@ -120,6 +121,14 @@ const onReceived = (data: NotificationReceivedEvent) => {
         listScreenBackWhenPayment.find((screen: any) => currentScreen === screen)
     ) {
         backHome(orderId);
+    }
+    try {
+        const defaultOrderHomeSaveOrderOption = generateDataSaveOrderOption(defaultOrderLocal, OrderType.DEFAULT_HOME);
+        await saveOrderOption(defaultOrderHomeSaveOrderOption);
+        const mobileSaveOrderOption = generateDataSaveOrderOption(mobileOrder, OrderType.MOBILE);
+        await saveOrderOption(mobileSaveOrderOption);
+    } catch (error) {
+        console.log('saveOrder -> error', error);
     }
 };
 

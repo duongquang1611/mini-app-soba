@@ -93,9 +93,7 @@ const StyledHeaderImage = (props: HeaderProps) => {
                     style={[styles.containerDot, { bottom: content ? verticalScale(20) : verticalScale(-10) }]}
                 >
                     <Pagination
-                        containerStyle={{
-                            justifyContent: 'flex-start',
-                        }}
+                        containerStyle={styles.containerPagination}
                         dotsLength={images.length}
                         activeDotIndex={index}
                         inactiveDotStyle={{ width: scale(5), borderRadius: 5 }}
@@ -159,8 +157,7 @@ const styles = ScaledSheet.create({
         top: '40@vs',
     },
     buttonBack: {
-        width: '25@vs',
-        height: '25@vs',
+        paddingHorizontal: '5@s',
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -207,6 +204,10 @@ const styles = ScaledSheet.create({
         bottom: '-10@vs',
         position: 'absolute',
     },
+    containerPagination: {
+        justifyContent: 'flex-start',
+        marginLeft: '-5@s',
+    },
     wrapDot: {
         width: '40@s',
         height: '5@vs',
@@ -234,6 +235,7 @@ const styles = ScaledSheet.create({
         width: '111@s',
         height: '58@s',
         borderRadius: 5,
+        marginLeft: '5@s',
     },
     newNotification: {
         width: '10@s',

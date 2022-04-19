@@ -151,7 +151,8 @@ const styles = ScaledSheet.create({
         backgroundColor: Themes.COLORS.white,
     },
     orderTextView: {
-        width: '73%',
+        flexShrink: 1,
+        marginLeft: '10@vs',
         justifyContent: 'space-between',
         marginRight: '5@s',
     },
@@ -181,15 +182,16 @@ const styles = ScaledSheet.create({
     icCancel: {},
     addValue: {
         marginVertical: '3@vs',
-        maxWidth: '90%',
+        flexShrink: 1,
     },
     changeText: {
         fontWeight: 'bold',
     },
     rowSub: {
-        flexDirection: 'row',
         marginVertical: '2@vs',
-        alignItems: 'center',
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        flexShrink: 1,
     },
     numView: {
         backgroundColor: Themes.COLORS.headerBackground,
