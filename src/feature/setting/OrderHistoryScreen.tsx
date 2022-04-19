@@ -11,6 +11,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import { formatDate, YMDHm } from 'utilities/format';
+import { numberWithCommas } from 'utilities/helper';
 
 const OrderItem = ({ item }: any) => {
     const { title, createdDate, amount, totalPaid, id } = item || {};
@@ -31,18 +32,17 @@ const OrderItem = ({ item }: any) => {
                     <StyledText originValue={formatDate(createdDate, YMDHm)} customStyle={styles.time} />
                     <View style={styles.priceRow}>
                         <StyledText
-                            i18nParams={{ totalPaid }}
+                            i18nParams={{ totalPaid: numberWithCommas(totalPaid) }}
                             i18nText={'order.rangeTimeHistoryOrder'}
                             customStyle={styles.price}
                         />
-                        <StyledText originValue={item?.price} customStyle={styles.price} />
                     </View>
                 </View>
             </View>
         </StyledTouchable>
     );
 };
-const renderItemNoti = ({ item }: any) => <OrderItem key={item.id} item={item} />;
+const renderItemHistory = ({ item }: any) => <OrderItem key={item.id} item={item} />;
 const OrderHistoryScreen = () => {
     const { pagingData, onRefresh, onLoadMore } = usePaging(getListHistoryOrder);
     const { list, refreshing } = pagingData;
@@ -54,13 +54,13 @@ const OrderHistoryScreen = () => {
                 <View style={styles.grayView} />
                 <StyledList
                     data={list}
-                    renderItem={renderItemNoti}
+                    renderItem={renderItemHistory}
                     ItemSeparatorComponent={DashView}
                     ListFooterComponent={DashView}
                     customStyle={styles.body}
                     refreshing={refreshing}
                     onRefresh={onRefresh}
-                    noDataText={'stamp.noData'}
+                    noDataText={'order.noDataOrderHistory'}
                     onEndReached={onLoadMore}
                 />
             </View>

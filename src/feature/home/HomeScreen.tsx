@@ -41,12 +41,7 @@ const netWorkItem = (data: any) => {
             onPress={() => Linking.openURL(item?.link)}
             style={[styles.netWorkView, { marginLeft: index === 0 ? scale(20) : 0 }]}
         >
-            <StyledIcon
-                resizeMode={'stretch'}
-                source={{ uri: item?.image }}
-                size={30}
-                customStyle={styles.iconNetwork}
-            />
+            <StyledIcon resizeMode={'cover'} source={{ uri: item?.image }} size={30} customStyle={styles.iconNetwork} />
             <StyledText originValue={item?.title} isBlack />
         </TouchableOpacity>
     );
@@ -253,6 +248,7 @@ const HomeScreen: FunctionComponent = () => {
                         renderScene={renderScene}
                         isHome={true}
                         customIndicatorStyle={{ backgroundColor: getColorTab(indexTab) }}
+                        defaultIndex={tab}
                     />
                     <View style={styles.grayView} />
                     <StyledImageBackground source={Images.photo.news} resizeMode="cover" style={styles.newsView}>

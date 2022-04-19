@@ -185,6 +185,7 @@ export default {
         rangeCouponPrice: '-￥ {{price}}',
         total: '合計',
         rangeSubDish: 'x{{amount}}',
+        noDataOrderHistory: '注文履歴がありません。',
     },
     setting: {
         editProfileTitle: 'マイページ編集',
