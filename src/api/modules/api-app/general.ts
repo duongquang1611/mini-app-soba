@@ -9,34 +9,38 @@ export const uploadImage = (formData: any): Promise<any> => request.post(COMMON_
 export const sendTeams = (data: string, title = '') => {
     const { userInfo = {} }: any = store.getState();
     const { user = {} } = userInfo;
-    axios.post(COMMON_URL.sendTeams, {
-        '@type': 'MessageCard',
-        '@context': 'http://schema.org/extensions',
-        themeColor: '0076D7',
-        title,
-        summary: 'Webhook Soba',
-        sections: [
-            {
-                facts: [
-                    {
-                        name: 'Device',
-                        value: Platform.OS === 'ios' ? 'ios' : 'Android',
-                    },
-                    {
-                        name: 'Email',
-                        value: user?.member?.email,
-                    },
-                    {
-                        name: 'UserId',
-                        value: user?.member?.id,
-                    },
-                ],
-                markdown: true,
-            },
-            {
-                type: 'TextBlock',
-                text: data,
-            },
-        ],
-    });
+    try {
+        axios.post(COMMON_URL.sendTeams, {
+            '@type': 'MessageCard',
+            '@context': 'http://schema.org/extensions',
+            themeColor: '0076D7',
+            title,
+            summary: 'Webhook Soba',
+            sections: [
+                {
+                    facts: [
+                        {
+                            name: 'Device',
+                            value: Platform.OS === 'ios' ? 'ios' : 'Android',
+                        },
+                        {
+                            name: 'Email',
+                            value: user?.member?.email,
+                        },
+                        {
+                            name: 'UserId',
+                            value: user?.member?.id,
+                        },
+                    ],
+                    markdown: true,
+                },
+                {
+                    type: 'TextBlock',
+                    text: data,
+                },
+            ],
+        });
+    } catch (error) {
+        console.log('sendTeams -> error', error);
+    }
 };

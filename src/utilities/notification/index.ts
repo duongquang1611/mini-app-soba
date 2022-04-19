@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import { sendTeams } from 'api/modules/api-app/general';
 import { readNotification } from 'api/modules/api-app/notification';
 import { saveOrderOption } from 'api/modules/api-app/order';
@@ -47,7 +48,7 @@ export function deleteTagOneSignal() {
     OneSignal.deleteTag('memberId');
 }
 
-export async function onMoveNavigation(data: any) {
+export async function onMoveNavigation(data: any, navigation?: any) {
     const { memberNotiId, category } = data || {};
     const isCategoryPayment =
         category === NotificationCategory.CANCEL_PAYMENT || category === NotificationCategory.SUCCESS_PAYMENT;
@@ -55,21 +56,14 @@ export async function onMoveNavigation(data: any) {
         try {
             await readNotification(data?.memberNotiId);
             if (isCategoryPayment) {
-                navigate(SETTING_ROUTE.ORDER_HISTORY);
-            } else navigate(HOME_ROUTE.NOTIFICATION_DETAIL, { item: { id: memberNotiId, isRead: true } });
+                navigation?.navigate(SETTING_ROUTE.ORDER_HISTORY);
+            } else navigation?.navigate(HOME_ROUTE.NOTIFICATION_DETAIL, { item: { id: memberNotiId, isRead: true } });
         } catch (error) {
             console.log('onMoveNavigation -> error', error);
         }
     }
 }
-export const handleNavigateNotification = async (data: any) => {
-    if (isLogin()) {
-        const { additionalData } = data?.notification;
-        setTimeout(() => {
-            onMoveNavigation(additionalData);
-        }, 300);
-    }
-};
+
 const deleteUsedCoupon = (order: any, couponsUsed: any) => {
     const { coupons } = order || {};
     const newCoupons =
@@ -134,10 +128,20 @@ const onReceived = async (data: NotificationReceivedEvent) => {
 
 export const useOnesignal = (user?: any) => {
     const { isPushDisabled } = useSelector((state: RootState) => state.globalData);
+    const navigation = useNavigation();
+
     if (!user) {
         const { userInfo } = store.getState();
         user = userInfo?.user;
     }
+    const handleNavigateNotification = async (data: any) => {
+        if (isLogin()) {
+            const { additionalData } = data?.notification;
+            setTimeout(() => {
+                onMoveNavigation(additionalData, navigation);
+            }, 100);
+        }
+    };
 
     useEffect(() => {
         const oneSignalId = Config.ONE_SIGNAL_APP_ID;

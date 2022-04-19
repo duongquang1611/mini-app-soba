@@ -24,9 +24,9 @@ import * as yup from 'yup';
 
 const changePassForm = __DEV__
     ? {
-          oldPassword: 'loveyou3000',
-          newPassword: 'abc12345',
-          confirmNewPassword: 'abc12345',
+          oldPassword: 'abc12345',
+          newPassword: 'loveyou3000',
+          confirmNewPassword: 'loveyou3000',
       }
     : {};
 
