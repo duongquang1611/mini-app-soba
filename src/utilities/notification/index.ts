@@ -90,6 +90,7 @@ const backHome = (orderId: string) => {
             onClosedModalize: () => {
                 navigate(APP_ROUTE.MAIN_TAB, { screen: HOME_ROUTE.ROOT });
             },
+            type: POPUP_TYPE.SUCCESS,
         },
         false,
     );

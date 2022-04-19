@@ -31,6 +31,7 @@ const Images = {
         stampUsedDetail: require('./icon/ic_stamp_used_detail.png'),
         couponUsed: require('./icon/ic_coupon_used.png'),
         question: require('./icon/ic_question.png'),
+        questionGray: require('./icon/ic_question_gray.png'),
         noodlesOn: require('./icon/ic_noodles_on.png'),
         noodlesOff: require('./icon/ic_noodles_off.png'),
         ticket_discount: require('./icon/ic_ticket_discount.png'),

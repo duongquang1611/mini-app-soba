@@ -51,11 +51,11 @@ const AuthenticateService = {
         store.dispatch(userInfoActions.updateToken(token));
     },
 };
-const getOrderData = async () => {
+const getOrderData = async (token: any) => {
     const res = await Promise.all([
-        getOrder(OrderType.DEFAULT_SETTING),
-        getOrder(OrderType.MOBILE),
-        getOrder(OrderType.DEFAULT_HOME),
+        getOrder(OrderType.DEFAULT_SETTING, token),
+        getOrder(OrderType.MOBILE, token),
+        getOrder(OrderType.DEFAULT_HOME, token),
     ]);
     console.log('🚀 ~ file: AuthenticateService.ts ~ line 59 ~ getOrderData ~ res', res?.[0]?.data);
     updateOrderStore(res);
@@ -81,7 +81,7 @@ export const useLogin = (): LoginRequest => {
             dispatch(updateGlobalData({ skipOrderDefault: true }));
             dispatch(userInfoActions.getUserInfoRequest(response?.data?.token));
             AuthenticateService.handlerLogin({ ...response.data });
-            getOrderData();
+            getOrderData(response?.data?.token);
         } catch (e) {
             setLoading(false);
             console.log('file: AuthenticateService.ts -> line 52 -> requestLogin -> e', e);

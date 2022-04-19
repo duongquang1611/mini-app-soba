@@ -41,7 +41,12 @@ const netWorkItem = (data: any) => {
             onPress={() => Linking.openURL(item?.link)}
             style={[styles.netWorkView, { marginLeft: index === 0 ? scale(20) : 0 }]}
         >
-            <StyledIcon source={{ uri: item?.image }} size={30} customStyle={styles.iconNetwork} />
+            <StyledIcon
+                resizeMode={'stretch'}
+                source={{ uri: item?.image }}
+                size={30}
+                customStyle={styles.iconNetwork}
+            />
             <StyledText originValue={item?.title} isBlack />
         </TouchableOpacity>
     );
@@ -286,6 +291,7 @@ const styles = ScaledSheet.create({
     },
     iconNetwork: {
         marginRight: '15@s',
+        borderRadius: 30,
     },
     rowView: {
         flexDirection: 'row',

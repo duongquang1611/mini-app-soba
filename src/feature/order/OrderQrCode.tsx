@@ -136,7 +136,7 @@ const OrderQrCodeScreen = (props: any) => {
     );
     const getSaveOption = () => {
         if (orderType === OrderTypeMenu.DEFAULT_ORDER) return defaultOrderSettingSaveOrderOption;
-        if (orderType === OrderTypeMenu.DEFAULT_ORDER_LOCAL) defaultOrderHomeSaveOrderOption;
+        if (orderType === OrderTypeMenu.DEFAULT_ORDER_LOCAL) return defaultOrderHomeSaveOrderOption;
         return mobileOrderSaveOrderOption;
     };
 
@@ -169,6 +169,7 @@ const OrderQrCodeScreen = (props: any) => {
                 dishes: [],
                 coupons: [],
             };
+            // console.log({saveOrderParams:})
             const res = await saveOrderOption(saveOrderParams);
             console.log('saveOrderMobile -> res', res);
         } catch (error) {
