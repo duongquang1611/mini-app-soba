@@ -290,6 +290,7 @@ const styles = ScaledSheet.create({
     },
     textGender: {
         marginLeft: '10@s',
+        color: Themes.COLORS.mineShaft,
     },
     titleGender: {
         marginTop: '18@vs',

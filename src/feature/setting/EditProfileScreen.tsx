@@ -157,7 +157,7 @@ const EditProfileScreen = () => {
                 <TextUnderline
                     onPress={goToChangePass}
                     customStyle={styles.changePassBtn}
-                    title={'authen.login.forgotPasswordText'}
+                    title={'common.changePass'}
                     customStyleText={styles.changePassText}
                     color={Themes.COLORS.primary}
                 />
@@ -217,6 +217,7 @@ const styles = ScaledSheet.create({
     },
     textGender: {
         marginLeft: '15@s',
+        color: Themes.COLORS.mineShaft,
     },
     titleGender: {
         alignSelf: 'flex-start',
@@ -276,6 +277,7 @@ const styles = ScaledSheet.create({
         backgroundColor: Themes.COLORS.disabled,
         flex: 1,
         paddingHorizontal: '15@s',
+        color: Themes.COLORS.silver,
     },
     wrapInputEmail: {
         paddingHorizontal: 0,
