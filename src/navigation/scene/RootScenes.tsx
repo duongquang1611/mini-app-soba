@@ -128,7 +128,7 @@ const AppStack = () => {
                     <MainStack.Screen name={SETTING_ROUTE.SETTING_NOTIFICATION} component={SettingNotificationScreen} />
                     <MainStack.Screen name={SETTING_ROUTE.ORDER_HISTORY_DETAIL} component={OrderHistoryDetailScreen} />
                     <MainStack.Screen name={AUTHENTICATE_ROUTE.CHANGE_PASS} component={ChangePassword} />
-                    <MainStack.Screen name={AUTHENTICATE_ROUTE.SEND_OTP} component={SendOTP} />
+                    <MainStack.Screen name={AUTHENTICATE_ROUTE.SEND_OTP_CHANGE_PASS} component={SendOTP} />
                     <MainStack.Screen name={SETTING_ROUTE.DEFAULT_ORDER_DETAIL} component={DefaultOrderDetailScreen} />
                     <MainStack.Screen name={SETTING_ROUTE.ORDER_SAVE} component={OrderSave} />
                     <MainStack.Screen name={AUTHENTICATE_ROUTE.SEND_OTP_FORGOT_PASS} component={SendOtpForgotPass} />
