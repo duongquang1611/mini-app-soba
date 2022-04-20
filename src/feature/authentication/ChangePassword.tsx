@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { getVerifyCode } from 'api/modules/api-app/authenticate';
+import { checkOldPass, getVerifyCode } from 'api/modules/api-app/authenticate';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledButton } from 'components/base';
@@ -68,6 +68,7 @@ const ChangePassword: FunctionComponent = () => {
         try {
             Keyboard.dismiss();
             setLoading(true);
+            await checkOldPass({ oldPassword });
             await getVerifyCode({ email, type: VerifiedCodeType.CHANGE_PASSWORD });
             setLoading(false);
             navigate(AUTHENTICATE_ROUTE.SEND_OTP_CHANGE_PASS, {
