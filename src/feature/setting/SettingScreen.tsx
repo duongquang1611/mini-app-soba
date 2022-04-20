@@ -12,6 +12,8 @@ import { StyledImageBackground } from 'components/base/StyledImage';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import DashView from 'components/common/DashView';
 import LinearView from 'components/common/LinearView';
+import StyledHeader from 'components/common/StyledHeader';
+import StyledHeaderImage from 'components/common/StyledHeaderImage';
 import { APP_ROUTE, AUTHENTICATE_ROUTE, ORDER_ROUTE, SETTING_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useEffect, useMemo } from 'react';
@@ -149,7 +151,11 @@ const SettingScreen = () => {
     const renderItemSetting = (item: any) => (
         <View key={item.id} style={styles.wrapBtnOptionSetting}>
             <StyledTouchable onPress={() => goToDetail(item?.key)} customStyle={{ alignItems: 'center' }}>
-                <StyledIcon source={item.img} size={20} />
+                <StyledIcon
+                    source={item.img}
+                    size={20}
+                    customStyle={{ backgroundColor: item?.background || Themes.COLORS.white, borderRadius: 30 }}
+                />
                 <StyledText originValue={item?.name} customStyle={styles.nameButton} isBlack />
             </StyledTouchable>
         </View>
@@ -157,49 +163,52 @@ const SettingScreen = () => {
 
     return (
         <View style={styles.container}>
-            <View style={styles.headerContainer}>
-                <View style={styles.row}>
-                    <StyledText customStyle={styles.title} i18nText={'tab.setting'} />
-                    <TouchableOpacity onPress={goToMyPage} style={styles.editButton}>
-                        <StyledIcon source={Images.icons.edit} size={20} />
-                    </TouchableOpacity>
-                </View>
-
-                <StyledImageBackground resizeMode={'cover'} source={Images.photo.backgroundMyPage}>
-                    <View style={styles.background}>
-                        <View style={styles.profileRow}>
-                            <StyledImage
-                                source={
-                                    user?.member?.avatar
-                                        ? { uri: user?.member?.avatar || '' }
-                                        : Images.photo.avatarDefault
-                                }
-                                customStyle={styles.avatar}
-                            />
-                            <View>
-                                <StyledText originValue={'田中　英雄'} customStyle={styles.name} />
-                                <LinearView style={styles.linear} colors={['#F8D156', '#FEECD2']}>
-                                    <StyledText originValue={'ゴールドメンバー'} isBlack />
-                                    <StyledIcon source={Images.icons.gold} size={15} />
-                                </LinearView>
+            <View>
+                <StyledHeader
+                    title={'tab.setting'}
+                    onPressRight={goToMyPage}
+                    hasBack={false}
+                    iconRight={Images.icons.edit}
+                    largeTitleHeader
+                />
+                <View style={styles.headerContainer}>
+                    <StyledImageBackground source={Images.photo.backgroundMyPage} style={styles.backgroundImage}>
+                        <StyledIcon source={Images.icons.rectangle} size={63} customStyle={styles.rectangle} />
+                        <View style={styles.background}>
+                            <View style={styles.profileRow}>
+                                <StyledImage
+                                    source={
+                                        user?.member?.avatar
+                                            ? { uri: user?.member?.avatar || '' }
+                                            : Images.photo.avatarDefault
+                                    }
+                                    customStyle={styles.avatar}
+                                />
+                                <View>
+                                    <StyledText originValue={'田中　英雄'} customStyle={styles.name} />
+                                    <LinearView style={styles.linear} colors={['#F8D156', '#FEECD2']}>
+                                        <StyledText originValue={'ゴールドメンバー'} isBlack />
+                                        <StyledIcon source={Images.icons.gold} size={15} />
+                                    </LinearView>
+                                </View>
+                                <StyledTouchable onPress={handleShowPicker} customStyle={styles.question}>
+                                    <StyledIcon source={Images.icons.questionGray} size={24} />
+                                </StyledTouchable>
                             </View>
-                            <StyledTouchable onPress={handleShowPicker} customStyle={styles.question}>
-                                <StyledIcon source={Images.icons.questionGray} size={24} />
-                            </StyledTouchable>
+                            <StyledText originValue={'￥80,000'} customStyle={styles.price} />
+                            <View style={styles.ratioContain}>
+                                <View style={styles.ratioAll} />
+                                <View style={[styles.ratio, { width: scale(200) }]} />
+                            </View>
+                            <View style={styles.desView}>
+                                <StyledText
+                                    originValue={'￥5000を支払うと、ダイヤモンドメンバー に昇格します'}
+                                    customStyle={styles.desText}
+                                />
+                            </View>
                         </View>
-                        <StyledText originValue={'￥80,000'} customStyle={styles.price} />
-                        <View style={styles.ratioContain}>
-                            <View style={styles.ratioAll} />
-                            <View style={[styles.ratio, { width: scale(200) }]} />
-                        </View>
-                        <View style={styles.desView}>
-                            <StyledText
-                                originValue={'￥5000を支払うと、ダイヤモンドメンバー に昇格します'}
-                                customStyle={styles.desText}
-                            />
-                        </View>
-                    </View>
-                </StyledImageBackground>
+                    </StyledImageBackground>
+                </View>
             </View>
             <StyledKeyboardAware>
                 <View style={styles.wrapListOptionSetting}>{listButton.map(renderItemSetting)}</View>
@@ -221,10 +230,13 @@ const styles = ScaledSheet.create({
 
     buttonSave: {},
     headerContainer: {
-        width: '100%',
+        // width: '100%',
         backgroundColor: Themes.COLORS.headerBackground,
         paddingHorizontal: '20@s',
-        paddingTop: Metrics.safeTopPadding,
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
+        overflow: 'hidden',
+        // paddingTop: Metrics.safeTopPadding,
     },
     row: {
         flexDirection: 'row',
@@ -246,7 +258,7 @@ const styles = ScaledSheet.create({
     profileRow: {
         flexDirection: 'row',
         alignItems: 'center',
-        padding: '20@s',
+        padding: '10@s',
         paddingBottom: 0,
         width: '100%',
     },
@@ -271,7 +283,8 @@ const styles = ScaledSheet.create({
     },
     price: {
         marginLeft: '200@s',
-        color: Themes.COLORS.white,
+        fontSize: '12@ms0.3',
+        color: Themes.COLORS.headerBackground,
     },
     ratioContain: {
         paddingHorizontal: '20@s',
@@ -320,12 +333,12 @@ const styles = ScaledSheet.create({
         fontSize: '16@ms0.3',
     },
     editButton: {
-        width: '40@s',
-        height: '40@s',
+        // width: '40@s',
+        // height: '40@s',
         borderRadius: 40,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(34, 34, 34, 0.2)',
+        // backgroundColor: 'rgba(34, 34, 34, 0.2)',
     },
     desText: {
         color: Themes.COLORS.white,
@@ -357,6 +370,14 @@ const styles = ScaledSheet.create({
         position: 'absolute',
         top: '12@vs',
         right: '20@s',
+    },
+    rectangle: {
+        position: 'absolute',
+    },
+    backgroundImage: {
+        overflow: 'hidden',
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
     },
 });
 

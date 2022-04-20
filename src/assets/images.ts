@@ -58,6 +58,7 @@ const Images = {
         cart: require('./icon/ic_cart.png'),
         document_text: require('./icon/ic_document_text.png'),
         history: require('./icon/ic_history.png'),
+        history_order: require('./icon/ic_history_order.png'),
         logout: require('./icon/ic_logout.png'),
         email: require('./icon/ic_email.png'),
         userName: require('./icon/ic_user_name.png'),

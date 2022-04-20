@@ -21,6 +21,8 @@ const common = {
     thunderbird: '#DF2115',
     sweetPink: '#FBA29D',
     netWorkItem: 'rgba(255, 255, 255, 0.5)',
+    cornflowerBlue: '#583B96',
+    backGroundHistory: 'rgba(165, 91, 214, 0.4)',
 };
 
 const Light = {
