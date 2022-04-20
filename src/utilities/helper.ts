@@ -455,11 +455,26 @@ const getTotalAmount = (itemDish: any) => {
 export const changeOrderApiToStore = (orderData: any) => {
     const { coupons, orderDish } = orderData;
     const newCoupons =
-        coupons?.map((itemCoupon: any) => ({
-            id: itemCoupon?.memberCoupon?.id,
-            receivedDate: itemCoupon?.memberCoupon?.receivedDate,
-            coupon: itemCoupon?.coupon,
-        })) || [];
+        coupons?.map((itemCoupon: any) => {
+            const { coupon, dish } = itemCoupon;
+            const choose = coupon?.couponDish?.find((itemDish: any) => itemDish?.dish?.stringId === dish?.stringId);
+            const couponFormat = {
+                id: coupon?.id,
+                stringId: coupon?.stringId,
+                title: coupon?.title,
+                type: coupon?.type,
+                discountType: coupon?.discountType,
+                discount: coupon?.discount,
+                couponDish: coupon?.couponDish,
+            };
+            return {
+                id: itemCoupon?.memberCoupon?.id,
+                type: itemCoupon?.type,
+                receivedDate: itemCoupon?.memberCoupon?.receivedDate,
+                coupon: couponFormat,
+                choose,
+            };
+        }) || [];
     const newDishes =
         orderDish?.map((itemDish: any) => ({
             createDate: itemDish?.createdDate,
@@ -574,8 +589,8 @@ export const getInformationSetting = (data: any) => {
     ];
 };
 export const getIndexTab = (defaultOrder: any, mobileOrder: any) => {
-    if (defaultOrder?.dishes?.length > 0 || defaultOrder?.coupon?.length > 0) return 0;
     if (mobileOrder?.dishes?.length > 0 || mobileOrder?.coupon?.length > 0) return 1;
+    if (defaultOrder?.dishes?.length > 0 || defaultOrder?.coupon?.length > 0) return 0;
     return 2;
 };
 export function numberWithCommas(x: number) {

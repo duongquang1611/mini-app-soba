@@ -115,7 +115,9 @@ const HomeScreen: FunctionComponent = () => {
         getNotification();
         setTab(getIndexTab(defaultOrderLocal, mobileOrder));
     }, []);
-
+    useEffect(() => {
+        getNewsData();
+    }, [newsDisplay?.value]);
     const getNotification = async () => {
         try {
             const res = await getNotificationList({ params: { take: 1, pageIndex: 1 } });
