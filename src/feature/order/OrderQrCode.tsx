@@ -178,7 +178,7 @@ const OrderQrCodeScreen = (props: any) => {
     };
 
     const edit = () => {
-        getResourcesData();
+        getResourcesData(false);
         navigate(TAB_NAVIGATION_ROOT.ORDER_ROUTE.CART_EDIT_QR, {
             orderType,
             setOrder: setOrderQr,

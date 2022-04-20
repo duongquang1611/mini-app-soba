@@ -11,7 +11,7 @@ import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useCallback, useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { View } from 'react-native';
+import { Keyboard, View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import { checkPasswordMatch } from 'utilities/helper';
 import { POPUP_TYPE } from 'utilities/staticData';
@@ -53,6 +53,7 @@ const ResetPasswordScreen = ({ route }: any) => {
     const submit = async (form: any) => {
         const { password: newPassword } = form;
         try {
+            Keyboard.dismiss();
             await resetPassword({ email, newPassword });
             AlertMessage('resetPass.success', {
                 onClosedModalize: () => navigate(AUTHENTICATE_ROUTE.LOGIN),
@@ -100,6 +101,7 @@ const ResetPasswordScreen = ({ route }: any) => {
                             icYeyOn={Images.icons.eyeOn}
                             customStyle={styles.inputPassword}
                             customErrorMessage={checkPassword()}
+                            onSubmitEditing={Keyboard.dismiss}
                         />
                     </FormProvider>
                     <StyledButton

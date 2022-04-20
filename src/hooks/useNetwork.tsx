@@ -10,7 +10,7 @@ import { useEffect, useRef } from 'react';
 import { filterOrderStore, filterResources, generateDataSaveOrderOption } from 'utilities/helper';
 import { OrderType } from 'utilities/staticData';
 
-export const getResourcesData = async () => {
+export const getResourcesData = async (updateOrderToAPI = true) => {
     try {
         const response = await getResources();
         const newResources = filterResources(response?.data);
@@ -18,17 +18,19 @@ export const getResourcesData = async () => {
         const { menu = [], categories = [] } = newResources || {};
 
         // handle menu,categories change => update order in store
-        const allDishFilter: any = {};
-        Object.entries(order).forEach(([keyOrder, orderData]) => {
-            const newDishesFilter = filterOrderStore({ menu, categories, order: orderData });
-            allDishFilter[keyOrder] = newDishesFilter;
-        });
+        if (updateOrderToAPI) {
+            const allDishFilter: any = {};
+            Object.entries(order).forEach(([keyOrder, orderData]) => {
+                const newDishesFilter = filterOrderStore({ menu, categories, order: orderData });
+                allDishFilter[keyOrder] = newDishesFilter;
+            });
 
-        // update save order api
-        updateOrderStore(allDishFilter);
+            // update save order api
+            updateOrderStore(allDishFilter);
 
-        // update dish to store
-        store.dispatch(updateDishesAllOrder(allDishFilter));
+            // update dish to store
+            store.dispatch(updateDishesAllOrder(allDishFilter));
+        }
 
         // update resource to store
         store.dispatch(resourceActions.getResourceSuccess(newResources));
