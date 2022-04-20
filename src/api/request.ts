@@ -16,7 +16,7 @@ const AUTH_URL_REFRESH_TOKEN = `${Config.API_URL}auth/request-access-token`;
 let hasAnyNetworkDialogShown = false;
 
 const request = axios.create({
-    baseURL: 'https://aos-api.test1.amelacorp.com/' || Config.API_URL,
+    baseURL: Config.API_URL,
     timeout: 8000,
     headers: { Accept: '*/*' },
 });
