@@ -1,11 +1,9 @@
 import { getCouponList } from 'api/modules/api-app/coupon';
-import { getResources } from 'api/modules/api-app/general';
 import { getNewsList } from 'api/modules/api-app/home';
 import { getNotificationList } from 'api/modules/api-app/notification';
 import { RootState } from 'app-redux/hooks';
 import { updateCoupon } from 'app-redux/slices/couponSlice';
 import { updateNotificationUnRead } from 'app-redux/slices/globalDataSlice';
-import { resourceActions } from 'app-redux/slices/resourceSlice';
 import { store } from 'app-redux/store';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
@@ -16,6 +14,7 @@ import { StyledImageBackground } from 'components/base/StyledImage';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeaderImage from 'components/common/StyledHeaderImage';
 import StyledTabTopView from 'components/common/StyledTabTopView';
+import { getResourcesData } from 'hooks/useNetwork';
 import { SIZE_LIMIT } from 'hooks/usePaging';
 import { APP_ROUTE, HOME_ROUTE, STAMP_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
@@ -27,7 +26,7 @@ import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { SceneMap } from 'react-native-tab-view';
 import { useSelector } from 'react-redux';
 import { QR_TAB_TYPE } from 'utilities/enumData';
-import { filterResources, generateCheckInQR, generateNewOrder, generateOrderQR, getIndexTab } from 'utilities/helper';
+import { generateCheckInQR, generateNewOrder, generateOrderQR, getIndexTab } from 'utilities/helper';
 import { useOnesignal } from 'utilities/notification';
 import { CouponStoreKeyByStatus, MODAL_ID, OrderType, staticValue, TabCouponStatus } from 'utilities/staticData';
 import ListNewsItem from './components/ListNewsItem';
@@ -83,16 +82,6 @@ export const getCouponData = async (status?: TabCouponStatus) => {
     }
 };
 
-export const getResourcesData = async () => {
-    try {
-        const response = await getResources();
-        const newResources = filterResources(response?.data);
-        store.dispatch(resourceActions.getResourceSuccess(newResources));
-    } catch (error) {
-        console.log('getCouponData -> error', error);
-    }
-};
-
 const HomeScreen: FunctionComponent = () => {
     useOnesignal();
     const { t } = useTranslation();
@@ -126,7 +115,7 @@ const HomeScreen: FunctionComponent = () => {
         getNotification();
         setTab(getIndexTab(defaultOrderLocal, mobileOrder));
     }, []);
-    console.log({ tab });
+
     const getNotification = async () => {
         try {
             const res = await getNotificationList({ params: { take: 1, pageIndex: 1 } });

@@ -7,7 +7,7 @@ import { StyledButton, StyledIcon, StyledList, StyledText, StyledTouchable } fro
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import { StyledImageBackground } from 'components/base/StyledImage';
 import StyledHeader from 'components/common/StyledHeader';
-import { getResourcesData } from 'feature/home/HomeScreen';
+import { getResourcesData } from 'hooks/useNetwork';
 import { ORDER_ROUTE } from 'navigation/config/routes';
 import { goBack, navigate } from 'navigation/NavigationService';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
