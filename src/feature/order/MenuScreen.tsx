@@ -6,7 +6,7 @@ import { StyledIcon, StyledList, StyledText, StyledTouchable } from 'components/
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import { StyledImageBackground } from 'components/base/StyledImage';
 import StyledHeader from 'components/common/StyledHeader';
-import { getResourcesData } from 'feature/home/HomeScreen';
+import { getResourcesData } from 'hooks/useNetwork';
 import { ORDER_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
