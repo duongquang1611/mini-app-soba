@@ -348,6 +348,11 @@ export default {
             titleInputOtp: '認証コードを入力',
             note: '入力していただいたメールアドレス宛に認証コードを送信しました。\n届いた認証コードを入力してください。',
         },
+        changePass: {
+            title: 'パスワード変更',
+            titleInputOtp: '認証コードを入力',
+            note: '認証コードを入力してください。',
+        },
         error: {
             otpInvalid: '認証コードが正しくありません.',
         },

@@ -14,3 +14,5 @@ export const resetPassword = (params: any) => request.post(`auth/reset-password`
 export const editProfile = (params: any) => request.put(AUTH_URL.editProfile, params);
 
 export const changePass = (params: any) => request.put(AUTH_URL.changePass, params);
+
+export const checkOldPass = (params: any) => request.post(AUTH_URL.checkOldPass, params);

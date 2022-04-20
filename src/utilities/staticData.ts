@@ -715,9 +715,9 @@ export const TEXT_OTP = [
     },
     {
         id: VerifiedCodeType.CHANGE_PASSWORD,
-        title: 'otp.register.title',
-        titleInputOtp: 'otp.register.titleInputOtp',
-        note: 'otp.register.note',
+        title: 'otp.changePass.title',
+        titleInputOtp: 'otp.changePass.titleInputOtp',
+        note: 'otp.changePass.note',
         confirm: 'common.next',
     },
 ];
