@@ -70,7 +70,7 @@ const ChangePassword: FunctionComponent = () => {
             setLoading(true);
             await getVerifyCode({ email, type: VerifiedCodeType.CHANGE_PASSWORD });
             setLoading(false);
-            navigate(AUTHENTICATE_ROUTE.SEND_OTP, {
+            navigate(AUTHENTICATE_ROUTE.SEND_OTP_CHANGE_PASS, {
                 user: { oldPassword, newPassword, email },
                 type: VerifiedCodeType.CHANGE_PASSWORD,
             });
