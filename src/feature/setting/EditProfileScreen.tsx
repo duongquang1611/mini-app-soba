@@ -22,6 +22,7 @@ import { Keyboard, View } from 'react-native';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
 import { GENDER_DATA, POPUP_TYPE, staticValue } from 'utilities/staticData';
+import { USERNAME_MAX_LENGTH } from 'utilities/validate';
 import yupValidate from 'utilities/yupValidate';
 import * as yup from 'yup';
 
@@ -114,7 +115,7 @@ const EditProfileScreen = () => {
                         <StyledInputForm name={'avatar'} />
                         <StyledInputForm name={'gender'} />
                     </View>
-                    <UpLoadAvatar setValue={(img: any) => setValueForm('avatar', img)} />
+                    <UpLoadAvatar setValue={(img: any) => setValueForm('avatar', img)} avatar={user?.member?.avatar} />
                     <StyledInputForm
                         name={'email'}
                         label={'authen.labelRegister.email'}
@@ -128,9 +129,10 @@ const EditProfileScreen = () => {
                         wrapInputStyle={styles.wrapInputEmail}
                     />
                     <StyledInputForm
-                        label={'common.name'}
+                        label={'authen.labelRegister.fullName'}
                         name={'fullName'}
                         ref={fullNameRef}
+                        maxLength={USERNAME_MAX_LENGTH}
                         customPlaceHolder={'authen.hintRegister.fullName'}
                         returnKeyType={'next'}
                         onSubmitEditing={() => birthdayRef.current.focus()}

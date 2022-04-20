@@ -168,7 +168,14 @@ const SettingScreen = () => {
                 <StyledImageBackground resizeMode={'cover'} source={Images.photo.backgroundMyPage}>
                     <View style={styles.background}>
                         <View style={styles.profileRow}>
-                            <StyledImage source={Images.photo.avatarDefault} customStyle={styles.avatar} />
+                            <StyledImage
+                                source={
+                                    user?.member?.avatar
+                                        ? { uri: user?.member?.avatar || '' }
+                                        : Images.photo.avatarDefault
+                                }
+                                customStyle={styles.avatar}
+                            />
                             <View>
                                 <StyledText originValue={'田中　英雄'} customStyle={styles.name} />
                                 <LinearView style={styles.linear} colors={['#F8D156', '#FEECD2']}>
@@ -234,6 +241,7 @@ const styles = ScaledSheet.create({
         width: '56@s',
         height: '56@s',
         marginRight: '20@s',
+        borderRadius: 100,
     },
     profileRow: {
         flexDirection: 'row',

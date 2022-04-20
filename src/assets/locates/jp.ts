@@ -239,7 +239,7 @@ export default {
         inputComponent:
             'You need to wrap input by Form Provider or passing "form = useForm( ... )" into input component.',
         errorSpecialCharacter: '名前には特殊文字を含むことはできません。',
-        newPassMatchOldPass: 'New Password and Old Password must be different.',
+        newPassMatchOldPass: '新しいパスワードは現在のパスワードと一致しないようにご入力ください。',
     },
     stamp: {
         title: 'スタンプカード',
