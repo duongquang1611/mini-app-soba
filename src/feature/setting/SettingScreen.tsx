@@ -1,47 +1,26 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { getProfile } from 'api/modules/api-app/authenticate';
 import { RootState } from 'app-redux/hooks';
-import { userInfoActions } from 'app-redux/slices/userInfoSlice';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
-import AlertMessage from 'components/base/AlertMessage';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import { StyledImageBackground } from 'components/base/StyledImage';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import DashView from 'components/common/DashView';
 import LinearView from 'components/common/LinearView';
 import StyledHeader from 'components/common/StyledHeader';
-import StyledHeaderImage from 'components/common/StyledHeaderImage';
-import { APP_ROUTE, AUTHENTICATE_ROUTE, ORDER_ROUTE, SETTING_ROUTE } from 'navigation/config/routes';
+import { getDataProfile } from 'hooks/useNetwork';
+import { AUTHENTICATE_ROUTE, ORDER_ROUTE, SETTING_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
-import React, { useEffect, useMemo } from 'react';
-import { View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import React, { useMemo } from 'react';
+import { RefreshControl, View } from 'react-native';
 import { scale, ScaledSheet } from 'react-native-size-matters';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import AuthenticateService from 'utilities/authenticate/AuthenticateService';
 import { generateOrderQR, getInformationSetting } from 'utilities/helper';
-import { INFORMATION, listButton, OrderTypeMenu, POPUP_TYPE } from 'utilities/staticData';
+import { listButton, OrderTypeMenu } from 'utilities/staticData';
 import UserStatus from './components/UserStatus';
 
-const profile = {
-    member: {
-        id: 12,
-        email: 'yeuquaimo@love.you',
-        fullName: 'DuongQuang001',
-        gender: 2,
-        birthday: '2022-03-14T05:53:39.000Z',
-        avatar: '',
-        levelRank: null,
-        money: null,
-        isPaid: 0,
-        avatar_50: '',
-    },
-    nextRank: '',
-    moneyToNextRank: '',
-};
 const InfoItem = (data: any) => {
     return (
         <View style={styles.infoContainer}>
@@ -58,15 +37,10 @@ const InfoItem = (data: any) => {
 };
 const SettingScreen = () => {
     const modalize = ModalizeManager();
-
-    const handleCancel = () => {
-        modalize.dismiss('modalPickerBackdrop');
-    };
     const { order, userInfo } = useSelector((state: RootState) => state);
     const { user } = userInfo;
     const { defaultOrder } = order;
     const defaultOrderQR = useMemo(() => generateOrderQR(defaultOrder, user), [defaultOrder, user]);
-    const dispatch = useDispatch();
     const handleShowPicker = () => {
         modalize.show(
             'modalPickerBackdrop',
@@ -161,6 +135,10 @@ const SettingScreen = () => {
         </View>
     );
 
+    const handleRefresh = () => {
+        getDataProfile();
+    };
+
     return (
         <View style={styles.container}>
             <View>
@@ -183,6 +161,7 @@ const SettingScreen = () => {
                                             : Images.photo.avatarDefault
                                     }
                                     customStyle={styles.avatar}
+                                    resizeMode={'cover'}
                                 />
                                 <View>
                                     <StyledText originValue={'田中　英雄'} customStyle={styles.name} />
@@ -210,7 +189,16 @@ const SettingScreen = () => {
                     </StyledImageBackground>
                 </View>
             </View>
-            <StyledKeyboardAware>
+            <StyledKeyboardAware
+                refreshControl={
+                    <RefreshControl
+                        refreshing={false}
+                        colors={[Themes.COLORS.primary]}
+                        tintColor={Themes.COLORS.primary}
+                        onRefresh={handleRefresh}
+                    />
+                }
+            >
                 <View style={styles.wrapListOptionSetting}>{listButton.map(renderItemSetting)}</View>
                 <View style={styles.infoContainerView}>
                     {information.map((item, index) => (

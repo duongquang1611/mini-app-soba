@@ -39,8 +39,8 @@ import SettingScreen from 'feature/setting/SettingScreen';
 import ExchangeCouponListScreen from 'feature/stamp/ExchangeCouponListScreen';
 import StampCardDetailScreen from 'feature/stamp/StampCardDetailScreen';
 import StampCardScreen from 'feature/stamp/StampCardScreen';
-import useNetwork from 'hooks/useNetwork';
-import React from 'react';
+import useNetwork, { getDataProfile } from 'hooks/useNetwork';
+import React, { useEffect } from 'react';
 import { StatusBar } from 'react-native';
 import { Host } from 'react-native-portalize';
 import { useSelector } from 'react-redux';
@@ -143,6 +143,12 @@ const Navigation: React.FunctionComponent = () => {
 
     const { userInfo } = useSelector((state: RootState) => state);
     const { token } = userInfo;
+
+    useEffect(() => {
+        if (token) {
+            getDataProfile();
+        }
+    }, []);
 
     if (token) {
         return <AppStack />;
