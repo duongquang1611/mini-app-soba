@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import NetInfo from '@react-native-community/netinfo';
+import { getProfile } from 'api/modules/api-app/authenticate';
 import { getResources } from 'api/modules/api-app/general';
 import { saveOrderOption } from 'api/modules/api-app/order';
 import { updateDishesAllOrder } from 'app-redux/slices/orderSlice';
 import { resourceActions } from 'app-redux/slices/resourceSlice';
+import { userInfoActions } from 'app-redux/slices/userInfoSlice';
 import { store } from 'app-redux/store';
 import { getCouponData } from 'feature/home/HomeScreen';
 import { useEffect, useRef } from 'react';
@@ -54,14 +56,14 @@ export const updateOrderStore = async (allDishFilter?: any) => {
     const defaultOrderHomeSaveData = generateDataSaveOrderOption(
         {
             ...defaultOrderLocal,
-            dishes: allDishFilter?.defaultOrder || [],
+            dishes: allDishFilter?.defaultOrderLocal || [],
         },
         OrderType.DEFAULT_HOME,
     );
     const mobileOrderSaveData = generateDataSaveOrderOption(
         {
             ...mobileOrder,
-            dishes: allDishFilter?.defaultOrder || [],
+            dishes: allDishFilter?.mobileOrder || [],
         },
         OrderType.MOBILE,
     );
@@ -70,6 +72,15 @@ export const updateOrderStore = async (allDishFilter?: any) => {
         saveOrderOption(defaultOrderHomeSaveData),
         saveOrderOption(mobileOrderSaveData),
     ]);
+};
+
+export const getDataProfile = async () => {
+    try {
+        const resProfile = await getProfile();
+        store.dispatch(userInfoActions.getUserInfoSuccess(resProfile?.data));
+    } catch (error) {
+        console.log('getDataProfile -> error', error);
+    }
 };
 
 const useNetwork = () => {

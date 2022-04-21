@@ -76,18 +76,26 @@ const StyledHeaderImage = (props: HeaderProps) => {
     return (
         <View style={[styles.container, customStyle, isShadow && styles.shadow]}>
             <View style={[styles.slide, { height: heightImage }]}>
-                <Carousel
-                    data={images}
-                    renderItem={renderItem}
-                    onSnapToItem={setIndex}
-                    sliderWidth={sliderWidth || Metrics.screenWidth}
-                    itemWidth={Metrics.screenWidth}
-                    loop={true}
-                    loopClonesPerSide={images.length}
-                    removeClippedSubviews={false}
-                    inactiveSlideOpacity={1}
-                    inactiveSlideScale={1}
-                />
+                {images?.length ? (
+                    <Carousel
+                        data={images}
+                        renderItem={renderItem}
+                        onSnapToItem={setIndex}
+                        sliderWidth={sliderWidth || Metrics.screenWidth}
+                        itemWidth={Metrics.screenWidth}
+                        loop={true}
+                        loopClonesPerSide={images.length}
+                        removeClippedSubviews={false}
+                        inactiveSlideOpacity={1}
+                        inactiveSlideScale={1}
+                    />
+                ) : (
+                    <StyledImage
+                        source={Images.photo.defaultImage}
+                        customStyle={styles.noDataImages}
+                        resizeMode={'cover'}
+                    />
+                )}
                 <View
                     pointerEvents={'none'}
                     style={[styles.containerDot, { bottom: content ? verticalScale(20) : verticalScale(-10) }]}
@@ -245,6 +253,10 @@ const styles = ScaledSheet.create({
         position: 'absolute',
         top: '8@s',
         right: '8@s',
+    },
+    noDataImages: {
+        width: '100%',
+        height: '100%',
     },
 });
 

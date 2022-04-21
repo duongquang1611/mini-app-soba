@@ -59,6 +59,8 @@ export const LINEAR_COLOR = {
 export const IMG_URL = {
     IMG_1: 'https://kenh14cdn.com/203336854389633024/2021/9/1/photo-1-16304832141231584345047.jpg',
     IMG_2: 'https://static.b52.club/uploads/2020/10/melody-marks-la-ai.jpg',
+    IMG_3: 'https://35express.org/wp-content/uploads/2021/10/tran-huyen-chau-la-ai-1-35express.jpg',
+    IMG_4: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvnt4b7WMOOiL1v6kiI2u8viuv7UTByHRz4A&usqp=CAU',
 };
 
 export const ERRORS = {
