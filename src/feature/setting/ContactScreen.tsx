@@ -32,10 +32,13 @@ const ContactScreen = () => {
     const { t } = useTranslation();
 
     const sendContact = async (formData: any) => {
+        Keyboard.dismiss();
         try {
             await contact(formData);
             AlertMessage('setting.sendContactSuccess', {
-                onClosedModalize: goBack,
+                onClosedModalize: () => {
+                    goBack();
+                },
                 type: POPUP_TYPE.SUCCESS,
             });
         } catch (error) {
