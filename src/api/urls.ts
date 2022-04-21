@@ -53,5 +53,8 @@ const AUTH_URL = {
     changePass: 'auth/change-password',
     checkOldPass: 'auth/check-old-password',
 };
+const SETTING_URL = {
+    contact: 'profile/send-contact',
+};
 
-export { COMMON_URL, STAMP_URL, NOTIFICATION_URL, COUPON_URL, HOME_URL, MENU_URL, ORDER_URL, AUTH_URL };
+export { COMMON_URL, STAMP_URL, NOTIFICATION_URL, COUPON_URL, HOME_URL, MENU_URL, ORDER_URL, AUTH_URL, SETTING_URL };

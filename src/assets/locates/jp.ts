@@ -204,6 +204,7 @@ export default {
         settingNotificationTitle: '通知設定',
         pushNotification: 'プッシュ通知',
         emailNotification: 'メール通知',
+        sendContactSuccess: 'お問い合わせが送信されました。',
     },
 
     // alert

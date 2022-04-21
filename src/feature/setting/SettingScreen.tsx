@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { RootState } from 'app-redux/hooks';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
@@ -18,7 +19,7 @@ import { scale, ScaledSheet } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
 import AuthenticateService from 'utilities/authenticate/AuthenticateService';
 import { generateOrderQR, getInformationSetting } from 'utilities/helper';
-import { listButton, OrderTypeMenu } from 'utilities/staticData';
+import { listButton, OrderTypeMenu, statusUser } from 'utilities/staticData';
 import UserStatus from './components/UserStatus';
 
 const InfoItem = (data: any) => {
@@ -148,6 +149,7 @@ const SettingScreen = () => {
                     hasBack={false}
                     iconRight={Images.icons.edit}
                     largeTitleHeader
+                    iconSize={25}
                 />
                 <View style={styles.headerContainer}>
                     <StyledImageBackground source={Images.photo.backgroundMyPage} style={styles.backgroundImage}>
@@ -165,19 +167,25 @@ const SettingScreen = () => {
                                 />
                                 <View>
                                     <StyledText originValue={'田中　英雄'} customStyle={styles.name} />
-                                    <LinearView style={styles.linear} colors={['#F8D156', '#FEECD2']}>
-                                        <StyledText originValue={'ゴールドメンバー'} isBlack />
-                                        <StyledIcon source={Images.icons.gold} size={15} />
-                                    </LinearView>
+                                    <View>
+                                        <LinearView style={styles.linear} colors={statusUser[2].colors}>
+                                            <StyledText
+                                                originValue={'ゴールドメンバー'}
+                                                isBlack
+                                                customStyle={styles.rank}
+                                            />
+                                            <StyledIcon source={Images.icons.gold} size={15} />
+                                        </LinearView>
+                                        <StyledText originValue={'￥80,000'} customStyle={styles.price} />
+                                    </View>
                                 </View>
                                 <StyledTouchable onPress={handleShowPicker} customStyle={styles.question}>
                                     <StyledIcon source={Images.icons.questionGray} size={24} />
                                 </StyledTouchable>
                             </View>
-                            <StyledText originValue={'￥80,000'} customStyle={styles.price} />
                             <View style={styles.ratioContain}>
                                 <View style={styles.ratioAll} />
-                                <View style={[styles.ratio, { width: scale(200) }]} />
+                                <View style={[styles.ratio, { width: '60%' }]} />
                             </View>
                             <View style={styles.desView}>
                                 <StyledText
@@ -218,13 +226,12 @@ const styles = ScaledSheet.create({
 
     buttonSave: {},
     headerContainer: {
-        // width: '100%',
         backgroundColor: Themes.COLORS.headerBackground,
         paddingHorizontal: '20@s',
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,
         overflow: 'hidden',
-        // paddingTop: Metrics.safeTopPadding,
+        paddingTop: '5@vs',
     },
     row: {
         flexDirection: 'row',
@@ -245,7 +252,6 @@ const styles = ScaledSheet.create({
     },
     profileRow: {
         flexDirection: 'row',
-        alignItems: 'center',
         padding: '10@s',
         paddingBottom: 0,
         width: '100%',
@@ -264,18 +270,17 @@ const styles = ScaledSheet.create({
         justifyContent: 'space-between',
         borderRadius: 5,
         marginTop: '10@vs',
-        width: '160@s',
         alignItems: 'center',
         flexDirection: 'row',
-        marginBottom: '5@vs',
     },
     price: {
-        marginLeft: '200@s',
+        alignSelf: 'flex-end',
+        marginTop: '12@vs',
         fontSize: '12@ms0.3',
         color: Themes.COLORS.headerBackground,
     },
     ratioContain: {
-        paddingHorizontal: '20@s',
+        paddingHorizontal: '10@s',
         width: '100%',
     },
     ratioAll: {
@@ -291,11 +296,10 @@ const styles = ScaledSheet.create({
         backgroundColor: Themes.COLORS.viking,
         position: 'absolute',
         zIndex: 99,
-        marginLeft: '20@s',
-        borderRadius: 1,
+        left: '10@s',
     },
     desView: {
-        paddingHorizontal: '20@s',
+        paddingHorizontal: '10@s',
         marginTop: '10@vs',
     },
     wrapListOptionSetting: {
@@ -319,17 +323,16 @@ const styles = ScaledSheet.create({
         color: Themes.COLORS.white,
         fontWeight: 'bold',
         fontSize: '16@ms0.3',
+        marginTop: '5@vs',
     },
     editButton: {
-        // width: '40@s',
-        // height: '40@s',
         borderRadius: 40,
         justifyContent: 'center',
         alignItems: 'center',
-        // backgroundColor: 'rgba(34, 34, 34, 0.2)',
     },
     desText: {
         color: Themes.COLORS.white,
+        fontSize: '12@ms0.3',
     },
     infoRow: {
         flexDirection: 'row',
@@ -347,17 +350,19 @@ const styles = ScaledSheet.create({
     titleInfo: {
         color: Themes.COLORS.silver,
         marginTop: '10@vs',
+        fontSize: '12@ms0.3',
     },
     valueInfo: {
         marginLeft: '10@s',
     },
     infoContainerView: {
         backgroundColor: Themes.COLORS.white,
+        marginBottom: '10@vs',
     },
     question: {
         position: 'absolute',
-        top: '12@vs',
-        right: '20@s',
+        top: '10@vs',
+        right: '10@s',
     },
     rectangle: {
         position: 'absolute',
@@ -366,6 +371,10 @@ const styles = ScaledSheet.create({
         overflow: 'hidden',
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,
+    },
+    rank: {
+        fontSize: '12@ms0.3',
+        marginRight: '7@vs',
     },
 });
 

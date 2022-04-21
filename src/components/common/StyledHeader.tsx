@@ -34,6 +34,7 @@ export interface StyledHeaderProps extends ViewProps {
     renderRight?: any;
     renderCenter?: any;
     largeTitleHeader?: boolean;
+    iconSize?: number;
 }
 
 const StyledHeader = (props: StyledHeaderProps) => {
@@ -60,6 +61,7 @@ const StyledHeader = (props: StyledHeaderProps) => {
         textRight = '',
         titleParams,
         largeTitleHeader = false,
+        iconSize,
     } = props;
     const [rightLayout, setRightLayout] = useState({ width: 0, height: 0 });
 
@@ -140,7 +142,7 @@ const StyledHeader = (props: StyledHeaderProps) => {
                     >
                         {iconRight ? (
                             <StyledIcon
-                                size={20}
+                                size={iconSize || 20}
                                 source={iconRight}
                                 customStyle={[styles.iconRight, customIconRight]}
                             />

@@ -1,20 +1,23 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { yupResolver } from '@hookform/resolvers/yup';
+import { contact } from 'api/modules/api-app/setting';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledInputForm } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
 import StyledHeader from 'components/common/StyledHeader';
+import { goBack } from 'navigation/NavigationService';
 import React, { useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Keyboard, View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
+import { POPUP_TYPE } from 'utilities/staticData';
 import * as yup from 'yup';
 
 const ContactScreen = () => {
     const registerSchema = yup.object().shape({
-        title: yup.string().required(),
-        description: yup.string().required(),
+        title: yup.string().required('error.required'),
+        description: yup.string().required('error.required'),
     });
 
     const form = useForm({
@@ -23,7 +26,6 @@ const ContactScreen = () => {
     });
     const {
         formState: { isValid },
-        setValue,
         handleSubmit,
     } = form;
     const contentRef = useRef<any>(null);
@@ -31,7 +33,11 @@ const ContactScreen = () => {
 
     const sendContact = async (formData: any) => {
         try {
-            // const contact = await contact(formData);
+            await contact(formData);
+            AlertMessage('setting.sendContactSuccess', {
+                onClosedModalize: goBack,
+                type: POPUP_TYPE.SUCCESS,
+            });
         } catch (error) {
             console.log('sendContact -> formData', formData);
             AlertMessage(error);
