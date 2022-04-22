@@ -40,18 +40,14 @@ const SettingScreen = () => {
     const modalize = ModalizeManager();
     const { order, userInfo } = useSelector((state: RootState) => state);
     const { user } = userInfo;
+    const { money } = user?.member || {};
+    const { moneyToNextRank = 0 } = user;
     const { defaultOrder } = order;
     const defaultOrderQR = useMemo(() => generateOrderQR(defaultOrder, user), [defaultOrder, user]);
     const handleShowPicker = () => {
         modalize.show(
             'modalPickerBackdrop',
-            <StyledTouchable
-                onPress={() => {
-                    modalize.dismiss('modalPickerBackdrop');
-                }}
-            >
-                <UserStatus />
-            </StyledTouchable>,
+            <UserStatus closeModal={() => modalize.dismiss('modalPickerBackdrop')} />,
             {
                 modalStyle: {
                     backgroundColor: 'transparent',
@@ -126,11 +122,9 @@ const SettingScreen = () => {
     const renderItemSetting = (item: any) => (
         <View key={item.id} style={styles.wrapBtnOptionSetting}>
             <StyledTouchable onPress={() => goToDetail(item?.key)} customStyle={{ alignItems: 'center' }}>
-                <StyledIcon
-                    source={item.img}
-                    size={20}
-                    customStyle={{ backgroundColor: item?.background || Themes.COLORS.white, borderRadius: 30 }}
-                />
+                <View style={{ backgroundColor: item?.background || Themes.COLORS.white, borderRadius: 30 }}>
+                    <StyledIcon source={item.img} size={20} />
+                </View>
                 <StyledText originValue={item?.name} customStyle={styles.nameButton} isBlack />
             </StyledTouchable>
         </View>
@@ -176,7 +170,11 @@ const SettingScreen = () => {
                                             />
                                             <StyledIcon source={Images.icons.gold} size={15} />
                                         </LinearView>
-                                        <StyledText originValue={'￥80,000'} customStyle={styles.price} />
+                                        <StyledText
+                                            i18nText={'order.rangePrice'}
+                                            i18nParams={{ price: money || 0 }}
+                                            customStyle={styles.price}
+                                        />
                                     </View>
                                 </View>
                                 <StyledTouchable onPress={handleShowPicker} customStyle={styles.question}>
@@ -189,7 +187,8 @@ const SettingScreen = () => {
                             </View>
                             <View style={styles.desView}>
                                 <StyledText
-                                    originValue={'￥5000を支払うと、ダイヤモンドメンバー に昇格します'}
+                                    i18nParams={{ moneyToNextRank }}
+                                    i18nText={'setting.moneyNexRank'}
                                     customStyle={styles.desText}
                                 />
                             </View>

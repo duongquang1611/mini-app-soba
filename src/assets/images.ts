@@ -100,6 +100,7 @@ const Images = {
         ptLogin: require('./photo/pt_login.png'),
         couponAmount: require('./photo/img_coupon_amount.png'),
         logoHeader: require('./photo/pt_logo_header.png'),
+        rankBackGround: require('./photo/pt_rank_background.png'),
     },
     lottie: {
         loadingNoodleJp: require('./lotties/loadingNoodleJp.json'),

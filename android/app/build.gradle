@@ -159,6 +159,7 @@ android {
         multiDexEnabled true
         resValue 'string', "CODE_PUSH_APK_BUILD_TIME", String.format("\"%d\"", System.currentTimeMillis())
         missingDimensionStrategy 'react-native-camera', 'general'
+        resValue "string", "build_config_package", "com.sobaapp"
     }
     splits {
         abi {
