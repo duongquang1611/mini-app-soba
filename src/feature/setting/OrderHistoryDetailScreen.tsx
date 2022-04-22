@@ -60,11 +60,13 @@ const OrderItem = (props: any) => {
                     <View style={styles.quantityItem}>
                         <View style={styles.rowPrice}>
                             <StyledText i18nText={'order.quantity'} customStyle={styles.titleDish} />
-                            <StyledText
-                                originValue={amount < 10 ? `0${amount}` : amount}
-                                customStyle={styles.price}
-                                isBlack
-                            />
+                            {amount && (
+                                <StyledText
+                                    originValue={amount < 10 ? `0${amount}` : amount}
+                                    customStyle={styles.price}
+                                    isBlack
+                                />
+                            )}
                         </View>
                         <View style={[styles.rowPrice, { marginTop: verticalScale(10) }]}>
                             <StyledText i18nText={'order.subtotal'} customStyle={styles.titleDish} />
