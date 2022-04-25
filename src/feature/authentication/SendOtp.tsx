@@ -10,6 +10,7 @@ import StyledOverlayLoading from 'components/base/StyledOverlayLoading';
 import StyledHeader from 'components/common/StyledHeader';
 import TextUnderline from 'components/common/TextUnderline';
 import useCountdown from 'hooks/useCountDown';
+import useKeyboardStatus from 'hooks/useKeyboardStatus';
 import { AUTHENTICATE_ROUTE, SETTING_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { FunctionComponent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -17,13 +18,14 @@ import { Keyboard, Text, View } from 'react-native';
 import { CodeField, Cursor, useClearByFocusCell } from 'react-native-confirmation-code-field';
 import { ScaledSheet } from 'react-native-size-matters';
 import { useDispatch } from 'react-redux';
-import { wait } from 'utilities/helper';
+import { isAndroid, wait } from 'utilities/helper';
 import { POPUP_TYPE, staticValue, TEXT_OTP, VerifiedCodeType } from 'utilities/staticData';
 
 const SendOTP: FunctionComponent = ({ route }: any) => {
     const dispatch = useDispatch();
+    const { isOpenKeyboard } = useKeyboardStatus();
     const codeInputRef = useRef<any>(null);
-    const { countdown, resetCountdown, clearCountdown } = useCountdown(staticValue.COUNT_DOWN_OTP);
+    const { countdown, resetCountdown, clearCountdown } = useCountdown(5 || staticValue.COUNT_DOWN_OTP);
     const isFirstRun = useRef<any>(true);
     const isFocused = useIsFocused();
     const [retryOtpCount, setRetryOtpCount] = useState(0);
@@ -146,6 +148,7 @@ const SendOTP: FunctionComponent = ({ route }: any) => {
     const actionResendSuccess = (reset = true) => {
         setCode('');
         if (reset) {
+            if (!isOpenKeyboard && isAndroid) Keyboard.dismiss();
             resetCountdown();
             codeInputRef.current.focus();
         }
