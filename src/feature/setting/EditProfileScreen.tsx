@@ -70,6 +70,9 @@ const EditProfileScreen = () => {
             if (newUser?.gender) {
                 newUser.gender = Number(newUser.gender);
             }
+            if (!newUser?.avatar) {
+                delete newUser.avatar;
+            }
             await editProfile(newUser);
             const resProfile = await getProfile();
             dispatch(userInfoActions.getUserInfoSuccess(resProfile?.data));
