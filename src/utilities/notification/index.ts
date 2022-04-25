@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import { getProfile } from 'api/modules/api-app/authenticate';
 import { sendTeams } from 'api/modules/api-app/general';
 import { readNotification } from 'api/modules/api-app/notification';
 import { saveOrderOption } from 'api/modules/api-app/order';
@@ -10,6 +11,7 @@ import {
     updateDefaultOrderLocal,
     updateMobileOrder,
 } from 'app-redux/slices/orderSlice';
+import { userInfoActions } from 'app-redux/slices/userInfoSlice';
 import { store } from 'app-redux/store';
 import AlertMessage from 'components/base/AlertMessage';
 import i18next from 'i18next';
@@ -130,6 +132,14 @@ const onReceived = async (data: NotificationReceivedEvent) => {
             await saveOrderOption(mobileSaveOrderOption);
         } catch (error) {
             console.log('saveOrder -> error', error);
+        }
+    }
+    if (category === NotificationCategory.SUCCESS_PAYMENT || category === NotificationCategory.CANCEL_PAYMENT) {
+        try {
+            const resProfile = await getProfile();
+            store.dispatch(userInfoActions.getUserInfoSuccess(resProfile?.data));
+        } catch (error) {
+            console.log('getProfile -> error', error);
         }
     }
     if (

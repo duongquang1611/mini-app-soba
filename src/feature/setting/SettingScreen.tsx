@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { getRankList } from 'api/modules/api-app/setting';
 import { RootState } from 'app-redux/hooks';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
+import AlertMessage from 'components/base/AlertMessage';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import { StyledImageBackground } from 'components/base/StyledImage';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
@@ -13,7 +15,7 @@ import StyledHeader from 'components/common/StyledHeader';
 import { getDataProfile } from 'hooks/useNetwork';
 import { AUTHENTICATE_ROUTE, ORDER_ROUTE, SETTING_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Linking, RefreshControl, View } from 'react-native';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
@@ -39,17 +41,29 @@ const InfoItem = (data: any) => {
 const SettingScreen = () => {
     const modalize = ModalizeManager();
     const { order, userInfo, resource } = useSelector((state: RootState) => state);
+    const [rankList, setRankList] = useState([]);
     const { configs = [] } = resource?.data;
     const policy = configs?.[2] || {};
     const { user } = userInfo;
-    const { money } = user?.member || {};
-    const { moneyToNextRank = 0 } = user || {};
+    const { money, levelRank, fullName } = user?.member || {};
+    const { moneyToNextRank = 0, nextRank = 0 } = user || {};
     const { defaultOrder } = order;
     const defaultOrderQR = useMemo(() => generateOrderQR(defaultOrder, user), [defaultOrder, user]);
+    useEffect(() => {
+        getRankData();
+    }, []);
+    const getRankData = async () => {
+        try {
+            const res = await getRankList();
+            setRankList(res?.data);
+        } catch (error) {
+            AlertMessage(error);
+        }
+    };
     const handleShowPicker = () => {
         modalize.show(
             'modalPickerBackdrop',
-            <UserStatus closeModal={() => modalize.dismiss('modalPickerBackdrop')} />,
+            <UserStatus closeModal={() => modalize.dismiss('modalPickerBackdrop')} rankList={rankList} />,
             {
                 modalStyle: {
                     backgroundColor: 'transparent',
@@ -160,14 +174,10 @@ const SettingScreen = () => {
                                     resizeMode={'cover'}
                                 />
                                 <View>
-                                    <StyledText originValue={'田中　英雄'} customStyle={styles.name} />
+                                    <StyledText originValue={fullName} customStyle={styles.name} />
                                     <View>
                                         <LinearView style={styles.linear} colors={statusUser[2].colors}>
-                                            <StyledText
-                                                originValue={'ゴールドメンバー'}
-                                                isBlack
-                                                customStyle={styles.rank}
-                                            />
+                                            <StyledText originValue={levelRank} isBlack customStyle={styles.rank} />
                                             <StyledIcon source={Images.icons.gold} size={15} />
                                         </LinearView>
                                         <StyledText
@@ -185,13 +195,15 @@ const SettingScreen = () => {
                                 <View style={styles.ratioAll} />
                                 <View style={[styles.ratio, { width: '60%' }]} />
                             </View>
-                            <View style={styles.desView}>
-                                <StyledText
-                                    i18nParams={{ moneyToNextRank }}
-                                    i18nText={'setting.moneyNexRank'}
-                                    customStyle={styles.desText}
-                                />
-                            </View>
+                            {nextRank && (
+                                <View style={styles.desView}>
+                                    <StyledText
+                                        i18nParams={{ moneyToNextRank, nextRank }}
+                                        i18nText={'setting.moneyNexRank'}
+                                        customStyle={styles.desText}
+                                    />
+                                </View>
+                            )}
                         </View>
                     </StyledImageBackground>
                 </View>

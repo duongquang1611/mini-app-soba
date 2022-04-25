@@ -8,6 +8,7 @@ interface IUser {
     username: string;
     member?: any;
     moneyToNextRank?: number;
+    nextRank?: string;
     // ...
 }
 

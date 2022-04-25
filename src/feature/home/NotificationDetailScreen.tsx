@@ -82,8 +82,8 @@ const NotificationDetailScreen = (props: any) => {
     const { item = {} } = props.route?.params || {};
     const { id } = item;
     const [coupon, setCoupon] = useState<any>({});
-    const { title, content, receivedDate, notification } = coupon;
-    const { images = [], memberStamps, memberCoupons, link } = notification || {};
+    const { title, content, receivedDate, notification, notificationSpecial } = coupon;
+    const { images = [], memberStamps, memberCoupons, link } = notificationSpecial || notification || {};
     const [refreshing, setRefreshing] = useState(false);
 
     const handleRefresh = async () => {

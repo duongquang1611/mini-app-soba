@@ -25,7 +25,7 @@ const SendOTP: FunctionComponent = ({ route }: any) => {
     const dispatch = useDispatch();
     const { isOpenKeyboard } = useKeyboardStatus();
     const codeInputRef = useRef<any>(null);
-    const { countdown, resetCountdown, clearCountdown } = useCountdown(5 || staticValue.COUNT_DOWN_OTP);
+    const { countdown, resetCountdown, clearCountdown } = useCountdown(staticValue.COUNT_DOWN_OTP);
     const isFirstRun = useRef<any>(true);
     const isFocused = useIsFocused();
     const [retryOtpCount, setRetryOtpCount] = useState(0);

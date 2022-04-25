@@ -205,7 +205,9 @@ export default {
         pushNotification: 'プッシュ通知',
         emailNotification: 'メール通知',
         sendContactSuccess: 'お問い合わせが送信されました。',
-        moneyNexRank: '￥{{moneyToNextRank}}を支払うと、ダイヤモンドメンバー に昇格します',
+        moneyNexRank: '￥{{moneyToNextRank}}を支払うと、{{nextRank}} に昇格します',
+        contentRank: '￥{{money}}を支払う、月に1回「{{coupon}}」クーポンを頂く',
+        nextRank: 'を支払うと、{{nextRank}} に昇格します',
     },
 
     // alert
