@@ -78,7 +78,6 @@ const ContactScreen = () => {
                             keyboardType="email-address"
                             onSubmitEditing={Keyboard.dismiss}
                             customStyle={styles.contentInput}
-                            maxLength={CONTACT_MAX_LENGTH}
                             multiline
                         />
                     </FormProvider>

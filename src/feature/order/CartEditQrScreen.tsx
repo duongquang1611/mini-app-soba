@@ -30,12 +30,13 @@ import ModalCoupon from './components/ModalCoupon';
 import OrderItemCart from './components/OrderItemCart';
 
 const ItemCoupon = (props: any) => {
-    const { cancelCouponItem, data, orderType, setSaveOrderCoupon } = props;
+    const { cancelCouponItem, data, orderType, setSaveOrderCoupon, saveOrderCart } = props;
     const { cartOrder } = useSelector((state: RootState) => state.order);
     const { coupon, id, choose } = data || {};
     const modalize = ModalizeManager();
     const dispatch = useDispatch();
     const updateCouponsCart = (coupons: any) => {
+        console.log({ coupons });
         setSaveOrderCoupon(coupons);
         if (orderType === OrderTypeMenu.CART_ORDER) {
             dispatch(updateCartOrder({ ...cartOrder, coupons }));
@@ -59,10 +60,11 @@ const ItemCoupon = (props: any) => {
             { title: 'order.applyCoupon' },
         );
     };
+    console.log({ saveOrderCart });
 
     const onPressCoupon = () => {
         const listCouponsModal = coupon?.discountType === DiscountType.EACH_DISH ? [data] : [];
-        const listCouponsNoChange = cartOrder?.coupons?.filter((item: any) => item?.id !== id);
+        const listCouponsNoChange = saveOrderCart?.coupons?.filter((item: any) => item?.id !== id);
         if (listCouponsModal.length > 0) {
             showApplyCoupon(listCouponsModal, listCouponsNoChange);
         }
@@ -224,6 +226,7 @@ const CartEditQrScreen = (props: any) => {
         if (orderType === OrderTypeMenu.DEFAULT_ORDER_LOCAL) return 'order.resetOrderDefault';
         return 'order.cancelOrder';
     };
+    console.log({ saveOrderCart });
     return (
         <View style={styles.container}>
             <StyledHeader
@@ -254,6 +257,7 @@ const CartEditQrScreen = (props: any) => {
                             {saveOrderCart?.coupons?.map((item: any, index: number) => (
                                 <ItemCoupon
                                     orderType={orderType}
+                                    saveOrderCart={saveOrderCart}
                                     key={index}
                                     data={item}
                                     cancelCouponItem={popUpCancelCoupon}
