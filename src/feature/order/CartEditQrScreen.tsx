@@ -30,13 +30,16 @@ import ModalCoupon from './components/ModalCoupon';
 import OrderItemCart from './components/OrderItemCart';
 
 const ItemCoupon = (props: any) => {
-    const { cancelCouponItem, data } = props;
+    const { cancelCouponItem, data, orderType, setSaveOrderCoupon } = props;
     const { cartOrder } = useSelector((state: RootState) => state.order);
     const { coupon, id, choose } = data || {};
     const modalize = ModalizeManager();
     const dispatch = useDispatch();
     const updateCouponsCart = (coupons: any) => {
-        dispatch(updateCartOrder({ ...cartOrder, coupons }));
+        setSaveOrderCoupon(coupons);
+        if (orderType === OrderTypeMenu.CART_ORDER) {
+            dispatch(updateCartOrder({ ...cartOrder, coupons }));
+        }
         modalize.dismiss(MODAL_ID.APPLY_COUPON);
     };
     const showApplyCoupon = (listCouponsModal: any, listCouponsNoChange: any) => {
@@ -249,7 +252,15 @@ const CartEditQrScreen = (props: any) => {
                         <View style={styles.contentView}>
                             <StyledText customStyle={styles.title} i18nText={'coupon.title'} />
                             {saveOrderCart?.coupons?.map((item: any, index: number) => (
-                                <ItemCoupon key={index} data={item} cancelCouponItem={popUpCancelCoupon} />
+                                <ItemCoupon
+                                    orderType={orderType}
+                                    key={index}
+                                    data={item}
+                                    cancelCouponItem={popUpCancelCoupon}
+                                    setSaveOrderCoupon={(coupons: any) =>
+                                        setSaveOrderCart({ ...saveOrderCart, coupons })
+                                    }
+                                />
                             ))}
                             {saveOrderCart?.coupons?.length === 0 && (
                                 <View style={styles.noCouponView}>

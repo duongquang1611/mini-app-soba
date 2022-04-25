@@ -55,6 +55,7 @@ const AUTH_URL = {
 };
 const SETTING_URL = {
     contact: 'profile/send-contact',
+    rankList: 'profile/rank-list',
 };
 
 export { COMMON_URL, STAMP_URL, NOTIFICATION_URL, COUPON_URL, HOME_URL, MENU_URL, ORDER_URL, AUTH_URL, SETTING_URL };

@@ -1,3 +1,4 @@
+import { RootState } from 'app-redux/hooks';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
@@ -7,10 +8,23 @@ import React from 'react';
 import { ImageBackground, Text, View } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { scale, ScaledSheet } from 'react-native-size-matters';
+import { useSelector } from 'react-redux';
 import { statusUser } from 'utilities/staticData';
 
-const UserStatusItem = (item: any) => {
-    const { name, colors, background, crownColor, content } = item?.item;
+const fakeRankColor = {
+    colors: ['#F8D156', '#FEECD2'],
+    background: '#FEECD2',
+    crownColor: 'rgba(249, 197, 33, 0.4)',
+};
+
+const UserStatusItem = (props: any) => {
+    const {
+        colors = fakeRankColor.colors,
+        background = fakeRankColor.background,
+        crownColor = fakeRankColor.crownColor,
+    } = props?.item;
+    const { title, coupon, money } = props?.item || {};
+
     return (
         <LinearView style={styles.linear} colors={colors}>
             <StyledIcon
@@ -24,15 +38,25 @@ const UserStatusItem = (item: any) => {
                 customStyle={[styles.icStatus, { tintColor: crownColor }]}
             />
             <View style={styles.infoStatus}>
-                <StyledText originValue={name} isBlack customStyle={styles.title} />
-                <StyledText originValue={content} isBlack customStyle={styles.normalText} />
+                <StyledText originValue={title} isBlack customStyle={styles.title} />
+                <StyledText
+                    i18nParams={{ money, coupon: coupon.title }}
+                    i18nText={'setting.contentRank'}
+                    isBlack
+                    customStyle={styles.normalText}
+                />
             </View>
         </LinearView>
     );
 };
 const UserStatus = (props: any) => {
-    const { closeModal } = props;
-    const fillNumber = 60;
+    const { userInfo } = useSelector((state: RootState) => state);
+    const { user } = userInfo;
+    const { money, levelRank } = user?.member || {};
+    const shortLevelRank = levelRank?.slice(0);
+    const { nextRank, moneyToNextRank } = user || {};
+    const { closeModal, rankList } = props;
+    const fillNumber = (money / (money + moneyToNextRank)) * 100;
     return (
         <View>
             <ImageBackground source={Images.photo.rankBackGround} style={styles.headerView}>
@@ -51,18 +75,29 @@ const UserStatus = (props: any) => {
                 >
                     {() => (
                         <>
-                            <StyledText i18nText={'￥80,000'} customStyle={styles.titleAchieveRate} isBlack />
+                            <StyledText
+                                i18nText={'order.rangePrice'}
+                                i18nParams={{ price: money || 0 }}
+                                customStyle={styles.titleAchieveRate}
+                                isBlack
+                            />
                             <LinearView style={styles.linearChart} colors={statusUser[2].colors}>
-                                <StyledText originValue={'ゴールド'} isBlack customStyle={styles.smallText} />
+                                <StyledText originValue={shortLevelRank || ''} isBlack customStyle={styles.smallText} />
                                 <StyledIcon source={Images.icons.gold} size={15} />
                             </LinearView>
                         </>
                     )}
                 </AnimatedCircularProgress>
-                <Text style={styles.money}>
-                    {'￥5000'}
-                    <Text style={styles.content}>{'を支払うと、ダイヤモンドメンバー に昇格します'}</Text>
-                </Text>
+                {nextRank && (
+                    <Text style={styles.money}>
+                        {`￥${moneyToNextRank || 0}`}
+                        <StyledText
+                            i18nParams={{ nextRank }}
+                            i18nText={'setting.nextRank'}
+                            customStyle={styles.content}
+                        />
+                    </Text>
+                )}
             </ImageBackground>
             <View style={styles.body}>
                 <StyledText
@@ -72,7 +107,7 @@ const UserStatus = (props: any) => {
                     isBlack
                     customStyle={styles.content}
                 />
-                {statusUser.map((item: any, index: number) => (
+                {rankList.map((item: any, index: number) => (
                     <UserStatusItem key={index} item={item} />
                 ))}
             </View>
