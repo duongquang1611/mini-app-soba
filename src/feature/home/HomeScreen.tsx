@@ -185,7 +185,6 @@ const HomeScreen: FunctionComponent = () => {
             setRefreshing(false);
         }
     };
-
     return (
         <View style={styles.container}>
             <StyledKeyboardAware
