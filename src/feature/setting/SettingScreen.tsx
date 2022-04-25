@@ -45,8 +45,8 @@ const SettingScreen = () => {
     const { configs = [] } = resource?.data;
     const policy = configs?.[2] || {};
     const { user } = userInfo;
-    const { money, levelRank, fullName } = user?.member || {};
-    const { moneyToNextRank = 0, nextRank = 0 } = user || {};
+    const { money = 0, levelRank = '', fullName = '' } = user?.member || {};
+    const { moneyToNextRank = 0, nextRank } = user || {};
     const { defaultOrder } = order;
     const defaultOrderQR = useMemo(() => generateOrderQR(defaultOrder, user), [defaultOrder, user]);
     useEffect(() => {
@@ -195,7 +195,7 @@ const SettingScreen = () => {
                                 <View style={styles.ratioAll} />
                                 <View style={[styles.ratio, { width: '60%' }]} />
                             </View>
-                            {nextRank && (
+                            {!!nextRank && (
                                 <View style={styles.desView}>
                                     <StyledText
                                         i18nParams={{ moneyToNextRank, nextRank }}
