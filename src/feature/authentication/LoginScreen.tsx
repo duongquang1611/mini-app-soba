@@ -22,14 +22,16 @@ const DEFAULT_FORM: any = __DEV__
           //   email: 'yeuquaimo@love.you',
           //   password: 'loveyou3000',
 
-          email: 'trieuphong123@gmail.com',
-          password: 'abc12345',
+          //   email: 'trieuphong123@gmail.com',
+          //   password: 'abc12345',
 
           //   email: 'tester4@gmail.com',
           //   password: 'abc12345',
 
           //   email: 'test1@love.you',
           //   password: 'abc12345',
+          email: 'le.ngo@amela.vn',
+          password: 'abc12345',
       }
     : {};
 

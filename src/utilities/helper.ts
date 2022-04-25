@@ -177,10 +177,10 @@ export const generateCheckInQR = (user: any, convert?: boolean, includeEOS?: boo
 
 // foodId: is "stringId"
 export const generateCouponQR = (memberCoupon: any, user?: any, convert?: boolean, includeEOS?: boolean) => {
-    const { coupon } = memberCoupon;
+    const { coupon, choose } = memberCoupon;
     const isFullOrder = Number(coupon?.discountType === DiscountType.ALL_ORDER);
-    const isFree = Number(coupon?.couponDish?.[0]?.type === CouponDishType.FREE);
-    const price = (isFullOrder ? coupon?.discount : coupon?.couponDish?.[0]?.discount) || 0;
+    const isFree = Number(isFullOrder ? !coupon?.discount : choose?.type === CouponDishType.FREE);
+    const price = (isFullOrder ? coupon?.discount : choose?.discount) || 0;
     const isAccounted = Number(coupon?.type === CouponType.COMPANY);
 
     const qrData: any = {
@@ -195,7 +195,7 @@ export const generateCouponQR = (memberCoupon: any, user?: any, convert?: boolea
     };
 
     if (!isFullOrder) {
-        qrData.coupon.foodId = `${coupon?.couponDish?.[0]?.dish?.stringId}`;
+        qrData.coupon.foodId = `${choose?.dish?.stringId}`;
     }
     if (user) qrData.user = generateCheckInQR(user, false);
 
