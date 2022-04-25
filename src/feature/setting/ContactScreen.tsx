@@ -4,6 +4,7 @@ import { contact } from 'api/modules/api-app/setting';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledInputForm } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
+import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeader from 'components/common/StyledHeader';
 import { goBack } from 'navigation/NavigationService';
 import React, { useRef } from 'react';
@@ -12,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { Keyboard, View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import { POPUP_TYPE } from 'utilities/staticData';
+import { CONTACT_MAX_LENGTH } from 'utilities/validate';
 import * as yup from 'yup';
 
 const ContactScreen = () => {
@@ -50,37 +52,46 @@ const ContactScreen = () => {
     return (
         <View style={styles.container}>
             <StyledHeader title={'setting.contactTitle'} />
-            <View style={styles.body}>
-                <FormProvider {...form}>
-                    <StyledInputForm
-                        label={'setting.position'}
-                        name={'title'}
-                        placeholder={t('setting.position')}
-                        keyboardType="email-address"
-                        returnKeyType={'next'}
-                        onSubmitEditing={() => contentRef.current.focus()}
-                    />
-                    <StyledInputForm
-                        label={'setting.content'}
-                        name={'description'}
-                        returnKeyType={'done'}
-                        ref={contentRef}
-                        placeholder={t('setting.content')}
-                        keyboardType="email-address"
-                        onSubmitEditing={Keyboard.dismiss}
-                        customStyle={styles.contentInput}
-                        multiline
-                    />
-                </FormProvider>
-                <View style={styles.buttonView}>
-                    <StyledButton
-                        title={'setting.send'}
-                        onPress={handleSubmit(sendContact)}
-                        disabled={!isValid}
-                        customStyle={styles.buttonSave}
-                    />
+            <StyledKeyboardAware
+                style={styles.scrollView}
+                customStyle={styles.contentScrollView}
+                enableResetScrollToCoords={false}
+                enableOnAndroid={false}
+            >
+                <View style={styles.body}>
+                    <FormProvider {...form}>
+                        <StyledInputForm
+                            label={'setting.position'}
+                            name={'title'}
+                            placeholder={t('setting.position')}
+                            keyboardType="email-address"
+                            returnKeyType={'next'}
+                            maxLength={CONTACT_MAX_LENGTH}
+                            onSubmitEditing={() => contentRef.current.focus()}
+                        />
+                        <StyledInputForm
+                            label={'setting.content'}
+                            name={'description'}
+                            returnKeyType={'done'}
+                            ref={contentRef}
+                            placeholder={t('setting.content')}
+                            keyboardType="email-address"
+                            onSubmitEditing={Keyboard.dismiss}
+                            customStyle={styles.contentInput}
+                            maxLength={CONTACT_MAX_LENGTH}
+                            multiline
+                        />
+                    </FormProvider>
+                    <View style={styles.buttonView}>
+                        <StyledButton
+                            title={'setting.send'}
+                            onPress={handleSubmit(sendContact)}
+                            disabled={!isValid}
+                            customStyle={styles.buttonSave}
+                        />
+                    </View>
                 </View>
-            </View>
+            </StyledKeyboardAware>
         </View>
     );
 };
@@ -110,5 +121,11 @@ const styles = ScaledSheet.create({
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
         borderRadius: 5,
+    },
+    contentScrollView: {
+        paddingBottom: '40@vs',
+    },
+    scrollView: {
+        flex: 1,
     },
 });

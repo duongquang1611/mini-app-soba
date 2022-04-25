@@ -195,7 +195,6 @@ export const listButton = [
         name: '注文履歴',
         img: Images.icons.history_order,
         key: 'history',
-        background: Themes.COLORS.backGroundHistory,
     },
     {
         id: 2,
