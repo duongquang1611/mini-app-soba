@@ -14,7 +14,7 @@ import { getDataProfile } from 'hooks/useNetwork';
 import { AUTHENTICATE_ROUTE, ORDER_ROUTE, SETTING_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useMemo } from 'react';
-import { RefreshControl, View } from 'react-native';
+import { Linking, RefreshControl, View } from 'react-native';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
 import AuthenticateService from 'utilities/authenticate/AuthenticateService';
@@ -38,10 +38,12 @@ const InfoItem = (data: any) => {
 };
 const SettingScreen = () => {
     const modalize = ModalizeManager();
-    const { order, userInfo } = useSelector((state: RootState) => state);
+    const { order, userInfo, resource } = useSelector((state: RootState) => state);
+    const { configs = [] } = resource?.data;
+    const policy = configs?.[2] || {};
     const { user } = userInfo;
     const { money } = user?.member || {};
-    const { moneyToNextRank = 0 } = user;
+    const { moneyToNextRank = 0 } = user || {};
     const { defaultOrder } = order;
     const defaultOrderQR = useMemo(() => generateOrderQR(defaultOrder, user), [defaultOrder, user]);
     const handleShowPicker = () => {
@@ -109,7 +111,7 @@ const SettingScreen = () => {
                 goToContact();
                 break;
             case 'policy':
-                alert('open link policy');
+                Linking.openURL(policy?.value);
                 break;
             case 'logOut':
                 logout();
@@ -122,9 +124,7 @@ const SettingScreen = () => {
     const renderItemSetting = (item: any) => (
         <View key={item.id} style={styles.wrapBtnOptionSetting}>
             <StyledTouchable onPress={() => goToDetail(item?.key)} customStyle={{ alignItems: 'center' }}>
-                <View style={{ backgroundColor: item?.background || Themes.COLORS.white, borderRadius: 30 }}>
-                    <StyledIcon source={item.img} size={20} />
-                </View>
+                <StyledIcon source={item.img} size={20} />
                 <StyledText originValue={item?.name} customStyle={styles.nameButton} isBlack />
             </StyledTouchable>
         </View>
@@ -143,7 +143,7 @@ const SettingScreen = () => {
                     hasBack={false}
                     iconRight={Images.icons.edit}
                     largeTitleHeader
-                    iconSize={25}
+                    iconSize={28}
                 />
                 <View style={styles.headerContainer}>
                     <StyledImageBackground source={Images.photo.backgroundMyPage} style={styles.backgroundImage}>
@@ -257,11 +257,10 @@ const styles = ScaledSheet.create({
     },
     background: {
         width: Metrics.screenWidth - scale(40),
-        height: '172@s',
+        paddingBottom: '20@vs',
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,
         justifyContent: 'space-between',
-        paddingBottom: '20@s',
     },
     linear: {
         paddingHorizontal: '10@s',
@@ -286,11 +285,11 @@ const styles = ScaledSheet.create({
         width: '100%',
         height: '10@vs',
         backgroundColor: Themes.COLORS.white,
-        marginTop: '10@vs',
+        marginTop: '8@vs',
         borderRadius: 1,
     },
     ratio: {
-        top: '10@vs',
+        top: '8@vs',
         height: '10@vs',
         backgroundColor: Themes.COLORS.viking,
         position: 'absolute',
