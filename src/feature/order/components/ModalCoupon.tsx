@@ -2,7 +2,7 @@ import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledImage, StyledText, StyledTouchable } from 'components/base';
 import DashView from 'components/common/DashView';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 
@@ -62,6 +62,9 @@ const OneCoupon = (props: any) => {
 const ModalCoupon = (props: any) => {
     const { listCouponsModal, setCartListCouponOrder, updateCouponsCart, cartListCouponAll, applyChooseDish } = props;
     const [enableButton, setEnableButton] = useState(listCouponsModal?.map((item: any) => ({ ...item })));
+    useEffect(() => {
+        setEnableButton(listCouponsModal?.map((item: any) => ({ ...item })));
+    }, [listCouponsModal]);
     const checkDisableButton = enableButton?.filter((item: any) => !item?.choose);
     const numCheck = enableButton?.filter((item: any) => item?.choose)?.length || 0;
     return (
@@ -90,9 +93,15 @@ const ModalCoupon = (props: any) => {
                 onPress={() => {
                     if (applyChooseDish) {
                         applyChooseDish?.(enableButton);
+                        console.log('vao if');
                     } else {
+                        console.log('vao else');
+                        console.log({ enableButton, next: [...enableButton, ...cartListCouponAll] });
+                        console.log('vao else 2');
                         setCartListCouponOrder?.([...enableButton, ...cartListCouponAll]);
+                        console.log('vao else 3');
                         updateCouponsCart([...enableButton, ...cartListCouponAll]);
+                        console.log('vao else 4');
                     }
                 }}
                 disabled={checkDisableButton.length > 0}
