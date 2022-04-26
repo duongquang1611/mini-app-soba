@@ -9,20 +9,11 @@ import { ImageBackground, Text, View } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
-import { statusUser } from 'utilities/staticData';
-
-const fakeRankColor = {
-    colors: ['#F8D156', '#FEECD2'],
-    background: '#FEECD2',
-    crownColor: 'rgba(249, 197, 33, 0.4)',
-};
+import { defaultRankColor, statusUser } from 'utilities/staticData';
 
 const UserStatusItem = (props: any) => {
-    const {
-        colors = fakeRankColor.colors,
-        background = fakeRankColor.background,
-        crownColor = fakeRankColor.crownColor,
-    } = props?.item;
+    const { index } = props;
+    const { colors, background, crownColor } = statusUser[index % 4];
     const { title, coupon, money } = props?.item || {};
 
     return (
@@ -35,7 +26,7 @@ const UserStatusItem = (props: any) => {
             <StyledIcon
                 source={Images.icons.gold}
                 size={22}
-                customStyle={[styles.icStatus, { tintColor: crownColor }]}
+                customStyle={[styles.icStatus, { tintColor: crownColor, opacity: 0.4 }]}
             />
             <View style={styles.infoStatus}>
                 <StyledText originValue={title} isBlack customStyle={styles.title} />
@@ -55,7 +46,7 @@ const UserStatus = (props: any) => {
     const { money, levelRank } = user?.member || {};
     const shortLevelRank = levelRank?.slice(0);
     const { nextRank, moneyToNextRank } = user || {};
-    const { closeModal, rankList } = props;
+    const { closeModal, rankList, colorRank } = props;
     const fillNumber = (money / (money + moneyToNextRank)) * 100;
     return (
         <View>
@@ -81,14 +72,18 @@ const UserStatus = (props: any) => {
                                 customStyle={styles.titleAchieveRate}
                                 isBlack
                             />
-                            <LinearView style={styles.linearChart} colors={statusUser[2].colors}>
+                            <LinearView style={styles.linearChart} colors={colorRank?.colors || defaultRankColor}>
                                 <StyledText originValue={shortLevelRank || ''} isBlack customStyle={styles.smallText} />
-                                <StyledIcon source={Images.icons.gold} size={15} />
+                                <StyledIcon
+                                    source={Images.icons.gold}
+                                    size={15}
+                                    customStyle={{ tintColor: colorRank?.crownColor }}
+                                />
                             </LinearView>
                         </>
                     )}
                 </AnimatedCircularProgress>
-                {nextRank && (
+                {!!nextRank && (
                     <Text style={styles.money}>
                         {`￥${moneyToNextRank || 0}`}
                         <StyledText
@@ -107,8 +102,8 @@ const UserStatus = (props: any) => {
                     isBlack
                     customStyle={styles.content}
                 />
-                {rankList.map((item: any, index: number) => (
-                    <UserStatusItem key={index} item={item} />
+                {rankList?.map((item: any, index: number) => (
+                    <UserStatusItem key={index} item={item} index={index} />
                 ))}
             </View>
         </View>
