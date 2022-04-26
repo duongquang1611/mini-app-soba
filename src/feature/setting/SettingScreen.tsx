@@ -21,7 +21,7 @@ import { scale, ScaledSheet } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
 import AuthenticateService from 'utilities/authenticate/AuthenticateService';
 import { generateOrderQR, getInformationSetting } from 'utilities/helper';
-import { listButton, OrderTypeMenu, statusUser } from 'utilities/staticData';
+import { defaultRankColor, listButton, OrderTypeMenu, statusUser } from 'utilities/staticData';
 import UserStatus from './components/UserStatus';
 
 const InfoItem = (data: any) => {
@@ -60,10 +60,16 @@ const SettingScreen = () => {
             AlertMessage(error);
         }
     };
+    const indexRank = rankList.findIndex((itemRank: any) => itemRank?.title === levelRank);
+    const colorRank = indexRank >= 0 ? statusUser[indexRank % 4] : statusUser[0];
     const handleShowPicker = () => {
         modalize.show(
             'modalPickerBackdrop',
-            <UserStatus closeModal={() => modalize.dismiss('modalPickerBackdrop')} rankList={rankList} />,
+            <UserStatus
+                colorRank={colorRank}
+                closeModal={() => modalize.dismiss('modalPickerBackdrop')}
+                rankList={rankList}
+            />,
             {
                 modalStyle: {
                     backgroundColor: 'transparent',
@@ -176,9 +182,16 @@ const SettingScreen = () => {
                                 <View>
                                     <StyledText originValue={fullName} customStyle={styles.name} />
                                     <View>
-                                        <LinearView style={styles.linear} colors={statusUser[2].colors}>
+                                        <LinearView
+                                            style={styles.linear}
+                                            colors={colorRank?.colors || defaultRankColor}
+                                        >
                                             <StyledText originValue={levelRank} isBlack customStyle={styles.rank} />
-                                            <StyledIcon source={Images.icons.gold} size={15} />
+                                            <StyledIcon
+                                                source={Images.icons.gold}
+                                                size={15}
+                                                customStyle={{ tintColor: colorRank?.crownColor }}
+                                            />
                                         </LinearView>
                                         <StyledText
                                             i18nText={'order.rangePrice'}

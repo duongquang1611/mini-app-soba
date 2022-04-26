@@ -574,34 +574,27 @@ export const listImage = [
             'https://image.shutterstock.com/image-photo/wild-tropical-pulasan-fruit-nephelium-600w-2028303242.jpg',
     },
 ];
+export const defaultRankColor = [Themes.COLORS.white, Themes.COLORS.white];
 export const statusUser = [
     {
-        name: 'ブロンズメンバー',
         colors: ['#A46628', '#D7995B'],
         background: '#CE9E6D',
-        crownColor: 'rgba(144, 89, 35, 0.4)',
-        content: '￥5000を支払う、月に1回「新年おめでとう」クーポンを頂く',
+        crownColor: 'rgba(144, 89, 35, 1)',
     },
     {
-        name: 'シルバーメンバー',
         colors: ['#CCCCCC', '#F2F2F2'],
         background: '#F2F2F2',
-        crownColor: 'rgba(196, 196, 196, 0.4)',
-        content: '￥7000を支払う、月に1回「新年おめでとう」クーポンを頂く',
+        crownColor: 'rgba(196, 196, 196, 1)',
     },
     {
-        name: 'ブロンズメンバー',
         colors: ['#F8D156', '#FEECD2'],
         background: '#FEECD2',
-        crownColor: 'rgba(249, 197, 33, 0.4)',
-        content: '￥10000を支払う、月に1「新年おめでとう」クーポンを頂く',
+        crownColor: 'rgba(249, 197, 33, 1)',
     },
     {
-        name: 'ブロンズメンバー',
         colors: ['#A4F4F9', '#7B68EE'],
         background: '#DCFDFF',
-        crownColor: 'rgba(172, 229, 238, 0.4)',
-        content: '￥20000を支払う、月に1回「新年おめでとう」クーポンを頂く',
+        crownColor: 'rgba(172, 229, 238, 1)',
     },
 ];
 
