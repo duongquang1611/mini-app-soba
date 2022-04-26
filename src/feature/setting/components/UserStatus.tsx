@@ -9,6 +9,7 @@ import { ImageBackground, Text, View } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
+import { numberWithCommas } from 'utilities/helper';
 import { defaultRankColor, statusUser } from 'utilities/staticData';
 
 const UserStatusItem = (props: any) => {
@@ -43,9 +44,9 @@ const UserStatusItem = (props: any) => {
 const UserStatus = (props: any) => {
     const { userInfo } = useSelector((state: RootState) => state);
     const { user } = userInfo;
-    const { money, levelRank } = user?.member || {};
-    const shortLevelRank = levelRank?.slice(0);
-    const { nextRank, moneyToNextRank } = user || {};
+    const { money = 0, levelRank } = user?.member || {};
+    const shortLevelRank = levelRank?.slice(0, 4);
+    const { nextRank, moneyToNextRank = 0 } = user || {};
     const { closeModal, rankList, colorRank } = props;
     const fillNumber = (money / (money + moneyToNextRank)) * 100;
     return (
@@ -68,24 +69,30 @@ const UserStatus = (props: any) => {
                         <>
                             <StyledText
                                 i18nText={'order.rangePrice'}
-                                i18nParams={{ price: money || 0 }}
+                                i18nParams={{ price: numberWithCommas(money || 0) }}
                                 customStyle={styles.titleAchieveRate}
                                 isBlack
                             />
-                            <LinearView style={styles.linearChart} colors={colorRank?.colors || defaultRankColor}>
-                                <StyledText originValue={shortLevelRank || ''} isBlack customStyle={styles.smallText} />
-                                <StyledIcon
-                                    source={Images.icons.gold}
-                                    size={15}
-                                    customStyle={{ tintColor: colorRank?.crownColor }}
-                                />
-                            </LinearView>
+                            {!!levelRank && (
+                                <LinearView style={styles.linearChart} colors={colorRank?.colors || defaultRankColor}>
+                                    <StyledText
+                                        originValue={shortLevelRank || ''}
+                                        isBlack
+                                        customStyle={styles.smallText}
+                                    />
+                                    <StyledIcon
+                                        source={Images.icons.gold}
+                                        size={15}
+                                        customStyle={{ tintColor: colorRank?.crownColor }}
+                                    />
+                                </LinearView>
+                            )}
                         </>
                     )}
                 </AnimatedCircularProgress>
                 {!!nextRank && (
                     <Text style={styles.money}>
-                        {`￥${moneyToNextRank || 0}`}
+                        {`￥${numberWithCommas(moneyToNextRank || 0)}`}
                         <StyledText
                             i18nParams={{ nextRank }}
                             i18nText={'setting.nextRank'}
@@ -95,13 +102,7 @@ const UserStatus = (props: any) => {
                 )}
             </ImageBackground>
             <View style={styles.body}>
-                <StyledText
-                    i18nText={
-                        '＊注意：ニヲタ問8地携ドじなれ速改ょクり型載えで果情ムネ樹権オ更虫検意リクニ張本ス皆説との刑世九憂えんど。試じどそ読顔シトニ千限くトょイ減3勝'
-                    }
-                    isBlack
-                    customStyle={styles.content}
-                />
+                <StyledText i18nText={'setting.statusContent'} isBlack customStyle={styles.content} />
                 {rankList?.map((item: any, index: number) => (
                     <UserStatusItem key={index} item={item} index={index} />
                 ))}

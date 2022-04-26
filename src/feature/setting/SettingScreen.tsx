@@ -16,11 +16,11 @@ import { getDataProfile } from 'hooks/useNetwork';
 import { AUTHENTICATE_ROUTE, ORDER_ROUTE, SETTING_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useEffect, useMemo, useState } from 'react';
-import { Linking, RefreshControl, View } from 'react-native';
+import { Linking, RefreshControl, StyleProp, View, ViewStyle } from 'react-native';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
 import AuthenticateService from 'utilities/authenticate/AuthenticateService';
-import { generateOrderQR, getInformationSetting } from 'utilities/helper';
+import { generateOrderQR, getInformationSetting, numberWithCommas } from 'utilities/helper';
 import { defaultRankColor, listButton, OrderTypeMenu, statusUser } from 'utilities/staticData';
 import UserStatus from './components/UserStatus';
 
@@ -45,10 +45,12 @@ const SettingScreen = () => {
     const { configs = [] } = resource?.data;
     const policy = configs?.[2] || {};
     const { user } = userInfo;
-    const { money = 0, levelRank = '', fullName = '' } = user?.member || {};
+    const [contentWidth, setContentWidth] = useState(0);
+    const { money = 0, levelRank, fullName = '' } = user?.member || {};
     const { moneyToNextRank = 0, nextRank } = user || {};
     const { defaultOrder } = order;
     const defaultOrderQR = useMemo(() => generateOrderQR(defaultOrder, user), [defaultOrder, user]);
+
     useEffect(() => {
         getRankData();
     }, []);
@@ -153,7 +155,16 @@ const SettingScreen = () => {
     const handleRefresh = () => {
         getDataProfile();
     };
-
+    const fillNumber = (money / (money + moneyToNextRank)) * 100;
+    const getStylePrice: any = () => {
+        if (fillNumber <= 10) return { marginLeft: scale(10) };
+        if (fillNumber >= 90) {
+            return { alignSelf: 'flex-end', marginRight: scale(10) };
+        }
+        return {
+            marginLeft: ((Metrics.screenWidth - scale(60)) * fillNumber) / 100 - scale(contentWidth) / 2 + scale(10),
+        };
+    };
     return (
         <View style={styles.container}>
             <View>
@@ -182,36 +193,55 @@ const SettingScreen = () => {
                                 <View>
                                     <StyledText originValue={fullName} customStyle={styles.name} />
                                     <View>
-                                        <LinearView
-                                            style={styles.linear}
-                                            colors={colorRank?.colors || defaultRankColor}
-                                        >
-                                            <StyledText originValue={levelRank} isBlack customStyle={styles.rank} />
-                                            <StyledIcon
-                                                source={Images.icons.gold}
-                                                size={15}
-                                                customStyle={{ tintColor: colorRank?.crownColor }}
-                                            />
-                                        </LinearView>
-                                        <StyledText
-                                            i18nText={'order.rangePrice'}
-                                            i18nParams={{ price: money || 0 }}
-                                            customStyle={styles.price}
-                                        />
+                                        {!!levelRank && (
+                                            <LinearView
+                                                style={styles.linear}
+                                                colors={colorRank?.colors || defaultRankColor}
+                                            >
+                                                <StyledText originValue={levelRank} isBlack customStyle={styles.rank} />
+                                                <StyledIcon
+                                                    source={Images.icons.gold}
+                                                    size={15}
+                                                    customStyle={{ tintColor: colorRank?.crownColor }}
+                                                />
+                                            </LinearView>
+                                        )}
                                     </View>
                                 </View>
                                 <StyledTouchable onPress={handleShowPicker} customStyle={styles.question}>
                                     <StyledIcon source={Images.icons.questionGray} size={24} />
                                 </StyledTouchable>
                             </View>
+
+                            <View
+                                style={[
+                                    {
+                                        alignSelf: 'flex-start',
+                                    },
+                                    getStylePrice(),
+                                ]}
+                            >
+                                <View
+                                    onLayout={(event) => {
+                                        console.log({ event, layout: event?.nativeEvent?.layout });
+                                        setContentWidth(event?.nativeEvent?.layout?.width);
+                                    }}
+                                >
+                                    <StyledText
+                                        i18nText={'order.rangePrice'}
+                                        i18nParams={{ price: numberWithCommas(money) || 0 }}
+                                        customStyle={styles.price}
+                                    />
+                                </View>
+                            </View>
                             <View style={styles.ratioContain}>
                                 <View style={styles.ratioAll} />
-                                <View style={[styles.ratio, { width: '60%' }]} />
+                                <View style={[styles.ratio, { width: `${fillNumber}%` }]} />
                             </View>
                             {!!nextRank && (
                                 <View style={styles.desView}>
                                     <StyledText
-                                        i18nParams={{ moneyToNextRank, nextRank }}
+                                        i18nParams={{ moneyToNextRank: numberWithCommas(moneyToNextRank), nextRank }}
                                         i18nText={'setting.moneyNexRank'}
                                         customStyle={styles.desText}
                                     />
@@ -297,7 +327,7 @@ const styles = ScaledSheet.create({
         flexDirection: 'row',
     },
     price: {
-        alignSelf: 'flex-end',
+        // alignSelf: 'flex-end',
         marginTop: '12@vs',
         fontSize: '12@ms0.3',
         color: Themes.COLORS.headerBackground,
