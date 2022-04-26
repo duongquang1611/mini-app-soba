@@ -53,7 +53,7 @@ request.interceptors.request.use(
     async (config: any) => {
         // Do something before API is sent
         const token = TokenProvider.getToken();
-        if (token) {
+        if (token && !config?.headers?.Authorization) {
             config.headers.Authorization = `Bearer ${token}`;
         }
         return config;
