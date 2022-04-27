@@ -19,10 +19,16 @@ import * as yup from 'yup';
 
 const DEFAULT_FORM: any = __DEV__
     ? {
-          //   email: 'yeuquaimo@love.you',
-          //   password: 'loveyou3000',
+          email: 'yeuquaimo@love.you',
+          password: 'loveyou3000',
 
-          //   email: 'trieuphong123@gmail.com',
+          //   email: 'tuyet08@gmail.com',
+          //   password: 'abc12345',
+
+          //   email: 'tuyet.nguyen@amela.vn',
+          //   password: 'abc12345',
+
+          //   email: 'tuyet10@gmail.com',
           //   password: 'abc12345',
 
           //   email: 'tester4@gmail.com',
@@ -30,8 +36,9 @@ const DEFAULT_FORM: any = __DEV__
 
           //   email: 'tuyet08@gmail.com',
           //   password: 'abc12345',
-          email: 'le.ngo@amela.vn',
-          password: 'abc12345',
+
+          //   email: 'le.ngo@amela.vn',
+          //   password: 'abc12345',
       }
     : {};
 
