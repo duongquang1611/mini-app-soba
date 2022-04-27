@@ -18,7 +18,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { ScaledSheet } from 'react-native-size-matters';
 import { autoCompleteType, textContentType } from 'utilities/CommonInterface';
 import { formatDate, YYYYMMDD } from 'utilities/format';
-import { getYesterday } from 'utilities/helper';
+import { formatUTC, getYesterday } from 'utilities/helper';
 import { StyledIcon, StyledTouchable } from '.';
 import StyledText from './StyledText';
 
@@ -46,6 +46,7 @@ export interface StyledInputProps extends TextInputProps {
     onPress?: any;
     handleConfirm?: any;
     customErrorMessage?: any;
+    useUTC?: boolean;
 }
 
 export const LabelInput = ({ label, labelRequire = '*', customStyle, containerStyle }: any) => {
@@ -83,6 +84,7 @@ const StyledInput = (props: StyledInputProps, ref: any) => {
         customErrorMessage,
         errorMessage,
         wrapInputStyle,
+        useUTC = true,
     } = props;
 
     const [isFocused, setIsFocused] = useState(false);
@@ -104,7 +106,7 @@ const StyledInput = (props: StyledInputProps, ref: any) => {
 
     const handleConfirmDate = useCallback((date: any) => {
         hideDatePicker();
-        handleConfirm?.(date.toISOString());
+        handleConfirm?.(useUTC ? formatUTC(date) : date.toISOString());
     }, []);
 
     return (
