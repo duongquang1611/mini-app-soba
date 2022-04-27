@@ -28,7 +28,7 @@ const REGISTER_DEFAULT_FORM = __DEV__
           password: 'loveyou3000',
           confirmPassword: 'loveyou3000',
           fullName: 'DuongQuang',
-          birthday: '2022-03-14T05:53:39.027Z',
+          birthday: '2022-03-14T00:00:00.000Z',
           gender: '1',
       }
     : {};
