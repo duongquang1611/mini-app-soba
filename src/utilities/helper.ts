@@ -596,3 +596,11 @@ export const getIndexTab = (defaultOrder: any, mobileOrder: any) => {
 export function numberWithCommas(x: number) {
     return (x || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
+
+export const getStringCoupon = (coupons: any) => {
+    let result = '';
+    coupons?.forEach((item: any) => {
+        result += `, ${item?.title || ''}`;
+    });
+    return result.slice(1, result.length);
+};

@@ -9,13 +9,13 @@ import { ImageBackground, Text, View } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
-import { numberWithCommas } from 'utilities/helper';
+import { getStringCoupon, numberWithCommas } from 'utilities/helper';
 import { defaultRankColor, statusUser } from 'utilities/staticData';
 
 const UserStatusItem = (props: any) => {
     const { index } = props;
     const { colors, background, crownColor } = statusUser[index % 4];
-    const { title, coupon, money } = props?.item || {};
+    const { title, coupons, money } = props?.item || {};
 
     return (
         <LinearView style={styles.linear} colors={colors}>
@@ -32,7 +32,7 @@ const UserStatusItem = (props: any) => {
             <View style={styles.infoStatus}>
                 <StyledText originValue={title} isBlack customStyle={styles.title} />
                 <StyledText
-                    i18nParams={{ money, coupon: coupon.title }}
+                    i18nParams={{ money: numberWithCommas(money), coupon: getStringCoupon(coupons) }}
                     i18nText={'setting.contentRank'}
                     isBlack
                     customStyle={styles.normalText}
