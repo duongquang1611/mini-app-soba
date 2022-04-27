@@ -72,6 +72,7 @@ const UserStatus = (props: any) => {
                                 i18nParams={{ price: numberWithCommas(money || 0) }}
                                 customStyle={styles.titleAchieveRate}
                                 isBlack
+                                numberOfLines={1}
                             />
                             {!!levelRank && (
                                 <LinearView style={styles.linearChart} colors={colorRank?.colors || defaultRankColor}>
@@ -184,7 +185,10 @@ const styles = ScaledSheet.create({
     },
     titleAchieveRate: {
         fontWeight: 'bold',
-        fontSize: '24@ms0.3',
+        fontSize: '20@ms0.3',
+        width: '130@s',
+        alignSelf: 'center',
+        textAlign: 'center',
     },
     linearChart: {
         padding: '5@vs',
