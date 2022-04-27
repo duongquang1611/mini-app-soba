@@ -604,3 +604,12 @@ export const getStringCoupon = (coupons: any) => {
     });
     return result.slice(1, result.length);
 };
+export const formatUTC = (dateInt: any) => {
+    const date = new Date(dateInt);
+    const offset = -date.getTimezoneOffset();
+    date.setHours(Math.floor(offset / 60));
+    date.setMinutes(offset % 60);
+    date.setSeconds(0);
+    date.setMilliseconds(0);
+    return date.toISOString();
+};
