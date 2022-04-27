@@ -96,7 +96,7 @@
         "react-native-modal-datetime-picker": "^13.0.1",
         "react-native-modalize": "^2.0.8",
         "react-native-onesignal": "^4.1.1",
-        "react-native-pager-view": "^5.4.9",
+        "react-native-pager-view": "^5.4.15",
         "react-native-permissions": "^3.0.5",
         "react-native-picker": "^4.3.7",
         "react-native-portalize": "^1.0.7",

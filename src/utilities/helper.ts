@@ -322,8 +322,10 @@ export const filterResources = (data: any) => {
 export const filterDishOptions = (dish: any) => {
     const newDish = { ...dish };
     for (let j = 0; j < newDish?.dishOptions?.length; j++) {
-        // remove dish null in subDish
-        newDish.dishOptions[j].subDish = newDish?.dishOptions?.[j]?.subDish?.filter((item: any) => item.dish);
+        // remove dish null in subDish and dish status 0
+        newDish.dishOptions[j].subDish = newDish?.dishOptions?.[j]?.subDish?.filter(
+            (item: any) => item.dish && item?.status,
+        );
     }
     newDish.dishOptions = newDish?.dishOptions?.filter((item: any) => {
         // remove dishOption status 0 and dont have subDish
@@ -331,6 +333,7 @@ export const filterDishOptions = (dish: any) => {
     });
     return newDish;
 };
+
 export const checkHasDataOrder = (order: any) => {
     return order?.dishes?.length + order?.coupons?.length > 0;
 };

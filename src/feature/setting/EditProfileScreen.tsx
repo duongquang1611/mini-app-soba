@@ -50,6 +50,7 @@ const EditProfileScreen = () => {
             avatar: user?.member?.avatar,
         },
     });
+
     const {
         formState: { isValid },
         setValue,
