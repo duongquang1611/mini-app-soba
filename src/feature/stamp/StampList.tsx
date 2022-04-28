@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { getStampList, tickStamp } from 'api/modules/api-app/stamp';
+import { RootState } from 'app-redux/hooks';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
@@ -17,6 +18,8 @@ import { View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { Portal } from 'react-native-portalize';
 import { ScaledSheet, verticalScale } from 'react-native-size-matters';
+import { useSelector } from 'react-redux';
+import { diffTime } from 'utilities/helper';
 import { POPUP_TYPE, staticValue } from 'utilities/staticData';
 import ChooseStampList from './components/ChooseStampList';
 import StampItem from './components/StampItem';
@@ -26,12 +29,13 @@ interface StampListProps {
     showEarnStamp?: any;
 }
 
+// let currentTimeRefresh = new Date();
+
 const StampList = (props: StampListProps) => {
     const { canUse = false } = props;
     const modalizeRef = useRef<Modalize>(null);
     const [chooseTickStampIds, setChooseTickStampIds] = useState({});
-    // const [refreshing, setRefreshing] = useState(false);
-    // const [list, setList] = useState<any>({});
+    const { triggerReloadStamp } = useSelector((state: RootState) => state.globalData);
     const userTicked = useMemo(() => {
         const lengthTicked = Object.values(chooseTickStampIds).filter((item: any) => Boolean(item))?.length;
         return lengthTicked || 0;
@@ -50,28 +54,11 @@ const StampList = (props: StampListProps) => {
     const { untickStampsAmount = 0, bill = [] } = untickedStamps;
 
     // useEffect(() => {
-    //     getStampData(false);
-    // }, []);
-
-    // const getStampData = async (changeRefreshing = true) => {
-    //     console.log('getStampData -> changeRefreshing', changeRefreshing);
-    //     try {
-    //         changeRefreshing && setRefreshing(true);
-    //         const res = await getStampList({
-    //             params: {
-    //                 status: Number(canUse),
-    //                 take: SIZE_LIMIT,
-    //                 pageIndex: 1,
-    //             },
-    //         });
-    //         console.log('getStampData -> res', res);
-    //         setList(res?.data || {});
-    //     } catch (error) {
-    //         console.log('getStampData -> error', error);
-    //     } finally {
-    //         changeRefreshing && setRefreshing(false);
+    //     if (triggerReloadStamp && canUse && diffTime(currentTimeRefresh, new Date()) > 2000) {
+    //         currentTimeRefresh = new Date();
+    //         onRefresh();
     //     }
-    // };
+    // }, [triggerReloadStamp]);
 
     const goToDetail = (item: any) => {
         navigate(STAMP_ROUTE.STAMP_CARD_DETAIL, { item });
@@ -105,7 +92,6 @@ const StampList = (props: StampListProps) => {
             await tickStamp({ tickStamps: dataTicks });
             setChooseTickStampIds({});
             onRefresh?.();
-            // getStampData(false);
             AlertMessage('stamp.tickSuccess', { type: POPUP_TYPE.SUCCESS });
         } catch (error) {
             AlertMessage(error);
@@ -179,7 +165,6 @@ const StampList = (props: StampListProps) => {
                 customStyle={styles.listStamp}
                 refreshing={refreshing}
                 onRefresh={onRefresh}
-                // onRefresh={getStampData}
                 noDataText={'stamp.noData'}
                 onEndReached={onLoadMore}
                 removeClippedSubviews={true}

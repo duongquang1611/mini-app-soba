@@ -9,6 +9,7 @@ interface IGlobalDataState {
     viewedOrderDefault: boolean;
     chooseTickStampIds: any;
     notificationUnRead: number;
+    triggerReloadStamp: number;
 }
 
 const initialState: IGlobalDataState = {
@@ -17,6 +18,7 @@ const initialState: IGlobalDataState = {
     viewedOrderDefault: false,
     chooseTickStampIds: {},
     notificationUnRead: 0,
+    triggerReloadStamp: 0,
 };
 
 const globalDataSlice = createSlice({
