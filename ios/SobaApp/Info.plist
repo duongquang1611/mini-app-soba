@@ -9,7 +9,7 @@
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
-	<string>RNC_IOS_APP_ID</string>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleLocalizations</key>
@@ -41,24 +41,24 @@
 			</dict>
 		</dict>
 	</dict>
-	<key>UIAppFonts</key>
-	<array>
-		<string>ZenMaruGothic-Bold.ttf</string>
-	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>プロフィール画像を更新するにはアプリにカメラへのアクセスを許可する必要があります。</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>App need the location permission</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>App need the location permission</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>App need the location permission</string>
-	<key>NSCameraUsageDescription</key>
-	<string>プロフィール画像を更新するにはアプリにカメラへのアクセスを許可する必要があります。</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>プロフィール画像を更新するにはアプリに写真へのアクセスを許可する必要があります。</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>プロフィール画像を更新するにはアプリに写真へのアクセスを許可する必要があります。</string>
 	<key>PHPhotoLibraryPreventAutomaticLimitedAccessAlert</key>
 	<true/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>ZenMaruGothic-Bold.ttf</string>
+	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>

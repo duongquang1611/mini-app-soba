@@ -1,4 +1,5 @@
 import { getDetailMemberStamp, postExchangeCoupon } from 'api/modules/api-app/stamp';
+import { updateGlobalData } from 'app-redux/slices/globalDataSlice';
 import Images from 'assets/images';
 import * as languageText from 'assets/locates/jp';
 import { Themes } from 'assets/themes';
@@ -14,6 +15,8 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
+import { useDispatch } from 'react-redux';
+import { getRandomRange } from 'utilities/helper';
 import { POPUP_TYPE } from 'utilities/staticData';
 import StampItem from './components/StampItem';
 
@@ -24,6 +27,7 @@ const ExchangeCouponListScreen = (props: any) => {
     const [stampDetail, setStampDetail] = useState(props?.route?.params?.stampDetail || {});
     const { stamp = {}, leftAmount = 0 } = stampDetail;
     const { couponsExchange = [] } = stamp;
+    const dispatch = useDispatch();
 
     const goToDetail = (item: any, newStampDetail?: any) => {
         navigate(COUPON_ROUTE.DETAIL_COUPON, {
@@ -61,6 +65,7 @@ const ExchangeCouponListScreen = (props: any) => {
             });
             const resStampDetail = await getDetailMemberStamp(stampDetail?.id);
             setStampDetail(resStampDetail?.data);
+            dispatch(updateGlobalData({ triggerReloadStamp: getRandomRange() }));
             cbSuccess?.();
             AlertMessage('', {
                 ...languageText?.default?.exchangeCoupon?.success,

@@ -616,3 +616,12 @@ export const formatUTC = (dateInt: any) => {
     date.setMilliseconds(0);
     return date.toISOString();
 };
+
+export const getRandomRange = (min = 1, max = 100) => {
+    return Math.random() * (max - min) + min;
+};
+
+export const diffTime = (startDate: Date, endDate: Date) => {
+    const diff = endDate.getTime() - startDate.getTime();
+    return diff;
+};

@@ -518,7 +518,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = A934T35MUC;
+				DEVELOPMENT_TEAM = Z7GG33DDSP;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = SobaApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -531,9 +531,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.apps.aos;
+				PRODUCT_BUNDLE_IDENTIFIER = jp.co.mitsuwa.komoro.ios;
 				PRODUCT_NAME = SobaApp;
-				PROVISIONING_PROFILE_SPECIFIER = "AOS testflight dev";
+				PROVISIONING_PROFILE_SPECIFIER = "Soba production";
 				SWIFT_OBJC_BRIDGING_HEADER = "SobaApp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -551,7 +551,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = A934T35MUC;
+				DEVELOPMENT_TEAM = Z7GG33DDSP;
 				INFOPLIST_FILE = SobaApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -563,9 +563,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.apps.aos;
+				PRODUCT_BUNDLE_IDENTIFIER = jp.co.mitsuwa.komoro.ios;
 				PRODUCT_NAME = SobaApp;
-				PROVISIONING_PROFILE_SPECIFIER = "AOS testflight dev";
+				PROVISIONING_PROFILE_SPECIFIER = "Soba production";
 				SWIFT_OBJC_BRIDGING_HEADER = "SobaApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
