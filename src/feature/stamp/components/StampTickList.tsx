@@ -3,8 +3,7 @@ import DashView from 'components/common/DashView';
 import { STAMP_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { memo, useMemo } from 'react';
-import { View } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { FlatList, View } from 'react-native';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { StampCardType, StampSettingDuration } from 'utilities/enumData';
 import { checkExpired } from 'utilities/helper';
@@ -52,11 +51,13 @@ const StampTickList = ({
         <>
             <DashView customStyle={styles.dashView} />
             <View style={styles.wrapListCoupon}>
-                <ScrollView contentContainerStyle={styles.listCoupon}>
-                    <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                        {data.map((item: any, index: number) => renderItem({ item, index }))}
-                    </View>
-                </ScrollView>
+                <FlatList
+                    data={data}
+                    renderItem={renderItem}
+                    numColumns={numCol}
+                    contentContainerStyle={styles.listCoupon}
+                    keyExtractor={(item: any, index: number) => index.toString()}
+                />
             </View>
             <DashView customStyle={styles.dashView} />
             {isExchange && !fromNotify && (
