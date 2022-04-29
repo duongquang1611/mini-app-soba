@@ -155,14 +155,15 @@ const SettingScreen = () => {
     const handleRefresh = () => {
         getDataProfile();
     };
-    const fillNumber = (money / (money + moneyToNextRank)) * 100;
+    const fillNumber = money ? (money / (money + (moneyToNextRank || 0))) * 100 : 0;
     const getStylePrice: any = () => {
         if (fillNumber <= 10) return { marginLeft: scale(10) };
         if (fillNumber >= 90) {
             return { alignSelf: 'flex-end', marginRight: scale(10) };
         }
         return {
-            marginLeft: ((Metrics.screenWidth - scale(60)) * fillNumber) / 100 - scale(contentWidth) / 2 + scale(10),
+            marginLeft:
+                ((Metrics.screenWidth - scale(60)) * fillNumber) / 100 - scale(contentWidth || 0) / 2 + scale(10) || 0,
         };
     };
     return (
@@ -223,7 +224,6 @@ const SettingScreen = () => {
                             >
                                 <View
                                     onLayout={(event) => {
-                                        console.log({ event, layout: event?.nativeEvent?.layout });
                                         setContentWidth(event?.nativeEvent?.layout?.width);
                                     }}
                                 >

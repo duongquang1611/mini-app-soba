@@ -34,7 +34,7 @@ const DEFAULT_FORM: any = __DEV__
           //   email: 'tester4@gmail.com',
           //   password: 'abc12345',
 
-          //   email: 'tuyet08@gmail.com',
+          //   email: 'amela02@gmail.com',
           //   password: 'abc12345',
 
           // email: 'le.ngo@amela.vn',
