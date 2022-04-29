@@ -109,12 +109,14 @@ const onReceived = async (data: NotificationReceivedEvent) => {
         store.dispatch(updateDefaultOrderLocal(defaultOrder));
         try {
             const defaultOrderHomeSaveOrderOption = generateDataSaveOrderOption(defaultOrder, OrderType.DEFAULT_HOME);
-            await saveOrderOption(defaultOrderHomeSaveOrderOption);
             const mobileSaveOrderOption = generateDataSaveOrderOption(
                 deleteUsedCoupon(mobileOrder, coupons),
                 OrderType.MOBILE,
             );
-            await saveOrderOption(mobileSaveOrderOption);
+            await Promise.all([
+                saveOrderOption(defaultOrderHomeSaveOrderOption),
+                saveOrderOption(mobileSaveOrderOption),
+            ]);
         } catch (error) {
             console.log('saveOrder -> error', error);
         }
@@ -127,9 +129,11 @@ const onReceived = async (data: NotificationReceivedEvent) => {
                 deleteUsedCoupon(defaultOrderLocal, coupons),
                 OrderType.DEFAULT_HOME,
             );
-            await saveOrderOption(defaultOrderHomeSaveOrderOption);
             const mobileSaveOrderOption = generateDataSaveOrderOption({}, OrderType.MOBILE);
-            await saveOrderOption(mobileSaveOrderOption);
+            await Promise.all([
+                saveOrderOption(defaultOrderHomeSaveOrderOption),
+                saveOrderOption(mobileSaveOrderOption),
+            ]);
         } catch (error) {
             console.log('saveOrder -> error', error);
         }
