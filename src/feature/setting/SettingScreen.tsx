@@ -20,7 +20,7 @@ import { Linking, RefreshControl, StyleProp, View, ViewStyle } from 'react-nativ
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
 import AuthenticateService from 'utilities/authenticate/AuthenticateService';
-import { generateOrderQR, getInformationSetting, numberWithCommas } from 'utilities/helper';
+import { checkValidRank, generateOrderQR, getInformationSetting, numberWithCommas } from 'utilities/helper';
 import { defaultRankColor, listButton, OrderTypeMenu, statusUser } from 'utilities/staticData';
 import UserStatus from './components/UserStatus';
 
@@ -194,7 +194,7 @@ const SettingScreen = () => {
                                 <View>
                                     <StyledText originValue={fullName} customStyle={styles.name} />
                                     <View>
-                                        {!!levelRank && (
+                                        {checkValidRank(levelRank) && (
                                             <LinearView
                                                 style={styles.linear}
                                                 colors={colorRank?.colors || defaultRankColor}

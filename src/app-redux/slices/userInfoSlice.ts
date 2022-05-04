@@ -42,16 +42,12 @@ const getUserInfoFailed: Reducer<PayloadAction<any>> = (state, { payload }) => {
 };
 
 const updateToken: Reducer<PayloadAction<Pick<IUserInfoState, 'token' | 'refreshToken'>>> = (state, { payload }) => {
-    state.token = payload.token;
-    state.refreshToken = payload.refreshToken;
+    state = { ...state, token: payload.token, refreshToken: payload.refreshToken };
+    return state;
 };
 
-const logOut: Reducer = (state) => {
-    delete state.token;
-    delete state.refreshToken;
-    delete state.user;
-    delete state.error;
-    state.status = CommonStatus.IDLE;
+const logOut: Reducer = () => {
+    return initialState;
 };
 
 const userInfoSlice = createSlice({
