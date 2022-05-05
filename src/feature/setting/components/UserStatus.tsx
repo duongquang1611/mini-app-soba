@@ -9,7 +9,7 @@ import { ImageBackground, Text, View } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
-import { getStringCoupon, numberWithCommas } from 'utilities/helper';
+import { checkValidRank, getStringCoupon, numberWithCommas } from 'utilities/helper';
 import { defaultRankColor, statusUser } from 'utilities/staticData';
 
 const UserStatusItem = (props: any) => {
@@ -45,7 +45,7 @@ const UserStatus = (props: any) => {
     const { userInfo } = useSelector((state: RootState) => state);
     const { user } = userInfo;
     const { money = 0, levelRank } = user?.member || {};
-    const shortLevelRank = levelRank?.slice(0, 4);
+    const shortLevelRank = levelRank?.slice?.(0, 4);
     const { nextRank, moneyToNextRank = 0 } = user || {};
     const { closeModal, rankList, colorRank } = props;
     const fillNumber = (money / (money + moneyToNextRank)) * 100;
@@ -74,7 +74,7 @@ const UserStatus = (props: any) => {
                                 isBlack
                                 numberOfLines={1}
                             />
-                            {!!levelRank && (
+                            {checkValidRank(levelRank) && (
                                 <LinearView style={styles.linearChart} colors={colorRank?.colors || defaultRankColor}>
                                     <StyledText
                                         originValue={shortLevelRank || ''}

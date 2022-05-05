@@ -5,7 +5,7 @@ import i18next from 'i18next';
 dayjs.locale('ja');
 
 export const YYYYMMDD = 'YYYY年MM月DD日';
-export const DDMM = 'DD/MM';
+export const MMDD = 'MM/DD';
 export const YYYYMMDD_PUBLISH = 'YYYY/MM/DD';
 export const YMDHms = 'YYYY/MM/DD hh:mm:ss';
 export const YMDHm = 'YYYY年MM月DD日　HH時mm分';

@@ -4,7 +4,7 @@ import { Themes } from 'assets/themes';
 import { StyledImage, StyledText, StyledTouchable } from 'components/base';
 import React, { memo } from 'react';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
-import { DDMM, formatDate } from 'utilities/format';
+import { formatDate, MMDD } from 'utilities/format';
 import { staticValue } from 'utilities/staticData';
 
 const itemHeight = 67;
@@ -67,7 +67,7 @@ const StampTickItem = ({ item, numCol, onPress, isOpen = false, index }: any) =>
             />
             {!!createdDate && (
                 <StyledText
-                    originValue={formatDate(createdDate, DDMM)}
+                    originValue={formatDate(createdDate, MMDD)}
                     isBlack
                     customStyle={[s.textDate, { position: 'absolute', bottom: scale(2) }]}
                 />

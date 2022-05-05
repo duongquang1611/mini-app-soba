@@ -625,3 +625,7 @@ export const diffTime = (startDate: Date, endDate: Date) => {
     const diff = endDate.getTime() - startDate.getTime();
     return diff;
 };
+
+export const checkValidRank = (levelRank: any) => {
+    return !!(levelRank && typeof levelRank === 'string' && levelRank?.trim?.()?.length > 0);
+};

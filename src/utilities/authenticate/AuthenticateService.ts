@@ -42,8 +42,8 @@ const AuthenticateService = {
         store.dispatch(userInfoActions.logOut());
         deleteTagOneSignal();
     },
-    handlerLogin: async (token: Record<string, string>) => {
-        store.dispatch(userInfoActions.updateToken(token));
+    handlerLogin: async (tokenData: Record<string, string>) => {
+        store.dispatch(userInfoActions.updateToken(tokenData));
     },
 };
 const getOrderData = async (token: any) => {

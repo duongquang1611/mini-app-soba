@@ -25,14 +25,16 @@ const DEFAULT_FORM: any = __DEV__
           //   email: 'tuyet08@gmail.com',
           //   password: 'abc12345',
 
-          email: 'tuyet.nguyen@amela.vn',
-          password: 'abc12345',
+          //   email: 'tuyet.nguyen@amela.vn',
+          //   password: 'abc12345',
 
           //   email: 'tuyet10@gmail.com',
           //   password: 'abc12345',
 
           //   email: 'tester4@gmail.com',
           //   password: 'abc12345',
+          email: 'amela1@gmail.com',
+          password: 'abc12345',
 
           //   email: 'amela02@gmail.com',
           //   password: 'abc12345',
