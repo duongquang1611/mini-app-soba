@@ -124,7 +124,7 @@ const HomeScreen: FunctionComponent = () => {
             const { totalUnread } = res?.data;
             store.dispatch(updateNotificationUnRead(totalUnread));
         } catch (error) {
-            console.log('file: HomeScreen.tsx -> line 130 -> notification -> error', error);
+            console.log('getNotification -> error', error);
         }
     };
     const getNewsData = async () => {

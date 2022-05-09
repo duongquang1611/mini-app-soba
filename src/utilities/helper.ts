@@ -609,9 +609,11 @@ export const getStringCoupon = (coupons: any) => {
 };
 export const formatUTC = (dateInt: any) => {
     const date = new Date(dateInt);
-    const offset = -date.getTimezoneOffset();
-    date.setHours(Math.floor(offset / 60));
-    date.setMinutes(offset % 60);
+    // const offset = -date.getTimezoneOffset();
+    // date.setHours(Math.floor(offset / 60));
+    // date.setMinutes(offset % 60);
+    date.setHours(0);
+    date.setMinutes(0);
     date.setSeconds(0);
     date.setMilliseconds(0);
     return date.toISOString();

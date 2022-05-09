@@ -24,7 +24,7 @@ import UpLoadAvatar from './components/UpLoadAvatar';
 
 const REGISTER_DEFAULT_FORM = __DEV__
     ? {
-          email: 'yeuquaimo@love.you',
+          email: 'yeuquaimo1001@love.you',
           password: 'loveyou3000',
           confirmPassword: 'loveyou3000',
           fullName: 'DuongQuang',
@@ -33,7 +33,7 @@ const REGISTER_DEFAULT_FORM = __DEV__
       }
     : {};
 
-const RegisTerScreen = () => {
+const RegisterScreen = () => {
     const [rule, setRule] = useState(__DEV__);
     const passwordRef = useRef<any>(null);
     const passwordConfirmRef = useRef<any>(null);
@@ -228,7 +228,7 @@ const RegisTerScreen = () => {
     );
 };
 
-export default RegisTerScreen;
+export default RegisterScreen;
 
 const styles = ScaledSheet.create({
     container: {
