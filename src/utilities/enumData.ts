@@ -1,8 +1,3 @@
-export enum CouponStatus {
-    AVAILABLE = 1,
-    OUTDATE = 0,
-}
-
 // item.stamp.cardType
 export enum StampCardType {
     EXCHANGE = 1,
@@ -27,10 +22,23 @@ export enum StampSettingBox {
     NO_LIMIT = 2,
 }
 
+// item.coupon.status
+export enum CouponStatus {
+    AVAILABLE = 1,
+    OUTDATE = 2,
+    ADD_TO_STAMP = 3,
+    ADD_TO_NOTI = 4,
+    PUBLISHED = 5,
+    BLOCK = 6,
+}
+
 // item.stamp.status
 export enum StampStatus {
     AVAILABLE = 1,
-    OUTDATE = 0,
+    OUTDATE = 2,
+    ADD_TO_NOTI = 3,
+    PUBLISHED = 4,
+    BLOCK = 5,
 }
 
 // coupon receive from notification or stamp: item.type

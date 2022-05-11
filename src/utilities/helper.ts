@@ -631,3 +631,9 @@ export const diffTime = (startDate: Date, endDate: Date) => {
 export const checkValidRank = (levelRank: any) => {
     return !!(levelRank && typeof levelRank === 'string' && levelRank?.trim?.()?.length > 0);
 };
+
+export const getConfig = (key: string, parseJSON = false) => {
+    const { configs = [] } = store.getState()?.resource?.data;
+    const dataConfig = configs.find((item: any) => item.key === key) || {};
+    return parseJSON && dataConfig?.value ? JSON.parse(dataConfig?.value) : dataConfig?.value;
+};

@@ -805,3 +805,9 @@ export const listScreenBackWhenPayment = [
 ];
 
 export const tickTypeText = ['', '自動付与スタンプカード', '選択付与スタンプカード'];
+
+export const CONFIG_KEYS = {
+    WEB_PAGE: 'WEB_PAGE',
+    NEWS_DISPLAY: 'NEWS_DISPLAY',
+    POLICY: 'POLICY',
+};

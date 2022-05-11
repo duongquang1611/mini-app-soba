@@ -11,10 +11,11 @@ import StampTypeView from 'feature/stamp/components/StampTypeView';
 import { COUPON_ROUTE, STAMP_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Linking, RefreshControl, ScrollView, View } from 'react-native';
+import { RefreshControl, ScrollView, View } from 'react-native';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { StampCardType, StampSettingDuration } from 'utilities/enumData';
 import { formatDate } from 'utilities/format';
+import { openURL } from 'utilities/helper';
 import { DateType } from 'utilities/staticData';
 
 const CouponItemNotification = (props: any) => {
@@ -153,7 +154,7 @@ const NotificationDetailScreen = (props: any) => {
                         <StyledText originValue={content} isBlack customStyle={styles.normalText} />
                         {link && (
                             <StyledText
-                                onPress={() => Linking.openURL(link)}
+                                onPress={() => openURL(link)}
                                 originValue={link}
                                 isBlack
                                 customStyle={styles.linkText}

@@ -211,7 +211,7 @@ const OrderQrCodeScreen = (props: any) => {
         });
     };
 
-    const showModal = () => {
+    const handlePressGuide = () => {
         modalize.show(
             MODAL_ID.ORDER_GUIDE,
             <ModalGuideMenu />,
@@ -249,7 +249,7 @@ const OrderQrCodeScreen = (props: any) => {
                 <StyledHeader
                     title={titleOrder(orderType, 'mobileOrder.title')}
                     iconRight={Images.icons.question}
-                    onPressRight={showModal}
+                    onPressRight={handlePressGuide}
                     onPressBack={handleBack}
                 />
             )}
