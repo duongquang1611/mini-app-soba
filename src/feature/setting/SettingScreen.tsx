@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { getRankList } from 'api/modules/api-app/setting';
 import { RootState } from 'app-redux/hooks';
 import Images from 'assets/images';
@@ -16,12 +15,19 @@ import { getDataProfile } from 'hooks/useNetwork';
 import { AUTHENTICATE_ROUTE, ORDER_ROUTE, SETTING_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useEffect, useMemo, useState } from 'react';
-import { Linking, RefreshControl, StyleProp, View, ViewStyle } from 'react-native';
+import { RefreshControl, View } from 'react-native';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
 import AuthenticateService from 'utilities/authenticate/AuthenticateService';
-import { checkValidRank, generateOrderQR, getInformationSetting, numberWithCommas } from 'utilities/helper';
-import { defaultRankColor, listButton, OrderTypeMenu, statusUser } from 'utilities/staticData';
+import {
+    checkValidRank,
+    generateOrderQR,
+    getConfig,
+    getInformationSetting,
+    numberWithCommas,
+    openURL,
+} from 'utilities/helper';
+import { CONFIG_KEYS, defaultRankColor, listButton, OrderTypeMenu, statusUser } from 'utilities/staticData';
 import UserStatus from './components/UserStatus';
 
 const InfoItem = (data: any) => {
@@ -40,10 +46,9 @@ const InfoItem = (data: any) => {
 };
 const SettingScreen = () => {
     const modalize = ModalizeManager();
-    const { order, userInfo, resource } = useSelector((state: RootState) => state);
+    const { order, userInfo } = useSelector((state: RootState) => state);
     const [rankList, setRankList] = useState([]);
-    const { configs = [] } = resource?.data;
-    const policy = configs?.[2] || {};
+    const policyUrl = getConfig(CONFIG_KEYS.POLICY);
     const { user } = userInfo;
     const [contentWidth, setContentWidth] = useState(0);
     const { money = 0, levelRank, fullName = '' } = user?.member || {};
@@ -133,7 +138,7 @@ const SettingScreen = () => {
                 goToContact();
                 break;
             case 'policy':
-                Linking.openURL(policy?.value);
+                openURL(policyUrl);
                 break;
             case 'logOut':
                 logout();

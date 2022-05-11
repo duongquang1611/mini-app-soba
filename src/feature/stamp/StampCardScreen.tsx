@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { RootState } from 'app-redux/hooks';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
@@ -7,10 +6,9 @@ import { StyledButton } from 'components/base';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledHeader from 'components/common/StyledHeader';
 import StyledTabTopView from 'components/common/StyledTabTopView';
-import React, { memo, useMemo, useRef, useState } from 'react';
+import React, { memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
-import { Modalize } from 'react-native-modalize';
 import { ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { SceneMap } from 'react-native-tab-view';
 import { useSelector } from 'react-redux';
@@ -23,7 +21,6 @@ const StampCardScreen = () => {
     const { t } = useTranslation();
     const modalize = ModalizeManager();
     const { chooseTickStampIds = {} } = useSelector((state: RootState) => state.globalData);
-    const modalizeRef = useRef<Modalize>(null);
     const userTicked = useMemo(() => {
         const lengthTicked = Object.values(chooseTickStampIds).filter((item: any) => Boolean(item))?.length;
         return lengthTicked || 0;
@@ -49,7 +46,7 @@ const StampCardScreen = () => {
                 },
                 snapPoint: verticalScale(487),
                 modalHeight: Metrics.screenHeight * staticValue.PERCENT_HEIGHT_POPUP,
-                FloatingComponent: () => (
+                FloatingComponent: (
                     <StyledButton
                         title={'common.yes'}
                         customStyle={styles.footerButtonChooseStamp}

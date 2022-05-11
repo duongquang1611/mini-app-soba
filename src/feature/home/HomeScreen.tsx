@@ -8,7 +8,7 @@ import { store } from 'app-redux/store';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
-import { StyledIcon, StyledImage, StyledText } from 'components/base';
+import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import { StyledImageBackground } from 'components/base/StyledImage';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
@@ -20,15 +20,29 @@ import { APP_ROUTE, HOME_ROUTE, STAMP_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { FunctionComponent, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Linking, RefreshControl, View } from 'react-native';
+import { RefreshControl, View } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { SceneMap } from 'react-native-tab-view';
 import { useSelector } from 'react-redux';
 import { QR_TAB_TYPE } from 'utilities/enumData';
-import { generateCheckInQR, generateNewOrder, generateOrderQR, getIndexTab } from 'utilities/helper';
+import {
+    generateCheckInQR,
+    generateNewOrder,
+    generateOrderQR,
+    getConfig,
+    getIndexTab,
+    openURL,
+} from 'utilities/helper';
 import { useOnesignal } from 'utilities/notification';
-import { CouponStoreKeyByStatus, MODAL_ID, OrderType, staticValue, TabCouponStatus } from 'utilities/staticData';
+import {
+    CONFIG_KEYS,
+    CouponStoreKeyByStatus,
+    MODAL_ID,
+    OrderType,
+    staticValue,
+    TabCouponStatus,
+} from 'utilities/staticData';
 import ListNewsItem from './components/ListNewsItem';
 import ModalGuideCheckIn from './components/ModalGuideCheckIn';
 import ShowQrTab from './components/ShowQrTab';
@@ -37,7 +51,7 @@ const netWorkItem = (data: any) => {
     const { index, item } = data;
     return (
         <TouchableOpacity
-            onPress={() => Linking.openURL(item?.link)}
+            onPress={() => openURL(item?.link)}
             style={[styles.netWorkView, { marginLeft: index === 0 ? scale(20) : 0 }]}
         >
             <StyledIcon resizeMode={'cover'} source={{ uri: item?.image }} size={30} customStyle={styles.iconNetwork} />
@@ -86,9 +100,9 @@ const HomeScreen: FunctionComponent = () => {
     useOnesignal();
     const { t } = useTranslation();
     const { order, userInfo, globalData, resource } = useSelector((state: RootState) => state);
-    const { banners = [], sns = [], configs = [] } = resource?.data;
-    const storeSearch = configs?.[0] || {};
-    const newsDisplay = configs?.[1] || {};
+    const { banners = [], sns = [] } = resource?.data;
+    const storeUrl = getConfig(CONFIG_KEYS.WEB_PAGE);
+    const newsDisplay = Number(getConfig(CONFIG_KEYS.NEWS_DISPLAY));
     const { user } = userInfo;
     const { notificationUnRead } = globalData;
     const { mobileOrder, defaultOrderLocal } = order;
@@ -117,7 +131,7 @@ const HomeScreen: FunctionComponent = () => {
     }, []);
     useEffect(() => {
         getNewsData();
-    }, [newsDisplay?.value]);
+    }, [newsDisplay]);
     const getNotification = async () => {
         try {
             const res = await getNotificationList({ params: { take: 1, pageIndex: 1 } });
@@ -129,7 +143,7 @@ const HomeScreen: FunctionComponent = () => {
     };
     const getNewsData = async () => {
         try {
-            const res = await getNewsList({ params: { take: newsDisplay?.value || 5, pageIndex: 1 } });
+            const res = await getNewsList({ params: { take: newsDisplay || 5, pageIndex: 1 } });
             setListNews(res?.data);
         } catch (error) {
             console.log('file: HomeScreen.tsx -> line 100 -> getNotification -> error', error);
@@ -212,13 +226,10 @@ const HomeScreen: FunctionComponent = () => {
                         <View style={styles.logoView}>
                             <StyledIcon source={Images.icons.rectangle} size={85} customStyle={styles.icRectangle} />
                             <StyledImage source={Images.photo.logo} customStyle={styles.logoIcon} />
-                            <TouchableOpacity
-                                onPress={() => Linking.openURL(storeSearch?.value)}
-                                style={styles.buttonMobile}
-                            >
+                            <StyledTouchable onPress={() => openURL(storeUrl)} customStyle={styles.buttonMobile}>
                                 <StyledText i18nText={'home.storeSearch'} customStyle={styles.textPrimary} />
                                 <StyledIcon source={Images.icons.arrow_left} size={20} />
-                            </TouchableOpacity>
+                            </StyledTouchable>
                         </View>
                         <FlatList
                             horizontal

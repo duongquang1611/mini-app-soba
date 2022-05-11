@@ -262,6 +262,7 @@ export default {
         noData: '現在、スタンプカードがありません',
         remain: '残数',
         tickSuccess: 'スタンプを貯まりました',
+        textBlock: '無効',
     },
     chooseStamp: {
         earnStamp: '貯まるスタンプを選択',
@@ -324,6 +325,7 @@ export default {
         btnUnUse: '選択している',
         btnInCart: 'カート追加した',
         btnExpired: '有効期限切れ',
+        btnBlock: '無効',
         noExpiredDate: '有効期間 : 無制限',
         detail: {
             id: 'クーポンＩＤ：{{id}}',

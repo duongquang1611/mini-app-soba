@@ -1,43 +1,46 @@
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
-import { StyledText, StyledImage } from 'components/base';
+import { StyledImage, StyledText } from 'components/base';
 import TextUnderline from 'components/common/TextUnderline';
 import React from 'react';
-import { Linking, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { scale, ScaledSheet } from 'react-native-size-matters';
-import { isIos } from 'utilities/helper';
-import { stepGuide } from 'utilities/staticData';
+import { getConfig, isIos, openURL } from 'utilities/helper';
+import { CONFIG_KEYS, stepGuide } from 'utilities/staticData';
 
-const StepItem = (item: any) => (
-    <View style={item?.largeView ? [styles.rowStep, { height: scale(140) }] : styles.rowStep}>
-        <View style={styles.numberView}>
-            <StyledText originValue={item?.item?.index} customStyle={styles.numberValue} />
-        </View>
-        <StyledImage source={item?.item?.icon} customStyle={styles.icStep} />
-        <View style={styles.containView}>
-            <Text style={[styles.title, styles.textGuide]}>
-                {item?.item?.name}
-                <Text style={[styles.contentName, styles.textGuide]}>{item?.item?.contentName}</Text>
-            </Text>
-            <StyledText originValue={item?.item?.content} isBlack customStyle={styles.textGuide} />
-            <View>
-                <TextUnderline
-                    onPress={() => Linking.openURL(item?.item?.link)}
-                    title={item?.item?.textLink}
-                    color={Themes.COLORS.primary}
-                />
+const StepItem = (props: any) => {
+    return (
+        <View style={props?.largeView ? [styles.rowStep, { height: scale(140) }] : styles.rowStep}>
+            <View style={styles.numberView}>
+                <StyledText originValue={props?.item?.index} customStyle={styles.numberValue} />
+            </View>
+            <StyledImage source={props?.item?.icon} customStyle={styles.icStep} />
+            <View style={styles.containView}>
+                <Text style={[styles.title, styles.textGuide]}>
+                    {props?.item?.name}
+                    <Text style={[styles.contentName, styles.textGuide]}>{props?.item?.contentName}</Text>
+                </Text>
+                <StyledText originValue={props?.item?.content} isBlack customStyle={styles.textGuide} />
+                <View>
+                    <TextUnderline
+                        onPress={() => openURL(props?.storeUrl)}
+                        title={props?.item?.textLink}
+                        color={Themes.COLORS.primary}
+                    />
+                </View>
             </View>
         </View>
-    </View>
-);
+    );
+};
 const ModalGuideMenu = () => {
+    const storeUrl = getConfig(CONFIG_KEYS.WEB_PAGE);
     return (
         <View>
             <StyledImage source={Images.photo.line} customStyle={styles.line1} />
             <StyledImage source={Images.photo.line} customStyle={styles.line2} />
             <View>
                 {stepGuide.map((item, index) => (
-                    <StepItem key={item.name} item={item} largeView={isIos && index === 2} />
+                    <StepItem key={item.name} item={item} largeView={isIos && index === 2} storeUrl={storeUrl} />
                 ))}
             </View>
         </View>
@@ -107,6 +110,6 @@ const styles = ScaledSheet.create({
         backgroundColor: Themes.COLORS.primary,
     },
     textGuide: {
-        lineHeight: scale(24),
+        lineHeight: '24@s',
     },
 });

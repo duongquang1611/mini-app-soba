@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { saveOrderOption } from 'api/modules/api-app/order';
 import { RootState } from 'app-redux/hooks';
 import { updateCartOrder, updateMobileOrder } from 'app-redux/slices/orderSlice';
@@ -16,11 +15,11 @@ import OrderItemCart from 'feature/order/components/OrderItemCart';
 import { HOME_ROUTE, TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useEffect, useMemo, useState } from 'react';
-import { Clipboard, Linking, Text, TouchableOpacity, View } from 'react-native';
+import { Clipboard, Text, TouchableOpacity, View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
-import { generateDataSaveOrderOption, generateOrderQR, isIos } from 'utilities/helper';
+import { generateDataSaveOrderOption, generateOrderQR, isIos, openURL } from 'utilities/helper';
 import { DiscountType, MODAL_ID, orderGuide, OrderTypeMenu, POPUP_TYPE, staticValue } from 'utilities/staticData';
 
 const ItemCoupon = (props: any) => {
@@ -86,6 +85,7 @@ const ItemCoupon = (props: any) => {
         </View>
     );
 };
+
 const ModalGuide = () => (
     <View>
         <StyledText originValue={orderGuide?.content} isBlack customStyle={styles.contentGuide} />
@@ -101,6 +101,7 @@ const ModalGuide = () => (
         </View>
     </View>
 );
+
 const StepItem = (item: any) => (
     <View style={styles.rowStep}>
         <View style={styles.numberView}>
@@ -111,7 +112,7 @@ const StepItem = (item: any) => (
             <Text style={styles.textGuide}>
                 {item?.item?.content}
                 <TextUnderline
-                    onPress={() => Linking.openURL(item?.item?.link)}
+                    onPress={() => openURL(item?.item?.link)}
                     title={item?.item?.textLink}
                     color={Themes.COLORS.primary}
                     customStyleText={styles.textLink}
