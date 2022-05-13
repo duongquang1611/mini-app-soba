@@ -43,6 +43,12 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>プロフィール画像を更新するにはアプリにカメラへのアクセスを許可する必要があります。</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>アプリに位置情報へのアクセスを許可する必要があります。</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>アプリに位置情報へのアクセスを許可する必要があります。</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>アプリに位置情報へのアクセスを許可する必要があります。</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>プロフィール画像を更新するにはアプリに写真へのアクセスを許可する必要があります。</string>
 	<key>NSPhotoLibraryUsageDescription</key>
