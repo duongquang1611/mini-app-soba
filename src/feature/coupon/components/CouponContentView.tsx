@@ -54,6 +54,7 @@ const CouponContentView = (props: IProps) => {
         discount,
         stringId = '',
     } = coupon || {};
+    const isBlock = Boolean(coupon?.isBlock);
 
     return (
         <WrapComponent customStyle={[styles.container, customStyle]} isModal={isModal}>
@@ -77,17 +78,17 @@ const CouponContentView = (props: IProps) => {
                         <PointExchangeView stampAmount={initDetailNavigate?.stampAmount} bigSize />
                     </View>
                     <StyledImageBackground style={styles.img} source={{ uri: image }}>
-                        {!canUse && (
+                        {(isBlock || !canUse) && (
                             <View style={styles.transparent}>
-                                {usedDate ? (
-                                    <StyledImage source={Images.photo.used} customStyle={styles.labelImage} />
-                                ) : (
+                                {!usedDate || isBlock ? (
                                     <View style={styles.wrapTextImgExpired}>
                                         <StyledText
-                                            i18nText={'coupon.detail.expired'}
+                                            i18nText={isBlock ? 'coupon.btnBlock' : 'coupon.detail.expired'}
                                             customStyle={styles.textImgExpired}
                                         />
                                     </View>
+                                ) : (
+                                    <StyledImage source={Images.photo.used} customStyle={styles.labelImage} />
                                 )}
                             </View>
                         )}
