@@ -22,7 +22,7 @@ const StampTickList = ({
     fromNotify = false,
 }: any) => {
     const { leftAmount, stamp = {} } = stampDetail || {};
-    const { stampTicks = [], settingDuration, endDate } = stamp;
+    const { stampTicks = [], settingDuration, endDate, isBlock } = stamp;
     const isExchange = useMemo(() => stamp.cardType === StampCardType.EXCHANGE, [stamp.cardType]);
     const isNoExpired = useMemo(() => settingDuration === StampSettingDuration.NO_EXPIRED_DATE, [settingDuration]);
     const isExpired = useMemo(() => {
@@ -60,7 +60,7 @@ const StampTickList = ({
                 />
             </View>
             <DashView customStyle={styles.dashView} />
-            {isExchange && !fromNotify && (
+            {isExchange && !fromNotify && !isBlock && (
                 <StyledButton
                     title={'stampDetail.couponExchangeBtn'}
                     customStyle={styles.btnExchange}

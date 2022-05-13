@@ -6,7 +6,7 @@ import React, { useMemo } from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { ScaledSheet } from 'react-native-size-matters';
-import { StampCardType, StampSettingDuration, StampStatus } from 'utilities/enumData';
+import { StampCardType, StampSettingDuration } from 'utilities/enumData';
 import { formatDate } from 'utilities/format';
 import { checkExpired } from 'utilities/helper';
 import { staticValue } from 'utilities/staticData';
@@ -31,7 +31,7 @@ const StampItem = (props: IProps) => {
         isBottomTab = false,
     } = props;
     const { stamp = {}, leftAmount = 0, totalAmount = 0 } = itemMemberStamp;
-    const { image, title, startDate, cardType, settingDuration, endDate, status: currentStampStatus } = stamp;
+    const { image, title, startDate, cardType, settingDuration, endDate } = stamp;
     const titleProps = useMemo(() => (isBottomTab ? { numberOfLines: 1 } : {}), [isBottomTab]);
     // cardType: StampCardType
     const isExchange = useMemo(() => cardType === StampCardType.EXCHANGE, [cardType]);
@@ -39,7 +39,7 @@ const StampItem = (props: IProps) => {
     const isExpired = useMemo(() => {
         return isNoExpired ? false : checkExpired(endDate);
     }, [endDate, isNoExpired]);
-    const isStampBlocked = currentStampStatus === StampStatus.BLOCK;
+    const isBlock = Boolean(stamp?.isBlock);
 
     return (
         <Animatable.View style={containerStyle} animation={animation ? staticValue.ANIMATION_ITEM : ''} useNativeDriver>
@@ -47,7 +47,7 @@ const StampItem = (props: IProps) => {
                 <StyledImageBackground source={{ uri: image }} style={styles.imgStamp} resizeMode={'cover'}>
                     {!!isExpired &&
                         !isBottomTab &&
-                        (isStampBlocked ? null : (
+                        (isBlock ? null : (
                             <View style={styles.expiredImage}>
                                 <StyledIcon size={60} source={Images.icons.stampUsedDetail} />
                             </View>
@@ -77,15 +77,13 @@ const StampItem = (props: IProps) => {
                                 customStyle={styles.textCount}
                             />
                         </View>
-                        {isStampBlocked && (
-                            <StyledText i18nText={'stamp.textBlock'} customStyle={styles.textBlock} disabled />
-                        )}
+                        {isBlock && <StyledText i18nText={'stamp.textBlock'} customStyle={styles.textBlock} disabled />}
                     </View>
                 </View>
                 <StampTypeView isExchange={isExchange} />
                 {!!isExpired &&
                     isBottomTab &&
-                    (isStampBlocked ? null : (
+                    (isBlock ? null : (
                         <StyledIcon source={Images.icons.stampUsed} size={90} customStyle={styles.stampUsed} />
                     ))}
             </StyledTouchable>

@@ -29,14 +29,14 @@ export const CouponItem = (props: any) => {
     } = props || {};
     const { coupon, usedDate, status, id: idMemberCoupon, receivedDate, stampAmount = 0 } = item;
 
-    const { image, title, startDate, endDate, dateType, status: currentCouponStatus } = coupon || {};
-    console.log('CouponItem -> couponStatus', currentCouponStatus);
+    const { image, title, startDate, endDate, dateType } = coupon || {};
     // const isInCartAPI = useMemo(() => status === MemberCouponStatus.IN_CART, [status]);
     const checkChooseTemp = cartOrderState?.coupons?.find((itemCoupon: any) => itemCoupon?.id === idMemberCoupon);
     const checkChooseInCart = (order || cartOrder)?.coupons?.find(
         (itemCoupon: any) => itemCoupon?.id === idMemberCoupon && itemCoupon?.receivedDate === receivedDate,
     );
     const disabledUse = checkChooseInCart;
+    const isBlock = Boolean(coupon?.isBlock);
 
     const handleGoToDetail = () => {
         goToDetail?.(item);
@@ -79,12 +79,10 @@ export const CouponItem = (props: any) => {
                         />
                         <StyledIcon source={getIcon()} size={20} />
                     </StyledTouchable>
-                ) : currentCouponStatus === CouponStatus.BLOCK || !usedDate ? (
+                ) : isBlock || !usedDate ? (
                     <View style={styles.btnCanUSe}>
                         <StyledText
-                            i18nText={
-                                currentCouponStatus === CouponStatus.BLOCK ? 'coupon.btnBlock' : 'coupon.btnExpired'
-                            }
+                            i18nText={isBlock ? 'coupon.btnBlock' : 'coupon.btnExpired'}
                             customStyle={styles.textDisable}
                             disabled={true}
                         />
