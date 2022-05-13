@@ -72,12 +72,12 @@ const ContactScreen = () => {
                         <StyledInputForm
                             label={'setting.content'}
                             name={'description'}
-                            returnKeyType={'done'}
+                            returnKeyType={'next'}
                             ref={contentRef}
                             placeholder={t('setting.content')}
                             keyboardType="email-address"
-                            onSubmitEditing={Keyboard.dismiss}
                             customStyle={styles.contentInput}
+                            textAlignVertical={'top'}
                             multiline
                         />
                     </FormProvider>
@@ -120,11 +120,13 @@ const styles = ScaledSheet.create({
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
         borderRadius: 5,
+        paddingTop: '10@vs',
     },
     contentScrollView: {
         paddingBottom: '40@vs',
     },
     scrollView: {
         flex: 1,
+        backgroundColor: Themes.COLORS.white,
     },
 });
