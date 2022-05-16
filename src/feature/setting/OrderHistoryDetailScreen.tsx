@@ -1,4 +1,3 @@
-import { sendTeams } from 'api/modules/api-app/general';
 import { getDetailHistoryDetail } from 'api/modules/api-app/order';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
@@ -96,7 +95,6 @@ const OrderHistoryDetailScreen = (props: any) => {
     const getDetailHistory = async () => {
         try {
             const res = await getDetailHistoryDetail(id);
-            sendTeams(JSON.stringify(res.data), 'DetailHistoryOrder');
             setHistoryDetail(res?.data);
         } catch (error) {
             AlertMessage(error);

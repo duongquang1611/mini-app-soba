@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { yupResolver } from '@hookform/resolvers/yup';
 import { contact } from 'api/modules/api-app/setting';
 import { Themes } from 'assets/themes';
@@ -9,7 +8,6 @@ import StyledHeader from 'components/common/StyledHeader';
 import { goBack } from 'navigation/NavigationService';
 import React, { useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 import { Keyboard, View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import { POPUP_TYPE } from 'utilities/staticData';
@@ -31,7 +29,6 @@ const ContactScreen = () => {
         handleSubmit,
     } = form;
     const contentRef = useRef<any>(null);
-    const { t } = useTranslation();
 
     const sendContact = async (formData: any) => {
         Keyboard.dismiss();
@@ -63,8 +60,7 @@ const ContactScreen = () => {
                         <StyledInputForm
                             label={'setting.position'}
                             name={'title'}
-                            placeholder={t('setting.position')}
-                            keyboardType="email-address"
+                            customPlaceHolder={'setting.position'}
                             returnKeyType={'next'}
                             maxLength={CONTACT_MAX_LENGTH}
                             onSubmitEditing={() => contentRef.current.focus()}
@@ -74,8 +70,7 @@ const ContactScreen = () => {
                             name={'description'}
                             returnKeyType={'next'}
                             ref={contentRef}
-                            placeholder={t('setting.content')}
-                            keyboardType="email-address"
+                            customPlaceHolder={'setting.content'}
                             customStyle={styles.contentInput}
                             textAlignVertical={'top'}
                             multiline

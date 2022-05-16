@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useNavigation } from '@react-navigation/native';
 import { getProfile } from 'api/modules/api-app/authenticate';
 import { sendTeams } from 'api/modules/api-app/general';
@@ -98,7 +99,7 @@ const onReceived = async (data: NotificationReceivedEvent) => {
     const notify = data.getNotification();
     setTimeout(() => data.complete(notify), 0); // must need to show notify in tab bar
     const { coupons = [], type, orderId = '', category } = data?.notification?.additionalData || {};
-    sendTeams(JSON.stringify(data?.notification), 'Notification');
+    // sendTeams(JSON.stringify(data?.notification), 'Notification');
     const { order } = store.getState();
     const { defaultOrder, defaultOrderLocal, mobileOrder, cartOrder } = order;
     store.dispatch(updateCartOrder(deleteUsedCoupon(cartOrder, coupons)));
