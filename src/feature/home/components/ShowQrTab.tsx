@@ -7,7 +7,7 @@ import { TouchableOpacity, View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { QR_TAB_TYPE } from 'utilities/enumData';
-import { showActionQR } from 'utilities/helper';
+import { isAmela, showActionQR } from 'utilities/helper';
 import { QR_TAB_DATA, staticValue } from 'utilities/staticData';
 
 const ShowQrTab = (props: any) => {
@@ -32,6 +32,14 @@ const ShowQrTab = (props: any) => {
         }
     };
 
+    const handleLongPress = () => {
+        if (!isAmela()) return;
+
+        type === QR_TAB_TYPE.CHECK_IN
+            ? showActionQR(qrValue, qrValue, 'QR Check In', 'QR Check In')
+            : showActionQR(qrValue, newOrder);
+    };
+
     return (
         <View style={[styles.containerQrTab, { backgroundColor: background || Themes.COLORS.primary }]}>
             {qrValue ? (
@@ -39,11 +47,7 @@ const ShowQrTab = (props: any) => {
                     {!!qrValue && (
                         <TouchableOpacity
                             activeOpacity={1}
-                            onLongPress={() => {
-                                type === QR_TAB_TYPE.CHECK_IN
-                                    ? showActionQR(qrValue, qrValue, 'QR Check In', 'QR Check In')
-                                    : showActionQR(qrValue, newOrder);
-                            }}
+                            onLongPress={handleLongPress}
                             delayLongPress={staticValue.DELAY_LONG_PRESS}
                         >
                             <QRCode

@@ -31,6 +31,7 @@ import {
     generateDataSaveOrderOption,
     generateNewOrder,
     generateOrderQR,
+    isAmela,
     isIos,
     showActionQR,
     titleOrder,
@@ -236,6 +237,11 @@ const OrderQrCodeScreen = (props: any) => {
 
     useBackHandler(handleBack);
 
+    const handleLongPress = () => {
+        if (!isAmela()) return;
+        showActionQR(orderQR, newOrderTest);
+    };
+
     return (
         <>
             {orderType === OrderTypeMenu.DEFAULT_ORDER ? (
@@ -260,9 +266,7 @@ const OrderQrCodeScreen = (props: any) => {
                             {!!orderQR && (
                                 <TouchableOpacity
                                     activeOpacity={1}
-                                    onLongPress={() => {
-                                        showActionQR(orderQR, newOrderTest);
-                                    }}
+                                    onLongPress={handleLongPress}
                                     delayLongPress={staticValue.DELAY_LONG_PRESS}
                                 >
                                     <QRCode value={orderQR} size={scale(staticValue.QR_SIZE)} />

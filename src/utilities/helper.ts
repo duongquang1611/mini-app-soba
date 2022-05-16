@@ -637,3 +637,8 @@ export const getConfig = (key: string, parseJSON = false) => {
     const dataConfig = configs.find((item: any) => item.key === key) || {};
     return parseJSON && dataConfig?.value ? JSON.parse(dataConfig?.value) : dataConfig?.value;
 };
+
+export const isAmela = () => {
+    const { user } = store.getState().userInfo;
+    return user?.member?.email?.includes('amela.vn');
+};
