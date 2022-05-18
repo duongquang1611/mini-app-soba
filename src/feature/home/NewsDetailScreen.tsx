@@ -13,8 +13,10 @@ import { logger } from 'utilities/helper';
 
 const NewsDetailScreen = (props: any) => {
     const { id } = props?.route?.params;
+    console.log({ id });
     const [news, setNews] = useState<any>({});
-    const { images, title, publishDate, description } = news;
+    console.log({ news });
+    const { images, title, publishDate, description } = news || {};
     const [refreshing, setRefreshing] = useState(false);
     useEffect(() => {
         getNews();
