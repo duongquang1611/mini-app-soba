@@ -138,9 +138,9 @@ const EditProfileScreen = () => {
                         ref={fullNameRef}
                         maxLength={USERNAME_MAX_LENGTH}
                         customPlaceHolder={'authen.hintRegister.fullName'}
-                        returnKeyType={'next'}
-                        onSubmitEditing={() => birthdayRef.current.focus()}
+                        returnKeyType={'done'}
                         containerStyle={styles.inputContainer}
+                        onSubmitEditing={Keyboard.dismiss}
                     />
                     <StyledInputForm
                         name={'birthday'}

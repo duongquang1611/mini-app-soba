@@ -163,22 +163,24 @@ const RegisterScreen = () => {
                         name={'confirmPassword'}
                         label={'authen.labelRegister.confirmPassword'}
                         customPlaceHolder={'authen.hintRegister.confirmPassword'}
-                        returnKeyType={'done'}
                         maxLength={PASSWORD_MAX_LENGTH}
                         isSecureTextEntry={true}
                         icYeyOff={Images.icons.eyeOff}
                         icYeyOn={Images.icons.eyeOn}
                         customStyle={styles.inputPassword}
                         customErrorMessage={checkPassword()}
+                        onSubmitEditing={() => fullNameRef.current.focus()}
                         containerStyle={styles.normalInputContainer}
                     />
                     <StyledInputForm
                         ref={fullNameRef}
                         name={'fullName'}
+                        returnKeyType={'done'}
                         customPlaceHolder={'authen.hintRegister.fullName'}
                         maxLength={USERNAME_MAX_LENGTH}
                         label={'authen.labelRegister.fullName'}
                         containerStyle={styles.normalInputContainer}
+                        onSubmitEditing={Keyboard.dismiss}
                     />
                     <StyledInputForm
                         name={'birthday'}
