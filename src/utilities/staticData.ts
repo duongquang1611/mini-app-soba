@@ -20,7 +20,7 @@ export const staticValue = {
         0: { opacity: 0, translateY: -100, scale: 0.2 },
         1: { opacity: 1, translateY: 0, scale: 1 },
     },
-    AWS_DOMAIN: 'https://aos-app-order-soba-8e35e74.s3.amazonaws.com/',
+    AWS_DOMAIN: 'https://soba-prod.s3.amazonaws.com/',
     ACTION_WHENS_SET_VALUE: {
         shouldValidate: true,
         shouldDirty: true,
