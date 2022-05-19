@@ -131,7 +131,7 @@ const StyledHeaderImage = (props: HeaderProps) => {
                     {isBack ? (
                         <View>
                             <StyledTouchable onPress={onBack} customStyle={styles.buttonBack}>
-                                <StyledIcon source={Images.icons.back} size={20} customStyle={styles.iconBack} />
+                                <StyledIcon source={Images.icons.back} size={24} customStyle={styles.iconBack} />
                             </StyledTouchable>
                         </View>
                     ) : (
