@@ -59,18 +59,6 @@ const netWorkItem = (data: any) => {
         </TouchableOpacity>
     );
 };
-const getColorTab = (key: number) => {
-    switch (key) {
-        case 0:
-            return Themes.COLORS.secondary;
-        case 1:
-            return Themes.COLORS.primary;
-        case 2:
-            return Themes.COLORS.qrCheckIn;
-        default:
-            return Themes.COLORS.secondary;
-    }
-};
 
 export const getCouponData = async (status?: TabCouponStatus) => {
     try {
@@ -373,9 +361,9 @@ const styles = ScaledSheet.create({
         height: '5@vs',
     },
     customTabStyle: {
-        borderLeftWidth: 0.2,
-        borderRightWidth: 0.2,
-        borderColor: 'white',
+        borderLeftWidth: 0.5,
+        borderRightWidth: 0.5,
+        borderColor: Themes.COLORS.white,
     },
 });
 
