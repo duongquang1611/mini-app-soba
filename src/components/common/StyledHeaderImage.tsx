@@ -74,80 +74,84 @@ const StyledHeaderImage = (props: HeaderProps) => {
     };
 
     return (
-        <View style={[styles.container, customStyle, isShadow && styles.shadow]}>
-            <View style={[styles.slide, { height: heightImage }]}>
-                {images?.length ? (
-                    <Carousel
-                        data={images}
-                        renderItem={renderItem}
-                        onSnapToItem={setIndex}
-                        sliderWidth={sliderWidth || Metrics.screenWidth}
-                        itemWidth={Metrics.screenWidth}
-                        loop={true}
-                        loopClonesPerSide={images.length}
-                        removeClippedSubviews={false}
-                        inactiveSlideOpacity={1}
-                        inactiveSlideScale={1}
-                    />
-                ) : (
-                    <StyledImage
-                        source={Images.photo.defaultImage}
-                        customStyle={styles.noDataImages}
-                        resizeMode={'cover'}
-                    />
-                )}
-                <View
-                    pointerEvents={'none'}
-                    style={[styles.containerDot, { bottom: content ? verticalScale(20) : verticalScale(-10) }]}
-                >
-                    <Pagination
-                        containerStyle={styles.containerPagination}
-                        dotsLength={images.length}
-                        activeDotIndex={index}
-                        inactiveDotStyle={{ width: scale(5), borderRadius: 5 }}
-                        dotStyle={[
-                            styles.wrapDot,
-                            {
-                                width:
+        <>
+            <View style={[styles.container, customStyle, isShadow && styles.shadow]}>
+                <View style={[styles.slide, { height: heightImage }]}>
+                    {images?.length ? (
+                        <Carousel
+                            data={images}
+                            renderItem={renderItem}
+                            onSnapToItem={setIndex}
+                            sliderWidth={sliderWidth || Metrics.screenWidth}
+                            itemWidth={Metrics.screenWidth}
+                            loop={true}
+                            loopClonesPerSide={images.length}
+                            removeClippedSubviews={false}
+                            inactiveSlideOpacity={1}
+                            inactiveSlideScale={1}
+                        />
+                    ) : (
+                        <StyledImage
+                            source={Images.photo.defaultImage}
+                            customStyle={styles.noDataImages}
+                            resizeMode={'cover'}
+                        />
+                    )}
+                    <View
+                        pointerEvents={'none'}
+                        style={[styles.containerDot, { bottom: content ? verticalScale(20) : verticalScale(-10) }]}
+                    >
+                        <Pagination
+                            containerStyle={styles.containerPagination}
+                            dotsLength={images.length}
+                            activeDotIndex={index}
+                            inactiveDotStyle={{ width: scale(5), borderRadius: 5 }}
+                            dotStyle={[
+                                styles.wrapDot,
+                                {
+                                    width:
+                                        images.length <= 6
+                                            ? scale(40)
+                                            : ((Metrics.screenWidth - scale(30)) / images.length) * 0.5,
+                                },
+                            ]}
+                            inactiveDotOpacity={1}
+                            inactiveDotScale={1}
+                            dotContainerStyle={{
+                                marginHorizontal:
                                     images.length <= 6
-                                        ? scale(40)
-                                        : ((Metrics.screenWidth - scale(30)) / images.length) * 0.5,
-                            },
-                        ]}
-                        inactiveDotOpacity={1}
-                        inactiveDotScale={1}
-                        dotContainerStyle={{
-                            marginHorizontal:
-                                images.length <= 6
-                                    ? scale(8)
-                                    : ((Metrics.screenWidth - scale(30)) / images.length) * 0.2,
-                        }}
-                    />
-                    {content && <StyledText originValue={content} customStyle={styles.contentText} />}
+                                        ? scale(8)
+                                        : ((Metrics.screenWidth - scale(30)) / images.length) * 0.2,
+                            }}
+                        />
+                    </View>
+                </View>
+                <View style={styles.viewHeader}>
+                    {logo && <StyledImage source={Images.photo.logoHeader} customStyle={styles.logo} />}
+                    {isBack ? (
+                        <View>
+                            <StyledTouchable onPress={onBack} customStyle={styles.buttonBack}>
+                                <StyledIcon source={Images.icons.back} size={20} customStyle={styles.iconBack} />
+                            </StyledTouchable>
+                        </View>
+                    ) : (
+                        <View style={styles.buttonBack} />
+                    )}
+                    <StyledText i18nText={title || ' '} customStyle={styles.title} numberOfLines={1} />
+                    {iconNoti ? (
+                        <StyledTouchable onPress={onPressNoti} customStyle={styles.buttonActionNoti}>
+                            <StyledIcon source={iconNoti} size={25} customStyle={styles.iconAction} />
+                            {notificationUnRead > 0 && <View style={styles.newNotification} />}
+                        </StyledTouchable>
+                    ) : (
+                        <View style={styles.buttonAction} />
+                    )}
                 </View>
             </View>
-            <View style={styles.viewHeader}>
-                {logo && <StyledImage source={Images.photo.logoHeader} customStyle={styles.logo} />}
-                {isBack ? (
-                    <View>
-                        <StyledTouchable onPress={onBack} customStyle={styles.buttonBack}>
-                            <StyledIcon source={Images.icons.back} size={20} customStyle={styles.iconBack} />
-                        </StyledTouchable>
-                    </View>
-                ) : (
-                    <View style={styles.buttonBack} />
-                )}
-                <StyledText i18nText={title || ' '} customStyle={styles.title} numberOfLines={1} />
-                {iconNoti ? (
-                    <StyledTouchable onPress={onPressNoti} customStyle={styles.buttonActionNoti}>
-                        <StyledIcon source={iconNoti} size={25} customStyle={styles.iconAction} />
-                        {notificationUnRead > 0 && <View style={styles.newNotification} />}
-                    </StyledTouchable>
-                ) : (
-                    <View style={styles.buttonAction} />
-                )}
+            <View style={styles.contentView}>
+                {content && <StyledText originValue={content} customStyle={styles.contentText} isBlack />}
             </View>
-        </View>
+        </>
     );
 };
 
@@ -227,17 +231,17 @@ const styles = ScaledSheet.create({
         height: '260@vs',
     },
     iconBack: {
-        tintColor: Themes.COLORS.headerBackground,
+        // tintColor: Themes.COLORS.black,
+    },
+    contentView: {
+        paddingTop: '15@vs',
+        paddingBottom: '5@vs',
+        backgroundColor: Themes.COLORS.lightGray,
     },
     contentText: {
-        bottom: '-5@vs',
-        marginTop: '-15@vs',
         marginLeft: '20@s',
-        color: Themes.COLORS.headerBackground,
         fontSize: '20@ms0.3',
-        zIndex: 20,
         fontWeight: 'bold',
-        maxWidth: '300@s',
     },
     logo: {
         width: '111@s',
