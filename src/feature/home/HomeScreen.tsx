@@ -117,7 +117,6 @@ const HomeScreen: FunctionComponent = () => {
         [defaultOrderLocal, user],
     );
     const checkInQR = useMemo(() => generateCheckInQR(user), [user]);
-    const [indexTab, setIndexTab] = useState(1);
     const [listNews, setListNews] = useState([]);
     const modalize = ModalizeManager();
     const [refreshing, setRefreshing] = useState(false);
@@ -242,13 +241,11 @@ const HomeScreen: FunctionComponent = () => {
                     </View>
                     <View style={styles.grayView} />
                     <StyledTabTopView
-                        setIndexTab={setIndexTab}
                         containerStyle={styles.tabContainerStyle}
                         routes={routes}
-                        customTabBar={{ backgroundColor: Themes.COLORS.white }}
+                        customTabStyle={styles.customTabStyle}
                         renderScene={renderScene}
                         isHome={true}
-                        customIndicatorStyle={{ backgroundColor: getColorTab(indexTab) }}
                         defaultIndex={tab}
                     />
                     <View style={styles.grayView} />
@@ -374,6 +371,11 @@ const styles = ScaledSheet.create({
     grayView: {
         backgroundColor: Themes.COLORS.lightGray,
         height: '5@vs',
+    },
+    customTabStyle: {
+        borderLeftWidth: 0.2,
+        borderRightWidth: 0.2,
+        borderColor: 'white',
     },
 });
 
