@@ -13,7 +13,7 @@ import { QR_TAB_DATA, staticValue } from 'utilities/staticData';
 const ShowQrTab = (props: any) => {
     const { type = QR_TAB_TYPE.ORDER_DEFAULT, qrValue, onPress, newOrder = '' } = props;
     const qrComponentData: any = QR_TAB_DATA[type];
-    const { background, textButton, content1, content2, navigateScreen, orderType, createButton } = qrComponentData;
+    const { textButton, content1, content2, navigateScreen, orderType, createButton } = qrComponentData;
 
     const handleQrPress = () => {
         if (qrValue) {
@@ -41,7 +41,7 @@ const ShowQrTab = (props: any) => {
     };
 
     return (
-        <View style={[styles.containerQrTab, { backgroundColor: background || Themes.COLORS.primary }]}>
+        <View style={[styles.containerQrTab]}>
             {qrValue ? (
                 <View style={[styles.qrCodeView]}>
                     {!!qrValue && (
@@ -50,12 +50,7 @@ const ShowQrTab = (props: any) => {
                             onLongPress={handleLongPress}
                             delayLongPress={staticValue.DELAY_LONG_PRESS}
                         >
-                            <QRCode
-                                value={qrValue}
-                                color={Themes.COLORS.headerBackground}
-                                size={scale(staticValue.QR_SIZE_HOME)}
-                                backgroundColor={Themes.COLORS.transparent}
-                            />
+                            <QRCode value={qrValue} size={scale(staticValue.QR_SIZE_HOME)} />
                         </TouchableOpacity>
                     )}
                     <StyledButton
@@ -90,7 +85,7 @@ const styles = ScaledSheet.create({
         paddingTop: '15@vs',
         height: verticalScale(90) + scale(staticValue.QR_SIZE_HOME),
         justifyContent: 'flex-end',
-        backgroundColor: 'purple',
+        backgroundColor: Themes.COLORS.white,
     },
     detailButton: {
         width: '160@s',
@@ -108,14 +103,14 @@ const styles = ScaledSheet.create({
     content1: {
         textAlign: 'center',
         marginBottom: '25@vs',
-        color: Themes.COLORS.headerBackground,
+        color: Themes.COLORS.mineShaft,
         fontSize: '12@ms0.3',
         lineHeight: '20@vs',
     },
     content2: {
         fontSize: '12@ms0.3',
         lineHeight: '20@vs',
-        color: Themes.COLORS.headerBackground,
+        color: Themes.COLORS.mineShaft,
         textAlign: 'center',
         marginBottom: '8@vs',
     },

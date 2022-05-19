@@ -20,6 +20,7 @@ interface IProps {
     setIndexTab?(index: number): void;
     customIndicatorStyle?: StyleProp<ViewStyle>;
     isHome?: boolean;
+    customTabStyle?: StyleProp<ViewStyle>;
 }
 
 const StyledTabTopView = (propsTab: IProps) => {
@@ -37,6 +38,7 @@ const StyledTabTopView = (propsTab: IProps) => {
         setIndexTab,
         customIndicatorStyle,
         isHome = false,
+        customTabStyle,
     } = propsTab;
     const [index, setIndex] = useState(defaultIndex || 0);
 
@@ -77,6 +79,7 @@ const StyledTabTopView = (propsTab: IProps) => {
                         style={[styles.tabBar, customTabBar]}
                         pressColor={'transparent'}
                         activeColor={activeColor || Themes.COLORS.primary}
+                        tabStyle={customTabStyle}
                         inactiveColor={inactiveColor || Themes.COLORS.white}
                         indicatorStyle={[styles.indicatorTabBar, customIndicatorStyle]}
                         contentContainerStyle={[styles.contentContainerTabBar, contentContainerStyle]}
