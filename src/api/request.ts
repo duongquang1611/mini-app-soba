@@ -10,7 +10,7 @@ import TokenProvider from 'utilities/authenticate/TokenProvider';
 import { logger } from 'utilities/helper';
 import i18next from 'utilities/i18next';
 import { apiLogger } from 'utilities/logger';
-import { apiLocal, ERRORS } from 'utilities/staticData';
+import { apiLocal, ERRORS, POPUP_TYPE } from 'utilities/staticData';
 
 const AUTH_URL_REFRESH_TOKEN = `${Config.API_URL}auth/request-access-token`;
 let hasAnyNetworkDialogShown = false;
@@ -108,6 +108,16 @@ request.interceptors.response.use(
             logger('RefreshToken_NotExist => logout');
             // Logout here
             AuthenticateService.logOut();
+            return rejectError(error, validNetwork, url);
+        }
+        if (errorKey === 'Member_Blocked') {
+            logger('Member_Blocked => logout');
+            AlertMessage(errorMessage, {
+                onOk: () => AuthenticateService.logOut(),
+                onCancel: () => AuthenticateService.logOut(),
+                onClosedModalize: () => AuthenticateService.logOut(),
+                type: POPUP_TYPE.ERROR,
+            });
             return rejectError(error, validNetwork, url);
         }
         if (
