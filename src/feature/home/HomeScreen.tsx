@@ -120,7 +120,7 @@ const HomeScreen: FunctionComponent = () => {
     useEffect(() => {
         getNewsData();
     }, [newsDisplay]);
-    useBackHandler(() => BackHandler.exitApp());
+    // useBackHandler(() => BackHandler.exitApp());
     const getNotification = async () => {
         try {
             const res = await getNotificationList({ params: { take: 1, pageIndex: 1 } });
