@@ -45,7 +45,8 @@
         "code-push-dev": "yarn code-push-android-develop && yarn code-push-ios-develop",
         "code-push-stg": "yarn code-push-android-staging && yarn code-push-ios-staging",
         "code-push-prod": "yarn code-push-android-production && yarn code-push-ios-production",
-        "code-push-dev-stg": "yarn code-push-dev && yarn code-push-stg"
+        "code-push-dev-stg": "yarn code-push-dev && yarn code-push-stg",
+        "code-push-all": "yarn code-push-prod && yarn code-push-dev && yarn code-push-stg"
     },
     "dependencies": {
         "@gorhom/animated-tabbar": "^2.1.2",

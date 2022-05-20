@@ -168,6 +168,17 @@ export const addQRCodeEOS = (qrData: any, convert = true, includeEOS = true) => 
 
 export const generateCheckInQR = (user: any, convert?: boolean, includeEOS?: boolean) => {
     const qrData = {
+        user: {
+            id: user?.member?.id,
+            name: user?.member?.fullName,
+        },
+    };
+
+    return addQRCodeEOS(qrData, convert, includeEOS);
+};
+
+export const generateUserDataQR = (user: any, convert?: boolean, includeEOS?: boolean) => {
+    const qrData = {
         id: user?.member?.id,
         name: user?.member?.fullName,
     };
@@ -188,16 +199,18 @@ export const generateCouponQR = (memberCoupon: any, user?: any, convert?: boolea
             id: coupon?.stringId,
             isFullOrder,
             isFree,
-            price,
             isAccounted,
             publishDatetime: memberCoupon?.receivedDate,
         },
     };
 
+    if (!isFree) {
+        qrData.price = price;
+    }
     if (!isFullOrder) {
         qrData.coupon.foodId = `${choose?.dish?.stringId}`;
     }
-    if (user) qrData.user = generateCheckInQR(user, false);
+    if (user) qrData.user = generateUserDataQR(user, false);
 
     return addQRCodeEOS(qrData, convert, includeEOS);
 };
@@ -247,7 +260,7 @@ export const generateOrderQR = (
         coupons: couponsFormatted,
         isDefaultOrder: Number(orderType === OrderType.DEFAULT_SETTING || orderType === OrderType.DEFAULT_HOME),
     };
-    if (user) qrData.user = generateCheckInQR(user, false);
+    if (user) qrData.user = generateUserDataQR(user, false);
 
     return addQRCodeEOS(qrData, convert, includeEOS);
 };
