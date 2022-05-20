@@ -203,8 +203,7 @@ export const generateCouponQR = (memberCoupon: any, user?: any, convert?: boolea
             publishDatetime: memberCoupon?.receivedDate,
         },
     };
-
-    if (!isFree) {
+    if (price) {
         qrData.price = price;
     }
     if (!isFullOrder) {
