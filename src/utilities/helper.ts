@@ -203,8 +203,8 @@ export const generateCouponQR = (memberCoupon: any, user?: any, convert?: boolea
             publishDatetime: memberCoupon?.receivedDate,
         },
     };
-    if (price) {
-        qrData.price = price;
+    if (!isFree) {
+        qrData.coupon.price = price;
     }
     if (!isFullOrder) {
         qrData.coupon.foodId = `${choose?.dish?.stringId}`;
