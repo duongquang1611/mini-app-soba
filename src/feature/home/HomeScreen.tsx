@@ -14,13 +14,14 @@ import { StyledImageBackground } from 'components/base/StyledImage';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeaderImage from 'components/common/StyledHeaderImage';
 import StyledTabTopView from 'components/common/StyledTabTopView';
+import useBackHandler from 'hooks/useBackHandler';
 import { getResourcesData } from 'hooks/useNetwork';
 import { SIZE_LIMIT } from 'hooks/usePaging';
 import { APP_ROUTE, HOME_ROUTE, STAMP_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { FunctionComponent, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { RefreshControl, View } from 'react-native';
+import { BackHandler, RefreshControl, View } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { SceneMap } from 'react-native-tab-view';
@@ -119,6 +120,7 @@ const HomeScreen: FunctionComponent = () => {
     useEffect(() => {
         getNewsData();
     }, [newsDisplay]);
+    useBackHandler(() => BackHandler.exitApp());
     const getNotification = async () => {
         try {
             const res = await getNotificationList({ params: { take: 1, pageIndex: 1 } });
