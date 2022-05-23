@@ -10,9 +10,10 @@ import { DevSettings, Linking, Platform } from 'react-native';
 import codePush from 'react-native-code-push';
 import Config from 'react-native-config';
 import Picker from 'react-native-picker';
+import CryptoJS from 'crypto-js';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import { CheckPasswordType, CouponDishType, CouponType } from './enumData';
-import { formatDate, YYYYMMDD_PUBLISH } from './format';
+import { formatDate, YMDHms, YYYYMMDD_PUBLISH } from './format';
 import { DiscountType, Gender, MenuType, OrderType, OrderTypeMenu, POPUP_TYPE, staticValue } from './staticData';
 
 export const isAndroid = Platform.OS === 'android';
@@ -160,10 +161,21 @@ export const getDefaultSubDish = (dishOptions: any) => {
     return subDishDefault;
 };
 
+export const encryptData = (value: string) => {
+    return CryptoJS.AES.encrypt(JSON.stringify(value), staticValue.ENCRYPT_KEY).toString();
+};
+
+export const decryptData = (valueEncrypt: string) => {
+    const bytes = CryptoJS.AES.decrypt(valueEncrypt, staticValue.ENCRYPT_KEY);
+    const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+    return decryptedData;
+};
+
 export const addQRCodeEOS = (qrData: any, convert = true, includeEOS = true) => {
     if (!convert) return qrData;
     const qrDataString = JSON.stringify(qrData);
-    return includeEOS ? `${qrDataString}${staticValue.END_CODE_QR}` : qrDataString;
+    const qrDataFinal = includeEOS ? `${qrDataString}${staticValue.END_CODE_QR}` : qrDataString;
+    return qrDataFinal;
 };
 
 export const generateCheckInQR = (user: any, convert?: boolean, includeEOS?: boolean) => {
@@ -200,7 +212,7 @@ export const generateCouponQR = (memberCoupon: any, user?: any, convert?: boolea
             isFullOrder,
             isFree,
             isAccounted,
-            publishDatetime: memberCoupon?.receivedDate,
+            publishDatetime: formatDate(memberCoupon?.receivedDate, YMDHms),
         },
     };
     if (!isFree) {

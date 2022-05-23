@@ -65,6 +65,7 @@
         "appcenter-crashes": "^4.4.3",
         "axios": "^0.21.1",
         "crypto": "^1.0.1",
+        "crypto-js": "3.3.0",
         "dayjs": "^1.10.6",
         "eslint-config-airbnb": "^18.2.1",
         "hash-object": "^0.1.7",

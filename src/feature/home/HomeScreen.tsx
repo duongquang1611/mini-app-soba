@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { getCouponList } from 'api/modules/api-app/coupon';
 import { getNewsList } from 'api/modules/api-app/home';
 import { getNotificationList } from 'api/modules/api-app/notification';

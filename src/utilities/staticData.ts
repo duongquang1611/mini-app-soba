@@ -49,6 +49,7 @@ export const staticValue = {
     NO_LIMIT_BOX: 200,
     PERCENT_HEIGHT_POPUP: 0.8,
     DELAY_LONG_PRESS: Platform.OS === 'ios' ? 400 : 350,
+    ENCRYPT_KEY: '@Soba$',
 };
 
 export const LINEAR_COLOR = {
