@@ -280,7 +280,7 @@ const OrderQrCodeScreen = (props: any) => {
                                     onPress={handleOnPressQR}
                                     delayLongPress={staticValue.DELAY_LONG_PRESS}
                                 >
-                                    <QRCode value={qrEncrypt} size={scale(300 || staticValue.QR_SIZE)} />
+                                    <QRCode value={qrEncrypt} size={scale(staticValue.QR_SIZE)} />
                                 </TouchableOpacity>
                             )}
                             <StyledButton
