@@ -1,19 +1,21 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledText } from 'components/base';
 import { AUTHENTICATE_ROUTE, HOME_ROUTE, ORDER_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { QR_TAB_TYPE } from 'utilities/enumData';
-import { isAmela, showActionQR } from 'utilities/helper';
+import { decryptData, encryptData, isAmela, showActionQR } from 'utilities/helper';
 import { QR_TAB_DATA, staticValue } from 'utilities/staticData';
 
 const ShowQrTab = (props: any) => {
     const { type = QR_TAB_TYPE.ORDER_DEFAULT, qrValue, onPress, newOrder = '' } = props;
     const qrComponentData: any = QR_TAB_DATA[type];
     const { textButton, content1, content2, navigateScreen, orderType, createButton } = qrComponentData;
+    const qrEncrypt = useMemo(() => encryptData(qrValue), [qrValue]);
 
     const handleQrPress = () => {
         if (qrValue) {
@@ -36,8 +38,12 @@ const ShowQrTab = (props: any) => {
         if (!isAmela()) return;
 
         type === QR_TAB_TYPE.CHECK_IN
-            ? showActionQR(qrValue, qrValue, 'QR Check In', 'QR Check In')
-            : showActionQR(qrValue, newOrder);
+            ? showActionQR(qrEncrypt, qrValue, 'QR Check In', 'QR Encrypt')
+            : showActionQR(qrEncrypt, newOrder);
+    };
+
+    const handleOnPressQR = () => {
+        // decryptData(qrEncrypt);
     };
 
     return (
@@ -49,8 +55,9 @@ const ShowQrTab = (props: any) => {
                             activeOpacity={1}
                             onLongPress={handleLongPress}
                             delayLongPress={staticValue.DELAY_LONG_PRESS}
+                            onPress={handleOnPressQR}
                         >
-                            <QRCode value={qrValue} size={scale(staticValue.QR_SIZE_HOME)} />
+                            <QRCode value={qrEncrypt} size={scale(staticValue.QR_SIZE_HOME)} />
                         </TouchableOpacity>
                     )}
                     <StyledButton

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { saveOrderOption } from 'api/modules/api-app/order';
 import { RootState } from 'app-redux/hooks';
 import {
@@ -28,6 +29,8 @@ import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     checkSameData,
+    decryptData,
+    encryptData,
     generateDataSaveOrderOption,
     generateNewOrder,
     generateOrderQR,
@@ -135,6 +138,9 @@ const OrderQrCodeScreen = (props: any) => {
         () => generateDataSaveOrderOption(defaultOrderLocal, OrderType.DEFAULT_HOME),
         [orderQr],
     );
+
+    const qrEncrypt = useMemo(() => encryptData(orderQR), [orderQR]);
+
     const getSaveOption = () => {
         if (orderType === OrderTypeMenu.DEFAULT_ORDER) return defaultOrderSettingSaveOrderOption;
         if (orderType === OrderTypeMenu.DEFAULT_ORDER_LOCAL) return defaultOrderHomeSaveOrderOption;
@@ -239,7 +245,11 @@ const OrderQrCodeScreen = (props: any) => {
 
     const handleLongPress = () => {
         if (!isAmela()) return;
-        showActionQR(orderQR, newOrderTest);
+        showActionQR(qrEncrypt, newOrderTest);
+    };
+
+    const handleOnPressQR = () => {
+        // decryptData(qrEncrypt);
     };
 
     return (
@@ -267,9 +277,10 @@ const OrderQrCodeScreen = (props: any) => {
                                 <TouchableOpacity
                                     activeOpacity={1}
                                     onLongPress={handleLongPress}
+                                    onPress={handleOnPressQR}
                                     delayLongPress={staticValue.DELAY_LONG_PRESS}
                                 >
-                                    <QRCode value={orderQR} size={scale(staticValue.QR_SIZE)} />
+                                    <QRCode value={qrEncrypt} size={scale(300 || staticValue.QR_SIZE)} />
                                 </TouchableOpacity>
                             )}
                             <StyledButton
