@@ -13,7 +13,7 @@ import Picker from 'react-native-picker';
 import CryptoJS from 'crypto-js';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import { CheckPasswordType, CouponDishType, CouponType } from './enumData';
-import { formatDate, YMDHms, YYYYMMDD_PUBLISH } from './format';
+import { formatDate, formatDateJapan, YMDHms, YYYYMMDD_PUBLISH } from './format';
 import { DiscountType, Gender, MenuType, OrderType, OrderTypeMenu, POPUP_TYPE, staticValue } from './staticData';
 
 export const isAndroid = Platform.OS === 'android';
@@ -212,7 +212,8 @@ export const generateCouponQR = (memberCoupon: any, user?: any, convert?: boolea
             isFullOrder,
             isFree,
             isAccounted,
-            publishDatetime: formatDate(memberCoupon?.receivedDate, YMDHms),
+            // publishDatetime: formatDate(memberCoupon?.receivedDate, YMDHms),
+            publishDatetime: memberCoupon?.receivedDate,
         },
     };
     if (!isFree) {
