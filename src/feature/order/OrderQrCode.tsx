@@ -139,7 +139,7 @@ const OrderQrCodeScreen = (props: any) => {
         [orderQr],
     );
 
-    const qrEncrypt = useMemo(() => encryptData(orderQR), [orderQR]);
+    const qrEncrypt = useMemo(() => encryptData(orderQR), [JSON.stringify(orderQR)]);
 
     const getSaveOption = () => {
         if (orderType === OrderTypeMenu.DEFAULT_ORDER) return defaultOrderSettingSaveOrderOption;
