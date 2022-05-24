@@ -161,17 +161,19 @@ export const getDefaultSubDish = (dishOptions: any) => {
     return subDishDefault;
 };
 
-export const encryptData = (value: string) => {
-    return CryptoJS.AES.encrypt(JSON.stringify(value), staticValue.ENCRYPT_KEY).toString();
+export const encryptData = (value: string, includeEOS = true) => {
+    const encrypted = CryptoJS.AES.encrypt(JSON.stringify(value), staticValue.ENCRYPT_KEY).toString();
+    return includeEOS ? `${encrypted}${staticValue.END_CODE_QR}` : encrypted;
 };
 
 export const decryptData = (valueEncrypt: string) => {
-    const bytes = CryptoJS.AES.decrypt(valueEncrypt, staticValue.ENCRYPT_KEY);
+    const removeEOS = valueEncrypt.substring(0, valueEncrypt.length - 3);
+    const bytes = CryptoJS.AES.decrypt(removeEOS, staticValue.ENCRYPT_KEY);
     const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
     return decryptedData;
 };
 
-export const addQRCodeEOS = (qrData: any, convert = true, includeEOS = true) => {
+export const addQRCodeEOS = (qrData: any, convert = true, includeEOS = false) => {
     if (!convert) return qrData;
     const qrDataString = JSON.stringify(qrData);
     const qrDataFinal = includeEOS ? `${qrDataString}${staticValue.END_CODE_QR}` : qrDataString;

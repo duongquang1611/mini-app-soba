@@ -15,7 +15,7 @@ const ShowQrTab = (props: any) => {
     const { type = QR_TAB_TYPE.ORDER_DEFAULT, qrValue, onPress, newOrder = '' } = props;
     const qrComponentData: any = QR_TAB_DATA[type];
     const { textButton, content1, content2, navigateScreen, orderType, createButton } = qrComponentData;
-    const qrEncrypt = useMemo(() => encryptData(qrValue), [qrValue]);
+    const qrEncrypt = useMemo(() => encryptData(qrValue), [JSON.stringify(qrValue)]);
 
     const handleQrPress = () => {
         if (qrValue) {
