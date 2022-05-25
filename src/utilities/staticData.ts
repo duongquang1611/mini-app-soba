@@ -3,6 +3,7 @@ import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { HOME_ROUTE, ORDER_ROUTE } from 'navigation/config/routes';
 import { Platform } from 'react-native';
+import CryptoJS from 'crypto-js';
 
 export const staticValue = {
     DEFAULT: 1,
@@ -811,4 +812,9 @@ export const CONFIG_KEYS = {
     WEB_PAGE: 'WEB_PAGE',
     NEWS_DISPLAY: 'NEWS_DISPLAY',
     POLICY: 'POLICY',
+};
+
+export const CRYPTO_DATA = {
+    key: CryptoJS.enc.Hex.parse('000102030405060708090a0b0c0d0e0f'),
+    iv: CryptoJS.enc.Hex.parse('101112131415161718191a1b1c1d1e1f'),
 };

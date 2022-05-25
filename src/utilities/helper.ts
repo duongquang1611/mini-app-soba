@@ -13,8 +13,17 @@ import Config from 'react-native-config';
 import Picker from 'react-native-picker';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import { CheckPasswordType, CouponDishType, CouponType } from './enumData';
-import { formatDate, YYYYMMDD_PUBLISH } from './format';
-import { DiscountType, Gender, MenuType, OrderType, OrderTypeMenu, POPUP_TYPE, staticValue } from './staticData';
+import { formatDate, YYYYMMDD_PUBLISH, formatDateJapan, YMDHms } from './format';
+import {
+    DiscountType,
+    Gender,
+    MenuType,
+    OrderType,
+    OrderTypeMenu,
+    POPUP_TYPE,
+    staticValue,
+    CRYPTO_DATA,
+} from './staticData';
 
 export const isAndroid = Platform.OS === 'android';
 
@@ -162,13 +171,18 @@ export const getDefaultSubDish = (dishOptions: any) => {
 };
 
 export const encryptData = (value: string, includeEOS = true) => {
-    const encrypted = CryptoJS.AES.encrypt(JSON.stringify(value), staticValue.ENCRYPT_KEY).toString();
-    return includeEOS ? `${encrypted}${staticValue.END_CODE_QR}` : encrypted;
+    if (value.length > 0) {
+        const encrypted = CryptoJS.AES.encrypt(JSON.stringify(value), CRYPTO_DATA.key, {
+            iv: CRYPTO_DATA.iv,
+        }).toString();
+        return includeEOS ? `${encrypted}${staticValue.END_CODE_QR}` : encrypted;
+    }
+    return '';
 };
 
 export const decryptData = (valueEncrypt: string) => {
     const removeEOS = valueEncrypt.substring(0, valueEncrypt.length - 3);
-    const bytes = CryptoJS.AES.decrypt(removeEOS, staticValue.ENCRYPT_KEY);
+    const bytes = CryptoJS.AES.decrypt(removeEOS, CRYPTO_DATA.key, { iv: CRYPTO_DATA.iv });
     const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
     console.log('decryptData -> decryptedData', decryptedData);
     return decryptedData;
