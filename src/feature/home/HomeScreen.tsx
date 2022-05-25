@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { getCouponList } from 'api/modules/api-app/coupon';
 import { getNewsList } from 'api/modules/api-app/home';
 import { getNotificationList } from 'api/modules/api-app/notification';
@@ -170,13 +169,27 @@ const HomeScreen: FunctionComponent = () => {
             { title: 'order.qrGuide' },
         );
     };
-    const renderScene = SceneMap({
-        qrDefault: () => (
-            <ShowQrTab type={QR_TAB_TYPE.ORDER_DEFAULT} qrValue={defaultOrderQR} newOrder={newOrderDefault} />
-        ),
-        qrMobile: () => <ShowQrTab type={QR_TAB_TYPE.MOBILE_ORDER} qrValue={mobileOrderQR} newOrder={newOrderMobile} />,
-        qrCheckIn: () => <ShowQrTab type={QR_TAB_TYPE.CHECK_IN} qrValue={checkInQR} onPress={showGuideCheckIn} />,
-    });
+    // const renderScene = SceneMap({
+    //     qrDefault: () => (
+    //         <ShowQrTab type={QR_TAB_TYPE.ORDER_DEFAULT} qrValue={defaultOrderQR} newOrder={newOrderDefault} />
+    //     ),
+    //     qrMobile: () => <ShowQrTab type={QR_TAB_TYPE.MOBILE_ORDER} qrValue={mobileOrderQR} newOrder={newOrderMobile} />,
+    //     qrCheckIn: () => <ShowQrTab type={QR_TAB_TYPE.CHECK_IN} qrValue={checkInQR} onPress={showGuideCheckIn} />,
+    // });
+    const renderScene = ({ route }: any) => {
+        switch (route.key) {
+            case 'qrDefault':
+                return (
+                    <ShowQrTab type={QR_TAB_TYPE.ORDER_DEFAULT} qrValue={defaultOrderQR} newOrder={newOrderDefault} />
+                );
+            case 'qrMobile':
+                return <ShowQrTab type={QR_TAB_TYPE.MOBILE_ORDER} qrValue={mobileOrderQR} newOrder={newOrderMobile} />;
+            case 'qrCheckIn':
+                return <ShowQrTab type={QR_TAB_TYPE.CHECK_IN} qrValue={checkInQR} onPress={showGuideCheckIn} />;
+            default:
+                return null;
+        }
+    };
 
     const handleRefresh = async () => {
         try {
