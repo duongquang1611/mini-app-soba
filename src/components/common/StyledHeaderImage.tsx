@@ -148,9 +148,11 @@ const StyledHeaderImage = (props: HeaderProps) => {
                     )}
                 </View>
             </View>
-            <View style={styles.contentView}>
-                {content && <StyledText originValue={content} customStyle={styles.contentText} isBlack />}
-            </View>
+            {!!content && (
+                <View style={styles.contentView}>
+                    <StyledText originValue={content} customStyle={styles.contentText} />
+                </View>
+            )}
         </>
     );
 };
@@ -209,7 +211,7 @@ const styles = ScaledSheet.create({
     },
     img: {
         width: '100%',
-        height: '260@vs',
+        height: '260@s',
     },
     containerDot: {
         backgroundColor: Themes.COLORS.transparent,

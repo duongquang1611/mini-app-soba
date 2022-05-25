@@ -33,7 +33,7 @@ const ItemMenu = (props: any) => {
         navigate(ORDER_ROUTE.DETAIL_MEAL, { id: props?.item?.id, isNew: true, orderType: OrderTypeMenu.CART_ORDER });
     };
     return (
-        <StyledTouchable onPress={num > 0 ? props?.goToDetailModal : gotoNew}>
+        <StyledTouchable onPress={num > 0 ? props?.goToDetailModal : gotoNew} customStyle={styles.wrapMenuItem}>
             <StyledImageBackground
                 source={{ uri: props?.item?.thumbnail }}
                 style={[
@@ -43,7 +43,6 @@ const ItemMenu = (props: any) => {
                     },
                 ]}
             >
-                <StyledText originValue={props?.item?.title} numberOfLines={1} customStyle={styles.name} />
                 {num > 0 && isSetting ? <StyledIcon source={Images.icons.tick} size={20} /> : null}
                 {num && !isSetting ? (
                     <View style={styles.numberChooseView}>
@@ -51,6 +50,7 @@ const ItemMenu = (props: any) => {
                     </View>
                 ) : null}
             </StyledImageBackground>
+            <StyledText originValue={props?.item?.title} numberOfLines={1} customStyle={styles.nameMenu} />
         </StyledTouchable>
     );
 };
@@ -358,10 +358,10 @@ const styles = ScaledSheet.create({
         width: '100%',
         backgroundColor: Themes.COLORS.white,
     },
-    name: {
-        color: Themes.COLORS.white,
+    nameMenu: {
         fontWeight: 'bold',
-        fontSize: '16@ms0.3',
+        fontSize: '18@ms0.3',
+        marginHorizontal: '6@s',
     },
     numberChoose: {
         color: Themes.COLORS.headerBackground,
@@ -409,5 +409,10 @@ const styles = ScaledSheet.create({
     },
     textGuide: {
         lineHeight: scale(24),
+    },
+    wrapMenuItem: {
+        marginBottom: '15@vs',
+        flexShrink: 1,
+        width: '50%',
     },
 });

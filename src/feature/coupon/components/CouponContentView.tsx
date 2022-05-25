@@ -170,8 +170,8 @@ const styles = ScaledSheet.create({
         marginBottom: '5@vs',
     },
     img: {
-        width: '100%',
-        height: '335@vs',
+        width: '335@s',
+        height: '335@s',
         marginTop: '20@vs',
         alignItems: 'center',
         justifyContent: 'center',

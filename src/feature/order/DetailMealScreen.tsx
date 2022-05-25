@@ -119,7 +119,6 @@ const DetailMealScreen = (props: any) => {
         <View style={styles.container}>
             <StyledKeyboardAware style={styles.container}>
                 <StyledHeaderImage images={dish?.images || []} content={title} />
-
                 <StyledText originValue={description} isBlack customStyle={styles.contentText} />
                 <View style={styles.body}>
                     {dishOptions?.map((item: any, index: number) => (
