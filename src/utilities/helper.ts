@@ -4,16 +4,16 @@ import { sendTeams } from 'api/modules/api-app/general';
 import { store } from 'app-redux/store';
 import Images from 'assets/images';
 import AlertMessage from 'components/base/AlertMessage';
+import CryptoJS from 'crypto-js';
 import i18next from 'i18next';
 import { cloneDeep, isEqual, throttle } from 'lodash';
 import { DevSettings, Linking, Platform } from 'react-native';
 import codePush from 'react-native-code-push';
 import Config from 'react-native-config';
 import Picker from 'react-native-picker';
-import CryptoJS from 'crypto-js';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import { CheckPasswordType, CouponDishType, CouponType } from './enumData';
-import { formatDate, formatDateJapan, YMDHms, YYYYMMDD_PUBLISH } from './format';
+import { formatDate, YYYYMMDD_PUBLISH } from './format';
 import { DiscountType, Gender, MenuType, OrderType, OrderTypeMenu, POPUP_TYPE, staticValue } from './staticData';
 
 export const isAndroid = Platform.OS === 'android';
@@ -170,6 +170,7 @@ export const decryptData = (valueEncrypt: string) => {
     const removeEOS = valueEncrypt.substring(0, valueEncrypt.length - 3);
     const bytes = CryptoJS.AES.decrypt(removeEOS, staticValue.ENCRYPT_KEY);
     const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+    console.log('decryptData -> decryptedData', decryptedData);
     return decryptedData;
 };
 

@@ -14,17 +14,15 @@ import { StyledImageBackground } from 'components/base/StyledImage';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeaderImage from 'components/common/StyledHeaderImage';
 import StyledTabTopView from 'components/common/StyledTabTopView';
-import useBackHandler from 'hooks/useBackHandler';
 import { getResourcesData } from 'hooks/useNetwork';
 import { SIZE_LIMIT } from 'hooks/usePaging';
 import { APP_ROUTE, HOME_ROUTE, STAMP_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { FunctionComponent, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { BackHandler, RefreshControl, View } from 'react-native';
+import { RefreshControl, View } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
-import { SceneMap } from 'react-native-tab-view';
 import { useSelector } from 'react-redux';
 import { QR_TAB_TYPE } from 'utilities/enumData';
 import {

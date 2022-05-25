@@ -12,7 +12,7 @@ import { COUPON_ROUTE, STAMP_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { RefreshControl, ScrollView, View } from 'react-native';
-import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
+import { scale, ScaledSheet } from 'react-native-size-matters';
 import { StampCardType, StampSettingDuration } from 'utilities/enumData';
 import { formatDate } from 'utilities/format';
 import { openURL } from 'utilities/helper';
@@ -146,7 +146,7 @@ const NotificationDetailScreen = (props: any) => {
                             <StyledHeaderImage
                                 isBack={false}
                                 images={listImage}
-                                heightImage={verticalScale(335)}
+                                heightImage={scale(335)}
                                 customStyle={styles.sliceImage}
                                 sliderWidth={Metrics.screenWidth - scale(40)}
                             />

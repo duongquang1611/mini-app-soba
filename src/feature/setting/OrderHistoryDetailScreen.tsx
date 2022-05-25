@@ -1,7 +1,7 @@
 import { getDetailHistoryDetail } from 'api/modules/api-app/order';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
-import { StyledIcon, StyledText } from 'components/base';
+import { StyledIcon, StyledImage, StyledText } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import DashView from 'components/common/DashView';
@@ -18,7 +18,7 @@ const OrderItem = (props: any) => {
     return (
         <>
             <View style={styles.orderItemView}>
-                <StyledIcon source={{ uri: dish?.thumbnail }} resizeMode={'cover'} size={70} />
+                <StyledImage source={{ uri: dish?.thumbnail }} resizeMode={'cover'} customStyle={styles.imgOrder} />
                 <View style={styles.orderTextView}>
                     <View style={[styles.rowPrice, { marginTop: scale(0) }]}>
                         <StyledText originValue={dish?.title} customStyle={styles.titleDish} />
@@ -410,5 +410,9 @@ const styles = ScaledSheet.create({
         color: Themes.COLORS.silver,
         fontSize: '12@ms0.3',
         marginTop: '10@vs',
+    },
+    imgOrder: {
+        width: '70@s',
+        height: '70@s',
     },
 });
