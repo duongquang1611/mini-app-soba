@@ -89,7 +89,7 @@ const ItemCoupon = (props: any) => {
     );
 };
 const CartScreen = (props: any) => {
-    const { isDefaultOrder, order, setOrder, orderType, screen } = props?.route?.params;
+    const { isDefaultOrder, order, setOrder, orderType, screen, isTabCoupon } = props?.route?.params;
     const { cartOrder, defaultOrderLocal, defaultOrder } = useSelector((state: RootState) => state.order);
     const [saveOrderCart, setSaveOrderCart] = useState(order);
     const saveOrder = isDefaultOrder ? saveOrderCart : cartOrder;
@@ -188,6 +188,11 @@ const CartScreen = (props: any) => {
         if (isDefaultOrder) return 'authen.register.skipOrderDefault';
         return 'order.cancelOrder';
     };
+    const goMenu = () => {
+        if (isTabCoupon) {
+            navigate(APP_ROUTE.MAIN_TAB, { screen: ORDER_ROUTE.ROOT });
+        } else goBack();
+    };
 
     return (
         <View style={styles.container}>
@@ -257,7 +262,7 @@ const CartScreen = (props: any) => {
                         <StyledButton
                             isNormal={true}
                             title={'order.editCartButton'}
-                            onPress={goBack}
+                            onPress={goMenu}
                             customStyle={styles.productAddition}
                             customStyleText={styles.textProduct}
                         />
