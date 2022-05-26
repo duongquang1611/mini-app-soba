@@ -377,10 +377,28 @@ export const filterDishOptions = (dish: any) => {
 };
 
 export const checkHasDataOrder = (order: any) => {
-    return order?.dishes?.length + order?.coupons?.length > 0;
+    return order?.dishes?.length > 0 || order?.coupons?.length > 0;
 };
+const cancelCreateDateOrder = (order: any) => ({
+    dishes: order?.dishes?.map((itemOrder: any) => ({ ...itemOrder, createDate: '' })),
+    coupons: order?.coupons,
+});
+const cancelCreateDateDishes = (dishes: any) => dishes?.map((itemOrder: any) => ({ ...itemOrder, createDate: '' }));
+
 export const checkSameData = (order: any, orderLocal: any) => {
-    return isEqual(order, orderLocal);
+    const newOrder = cancelCreateDateOrder(order);
+    const newOrderLocal = cancelCreateDateOrder(orderLocal);
+
+    if (
+        (!order?.coupons || order?.coupons.length === 0) &&
+        (!orderLocal?.coupons || orderLocal?.coupons.length === 0)
+    ) {
+        return isEqual(cancelCreateDateDishes(order?.dishes), cancelCreateDateDishes(orderLocal?.dishes));
+    }
+    if ((!order?.dishes || order?.coupons.dishes === 0) && (!orderLocal?.dishes || orderLocal?.dishes.length === 0)) {
+        return isEqual(order?.coupons, orderLocal?.coupons);
+    }
+    return isEqual(newOrder, newOrderLocal);
 };
 
 // mainDish, subDish id is "stringId"

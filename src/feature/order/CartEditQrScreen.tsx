@@ -60,7 +60,6 @@ const ItemCoupon = (props: any) => {
             { title: 'order.applyCoupon' },
         );
     };
-    console.log({ saveOrderCart });
 
     const onPressCoupon = () => {
         const listCouponsModal = coupon?.discountType === DiscountType.EACH_DISH ? [data] : [];

@@ -1,4 +1,4 @@
-import { StyledButton, StyledIcon, StyledText, StyledTouchable } from 'components/base';
+import { StyledButton, StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
@@ -18,7 +18,7 @@ const OrderItemCart = (props: any) => {
         <StyledTouchable onPress={goDetailMenu}>
             <View style={styles.orderItemView}>
                 <TouchableOpacity onPress={props.goDetailMenu}>
-                    <StyledIcon resizeMode={'cover'} source={{ uri: mainDish?.image }} size={70} />
+                    <StyledImage resizeMode={'cover'} source={{ uri: mainDish?.image }} customStyle={styles.image} />
                 </TouchableOpacity>
                 <View style={styles.orderTextView}>
                     <View style={styles.rowDetail}>
@@ -113,29 +113,13 @@ const styles = ScaledSheet.create({
         color: Themes.COLORS.primary,
         marginVertical: '10@vs',
     },
-    // orderItemView: {
-    //     width: '100%',
-    //     paddingVertical: '10@vs',
-    //     paddingHorizontal: '20@s',
-    //     flexDirection: 'row',
-    //     backgroundColor: Themes.COLORS.white,
-    //     backgroundColor: 'blue',
-    // },
     orderItemView: {
         width: '100%',
         paddingVertical: '10@vs',
         paddingHorizontal: '20@s',
         flexDirection: 'row',
-        // justifyContent: 'space-between',
         backgroundColor: Themes.COLORS.white,
     },
-    // orderTextView: {
-    //     flexShrink: 1,
-    //     marginLeft: '10@vs',
-    //     justifyContent: 'space-between',
-    //     marginRight: '5@s',
-    //     backgroundColor: 'red',
-    // },
     orderTextView: {
         flexShrink: 1,
         marginLeft: '10@vs',
@@ -190,5 +174,9 @@ const styles = ScaledSheet.create({
     dash: {
         width: Metrics.screenWidth,
         alignSelf: 'center',
+    },
+    image: {
+        width: '70@s',
+        height: '70@s',
     },
 });
