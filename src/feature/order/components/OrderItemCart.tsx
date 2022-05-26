@@ -1,7 +1,7 @@
 import { updateCartOrder } from 'app-redux/slices/orderSlice';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
-import { StyledIcon, StyledText, StyledTouchable } from 'components/base';
+import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
 import DashView from 'components/common/DashView';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
@@ -74,12 +74,7 @@ const OrderItemCart = (props: any) => {
             )}
             <View style={styles.orderItemView}>
                 <View style={{ borderRadius: 1, overflow: 'hidden' }}>
-                    <StyledIcon
-                        source={{ uri: image }}
-                        resizeMode={'cover'}
-                        size={70}
-                        customStyle={{ alignSelf: 'flex-start' }}
-                    />
+                    <StyledImage source={{ uri: image }} resizeMode={'contain'} customStyle={styles.image} />
                 </View>
                 <View style={styles.orderTextView}>
                     <StyledText originValue={name} customStyle={styles.titleOrder} />
@@ -225,5 +220,9 @@ const styles = ScaledSheet.create({
     },
     dishView: {
         width: '100%',
+    },
+    image: {
+        width: '70@vs',
+        height: '70@s',
     },
 });

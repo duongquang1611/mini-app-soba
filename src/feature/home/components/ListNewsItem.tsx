@@ -1,5 +1,5 @@
 import { Themes } from 'assets/themes';
-import { StyledIcon, StyledText } from 'components/base';
+import { StyledImage, StyledText } from 'components/base';
 import DashView from 'components/common/DashView';
 import { HOME_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
@@ -14,7 +14,7 @@ const ListNewsItem = (props: any) => {
     return (
         <View>
             <TouchableOpacity style={styles.listNewsView} onPress={() => navigate(HOME_ROUTE.NEW_DETAIL, { id })}>
-                <StyledIcon source={{ uri: thumbnail }} size={70} resizeMode={'cover'} />
+                <StyledImage source={{ uri: thumbnail }} customStyle={styles.image} resizeMode={'contain'} />
                 <View style={styles.newsTextView}>
                     <StyledText originValue={title} customStyle={styles.titleNew} numberOfLines={1} />
                     <StyledText originValue={description} isBlack customStyle={styles.contentNew} numberOfLines={2} />
@@ -52,5 +52,9 @@ const styles = ScaledSheet.create({
     time: {
         color: Themes.COLORS.silver,
         fontSize: '12@ms0.3',
+    },
+    image: {
+        width: '70@s',
+        height: '70@s',
     },
 });

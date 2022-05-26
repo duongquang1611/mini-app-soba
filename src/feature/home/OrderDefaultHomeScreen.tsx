@@ -19,7 +19,7 @@ import { listOrderDefault } from 'utilities/staticData';
 const OrderDefaultItem = (data: any) => {
     return (
         <TouchableOpacity style={styles.orderView}>
-            <StyledIcon source={{ uri: data?.data?.img }} size={70} />
+            <StyledImage source={{ uri: data?.data?.img }} resizeMode={'contain'} customStyle={styles.image} />
             <View style={styles.orderTextView}>
                 <StyledText originValue={data?.data?.name} customStyle={styles.titleOrder} />
                 {data?.data?.listAdd?.map((item: any, index: number) => (
@@ -178,5 +178,9 @@ const styles = ScaledSheet.create({
     addValue: {
         color: Themes.COLORS.primary,
         fontSize: '12@ms0.3',
+    },
+    image: {
+        width: '70@s',
+        height: '70@s',
     },
 });

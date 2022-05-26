@@ -1,6 +1,6 @@
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
-import { StyledButton, StyledIcon, StyledText } from 'components/base';
+import { StyledButton, StyledIcon, StyledImage, StyledText } from 'components/base';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import DashView from 'components/common/DashView';
 import StyledHeader from 'components/common/StyledHeader';
@@ -26,7 +26,7 @@ export const OrderItem = (data: any) => {
     return (
         <>
             <View style={styles.orderItemView}>
-                <StyledIcon source={{ uri: data?.data?.img }} size={70} />
+                <StyledImage source={{ uri: data?.data?.img }} resizeMode={'contain'} customStyle={styles.image} />
                 <View style={styles.orderTextView}>
                     <TouchableOpacity>
                         <StyledIcon source={Images.icons.cancel} size={17} customStyle={styles.icCancel} />
@@ -224,5 +224,9 @@ const styles = ScaledSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'center',
+    },
+    image: {
+        width: '70@s',
+        height: '70@s',
     },
 });
