@@ -12,7 +12,7 @@ import { View } from 'react-native';
 import { ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { SceneMap } from 'react-native-tab-view';
 import { useDispatch } from 'react-redux';
-import { DiscountType, MODAL_ID, staticValue, TabCouponStatus } from 'utilities/staticData';
+import { DiscountType, MODAL_ID, OrderTypeMenu, staticValue, TabCouponStatus } from 'utilities/staticData';
 import CouponTab from './components/CouponTab';
 
 const TabCouponListScreen = () => {
@@ -27,7 +27,7 @@ const TabCouponListScreen = () => {
 
     const goToCart = () => {
         modalize.dismiss(MODAL_ID.APPLY_COUPON);
-        navigate(ORDER_ROUTE.CART);
+        navigate(ORDER_ROUTE.CART, { orderType: OrderTypeMenu.CART_ORDER, isTabCoupon: true });
     };
 
     const handleUseCoupon = (item: any) => {
