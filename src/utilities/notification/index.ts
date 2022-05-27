@@ -2,7 +2,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { getProfile } from 'api/modules/api-app/authenticate';
 import { sendTeams } from 'api/modules/api-app/general';
-import { readNotification } from 'api/modules/api-app/notification';
+import { getNotificationList, readNotification } from 'api/modules/api-app/notification';
 import { saveOrderOption } from 'api/modules/api-app/order';
 import { RootState } from 'app-redux/hooks';
 import { updateNotificationUnRead } from 'app-redux/slices/globalDataSlice';
@@ -57,7 +57,8 @@ export async function onMoveNavigation(data: any, navigation?: any) {
         category === NotificationCategory.CANCEL_PAYMENT || category === NotificationCategory.SUCCESS_PAYMENT;
     if (data?.memberNotiId) {
         try {
-            await readNotification(data?.memberNotiId);
+            const readData = await readNotification(data?.memberNotiId);
+            store.dispatch(updateNotificationUnRead(readData?.data || 0));
             if (isCategoryPayment) {
                 navigation?.navigate(SETTING_ROUTE.ORDER_HISTORY);
             } else navigation?.navigate(HOME_ROUTE.NOTIFICATION_DETAIL, { item: { id: memberNotiId, isRead: true } });
