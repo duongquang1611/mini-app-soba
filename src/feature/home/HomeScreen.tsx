@@ -86,12 +86,11 @@ export const getCouponData = async (status?: TabCouponStatus) => {
 const HomeScreen: FunctionComponent = () => {
     useOnesignal();
     const { t } = useTranslation();
-    const { order, userInfo, globalData, resource } = useSelector((state: RootState) => state);
+    const { order, userInfo, resource } = useSelector((state: RootState) => state);
     const { banners = [], sns = [] } = resource?.data;
     const storeUrl = getConfig(CONFIG_KEYS.WEB_PAGE);
     const newsDisplay = Number(getConfig(CONFIG_KEYS.NEWS_DISPLAY));
     const { user } = userInfo;
-    const { notificationUnRead } = globalData;
     const { mobileOrder, defaultOrderLocal } = order;
     const newOrderMobile = useMemo(() => generateNewOrder(mobileOrder, user), [mobileOrder, user]);
     const newOrderDefault = useMemo(
@@ -219,7 +218,6 @@ const HomeScreen: FunctionComponent = () => {
                     isBack={false}
                     images={banners}
                     logo
-                    notificationUnRead={notificationUnRead}
                 />
                 <View style={styles.grayView} />
                 <View style={styles.contScreen}>

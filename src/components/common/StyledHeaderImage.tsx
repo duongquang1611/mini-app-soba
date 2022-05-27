@@ -9,6 +9,8 @@ import { StyleProp, View, ViewProps, ViewStyle } from 'react-native';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { logger } from 'utilities/helper';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
+import { RootState } from 'app-redux/hooks';
+import { useSelector } from 'react-redux';
 
 interface HeaderProps extends ViewProps {
     isBack?: boolean;
@@ -28,7 +30,6 @@ interface HeaderProps extends ViewProps {
     logo?: any;
     heightImage?: any;
     sliderWidth?: any;
-    notificationUnRead?: number;
 }
 
 const StyledHeaderImage = (props: HeaderProps) => {
@@ -46,8 +47,9 @@ const StyledHeaderImage = (props: HeaderProps) => {
         logo,
         heightImage = verticalScale(260),
         sliderWidth,
-        notificationUnRead = 0,
     } = props;
+    const { globalData } = useSelector((state: RootState) => state);
+    const { notificationUnRead } = globalData;
     const [index, setIndex] = useState(0);
 
     const onBack = () => {

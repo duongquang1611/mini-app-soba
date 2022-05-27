@@ -1,4 +1,6 @@
-import { getNotificationCoupon } from 'api/modules/api-app/notification';
+import { getNotificationCoupon, readNotification } from 'api/modules/api-app/notification';
+import { updateNotificationUnRead } from 'app-redux/slices/globalDataSlice';
+import { store } from 'app-redux/store';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
@@ -16,7 +18,7 @@ import { scale, ScaledSheet } from 'react-native-size-matters';
 import { StampCardType, StampSettingDuration } from 'utilities/enumData';
 import { formatDate } from 'utilities/format';
 import { openURL } from 'utilities/helper';
-import { DateType } from 'utilities/staticData';
+import { DateType, statusReadNotification } from 'utilities/staticData';
 
 const CouponItemNotification = (props: any) => {
     const { item, dash, goToDetailCoupon } = props || {};
@@ -105,6 +107,10 @@ const NotificationDetailScreen = (props: any) => {
     const getNotification = async () => {
         try {
             const res = await getNotificationCoupon(id);
+            if (res?.data?.isRead === statusReadNotification.UN_READ) {
+                const readData = await readNotification(id);
+                store.dispatch(updateNotificationUnRead(readData?.data || 0));
+            }
             setCoupon(res?.data);
         } catch (error) {
             console.log('getNotification -> error', error);
