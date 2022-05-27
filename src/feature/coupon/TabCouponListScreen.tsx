@@ -42,7 +42,6 @@ const TabCouponListScreen = () => {
     };
 
     const applyChooseDish = (data?: any) => {
-        console.log({ data });
         dispatch(updateCouponCartOrder(data));
         goToCart();
     };

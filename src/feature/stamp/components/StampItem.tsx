@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledText, StyledTouchable } from 'components/base';
@@ -31,7 +32,7 @@ const StampItem = (props: IProps) => {
         isBottomTab = false,
     } = props;
     const { stamp = {}, leftAmount = 0, totalAmount = 0 } = itemMemberStamp;
-    const { image, title, startDate, cardType, settingDuration, endDate } = stamp;
+    const { image_50, title, startDate, cardType, settingDuration, endDate } = stamp;
     const titleProps = useMemo(() => (isBottomTab ? { numberOfLines: 1 } : {}), [isBottomTab]);
     // cardType: StampCardType
     const isExchange = useMemo(() => cardType === StampCardType.EXCHANGE, [cardType]);
@@ -44,7 +45,7 @@ const StampItem = (props: IProps) => {
     return (
         <Animatable.View style={containerStyle} animation={animation ? staticValue.ANIMATION_ITEM : ''} useNativeDriver>
             <StyledTouchable customStyle={[styles.container, customStyle]} onPress={onPress} disabled={!onPress}>
-                <StyledImageBackground source={{ uri: image }} style={styles.imgStamp} resizeMode={'cover'}>
+                <StyledImageBackground source={{ uri: image_50 }} style={styles.imgStamp} resizeMode={'cover'}>
                     {!!isExpired &&
                         !isBottomTab &&
                         (isBlock ? null : (

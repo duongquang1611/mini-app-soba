@@ -32,6 +32,12 @@ export enum CouponStatus {
     BLOCK = 6,
 }
 
+// memberCoupon.status
+export enum MemberCouponStatus {
+    IN_CART = 1,
+    AVAILABLE = 2,
+}
+
 // item.stamp.status
 export enum StampStatus {
     AVAILABLE = 1,

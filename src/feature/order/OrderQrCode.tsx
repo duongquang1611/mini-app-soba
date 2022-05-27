@@ -78,6 +78,7 @@ const ItemCoupon = (props: any) => {
             showApplyCoupon(listCouponsModal, listCouponsNoChange);
         }
     };
+
     return (
         <View>
             {!!cancelCouponItem && (

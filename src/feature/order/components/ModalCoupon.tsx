@@ -62,11 +62,14 @@ const OneCoupon = (props: any) => {
 const ModalCoupon = (props: any) => {
     const { listCouponsModal, setCartListCouponOrder, updateCouponsCart, cartListCouponAll, applyChooseDish } = props;
     const [enableButton, setEnableButton] = useState(listCouponsModal?.map((item: any) => ({ ...item })));
+
     useEffect(() => {
         setEnableButton(listCouponsModal?.map((item: any) => ({ ...item })));
     }, [listCouponsModal]);
+
     const checkDisableButton = enableButton?.filter((item: any) => !item?.choose);
     const numCheck = enableButton?.filter((item: any) => item?.choose)?.length || 0;
+
     return (
         <View style={styles.modalView}>
             {listCouponsModal?.length > 1 && (
@@ -93,15 +96,9 @@ const ModalCoupon = (props: any) => {
                 onPress={() => {
                     if (applyChooseDish) {
                         applyChooseDish?.(enableButton);
-                        console.log('vao if');
                     } else {
-                        console.log('vao else');
-                        console.log({ enableButton, next: [...enableButton, ...cartListCouponAll] });
-                        console.log('vao else 2');
                         setCartListCouponOrder?.([...enableButton, ...cartListCouponAll]);
-                        console.log('vao else 3');
                         updateCouponsCart([...enableButton, ...cartListCouponAll]);
-                        console.log('vao else 4');
                     }
                 }}
                 disabled={checkDisableButton.length > 0}

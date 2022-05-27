@@ -11,14 +11,14 @@ import APIProvider from 'utilities/context/APIProvider';
 import { addMenuClearAsyncStorage, getCodePushInfo } from 'utilities/helper';
 import { loadLocaleLanguage } from 'utilities/i18next';
 
-LogBox.ignoreLogs(['Require cycle:']);
+LogBox.ignoreLogs(['Require cycle:', 'Non-serializable', 'Sending `onAnimatedValueUpdate`']);
+addMenuClearAsyncStorage();
 
 const App: FunctionComponent = () => {
     const onBeforeLift = () => {
         loadLocaleLanguage();
     };
     useEffect(() => {
-        addMenuClearAsyncStorage();
         getCodePushInfo();
     }, []);
 
