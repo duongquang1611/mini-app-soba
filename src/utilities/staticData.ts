@@ -715,12 +715,6 @@ export const TEXT_OTP = [
     },
 ];
 
-// memberCoupon.status
-export enum MemberCouponStatus {
-    IN_CART = 1,
-    AVAILABLE = 2,
-}
-
 // type 2 tab in coupon bottom tab
 export enum TabCouponStatus {
     USED = 0,
@@ -815,6 +809,6 @@ export const CONFIG_KEYS = {
 };
 
 export const CRYPTO_DATA = {
-    key: CryptoJS.enc.Hex.parse('000102030405060708090a0b0c0d0e0f'),
-    iv: CryptoJS.enc.Hex.parse('101112131415161718191a1b1c1d1e1f'),
+    key: CryptoJS.enc.Hex.parse('0582d429663b1351e8992a435730a456'),
+    iv: CryptoJS.enc.Hex.parse('a19f0214a81040a392aaec1e617bd51d'),
 };

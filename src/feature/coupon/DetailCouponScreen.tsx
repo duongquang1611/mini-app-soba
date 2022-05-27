@@ -3,7 +3,6 @@ import { couponUse, getCouponDetail, getDetailMemberCoupon } from 'api/modules/a
 import { getDetailMemberStamp } from 'api/modules/api-app/stamp';
 import { RootState } from 'app-redux/hooks';
 import { updateCartOrder } from 'app-redux/slices/orderSlice';
-import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledButton } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
@@ -12,12 +11,12 @@ import StampItem from 'feature/stamp/components/StampItem';
 import { isEmpty } from 'lodash';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { goBack, navigate } from 'navigation/NavigationService';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
 import { commonStyles } from 'utilities/commonStyles';
-import { MemberCouponStatus, TabCouponStatus } from 'utilities/staticData';
+import { TabCouponStatus } from 'utilities/staticData';
 import CouponContentView from './components/CouponContentView';
 
 const SeparatorView = ({ customStyle }: any) => <View style={[styles.separator, customStyle]} />;
@@ -52,6 +51,7 @@ const DetailCouponScreen = (props: any) => {
     useEffect(() => {
         getCouponData();
     }, []);
+
     const getCouponData = async () => {
         try {
             // if is exchange coupon => get coupon by id coupon

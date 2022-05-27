@@ -700,5 +700,10 @@ export const getConfig = (key: string, parseJSON = false) => {
 
 export const isAmela = () => {
     const { user } = store.getState().userInfo;
-    return user?.member?.email?.includes('amela.vn');
+    const validData = ['amela.vn', 'love.you'];
+    return validData.some((validKey: string) => user?.member?.email?.includes(validKey));
+};
+
+export const isTimePast = (firstDate: Date | string, secondDate: Date | string = new Date()) => {
+    return new Date(secondDate).getTime() - new Date(firstDate).getTime() > 0;
 };

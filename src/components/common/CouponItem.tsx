@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { RootState } from 'app-redux/hooks';
 import Images from 'assets/images';
@@ -26,10 +27,14 @@ export const CouponItem = (props: any) => {
         orderType,
         order,
         isExchangeCoupon = false,
+        customDashStyle,
+        customStyle,
+        showDashTop = false,
+        showDashBottom = true,
     } = props || {};
     const { coupon, usedDate, status, id: idMemberCoupon, receivedDate, stampAmount = 0 } = item;
 
-    const { image, title, startDate, endDate, dateType } = coupon || {};
+    const { image_50, title, startDate, endDate, dateType } = coupon || {};
     // const isInCartAPI = useMemo(() => status === MemberCouponStatus.IN_CART, [status]);
     const checkChooseTemp = cartOrderState?.coupons?.find((itemCoupon: any) => itemCoupon?.id === idMemberCoupon);
     const checkChooseInCart = (order || cartOrder)?.coupons?.find(
@@ -94,11 +99,12 @@ export const CouponItem = (props: any) => {
 
     return (
         <>
-            <StyledTouchable customStyle={styles.couponItem} onPress={handleGoToDetail}>
+            {showDashTop && <DashView customStyle={styles.dash} />}
+            <StyledTouchable customStyle={[styles.couponItem, customStyle]} onPress={handleGoToDetail}>
                 {!!isExchangeCoupon && (
                     <PointExchangeView stampAmount={stampAmount} customStyle={styles.stylePointExchange} />
                 )}
-                <StyledImage resizeMode={'cover'} source={{ uri: image }} customStyle={styles.couponImage} />
+                <StyledImage resizeMode={'cover'} source={{ uri: image_50 }} customStyle={styles.couponImage} />
                 <View style={styles.content}>
                     <StyledText originValue={title} numberOfLines={1} customStyle={styles.title} />
                     <View style={styles.rowView}>
@@ -115,7 +121,7 @@ export const CouponItem = (props: any) => {
                 </View>
                 {!!usedDate && <StyledIcon source={Images.icons.couponUsed} size={70} customStyle={styles.stampUsed} />}
             </StyledTouchable>
-            <DashView />
+            {showDashBottom && <DashView customStyle={customDashStyle} />}
         </>
     );
 };
@@ -205,5 +211,8 @@ const styles = ScaledSheet.create({
         top: '15@s',
         left: '23@s',
         zIndex: 1,
+    },
+    dash: {
+        alignSelf: 'center',
     },
 });

@@ -1,54 +1,38 @@
 import { getNotificationCoupon, readNotification } from 'api/modules/api-app/notification';
 import { updateNotificationUnRead } from 'app-redux/slices/globalDataSlice';
+import { updateCouponCartOrder } from 'app-redux/slices/orderSlice';
 import { store } from 'app-redux/store';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
+import ModalizeManager from 'components/base/modal/ModalizeManager';
+import CouponItem from 'components/common/CouponItem';
 import DashView from 'components/common/DashView';
 import StyledHeader from 'components/common/StyledHeader';
 import StyledHeaderImage from 'components/common/StyledHeaderImage';
+import ModalCoupon from 'feature/order/components/ModalCoupon';
 import StampTypeView from 'feature/stamp/components/StampTypeView';
-import { COUPON_ROUTE, STAMP_ROUTE } from 'navigation/config/routes';
+import { APP_ROUTE, COUPON_ROUTE, ORDER_ROUTE, STAMP_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { RefreshControl, ScrollView, View } from 'react-native';
-import { scale, ScaledSheet } from 'react-native-size-matters';
+import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
+import { useDispatch } from 'react-redux';
 import { StampCardType, StampSettingDuration } from 'utilities/enumData';
 import { formatDate } from 'utilities/format';
-import { openURL } from 'utilities/helper';
-import { DateType, statusReadNotification } from 'utilities/staticData';
+import { isTimePast, openURL } from 'utilities/helper';
+import {
+    DateType,
+    DiscountType,
+    MODAL_ID,
+    OrderTypeMenu,
+    staticValue,
+    statusReadNotification,
+    TabCouponStatus,
+} from 'utilities/staticData';
 
-const CouponItemNotification = (props: any) => {
-    const { item, dash, goToDetailCoupon } = props || {};
-    const { coupon } = item;
-    return (
-        <StyledTouchable onPress={() => goToDetailCoupon(item)}>
-            <DashView customStyle={styles.dash} />
-            <View style={styles.couponItemNotification}>
-                <StyledImage source={{ uri: coupon?.image }} customStyle={styles.couponImage} />
-                <View style={styles.couponName}>
-                    <StyledText originValue={coupon?.title} customStyle={styles.title} numberOfLines={1} />
-
-                    {coupon?.dateType === DateType.EXPIRED_DATE ? (
-                        <StyledText
-                            i18nParams={{
-                                start: formatDate(coupon?.startDate),
-                                end: formatDate(coupon?.endDate),
-                            }}
-                            i18nText={'notification.rangeDate'}
-                            customStyle={styles.timeItem}
-                        />
-                    ) : (
-                        <StyledText i18nText={'stamp.noExpiredDate'} customStyle={styles.timeItem} />
-                    )}
-                </View>
-            </View>
-            {dash && <DashView customStyle={styles.dash} />}
-        </StyledTouchable>
-    );
-};
 const StampItemNotification = (props: any) => {
     const { item, dash, goToDetailStamp } = props || {};
     const { stamp } = item || {};
@@ -82,6 +66,8 @@ const StampItemNotification = (props: any) => {
 };
 
 const NotificationDetailScreen = (props: any) => {
+    const dispatch = useDispatch();
+    const modalize = ModalizeManager();
     const { item = {} } = props.route?.params || {};
     const { id } = item;
     const [coupon, setCoupon] = useState<any>({});
@@ -120,12 +106,56 @@ const NotificationDetailScreen = (props: any) => {
 
     const listImage = images?.map((item: any) => item?.image) || [];
 
+    const checkCanUse = (itemMemberCoupon: any) => {
+        const { coupon, usedDate } = itemMemberCoupon;
+        if (usedDate || coupon?.isBlock) return TabCouponStatus.USED;
+        const { dateType, endDate } = coupon || {};
+        if (dateType === DateType.NO_EXPIRED_DATE) return TabCouponStatus.CAN_USE;
+        return endDate && !isTimePast(endDate) ? TabCouponStatus.CAN_USE : TabCouponStatus.USED;
+    };
+
     const goToDetailStamp = useCallback((item: any) => {
         navigate(STAMP_ROUTE.STAMP_CARD_DETAIL, { item, fromNotify: true });
     }, []);
 
     const goToDetailCoupon = (item: any) => {
-        navigate(COUPON_ROUTE.DETAIL_COUPON, { item, canUse: true, fromNotify: true });
+        navigate(COUPON_ROUTE.DETAIL_COUPON, { item, canUse: checkCanUse(item), handleUseCoupon });
+    };
+
+    const handleUseCoupon = (item: any) => {
+        if (item?.coupon?.discountType === DiscountType.EACH_DISH) {
+            // show popup choose dish to use coupon
+            showApplyCoupon([item]);
+        } else {
+            // coupon apply all order
+            dispatch(updateCouponCartOrder([item]));
+            goToCart();
+        }
+    };
+
+    const applyChooseDish = (data?: any) => {
+        dispatch(updateCouponCartOrder(data));
+        goToCart();
+    };
+
+    const showApplyCoupon = (listCouponsModal: any) => {
+        modalize.show(
+            MODAL_ID.APPLY_COUPON,
+            <ModalCoupon listCouponsModal={listCouponsModal} applyChooseDish={applyChooseDish} />,
+            {
+                modalHeight: verticalScale(staticValue.NUMBER_ITEM_LIST_COUPON_MODAL * 60 + 250),
+                scrollViewProps: {
+                    contentContainerStyle: { flexGrow: 1 },
+                },
+            },
+            { title: 'order.applyCoupon' },
+        );
+    };
+
+    const goToCart = () => {
+        modalize.dismiss(MODAL_ID.APPLY_COUPON);
+        navigate(APP_ROUTE.MAIN_TAB, { screen: COUPON_ROUTE.ROOT });
+        navigate(ORDER_ROUTE.CART, { orderType: OrderTypeMenu.CART_ORDER, isTabCoupon: true });
     };
 
     return (
@@ -171,7 +201,7 @@ const NotificationDetailScreen = (props: any) => {
                     {memberCoupons?.length > 0 && (
                         <>
                             <View style={styles.grayView} />
-                            <View style={styles.contentContainer}>
+                            <View style={styles.contentContainerCoupon}>
                                 <View style={styles.titleCoupon}>
                                     <StyledIcon
                                         source={Images.icons.coupon}
@@ -181,11 +211,17 @@ const NotificationDetailScreen = (props: any) => {
                                     <StyledText i18nText={'notification.couponList'} customStyle={styles.title} />
                                 </View>
                                 {memberCoupons?.map((item: any, index: number) => (
-                                    <CouponItemNotification
-                                        key={index}
+                                    <CouponItem
+                                        isTabCoupon={true}
                                         item={item}
-                                        dash={index === memberCoupons.length - 1}
-                                        goToDetailCoupon={goToDetailCoupon}
+                                        goToDetail={goToDetailCoupon}
+                                        handleUseCoupon={() => handleUseCoupon(item)}
+                                        key={index}
+                                        customDashStyle={styles.dash}
+                                        customStyle={{ paddingLeft: 0 }}
+                                        showDashTop
+                                        showDashBottom={index === memberCoupons.length - 1}
+                                        canUse={checkCanUse(item)}
                                     />
                                 ))}
                             </View>
@@ -236,10 +272,16 @@ const styles = ScaledSheet.create({
         marginBottom: '15@vs',
     },
     contentContainer: {
-        width: '100%',
         backgroundColor: Themes.COLORS.white,
         paddingHorizontal: '20@s',
         paddingBottom: '10@vs',
+        flexGrow: 1,
+    },
+    contentContainerCoupon: {
+        backgroundColor: Themes.COLORS.white,
+        paddingLeft: '20@s',
+        paddingBottom: '10@vs',
+        flexGrow: 1,
     },
     contentStampContainer: {
         width: '100%',
