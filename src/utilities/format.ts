@@ -11,6 +11,7 @@ dayjs.extend(timezone);
 export const YYYYMMDD = 'YYYY年MM月DD日';
 export const MMDD = 'MM/DD';
 export const YYYYMMDD_PUBLISH = 'YYYY/MM/DD';
+export const YYYYMMDD_NORMAL = 'YYYY-MM-DD';
 export const YMDHms = 'YYYY/MM/DD HH:mm:ss';
 export const YMDHm = 'YYYY年MM月DD日　HH時mm分';
 

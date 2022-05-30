@@ -21,6 +21,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { Keyboard, View } from 'react-native';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
+import { formatDate, YYYYMMDD_NORMAL } from 'utilities/format';
 import { GENDER_DATA, POPUP_TYPE, staticValue } from 'utilities/staticData';
 import { USERNAME_MAX_LENGTH } from 'utilities/validate';
 import yupValidate from 'utilities/yupValidate';
@@ -73,6 +74,9 @@ const EditProfileScreen = () => {
             }
             if (!newUser?.avatar) {
                 delete newUser.avatar;
+            }
+            if (newUser.birthday) {
+                newUser.birthday = formatDate(newUser.birthday, YYYYMMDD_NORMAL);
             }
             await editProfile(newUser);
             const resProfile = await getProfile();
