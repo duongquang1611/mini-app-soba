@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Images from 'assets/images';
-import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
 import { goBack } from 'navigation/NavigationService';
@@ -11,6 +10,7 @@ import { logger } from 'utilities/helper';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { RootState } from 'app-redux/hooks';
 import { useSelector } from 'react-redux';
+import Metrics from 'assets/metrics';
 
 interface HeaderProps extends ViewProps {
     isBack?: boolean;
@@ -69,7 +69,10 @@ const StyledHeaderImage = (props: HeaderProps) => {
                 <StyledImage
                     resizeMode={'cover'}
                     source={{ uri: data?.item?.image || data?.item }}
-                    customStyle={[styles.img, { height: heightImage }]}
+                    customStyle={[
+                        styles.img,
+                        { height: heightImage, width: sliderWidth || '100%', borderRadius: sliderWidth ? 10 : 0 },
+                    ]}
                 />
             </View>
         );
@@ -212,7 +215,8 @@ const styles = ScaledSheet.create({
         // elevation: 5,
     },
     img: {
-        width: '100%',
+        width: Metrics.screenWidth - scale(40),
+        // width: '100%',
         height: '260@s',
     },
     containerDot: {

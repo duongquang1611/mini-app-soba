@@ -182,7 +182,7 @@ const NotificationDetailScreen = (props: any) => {
                             <StyledHeaderImage
                                 isBack={false}
                                 images={listImage}
-                                heightImage={scale(335)}
+                                heightImage={Metrics.screenWidth - scale(40)}
                                 customStyle={styles.sliceImage}
                                 sliderWidth={Metrics.screenWidth - scale(40)}
                             />
