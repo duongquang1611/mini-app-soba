@@ -15,6 +15,7 @@ import React, { useCallback, useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Keyboard, Text, View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
+import { formatDate, YYYYMMDD_NORMAL } from 'utilities/format';
 import { checkPasswordMatch, openURL } from 'utilities/helper';
 import { GENDER_DATA, staticValue, VerifiedCodeType } from 'utilities/staticData';
 import { PASSWORD_MAX_LENGTH, USERNAME_MAX_LENGTH } from 'utilities/validate';
@@ -24,11 +25,11 @@ import UpLoadAvatar from './components/UpLoadAvatar';
 
 const REGISTER_DEFAULT_FORM = __DEV__
     ? {
-          email: 'yeuquaimo1001@love.you',
+          email: 'yeuquaimo101010@love.you',
           password: 'loveyou3000',
           confirmPassword: 'loveyou3000',
           fullName: 'DuongQuang',
-          birthday: '2022-03-14T00:00:00.000Z',
+          birthday: '2022-03-14',
           gender: '1',
       }
     : {};
@@ -79,6 +80,9 @@ const RegisterScreen = () => {
             delete newUser.confirmPassword;
             if (newUser?.gender) {
                 newUser.gender = Number(newUser.gender);
+            }
+            if (newUser.birthday) {
+                newUser.birthday = formatDate(newUser.birthday, YYYYMMDD_NORMAL);
             }
             navigate(AUTHENTICATE_ROUTE.SEND_OTP, { user: newUser, type: VerifiedCodeType.REGISTER });
         } catch (error) {
