@@ -75,9 +75,9 @@ const EditProfileScreen = () => {
             if (!newUser?.avatar) {
                 delete newUser.avatar;
             }
-            if (newUser.birthday) {
-                newUser.birthday = formatDate(newUser.birthday, YYYYMMDD_NORMAL);
-            }
+            // if (newUser.birthday) {
+            //     newUser.birthday = formatDate(newUser.birthday, YYYYMMDD_NORMAL);
+            // }
             await editProfile(newUser);
             const resProfile = await getProfile();
             dispatch(userInfoActions.getUserInfoSuccess(resProfile?.data));
