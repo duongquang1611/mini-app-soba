@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { yupResolver } from '@hookform/resolvers/yup';
 import { checkIsExistEmail, getVerifyCode } from 'api/modules/api-app/authenticate';
 import Images from 'assets/images';
@@ -81,9 +82,9 @@ const RegisterScreen = () => {
             if (newUser?.gender) {
                 newUser.gender = Number(newUser.gender);
             }
-            if (newUser.birthday) {
-                newUser.birthday = formatDate(newUser.birthday, YYYYMMDD_NORMAL);
-            }
+            // if (newUser.birthday) {
+            //     newUser.birthday = formatDate(newUser.birthday, YYYYMMDD_NORMAL);
+            // }
             navigate(AUTHENTICATE_ROUTE.SEND_OTP, { user: newUser, type: VerifiedCodeType.REGISTER });
         } catch (error) {
             setLoading(false);
