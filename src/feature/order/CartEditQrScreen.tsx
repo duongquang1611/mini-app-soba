@@ -2,6 +2,7 @@ import { saveOrderOption } from 'api/modules/api-app/order';
 import { RootState } from 'app-redux/hooks';
 import { updateGlobalData } from 'app-redux/slices/globalDataSlice';
 import {
+    clearCartOrder,
     clearDefaultOrder,
     clearDefaultOrderLocal,
     clearMobileOrder,
@@ -122,10 +123,10 @@ const CartEditQrScreen = (props: any) => {
     });
     num += saveOrderCart?.coupons?.length || 0;
 
-    const onClearOrder = async () => {
+    const onClearOrder = async (orderNum?: number) => {
         try {
             const saveOrderParams = {
-                orderType,
+                orderType: orderNum || orderType,
                 totalAmount: 0,
                 dishes: [],
                 coupons: [],
@@ -140,12 +141,14 @@ const CartEditQrScreen = (props: any) => {
         setSaveOrderCart({});
         if (orderType === OrderTypeMenu.MOBILE_ORDER) {
             dispatch(clearMobileOrder());
+            dispatch(clearCartOrder());
         }
         if (orderType === OrderTypeMenu.DEFAULT_ORDER) {
             if (checkSameData(defaultOrder, defaultOrderLocal)) {
                 dispatch(clearDefaultOrderLocal());
             }
             dispatch(clearDefaultOrder());
+            onClearOrder(3);
             navigate(APP_ROUTE.MAIN_TAB, { screen: SETTING_ROUTE.ROOT });
         }
         if (orderType === OrderTypeMenu.DEFAULT_ORDER_LOCAL) {
@@ -201,6 +204,7 @@ const CartEditQrScreen = (props: any) => {
         // update mobile order
         if (orderType === OrderTypeMenu.MOBILE_ORDER) {
             dispatch(updateMobileOrder(saveOrderCart));
+            dispatch(updateCartOrder(saveOrderCart));
         }
         if (orderType === OrderTypeMenu.DEFAULT_ORDER) {
             dispatch(updateDefaultOrder(saveOrderCart));

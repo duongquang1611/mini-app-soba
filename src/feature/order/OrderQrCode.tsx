@@ -2,6 +2,7 @@
 import { saveOrderOption } from 'api/modules/api-app/order';
 import { RootState } from 'app-redux/hooks';
 import {
+    clearCartOrder,
     clearDefaultOrder,
     clearDefaultOrderLocal,
     clearMobileOrder,
@@ -169,15 +170,14 @@ const OrderQrCodeScreen = (props: any) => {
             console.log('saveOrderMobile -> error', error);
         }
     };
-    const clearOrder = async () => {
+    const clearOrder = async (orderNum?: number) => {
         try {
             const saveOrderParams = {
-                orderType,
+                orderType: orderNum || orderType,
                 totalAmount: 0,
                 dishes: [],
                 coupons: [],
             };
-            // console.log({saveOrderParams:})
             const res = await saveOrderOption(saveOrderParams);
             console.log('saveOrderMobile -> res', res);
         } catch (error) {
@@ -197,11 +197,13 @@ const OrderQrCodeScreen = (props: any) => {
     const onClearOrder = async () => {
         if (orderType === OrderTypeMenu.MOBILE_ORDER) {
             dispatch(clearMobileOrder());
+            dispatch(clearCartOrder());
         }
         if (orderType === OrderTypeMenu.DEFAULT_ORDER) {
             dispatch(clearDefaultOrder());
             if (checkSameData(defaultOrder, defaultOrderLocal)) {
                 dispatch(clearDefaultOrderLocal());
+                clearOrder(3);
             }
         }
         if (orderType === OrderTypeMenu.DEFAULT_ORDER_LOCAL) {
