@@ -220,9 +220,7 @@ const HomeScreen: FunctionComponent = () => {
                     onPressNoti={goToNotifyScreen}
                     isBack={false}
                     images={banners}
-                    logo
                 />
-                <View style={styles.grayView} />
                 <View style={styles.contScreen}>
                     <View style={styles.searchView}>
                         <View style={styles.logoView}>
@@ -242,7 +240,6 @@ const HomeScreen: FunctionComponent = () => {
                             keyExtractor={(item) => `${item.id}`}
                         />
                     </View>
-                    <View style={styles.grayView} />
                     <StyledTabTopView
                         containerStyle={styles.tabContainerStyle}
                         routes={routes}
@@ -251,7 +248,6 @@ const HomeScreen: FunctionComponent = () => {
                         isHome={true}
                         defaultIndex={tab}
                     />
-                    <View style={styles.grayView} />
                     <StyledImageBackground source={Images.photo.news} resizeMode="cover" style={styles.newsView}>
                         <View style={styles.buttonMobile}>
                             <StyledIcon source={Images.icons.document} customStyle={styles.iconLeft} size={20} />

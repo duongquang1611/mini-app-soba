@@ -105,7 +105,13 @@ const onReceived = async (data: NotificationReceivedEvent) => {
     const { defaultOrder, defaultOrderLocal, mobileOrder, cartOrder } = order;
     store.dispatch(updateCartOrder(deleteUsedCoupon(cartOrder, coupons)));
     const currentScreen = navigationRef?.current?.getCurrentRoute?.()?.name;
-    store.dispatch(updateNotificationUnRead(1));
+    try {
+        const res = await getNotificationList({ params: { take: 1, pageIndex: 1 } });
+        const { totalUnread } = res?.data;
+        store.dispatch(updateNotificationUnRead(totalUnread));
+    } catch (error) {
+        console.log('getNotification -> error', error);
+    }
     if (category === NotificationCategory.SUCCESS_PAYMENT && Number(type) === OrderType.DEFAULT_SETTING) {
         store.dispatch(updateMobileOrder(deleteUsedCoupon(mobileOrder, coupons)));
         store.dispatch(updateDefaultOrderLocal(defaultOrder));

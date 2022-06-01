@@ -146,7 +146,24 @@ const StyledHeaderImage = (props: HeaderProps) => {
                     {iconNoti ? (
                         <StyledTouchable onPress={onPressNoti} customStyle={styles.buttonActionNoti}>
                             <StyledIcon source={iconNoti} size={25} customStyle={styles.iconAction} />
-                            {notificationUnRead > 0 && <View style={styles.newNotification} />}
+                            {notificationUnRead > 0 && (
+                                <View
+                                    style={[
+                                        styles.newNotification,
+                                        {
+                                            width: notificationUnRead > 99 ? scale(20) : scale(15),
+                                            height: notificationUnRead > 99 ? scale(20) : scale(15),
+                                            top: notificationUnRead > 99 ? scale(0) : scale(5),
+                                            right: notificationUnRead > 99 ? scale(0) : scale(5),
+                                        },
+                                    ]}
+                                >
+                                    <StyledText
+                                        customStyle={styles.numNoti}
+                                        originValue={notificationUnRead > 99 ? `99+` : `${notificationUnRead}`}
+                                    />
+                                </View>
+                            )}
                         </StyledTouchable>
                     ) : (
                         <View style={styles.buttonAction} />
@@ -258,17 +275,24 @@ const styles = ScaledSheet.create({
         marginLeft: '5@s',
     },
     newNotification: {
-        width: '10@s',
-        height: '10@s',
+        width: '20@s',
+        height: '20@s',
         backgroundColor: Themes.COLORS.primary,
         borderRadius: 20,
         position: 'absolute',
-        top: '8@s',
-        right: '8@s',
+        alignItems: 'center',
+        justifyContent: 'center',
+        top: '0@s',
+        right: '0@s',
     },
     noDataImages: {
         width: '100%',
         height: '100%',
+    },
+    numNoti: {
+        color: Themes.COLORS.white,
+        fontSize: '8@ms0.3',
+        fontWeight: 'bold',
     },
 });
 
