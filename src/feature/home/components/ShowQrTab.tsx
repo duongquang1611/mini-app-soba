@@ -95,7 +95,7 @@ const styles = ScaledSheet.create({
         backgroundColor: Themes.COLORS.white,
     },
     detailButton: {
-        width: '200@s',
+        width: '170@s',
         padding: 0,
         marginTop: '10@vs',
         paddingVertical: '8@vs',
