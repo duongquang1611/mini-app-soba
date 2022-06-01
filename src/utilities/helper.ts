@@ -693,7 +693,7 @@ export const checkValidRank = (levelRank: any) => {
 };
 
 export const getConfig = (key: string, parseJSON = false) => {
-    const { configs = [] } = store.getState()?.resource?.data;
+    const { configs = [] } = store.getState()?.resource?.data || {};
     const dataConfig = configs.find((item: any) => item.key === key) || {};
     return parseJSON && dataConfig?.value ? JSON.parse(dataConfig?.value) : dataConfig?.value;
 };

@@ -87,7 +87,7 @@ const HomeScreen: FunctionComponent = () => {
     useOnesignal();
     const { t } = useTranslation();
     const { order, userInfo, resource } = useSelector((state: RootState) => state);
-    const { banners = [], sns = [] } = resource?.data;
+    const { banners = [], sns = [] } = resource?.data || {};
     const storeUrl = getConfig(CONFIG_KEYS.WEB_PAGE);
     const newsDisplay = Number(getConfig(CONFIG_KEYS.NEWS_DISPLAY));
     const { user } = userInfo;
