@@ -172,7 +172,7 @@ export default {
         rangeEditMenu: '{{numOrderCheck}}/{{numOrder}}クーポン選択済み',
         cancelDish: 'この商品を削除してよろしいですか？',
         cancelCoupon: 'このクーポンを削除してよろしいですか？',
-        qrGuide: '来店QRコードの詳細',
+        qrGuide: '会員証の詳細',
         cancelOrderDefault: '全てキャンセル',
         editOrderDefault: 'いつもの！注文編集',
         resetOrderDefault: 'リセット',
@@ -400,7 +400,7 @@ export default {
         photo: 'ライブラリーへのアクセス権限をオフされているようです。スマホの設定でオンにしてください。',
     },
     mobileOrder: {
-        title: '事前注文QRコード',
+        title: '事前商品選択QRコード',
         qr: {
             edit: '注文編集',
             cancel: '注文キャンセル',
@@ -413,21 +413,21 @@ export default {
     qrHome: {
         default: {
             title: 'いつもの！注文',
-            button: '注文詳細',
+            button: '選択中の商品を確認する',
             content1: '”いつもの！注文”がまだ設定されていません。',
             content2: '※設定すると、ホーム画面を開いただけで よく食べる商品の注文が簡単にできるようになります。',
             createButton: '設定',
         },
         mobile: {
-            title: '事前注文',
-            button: '注文詳細',
-            content1: '"事前注文"がまだありません。',
+            title: '事前商品選択',
+            button: '選択中の商品を確認する',
+            content1: '"事前商品選択"がまだありません。',
             content2: 'お店に入る前に商品を選んでおくと、 スマホをかざすだけで簡単に注文ができるようになります。',
-            createButton: '事前注文',
+            createButton: '事前商品選択',
         },
         checkIn: {
-            title: '来店QRコード',
-            button: '来店QRコードについて',
+            title: '会員証',
+            button: '会員証について',
         },
     },
     profile: {
