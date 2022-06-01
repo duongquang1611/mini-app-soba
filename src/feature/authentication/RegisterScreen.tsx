@@ -17,8 +17,8 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { Keyboard, Text, View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import { formatDate, YYYYMMDD_NORMAL } from 'utilities/format';
-import { checkPasswordMatch, openURL } from 'utilities/helper';
-import { GENDER_DATA, staticValue, VerifiedCodeType } from 'utilities/staticData';
+import { checkPasswordMatch, getConfig, openURL } from 'utilities/helper';
+import { CONFIG_KEYS, GENDER_DATA, staticValue, VerifiedCodeType } from 'utilities/staticData';
 import { PASSWORD_MAX_LENGTH, USERNAME_MAX_LENGTH } from 'utilities/validate';
 import yupValidate from 'utilities/yupValidate';
 import * as yup from 'yup';
@@ -41,6 +41,7 @@ const RegisterScreen = () => {
     const passwordConfirmRef = useRef<any>(null);
     const fullNameRef = useRef<any>(null);
     const [loading, setLoading] = useState(false);
+    const policyUrl = getConfig(CONFIG_KEYS.POLICY);
 
     const registerSchema = yup.object().shape({
         email: yupValidate.email(),
@@ -117,7 +118,7 @@ const RegisterScreen = () => {
     };
 
     const openPolicy = () => {
-        openURL('https://fb.com');
+        openURL(policyUrl);
     };
 
     return (
