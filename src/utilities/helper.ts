@@ -264,6 +264,7 @@ export const generateOrderQR = (
             const flatDishItem: any = {
                 id: `${mainDish?.stringId}`,
                 name: mainDish?.name,
+                subIds: [],
             };
             const subDishesData: any[] = [];
             if (subDishes?.length > 0) {
@@ -422,6 +423,7 @@ export const generateNewOrder = (
                 id: `${mainDish?.stringId}`,
                 name: mainDish?.name,
                 price: 100,
+                subIds: [],
             };
             const subDishesData: any[] = [];
             if (subDishes?.length > 0) {
