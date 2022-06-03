@@ -16,21 +16,23 @@ const NewsListScreen = () => {
         return <ListNewsItem data={item} />;
     };
     return (
-        <View style={styles.container}>
+        <>
             <StyledHeader title={'home.newsTitle'} />
             <View style={styles.grayView} />
-            <StyledList
-                data={list}
-                renderItem={renderItemNews}
-                ItemSeparatorComponent={DashView}
-                ListFooterComponent={DashView}
-                customStyle={styles.body}
-                refreshing={refreshing}
-                onRefresh={onRefresh}
-                noDataText={'home.newsNoData'}
-                onEndReached={onLoadMore}
-            />
-        </View>
+            <View style={styles.container}>
+                <StyledList
+                    data={list}
+                    renderItem={renderItemNews}
+                    ItemSeparatorComponent={DashView}
+                    ListFooterComponent={DashView}
+                    customStyle={styles.body}
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                    noDataText={'home.newsNoData'}
+                    onEndReached={onLoadMore}
+                />
+            </View>
+        </>
     );
 };
 
