@@ -128,7 +128,7 @@ const NotificationScreen = () => {
     };
 
     return (
-        <View style={styles.container}>
+        <>
             <StyledOverlayLoading visible={loading} />
             <StyledHeader
                 title={'notification.notificationTiTle'}
@@ -136,18 +136,20 @@ const NotificationScreen = () => {
                 onPressRight={handleReadAll}
             />
             <View style={styles.grayView} />
-            <StyledList
-                data={notifications}
-                renderItem={renderItemNoti}
-                ItemSeparatorComponent={DashView}
-                ListFooterComponent={DashView}
-                customStyle={styles.body}
-                refreshing={refreshing}
-                onRefresh={onRefresh}
-                noDataText={'notification.noData'}
-                onEndReached={onLoadMore}
-            />
-        </View>
+            <View style={styles.listView}>
+                <StyledList
+                    data={notifications}
+                    renderItem={renderItemNoti}
+                    ItemSeparatorComponent={DashView}
+                    ListFooterComponent={DashView}
+                    customStyle={styles.body}
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                    noDataText={'notification.noData'}
+                    onEndReached={onLoadMore}
+                />
+            </View>
+        </>
     );
 };
 
@@ -185,5 +187,8 @@ const styles = ScaledSheet.create({
     content: {
         fontWeight: 'bold',
         marginBottom: '10@vs',
+    },
+    listView: {
+        flex: 1,
     },
 });
