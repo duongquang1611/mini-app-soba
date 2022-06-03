@@ -237,7 +237,9 @@ export const generateCouponQR = (memberCoupon: any, user?: any, convert?: boolea
         qrData.coupon.price = price;
     }
     if (!isFullOrder) {
+        console.log('generateCouponQR -> choose', choose);
         qrData.coupon.foodId = `${choose?.dish?.stringId}`;
+        qrData.coupon.foodName = `${choose?.dish?.title}`;
     }
     if (user) qrData.user = generateUserDataQR(user, false);
 
