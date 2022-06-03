@@ -159,9 +159,10 @@ const NotificationDetailScreen = (props: any) => {
     };
 
     return (
-        <View style={styles.container}>
+        <>
             <StyledHeader title={'notification.detailNotificationTitle'} />
             <ScrollView
+                style={styles.container}
                 refreshControl={
                     <RefreshControl
                         refreshing={refreshing}
@@ -252,7 +253,7 @@ const NotificationDetailScreen = (props: any) => {
                     )}
                 </View>
             </ScrollView>
-        </View>
+        </>
     );
 };
 

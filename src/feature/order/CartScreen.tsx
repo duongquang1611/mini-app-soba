@@ -195,13 +195,13 @@ const CartScreen = (props: any) => {
     };
 
     return (
-        <View style={styles.container}>
+        <>
             <StyledHeader
                 title={titleOrder(orderType, 'order.cartTitle')}
                 textRight={getTextHeaderCancel()}
                 onPressRight={cancelCart}
             />
-            <StyledKeyboardAware>
+            <StyledKeyboardAware style={styles.container}>
                 <View style={styles.body}>
                     <AmountOrder order={saveOrder} />
                     <View style={styles.orderView}>
@@ -270,7 +270,7 @@ const CartScreen = (props: any) => {
                 </View>
                 <View style={styles.bottomView} />
             </StyledKeyboardAware>
-        </View>
+        </>
     );
 };
 
