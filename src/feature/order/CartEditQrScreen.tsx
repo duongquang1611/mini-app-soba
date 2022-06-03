@@ -231,96 +231,93 @@ const CartEditQrScreen = (props: any) => {
     };
     console.log({ saveOrderCart });
     return (
-        <View style={styles.container}>
+        <>
             <StyledHeader
                 title={titleOrder(orderType, 'order.cartTitle')}
                 textRight={getTextCancelTitle()}
                 onPressRight={cancelCart}
             />
-            <StyledKeyboardAware>
-                <View style={styles.body}>
-                    <AmountOrder order={saveOrderCart} />
-                    <View style={styles.orderView}>
-                        {saveOrderCart?.dishes?.map((item: any, index: number) => (
-                            <OrderItemCart
-                                saveOrder={saveOrderCart}
-                                cancelItem={popUpCancelDish}
-                                key={index}
-                                hideDashView={index === saveOrderCart?.dishes?.length - 1}
-                                data={item}
-                                canChange={true}
+            <StyledKeyboardAware style={styles.container}>
+                <AmountOrder order={saveOrderCart} />
+                <View style={styles.orderView}>
+                    {saveOrderCart?.dishes?.map((item: any, index: number) => (
+                        <OrderItemCart
+                            saveOrder={saveOrderCart}
+                            cancelItem={popUpCancelDish}
+                            key={index}
+                            hideDashView={index === saveOrderCart?.dishes?.length - 1}
+                            data={item}
+                            canChange={true}
+                            orderType={orderType}
+                            SaveAllOrderCart={setSaveOrderCart}
+                        />
+                    ))}
+                </View>
+                {orderType !== OrderTypeMenu.DEFAULT_ORDER && (
+                    <View style={styles.contentView}>
+                        <StyledText customStyle={styles.title} i18nText={'coupon.title'} />
+                        {saveOrderCart?.coupons?.map((item: any, index: number) => (
+                            <ItemCoupon
                                 orderType={orderType}
-                                SaveAllOrderCart={setSaveOrderCart}
+                                saveOrderCart={saveOrderCart}
+                                key={index}
+                                data={item}
+                                cancelCouponItem={popUpCancelCoupon}
+                                setSaveOrderCoupon={(coupons: any) => setSaveOrderCart({ ...saveOrderCart, coupons })}
                             />
                         ))}
+                        {saveOrderCart?.coupons?.length === 0 && (
+                            <View style={styles.noCouponView}>
+                                <StyledIcon source={Images.icons.noCoupon} size={40} />
+                                <StyledText customStyle={styles.noCoupon} i18nText={'coupon.noCoupon'} />
+                            </View>
+                        )}
+                        <StyledTouchable
+                            disabled={saveOrderCart?.length >= staticValue.MAX_ORDER}
+                            onPress={goToCouponList}
+                            customStyle={styles.moreCouponView}
+                        >
+                            <StyledText customStyle={styles.moreCoupon} i18nText={'coupon.moreCoupon'} />
+                            <StyledIcon source={Images.icons.add} size={20} />
+                        </StyledTouchable>
                     </View>
-                    {orderType !== OrderTypeMenu.DEFAULT_ORDER && (
-                        <View style={styles.contentView}>
-                            <StyledText customStyle={styles.title} i18nText={'coupon.title'} />
-                            {saveOrderCart?.coupons?.map((item: any, index: number) => (
-                                <ItemCoupon
-                                    orderType={orderType}
-                                    saveOrderCart={saveOrderCart}
-                                    key={index}
-                                    data={item}
-                                    cancelCouponItem={popUpCancelCoupon}
-                                    setSaveOrderCoupon={(coupons: any) =>
-                                        setSaveOrderCart({ ...saveOrderCart, coupons })
-                                    }
-                                />
-                            ))}
-                            {saveOrderCart?.coupons?.length === 0 && (
-                                <View style={styles.noCouponView}>
-                                    <StyledIcon source={Images.icons.noCoupon} size={40} />
-                                    <StyledText customStyle={styles.noCoupon} i18nText={'coupon.noCoupon'} />
-                                </View>
-                            )}
-                            <StyledTouchable
-                                disabled={saveOrderCart?.length >= staticValue.MAX_ORDER}
-                                onPress={goToCouponList}
-                                customStyle={styles.moreCouponView}
-                            >
-                                <StyledText customStyle={styles.moreCoupon} i18nText={'coupon.moreCoupon'} />
-                                <StyledIcon source={Images.icons.add} size={20} />
-                            </StyledTouchable>
-                        </View>
+                )}
+                <View style={styles.contentView}>
+                    {num > staticValue.MAX_ORDER && (
+                        <StyledText i18nText={'order.errorMaxOrder'} customStyle={styles.errText} />
                     )}
-                    <View style={styles.contentView}>
-                        {num > staticValue.MAX_ORDER && (
-                            <StyledText i18nText={'order.errorMaxOrder'} customStyle={styles.errText} />
-                        )}
-                        {orderType !== OrderTypeMenu.DEFAULT_ORDER && (
-                            <StyledButton
-                                disabled={num <= 0 || num > staticValue.MAX_ORDER}
-                                title={'order.qrButton'}
-                                onPress={createQRCode}
-                            />
-                        )}
-                        {orderType === OrderTypeMenu.DEFAULT_ORDER && (
-                            <StyledButton
-                                disabled={num <= 0 || num > staticValue.MAX_ORDER}
-                                title={'common.save'}
-                                onPress={saveDefaultOrder}
-                            />
-                        )}
+                    {orderType !== OrderTypeMenu.DEFAULT_ORDER && (
                         <StyledButton
-                            isNormal={true}
-                            title={'order.editCartButton'}
-                            onPress={() =>
-                                navigate(ORDER_ROUTE.MENU_EDIT_QR, {
-                                    orderType,
-                                    order: saveOrderCart,
-                                    setOrder: setSaveOrderCart,
-                                })
-                            }
-                            customStyle={styles.productAddition}
-                            customStyleText={styles.textProduct}
+                            disabled={num <= 0 || num > staticValue.MAX_ORDER}
+                            title={'order.qrButton'}
+                            onPress={createQRCode}
                         />
-                    </View>
+                    )}
+                    {orderType === OrderTypeMenu.DEFAULT_ORDER && (
+                        <StyledButton
+                            disabled={num <= 0 || num > staticValue.MAX_ORDER}
+                            title={'common.save'}
+                            onPress={saveDefaultOrder}
+                        />
+                    )}
+                    <StyledButton
+                        isNormal={true}
+                        title={'order.editCartButton'}
+                        onPress={() =>
+                            navigate(ORDER_ROUTE.MENU_EDIT_QR, {
+                                orderType,
+                                order: saveOrderCart,
+                                setOrder: setSaveOrderCart,
+                            })
+                        }
+                        customStyle={styles.productAddition}
+                        customStyleText={styles.textProduct}
+                    />
                 </View>
+                {/* </View> */}
                 <View style={styles.bottomView} />
             </StyledKeyboardAware>
-        </View>
+        </>
     );
 };
 
@@ -332,7 +329,6 @@ const styles = ScaledSheet.create({
         backgroundColor: Themes.COLORS.white,
     },
     body: {
-        flex: 1,
         alignItems: 'center',
         backgroundColor: Themes.COLORS.lightGray,
     },
