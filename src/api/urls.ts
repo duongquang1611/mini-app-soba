@@ -32,6 +32,7 @@ const ORDER_URL = {
     getOrder: (orderType: number) => `order?orderType=${orderType}`,
     listHistoryOrder: 'order/bill-history',
     detailHistoryOrder: (id: number) => `order/bill-history/${id}`,
+    createNewOrder: 'order/create-new-order',
 };
 
 const HOME_URL = {

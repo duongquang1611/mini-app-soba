@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import AsyncStorage from '@react-native-community/async-storage';
 import { sendTeams } from 'api/modules/api-app/general';
+import { createNewOrder } from 'api/modules/api-app/order';
 import { store } from 'app-redux/store';
 import Images from 'assets/images';
 import AlertMessage from 'components/base/AlertMessage';
@@ -237,7 +238,6 @@ export const generateCouponQR = (memberCoupon: any, user?: any, convert?: boolea
         qrData.coupon.price = price;
     }
     if (!isFullOrder) {
-        console.log('generateCouponQR -> choose', choose);
         qrData.coupon.foodId = `${choose?.dish?.stringId}`;
         qrData.coupon.foodName = `${choose?.dish?.title}`;
     }
@@ -479,17 +479,18 @@ export const makeId = (length = 12) => {
     return result;
 };
 
-export const showActionQR = (qrCode: any, newOrder: any, titleCancel = 'New Order', titleOk = 'QR Code') => {
+export const showActionQR = (qrCode: any, newOrder: any, titleCancel = 'Create New Order', titleOk = 'QR Code') => {
     try {
         AlertMessage('Send To Teams', {
             textButtonCancel: titleCancel,
             textButtonOk: titleOk,
             onCancel: () => {
-                if (titleCancel === 'New Order') {
+                if (titleCancel === 'Create New Order') {
                     let newOrderFormat = JSON.parse(newOrder);
                     newOrderFormat.orderId = makeId();
                     newOrderFormat = addQRCodeEOS(newOrderFormat, true, false);
                     sendTeams(`${newOrderFormat}`, titleCancel);
+                    createNewOrder(JSON.parse(newOrderFormat));
                 } else {
                     sendTeams(`${newOrder}`, titleCancel);
                 }
@@ -703,6 +704,7 @@ export const getConfig = (key: string, parseJSON = false) => {
 };
 
 export const isAmela = () => {
+    return true;
     const { user } = store.getState().userInfo;
     const validData = ['amela.vn', 'love.you'];
     return validData.some((validKey: string) => user?.member?.email?.includes(validKey));
