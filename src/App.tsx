@@ -29,12 +29,14 @@ const App: FunctionComponent = () => {
     };
 
     useEffect(() => {
-        !__DEV__ && SplashScreen.hide();
-        getCodePushInfo();
-        // !__DEV__ &&
-        //     wait(staticValue.TIMEOUT_CODEPUSH).then(() => {
-        //         !getCodePushSuccess && SplashScreen.hide();
-        //     });
+        if (__DEV__) {
+            SplashScreen.hide();
+        } else {
+            getCodePushInfo(getCodepushSuccess);
+            wait(staticValue.TIMEOUT_CODEPUSH).then(() => {
+                !getCodePushSuccess && SplashScreen.hide();
+            });
+        }
     }, []);
 
     return (
