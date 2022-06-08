@@ -51,6 +51,7 @@ export const staticValue = {
     PERCENT_HEIGHT_POPUP: 0.8,
     DELAY_LONG_PRESS: Platform.OS === 'ios' ? 400 : 350,
     ENCRYPT_KEY: '@Soba$',
+    TIMEOUT_CODEPUSH: 6000,
 };
 
 export const LINEAR_COLOR = {

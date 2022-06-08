@@ -8,18 +8,32 @@ import { RootSiblingParent } from 'react-native-root-siblings';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import APIProvider from 'utilities/context/APIProvider';
-import { addMenuClearAsyncStorage, getCodePushInfo } from 'utilities/helper';
+import { addMenuClearAsyncStorage, getCodePushInfo, wait } from 'utilities/helper';
 import { loadLocaleLanguage } from 'utilities/i18next';
+import { staticValue } from 'utilities/staticData';
+import SplashScreen from 'react-native-splash-screen';
 
 LogBox.ignoreLogs(['Require cycle:', 'Non-serializable', 'Sending `onAnimatedValueUpdate`']);
 addMenuClearAsyncStorage();
+let getCodePushSuccess = false;
 
 const App: FunctionComponent = () => {
     const onBeforeLift = () => {
         loadLocaleLanguage();
     };
+
+    const getCodepushSuccess = () => {
+        getCodePushSuccess = true;
+        SplashScreen.hide();
+    };
+
     useEffect(() => {
-        getCodePushInfo();
+        __DEV__ && SplashScreen.hide();
+        getCodePushInfo(getCodepushSuccess);
+        !__DEV__ &&
+            wait(staticValue.TIMEOUT_CODEPUSH).then(() => {
+                !getCodePushSuccess && SplashScreen.hide();
+            });
     }, []);
 
     return (
