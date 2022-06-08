@@ -13,7 +13,6 @@ import {
     View,
     ViewStyle,
 } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { ScaledSheet } from 'react-native-size-matters';
 import { autoCompleteType, textContentType } from 'utilities/CommonInterface';
@@ -47,6 +46,7 @@ export interface StyledInputProps extends TextInputProps {
     handleConfirm?: any;
     customErrorMessage?: any;
     useUTC?: boolean;
+    disabled?: boolean;
 }
 
 export const LabelInput = ({ label, labelRequire = '*', customStyle, containerStyle }: any) => {
@@ -58,9 +58,9 @@ export const LabelInput = ({ label, labelRequire = '*', customStyle, containerSt
     );
 };
 
-const WrapInput = ({ onPress, children, customStyle }: any) => {
+const WrapInput = ({ onPress, children, customStyle, disabled }: any) => {
     return onPress ? (
-        <StyledTouchable customStyle={customStyle} onPress={onPress}>
+        <StyledTouchable customStyle={customStyle} onPress={onPress} disabled={disabled}>
             {children}
         </StyledTouchable>
     ) : (
@@ -85,6 +85,7 @@ const StyledInput = (props: StyledInputProps, ref: any) => {
         errorMessage,
         wrapInputStyle,
         useUTC = true,
+        disabled = false,
     } = props;
 
     const [isFocused, setIsFocused] = useState(false);
@@ -131,6 +132,7 @@ const StyledInput = (props: StyledInputProps, ref: any) => {
                         !!(errorMessage || customErrorMessage) && { borderColor: Themes.COLORS.borderInputError },
                 ]}
                 onPress={icBirthday ? showDatePicker : onPress}
+                disabled={disabled}
             >
                 <TextInput
                     ref={ref || input}
@@ -160,9 +162,9 @@ const StyledInput = (props: StyledInputProps, ref: any) => {
                     </StyledTouchable>
                 ) : null}
                 {icBirthday && (
-                    <TouchableOpacity onPress={showDatePicker}>
+                    <StyledTouchable onPress={showDatePicker} disabled={disabled}>
                         <StyledIcon customStyle={styles.icEntry} size={24} source={icBirthday} />
-                    </TouchableOpacity>
+                    </StyledTouchable>
                 )}
             </WrapInput>
             {!!(errorMessage || customErrorMessage) && (

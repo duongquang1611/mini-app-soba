@@ -39,9 +39,10 @@ const ExchangeCouponListScreen = (props: any) => {
         });
     };
 
-    const handleExchangeCoupon = (item: any, cbSuccess?: any, cbError?: any) => {
+    const handleExchangeCoupon = (item: any, cbSuccess?: any, cbError?: any, currentStampDetail) => {
         const { stampAmount = 0 } = item || {};
-        if (stampAmount > leftAmount) {
+        const currentLeftAmount = (currentStampDetail ? currentStampDetail?.leftAmount || 0 : leftAmount) || 0;
+        if (stampAmount > currentLeftAmount) {
             AlertMessage('', {
                 ...languageText?.default?.exchangeCoupon?.error,
                 type: POPUP_TYPE.ERROR,
@@ -49,7 +50,7 @@ const ExchangeCouponListScreen = (props: any) => {
         } else
             AlertMessage('', {
                 ...languageText?.default?.exchangeCoupon?.confirm,
-                content: t('exchangeCoupon.confirm.content', { amount: stampAmount }),
+                content: t('exchangeCoupon.confirm.content', { amount: currentLeftAmount - stampAmount }),
                 type: POPUP_TYPE.CONFIRM,
                 onOk: () => {
                     exchangeCoupon(item, cbSuccess, cbError);

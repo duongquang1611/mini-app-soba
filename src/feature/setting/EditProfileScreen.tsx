@@ -97,13 +97,15 @@ const EditProfileScreen = () => {
     };
 
     const renderItemGender = (item: any) => {
+        const activeRadio = watch('gender') === item.value;
         return (
             <StyledTouchable
                 customStyle={styles.buttonGender}
                 key={item.title}
                 onPress={() => setValueForm('gender', item.value)}
+                disabled
             >
-                <RadioCheckView check={watch('gender') === item.value} />
+                <RadioCheckView check={activeRadio} customStyle={activeRadio && styles.customRadioView} />
                 <StyledText customStyle={styles.textGender} originValue={item.title} />
             </StyledTouchable>
         );
@@ -155,7 +157,9 @@ const EditProfileScreen = () => {
                         editable={false}
                         pointerEvents={'none'}
                         handleConfirm={(text: string) => setValueForm('birthday', text)}
-                        containerStyle={styles.inputContainer}
+                        containerStyle={styles.birthdayContainer}
+                        wrapInputStyle={styles.wrapInputBirthday}
+                        disabled
                     />
                     <LabelInput
                         label={'authen.labelRegister.gender'}
@@ -267,6 +271,9 @@ const styles = ScaledSheet.create({
     inputContainer: {
         marginTop: '13@vs',
     },
+    birthdayContainer: {
+        marginTop: '13@vs',
+    },
     containerStyleTitleGender: {
         marginBottom: 0,
         marginLeft: '20@s',
@@ -282,12 +289,16 @@ const styles = ScaledSheet.create({
     },
     inputBirthday: {
         flex: 1,
+        color: Themes.COLORS.silver,
     },
     inputEmail: {
         backgroundColor: Themes.COLORS.disabled,
         flex: 1,
         paddingHorizontal: '15@s',
         color: Themes.COLORS.silver,
+    },
+    wrapInputBirthday: {
+        backgroundColor: Themes.COLORS.disabled,
     },
     wrapInputEmail: {
         paddingHorizontal: 0,
@@ -299,5 +310,9 @@ const styles = ScaledSheet.create({
     fakeFormInput: {
         bottom: -99999999,
         position: 'absolute',
+    },
+    customRadioView: {
+        backgroundColor: Themes.COLORS.disabled,
+        borderColor: Themes.COLORS.silver,
     },
 });
