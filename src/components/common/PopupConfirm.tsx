@@ -18,7 +18,7 @@ interface IProps {
     nonPaddingVertical?: boolean;
     onPressIconClose?: any;
 }
-const IMAGE_SIZE = [177, 130, 100];
+const IMAGE_SIZE = [155, 120, 100];
 const IMAGE_PATH = [Images.icons.confirm, Images.icons.success, Images.icons.error];
 const COLORS_CANCEL = [Themes.COLORS.white, Themes.COLORS.white];
 

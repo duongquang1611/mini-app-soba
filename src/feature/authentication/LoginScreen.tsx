@@ -19,8 +19,8 @@ import * as yup from 'yup';
 
 const DEFAULT_FORM: any = __DEV__
     ? {
-          email: 'yeuquaimo@love.you',
-          password: 'loveyou3000',
+          //   email: 'yeuquaimo@love.you',
+          //   password: 'loveyou3000',
           //   email: 'tuyet08@gmail.com',
           //   password: 'abc12345',
           //   email: 'tuyet.nguyen@amela.vn',
@@ -37,8 +37,8 @@ const DEFAULT_FORM: any = __DEV__
           //   password: 'abc12345',
           //   email: 'amela02@gmail.com',
           //   password: 'abc12345',
-          //   email: 'le.ngo@amela.vn',
-          //   password: 'abc12345',
+          email: 'le.ngo@amela.vn',
+          password: 'abc12345',
           //   email: 'quang.duong@amela.vn',
           //   password: 'abc12345',
       }

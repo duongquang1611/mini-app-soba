@@ -88,10 +88,15 @@ const DetailCouponScreen = (props: any) => {
     };
     const handleUseCouponDetail = async () => {
         if (handleExchangeCoupon) {
-            handleExchangeCoupon?.(item, async () => {
-                const resStampDetail = await getDetailMemberStamp(stampDetail?.id);
-                setStampDetail(resStampDetail?.data);
-            });
+            handleExchangeCoupon?.(
+                item,
+                async () => {
+                    const resStampDetail = await getDetailMemberStamp(stampDetail?.id);
+                    setStampDetail(resStampDetail?.data);
+                },
+                undefined,
+                stampDetail,
+            );
         } else {
             handleUseCoupon ? handleUseCoupon(detailMemberCoupon) : handleUseCouponDefault();
             if (cartOrderState) {
