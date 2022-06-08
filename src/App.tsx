@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { NavigationContainer } from '@react-navigation/native';
 import { persistor, store } from 'app-redux/store';
 import { navigationRef } from 'navigation/NavigationService';
@@ -28,12 +29,12 @@ const App: FunctionComponent = () => {
     };
 
     useEffect(() => {
-        __DEV__ && SplashScreen.hide();
-        getCodePushInfo(getCodepushSuccess);
-        !__DEV__ &&
-            wait(staticValue.TIMEOUT_CODEPUSH).then(() => {
-                !getCodePushSuccess && SplashScreen.hide();
-            });
+        !__DEV__ && SplashScreen.hide();
+        getCodePushInfo();
+        // !__DEV__ &&
+        //     wait(staticValue.TIMEOUT_CODEPUSH).then(() => {
+        //         !getCodePushSuccess && SplashScreen.hide();
+        //     });
     }, []);
 
     return (
