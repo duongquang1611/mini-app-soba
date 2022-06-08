@@ -7,6 +7,7 @@ import { saveOrderOption } from 'api/modules/api-app/order';
 import { RootState } from 'app-redux/hooks';
 import { updateNotificationUnRead } from 'app-redux/slices/globalDataSlice';
 import {
+    clearCartOrder,
     clearMobileOrder,
     updateCartOrder,
     updateDefaultOrderLocal,
@@ -131,6 +132,7 @@ const onReceived = async (data: NotificationReceivedEvent) => {
     }
     if (category === NotificationCategory.SUCCESS_PAYMENT && Number(type) === OrderType.MOBILE) {
         store.dispatch(clearMobileOrder());
+        store.dispatch(clearCartOrder());
         store.dispatch(updateDefaultOrderLocal(deleteUsedCoupon(defaultOrderLocal, coupons)));
         try {
             const defaultOrderHomeSaveOrderOption = generateDataSaveOrderOption(
