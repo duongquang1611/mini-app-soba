@@ -194,9 +194,9 @@ export default {
         orderHistoryTitle: '注文履歴',
         orderHistoryDetailTitle: '注文詳細',
         timeOrder: '注文日時 : ',
-        orderDefaultTitle: 'いつもの！注文',
+        orderDefaultTitle: 'いつもの！選択',
         viewCart: 'カートを見る',
-        orderSaveTitle: 'いつもの！注文',
+        orderSaveTitle: 'いつもの！選択',
         position: 'タイトル',
         content: '内容',
         contactTitle: '問い合わせ',
@@ -263,6 +263,12 @@ export default {
         remain: '残数',
         tickSuccess: 'スタンプを貯まりました',
         textBlock: '無効',
+        note: '～注意事項～',
+        contentFirst: 'スタンプは「１会計毎に１個」発行できます。',
+        contentSecond:
+            '各スタンプカードには「有効期間」が設定されています。\n有効期間外のスタンプカードには、スタンプを集める事ができません。\nまた、交換型のスタンプカードの場合、クーポン交換も不可能になります。',
+        contentThree: 'スタンプカードでGETしたクーポンを、返金および換金する事はできません。',
+        contentLatest: '予告なくサービスの内容を変更する場合がございます。',
     },
     chooseStamp: {
         earnStamp: '貯まるスタンプを選択',
@@ -412,7 +418,7 @@ export default {
     },
     qrHome: {
         default: {
-            title: 'いつもの！注文',
+            title: 'いつもの！選択',
             button: '選択中の商品を確認する',
             content1: '”いつもの！注文”がまだ設定されていません。',
             content2: '※設定すると、ホーム画面を開いただけで よく食べる商品の注文が簡単にできるようになります。',
