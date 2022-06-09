@@ -175,7 +175,7 @@ export default {
         qrGuide: '会員証の詳細',
         qrGuideFromHome: 'QRコードの使い方',
         cancelOrderDefault: '全てキャンセル',
-        editOrderDefault: 'いつもの！注文編集',
+        editOrderDefault: 'いつもの！選択編集',
         resetOrderDefault: 'リセット',
         resetDefaultOrder: '注文をリセットしてもよろしいでしょうか？',
         backHomeWhenPayment: '注文「{{orderId}}」の支払いが完了しました。更新するにはホーム画面へ戻ってください。',
@@ -419,7 +419,7 @@ export default {
     },
     qrHome: {
         default: {
-            title: 'いつもの！注文',
+            title: 'いつもの！選択',
             buttonNoEdit: 'いつもの！をアレンジ',
             buttonEdited: '選択中の商品を確認する',
             content1: '”いつもの！注文”がまだ設定されていません。',
