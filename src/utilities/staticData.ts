@@ -201,7 +201,7 @@ export const listButton = [
     },
     {
         id: 2,
-        name: 'いつもの！注文',
+        name: 'いつもの！選択',
         img: Images.icons.cart,
         key: 'orderDefault',
     },
@@ -612,9 +612,9 @@ export const stepGuide = [
         index: 1,
         name: '手順 1：',
         contentName: 'アプリ使用可能店 に行く',
-        content: '使用可能な店舗は随時追加 します。\n※現在、使用可能な店舗は',
+        content: '使用可能な店舗は随時追加 します。\n※2022/07時点、\n使用可能な店舗は「兜町店」のみです。',
         icon: Images.icons.step1,
-        textLink: 'こちら',
+        // textLink: 'こちら',
         link: 'https://www.facebook.com/',
     },
     {
@@ -813,3 +813,22 @@ export const CRYPTO_DATA = {
     key: CryptoJS.enc.Hex.parse('0582d429663b1351e8992a435730a456'),
     iv: CryptoJS.enc.Hex.parse('a19f0214a81040a392aaec1e617bd51d'),
 };
+
+export const STAMP_NOTE = [
+    {
+        id: 1,
+        content: 'stamp.contentFirst',
+    },
+    {
+        id: 2,
+        content: 'stamp.contentSecond',
+    },
+    {
+        id: 3,
+        content: 'stamp.contentThree',
+    },
+    {
+        id: 4,
+        content: 'stamp.contentLatest',
+    },
+];

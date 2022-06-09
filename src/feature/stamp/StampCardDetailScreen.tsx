@@ -12,7 +12,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { StampCardType, StampSettingBox } from 'utilities/enumData';
-import { MODAL_ID, staticValue, tickTypeText } from 'utilities/staticData';
+import { MODAL_ID, STAMP_NOTE, staticValue, tickTypeText } from 'utilities/staticData';
 import HistoryExchangeModal from './components/HistoryExchangeModal';
 import StampItem from './components/StampItem';
 import StampTickList from './components/StampTickList';
@@ -217,6 +217,19 @@ const StampCardDetailScreen = (props: any) => {
                                 />
                             );
                         })}
+                        <StyledText i18nText={'stamp.note'} customStyle={styles.noteStampText} />
+                        {STAMP_NOTE.map((item: any) => {
+                            return (
+                                <View style={styles.rowStampNote}>
+                                    <View style={styles.dot} />
+                                    <StyledText
+                                        key={JSON.stringify(item)}
+                                        i18nText={`${item?.content || ''}`}
+                                        customStyle={styles.noteTextStamp}
+                                    />
+                                </View>
+                            );
+                        })}
                     </View>
                 </ScrollView>
             </View>
@@ -274,6 +287,13 @@ const styles = ScaledSheet.create({
     noteText: {
         color: Themes.COLORS.mineShaft,
         lineHeight: '22@vs',
+        fontWeight: '500',
+    },
+    noteStampText: {
+        color: Themes.COLORS.mineShaft,
+        marginTop: '20@vs',
+        marginBottom: '5@vs',
+        fontWeight: '500',
     },
     tickTypeText: {
         color: Themes.COLORS.mineShaft,
@@ -287,6 +307,10 @@ const styles = ScaledSheet.create({
         color: Themes.COLORS.mineShaft,
         lineHeight: '22@vs',
     },
+    noteTextStamp: {
+        color: Themes.COLORS.mineShaft,
+        lineHeight: '22@vs',
+    },
     contentCoupon: {
         backgroundColor: Themes.COLORS.white,
     },
@@ -294,5 +318,17 @@ const styles = ScaledSheet.create({
         marginHorizontal: '20@s',
         marginBottom: '30@vs',
         marginTop: '20@vs',
+    },
+    rowStampNote: {
+        flexDirection: 'row',
+    },
+    dot: {
+        height: '3@s',
+        width: '3@s',
+        borderRadius: 10,
+        backgroundColor: Themes.COLORS.mineShaft,
+        marginTop: '9@ms0.3',
+        marginRight: '5@s',
+        marginLeft: '3@s',
     },
 });

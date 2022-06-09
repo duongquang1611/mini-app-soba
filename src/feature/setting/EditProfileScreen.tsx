@@ -98,6 +98,7 @@ const EditProfileScreen = () => {
 
     const renderItemGender = (item: any) => {
         const activeRadio = watch('gender') === item.value;
+        if (!activeRadio) return null;
         return (
             <StyledTouchable
                 customStyle={styles.buttonGender}

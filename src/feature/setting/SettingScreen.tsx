@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { getRankList } from 'api/modules/api-app/setting';
 import { RootState } from 'app-redux/hooks';
 import Images from 'assets/images';
@@ -69,6 +70,7 @@ const SettingScreen = () => {
     };
     const indexRank = rankList.findIndex((itemRank: any) => itemRank?.title === levelRank);
     const colorRank = indexRank >= 0 ? statusUser[indexRank % 4] : statusUser[0];
+
     const handleShowPicker = () => {
         modalize.show(
             'modalPickerBackdrop',
@@ -214,9 +216,9 @@ const SettingScreen = () => {
                                         )}
                                     </View>
                                 </View>
-                                <StyledTouchable onPress={handleShowPicker} customStyle={styles.question}>
+                                {/* <StyledTouchable onPress={handleShowPicker} customStyle={styles.question}>
                                     <StyledIcon source={Images.icons.questionGray} size={24} />
-                                </StyledTouchable>
+                                </StyledTouchable> */}
                             </View>
 
                             <View
