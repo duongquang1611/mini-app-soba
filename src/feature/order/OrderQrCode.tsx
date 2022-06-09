@@ -231,7 +231,7 @@ const OrderQrCodeScreen = (props: any) => {
                     contentContainerStyle: { flexGrow: 1 },
                 },
             },
-            { title: 'order.qrGuide' },
+            { title: 'order.qrGuideFromHome' },
         );
     };
 

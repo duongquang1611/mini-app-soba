@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { RootState } from 'app-redux/hooks';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledText } from 'components/base';
 import { AUTHENTICATE_ROUTE, HOME_ROUTE, ORDER_ROUTE } from 'navigation/config/routes';
@@ -7,14 +8,26 @@ import React, { useMemo } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
+import { useSelector } from 'react-redux';
 import { QR_TAB_TYPE } from 'utilities/enumData';
-import { decryptData, encryptData, isAmela, showActionQR } from 'utilities/helper';
+import { checkSameData, decryptData, encryptData, isAmela, showActionQR } from 'utilities/helper';
 import { QR_TAB_DATA, staticValue } from 'utilities/staticData';
 
 const ShowQrTab = (props: any) => {
     const { type = QR_TAB_TYPE.ORDER_DEFAULT, qrValue, onPress, newOrder = '' } = props;
     const qrComponentData: any = QR_TAB_DATA[type];
-    const { textButton, content1, content2, navigateScreen, orderType, createButton } = qrComponentData;
+    const { order } = useSelector((state: RootState) => state);
+    const { defaultOrder, defaultOrderLocal } = order;
+    const {
+        textButton,
+        textButtonNoEdit,
+        textButtonEdited,
+        content1,
+        content2,
+        navigateScreen,
+        orderType,
+        createButton,
+    } = qrComponentData;
     const qrEncrypt = useMemo(() => encryptData(qrValue), [JSON.stringify(qrValue)]);
 
     const handleQrPress = () => {
@@ -45,6 +58,12 @@ const ShowQrTab = (props: any) => {
     const handleOnPressQR = () => {
         // decryptData(qrEncrypt);
     };
+    const getTextButton = () => {
+        if (type !== QR_TAB_TYPE.ORDER_DEFAULT) {
+            return textButton;
+        }
+        return checkSameData(defaultOrder, defaultOrderLocal) ? textButtonNoEdit : textButtonEdited;
+    };
 
     return (
         <View style={[styles.containerQrTab]}>
@@ -62,8 +81,17 @@ const ShowQrTab = (props: any) => {
                     )}
                     <StyledButton
                         onPress={handleQrPress}
-                        title={textButton}
-                        customContentStyle={styles.detailButton}
+                        title={getTextButton()}
+                        customContentStyle={[
+                            styles.detailButton,
+                            {
+                                width:
+                                    type === QR_TAB_TYPE.ORDER_DEFAULT &&
+                                    !checkSameData(defaultOrder, defaultOrderLocal)
+                                        ? scale(220)
+                                        : scale(170),
+                            },
+                        ]}
                         customStyleText={styles.textBtn}
                     />
                 </View>

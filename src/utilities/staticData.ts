@@ -758,6 +758,8 @@ export enum OrderTypeMenu {
 export const QR_TAB_DATA = [
     {
         textButton: 'qrHome.default.button',
+        textButtonNoEdit: 'qrHome.default.buttonNoEdit',
+        textButtonEdited: 'qrHome.default.buttonEdited',
         background: Themes.COLORS.secondary,
         navigateScreen: ORDER_ROUTE.ORDER_QR_CODE,
         orderType: OrderTypeMenu.DEFAULT_ORDER_LOCAL,

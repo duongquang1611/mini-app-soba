@@ -173,6 +173,7 @@ export default {
         cancelDish: 'この商品を削除してよろしいですか？',
         cancelCoupon: 'このクーポンを削除してよろしいですか？',
         qrGuide: '会員証の詳細',
+        qrGuideFromHome: 'QRコードの使い方',
         cancelOrderDefault: '全てキャンセル',
         editOrderDefault: 'いつもの！注文編集',
         resetOrderDefault: 'リセット',
@@ -418,8 +419,9 @@ export default {
     },
     qrHome: {
         default: {
-            title: 'いつもの！選択',
-            button: '選択中の商品を確認する',
+            title: 'いつもの！注文',
+            buttonNoEdit: '選択中の商品を一時的に変更する',
+            buttonEdited: '選択中の商品を確認する',
             content1: '”いつもの！注文”がまだ設定されていません。',
             content2: '※設定すると、ホーム画面を開いただけで よく食べる商品の注文が簡単にできるようになります。',
             createButton: '設定',
