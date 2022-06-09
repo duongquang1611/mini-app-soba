@@ -82,16 +82,7 @@ const ShowQrTab = (props: any) => {
                     <StyledButton
                         onPress={handleQrPress}
                         title={getTextButton()}
-                        customContentStyle={[
-                            styles.detailButton,
-                            {
-                                width:
-                                    type === QR_TAB_TYPE.ORDER_DEFAULT &&
-                                    !checkSameData(defaultOrder, defaultOrderLocal)
-                                        ? scale(220)
-                                        : scale(170),
-                            },
-                        ]}
+                        customContentStyle={styles.detailButton}
                         customStyleText={styles.textBtn}
                     />
                 </View>
