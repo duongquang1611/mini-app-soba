@@ -18,7 +18,7 @@ import { APP_ROUTE, ORDER_ROUTE, SETTING_ROUTE, TAB_NAVIGATION_ROOT } from 'navi
 import { goBack, navigate, reset } from 'navigation/NavigationService';
 import React, { useRef, useState } from 'react';
 import { View } from 'react-native';
-import { ScaledSheet, verticalScale } from 'react-native-size-matters';
+import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkHasDataOrder, checkSameData, titleOrder } from 'utilities/helper';
 import { DiscountType, MODAL_ID, OrderTypeMenu, POPUP_TYPE, staticValue } from 'utilities/staticData';
@@ -204,7 +204,7 @@ const CartScreen = (props: any) => {
             <StyledKeyboardAware style={styles.container}>
                 <View style={styles.body}>
                     <AmountOrder order={saveOrder} />
-                    <View style={styles.orderView}>
+                    <View style={[styles.orderView, { marginBottom: saveOrder?.dishes?.length === 0 ? 0 : scale(10) }]}>
                         {saveOrder?.dishes?.map((item: any, index: number) => (
                             <OrderItemCart
                                 saveOrder={saveOrder}
