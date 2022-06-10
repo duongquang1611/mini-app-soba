@@ -62,9 +62,9 @@ const StampCardScreen = () => {
     const showGuide = () => {
         modalize.show(
             MODAL_ID.GUIDE_STAMP,
-            <GuideStamp onPress={() => modalize?.dismiss?.(MODAL_ID.GUIDE_STAMP)} content={''} />,
+            <GuideStamp onPress={() => modalize?.dismiss?.(MODAL_ID.GUIDE_STAMP)} />,
             {
-                modalHeight: verticalScale(487),
+                // modalHeight: Metrics.screenHeight,
                 scrollViewProps: {
                     contentContainerStyle: { flexGrow: 1 },
                 },

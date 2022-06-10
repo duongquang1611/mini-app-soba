@@ -441,4 +441,9 @@ export default {
     profile: {
         updateSuccess: 'プロフィールが更新されました。',
     },
+    guideStamp: {
+        title: '～スタンプの集め方～',
+        titleSecond: '～スタンプカードの種類～',
+        subTitleSecond: 'スタンプカードには以下の２種類がございます。',
+    },
 };
