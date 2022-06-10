@@ -94,7 +94,7 @@ const styles = ScaledSheet.create({
     itemContainer: {
         width: '100%',
         flexDirection: 'row',
-        marginTop: '10@s',
+        marginTop: '10@vs',
     },
     textGuideSecond: {
         fontSize: '18@ms0.3',

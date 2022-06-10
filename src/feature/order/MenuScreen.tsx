@@ -11,7 +11,7 @@ import { ORDER_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { View } from 'react-native';
-import { scale, ScaledSheet } from 'react-native-size-matters';
+import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
 import { funcFilterStatus, isIos, sumTotalAmount } from 'utilities/helper';
 import { MODAL_ID, OrderTypeMenu, staticValue } from 'utilities/staticData';
@@ -110,7 +110,7 @@ const MenuScreen = () => {
             MODAL_ID.ORDER_GUIDE,
             <ModalGuideMenu />,
             {
-                modalHeight: isIos ? scale(425) + Metrics.safeBottomPadding : scale(465) + Metrics.safeBottomPadding,
+                modalHeight: verticalScale(isIos ? 540 : 640),
                 scrollViewProps: {
                     contentContainerStyle: { flexGrow: 1 },
                 },
