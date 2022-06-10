@@ -175,7 +175,7 @@ const OrderDefaultMenu = (props: any) => {
             MODAL_ID.ORDER_GUIDE,
             <ModalGuideMenu />,
             {
-                modalHeight: isIos ? scale(425) + Metrics.safeBottomPadding : scale(465) + Metrics.safeBottomPadding,
+                modalHeight: verticalScale(isIos ? 540 : 640),
                 scrollViewProps: {
                     contentContainerStyle: { flexGrow: 1 },
                 },
