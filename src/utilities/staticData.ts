@@ -1,9 +1,9 @@
 import { COUPON_URL } from 'api/urls';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
+import CryptoJS from 'crypto-js';
 import { HOME_ROUTE, ORDER_ROUTE } from 'navigation/config/routes';
 import { Platform } from 'react-native';
-import CryptoJS from 'crypto-js';
 
 export const staticValue = {
     DEFAULT: 1,
@@ -631,6 +631,46 @@ export const stepGuide = [
         content:
             '券売機のQR読取部分にスマートフォンをかざします。\n※使用可能な券売機は、下記の写真の読取部分がついています。',
         icon: Images.icons.step3,
+    },
+];
+
+export const guideStamp = [
+    {
+        id: 1,
+        name: '手順 1：',
+        content: 'アプリ対応の店舗に行く',
+        // textLink: 'こちら',
+        link: 'https://www.facebook.com/',
+        icLine: Images.icons.lineStampFirst,
+        lineSize: 30,
+    },
+    {
+        id: 2,
+        name: '手順 2：',
+        content: '券売機にQRコード（いつもの！／事前選択／会員証のいずれか）をかざしてログイン',
+        icLine: Images.icons.lineStampSecond,
+        lineSize: 50,
+    },
+    {
+        id: 3,
+        name: '手順 3：',
+        content: '券売機で発券するとスタンプGET！',
+        subContent:
+            '※スタンプがGETできる対象商品が設定されている場合がございます。\n対象商品一覧は、各スタンプカード詳細の下部に表示されております。',
+    },
+];
+
+export const guideStampType = [
+    {
+        id: 1,
+        name: '累計型スタンプカード：',
+        content: '決められたスタンプ数を集めると、自動的にクーポンがGETできるカードです。',
+    },
+    {
+        id: 2,
+        name: '交換型スタンプカード：',
+        content:
+            '集めたスタンプを使って、クーポンと交換する事ができるカードです。\n交換に必要なスタンプ数は、各カード・クーポン毎に異なります。',
     },
 ];
 
