@@ -208,22 +208,21 @@ const StampCardDetailScreen = (props: any) => {
                             }
                             customStyle={styles.noteTextApply}
                         />
-                        {stampDishes?.map((item: any) => {
+                        {stampDishes?.map((item: any, index: number) => {
                             return (
                                 <StyledText
-                                    key={JSON.stringify(item)}
+                                    key={index}
                                     originValue={`+ ${item?.title || ''}`}
                                     customStyle={styles.noteTextDish}
                                 />
                             );
                         })}
                         <StyledText i18nText={'stamp.note'} customStyle={styles.noteStampText} />
-                        {STAMP_NOTE.map((item: any) => {
+                        {STAMP_NOTE.map((item: any, index: number) => {
                             return (
-                                <View style={styles.rowStampNote}>
+                                <View style={styles.rowStampNote} key={index}>
                                     <View style={styles.dot} />
                                     <StyledText
-                                        key={JSON.stringify(item)}
                                         i18nText={`${item?.content || ''}`}
                                         customStyle={styles.noteTextStamp}
                                     />
