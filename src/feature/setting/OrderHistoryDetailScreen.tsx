@@ -86,7 +86,7 @@ const OrderItem = (props: any) => {
 const OrderHistoryDetailScreen = (props: any) => {
     const { id } = props?.route?.params;
     const [historyDetail, setHistoryDetail] = useState<any>({});
-    const { createdDate, billDish = [], amount, totalPrice, billCoupon, totalPaid } = historyDetail;
+    const { createdDate, billDish = [], amount, totalPrice, billCoupon, totalPaid, restaurant } = historyDetail;
     let numDish = useRef(0).current;
     billDish?.forEach(async (rating: any) => {
         numDish += rating?.amount;
@@ -128,6 +128,10 @@ const OrderHistoryDetailScreen = (props: any) => {
                     }
                 >
                     <View style={styles.body}>
+                        <View style={styles.restaurantView}>
+                            <StyledText i18nText={'setting.restaurant'} isBlack />
+                            <StyledText originValue={restaurant?.name} isBlack customStyle={styles.timeValue} />
+                        </View>
                         <View style={styles.timeView}>
                             <StyledText i18nText={'setting.timeOrder'} isBlack />
                             <StyledText
@@ -363,6 +367,14 @@ const styles = ScaledSheet.create({
         tintColor: Themes.COLORS.secondary,
     },
     timeView: {
+        paddingHorizontal: '20@s',
+        flexDirection: 'row',
+        width: '100%',
+        alignItems: 'center',
+        backgroundColor: Themes.COLORS.lightGray,
+        paddingBottom: '15@vs',
+    },
+    restaurantView: {
         paddingVertical: '15@vs',
         paddingHorizontal: '20@s',
         flexDirection: 'row',

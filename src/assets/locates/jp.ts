@@ -209,6 +209,8 @@ export default {
         moneyNexRank: '￥{{moneyToNextRank}}を支払うと、{{nextRank}} に昇格します',
         contentRank: '￥{{money}}を支払う、月に1回「{{coupon}}」クーポンを頂く',
         nextRank: 'を支払うと、{{nextRank}} に昇格します',
+        restaurant: '店舗名 : ',
+        rangeRestaurant: '店舗名 : {{restaurant}}',
         statusContent:
             '＊注意：ニヲタ問8地携ドじなれ速改ょクり型載えで果情ムネ樹権オ更虫検意リクニ張本ス皆説との刑世九憂えんど。試じどそ読顔シトニ千限くトょイ減3勝',
     },

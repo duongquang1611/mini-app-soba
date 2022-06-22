@@ -14,7 +14,7 @@ import { formatDate, YMDHm } from 'utilities/format';
 import { numberWithCommas } from 'utilities/helper';
 
 const OrderItem = ({ item }: any) => {
-    const { title, createdDate, amount, totalPaid, id } = item || {};
+    const { title, createdDate, amount, totalPaid, id, restaurant } = item || {};
     return (
         <StyledTouchable
             customStyle={styles.orderItem}
@@ -28,6 +28,11 @@ const OrderItem = ({ item }: any) => {
                         i18nText={'order.rangeHistoryTitleItem'}
                         customStyle={styles.contentText}
                         numberOfLines={1}
+                    />
+                    <StyledText
+                        i18nText={'setting.rangeRestaurant'}
+                        i18nParams={{ restaurant: restaurant?.name }}
+                        customStyle={styles.restaurant}
                     />
                     <StyledText originValue={formatDate(createdDate, YMDHm)} customStyle={styles.time} />
                     <View style={styles.priceRow}>
@@ -105,6 +110,11 @@ const styles = ScaledSheet.create({
     time: {
         color: Themes.COLORS.silver,
         marginVertical: '10@vs',
+        fontSize: '14@ms0.3',
+    },
+    restaurant: {
+        color: Themes.COLORS.silver,
+        marginTop: '10@vs',
         fontSize: '14@ms0.3',
     },
     priceRow: {
