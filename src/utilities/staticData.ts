@@ -874,3 +874,8 @@ export const STAMP_NOTE = [
         content: 'stamp.contentLatest',
     },
 ];
+
+export const RESTAURANT_NEW_ORDER = {
+    id: '9212',
+    name: 'Komorosoba',
+};

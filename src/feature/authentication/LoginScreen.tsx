@@ -37,10 +37,12 @@ const DEFAULT_FORM: any = __DEV__
           //   password: 'abc12345',
           //   email: 'amela02@gmail.com',
           //   password: 'abc12345',
-          email: 'le.ngo@amela.vn',
-          password: 'abc12345',
+          //   email: 'le.ngo@amela.vn',
+          //   password: 'abc12345',
           //   email: 'quang.duong@amela.vn',
           //   password: 'abc12345',
+          email: 'komoro.app.test001@gmail.com',
+          password: 'Test0320',
       }
     : {};
 
