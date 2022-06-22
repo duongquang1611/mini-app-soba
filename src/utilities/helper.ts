@@ -24,6 +24,7 @@ import {
     POPUP_TYPE,
     staticValue,
     CRYPTO_DATA,
+    RESTAURANT_NEW_ORDER,
 } from './staticData';
 
 export const isAndroid = Platform.OS === 'android';
@@ -468,6 +469,7 @@ export const generateNewOrder = (
         totalPrice,
         totalDiscount,
         totalPaid: totalPrice - totalDiscount,
+        restaurant: RESTAURANT_NEW_ORDER,
     };
 
     return addQRCodeEOS(qrData, convert, includeEOS);
