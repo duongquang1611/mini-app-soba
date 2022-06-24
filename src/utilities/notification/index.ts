@@ -16,6 +16,7 @@ import {
 import { userInfoActions } from 'app-redux/slices/userInfoSlice';
 import { store } from 'app-redux/store';
 import AlertMessage from 'components/base/AlertMessage';
+import { getCouponData } from 'feature/home/HomeScreen';
 import i18next from 'i18next';
 import { APP_ROUTE, HOME_ROUTE, SETTING_ROUTE } from 'navigation/config/routes';
 import { navigate, navigationRef } from 'navigation/NavigationService';
@@ -150,6 +151,7 @@ const onReceived = async (data: NotificationReceivedEvent) => {
     }
     if (category === NotificationCategory.SUCCESS_PAYMENT || category === NotificationCategory.CANCEL_PAYMENT) {
         try {
+            await getCouponData();
             const resProfile = await getProfile();
             store.dispatch(userInfoActions.getUserInfoSuccess(resProfile?.data));
         } catch (error) {
