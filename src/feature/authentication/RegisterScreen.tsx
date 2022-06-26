@@ -16,7 +16,6 @@ import React, { useCallback, useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Keyboard, Text, View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
-import { formatDate, YYYYMMDD_NORMAL } from 'utilities/format';
 import { checkPasswordMatch, getConfig, openURL } from 'utilities/helper';
 import { CONFIG_KEYS, GENDER_DATA, staticValue, VerifiedCodeType } from 'utilities/staticData';
 import { PASSWORD_MAX_LENGTH, USERNAME_MAX_LENGTH } from 'utilities/validate';
@@ -26,12 +25,12 @@ import UpLoadAvatar from './components/UpLoadAvatar';
 
 const REGISTER_DEFAULT_FORM = __DEV__
     ? {
-          email: 'yeuquaimo101010@love.you',
+          email: 'yeuquaimo050@love.you',
           password: 'loveyou3000',
           confirmPassword: 'loveyou3000',
           fullName: 'DuongQuang',
-          birthday: '2022-03-14',
-          gender: '1',
+          birthday: '',
+          gender: '',
       }
     : {};
 
@@ -83,9 +82,12 @@ const RegisterScreen = () => {
             if (newUser?.gender) {
                 newUser.gender = Number(newUser.gender);
             }
-            // if (newUser.birthday) {
-            //     newUser.birthday = formatDate(newUser.birthday, YYYYMMDD_NORMAL);
-            // }
+            if (newUser.birthday === '') {
+                delete newUser.birthday;
+            }
+            if (newUser.gender === '') {
+                delete newUser.gender;
+            }
             navigate(AUTHENTICATE_ROUTE.SEND_OTP, { user: newUser, type: VerifiedCodeType.REGISTER });
         } catch (error) {
             setLoading(false);
@@ -195,6 +197,7 @@ const RegisterScreen = () => {
                         icBirthday={Images.icons.calendar}
                         customStyle={styles.inputBirthday}
                         editable={false}
+                        labelRequire={''}
                         pointerEvents={'none'}
                         handleConfirm={(text: string) => setValueForm('birthday', text)}
                         containerStyle={styles.normalInputContainer}
@@ -203,6 +206,7 @@ const RegisterScreen = () => {
                         label={'authen.labelRegister.gender'}
                         customStyle={styles.titleGender}
                         containerStyle={styles.containerStyleTitleGender}
+                        labelRequire={''}
                     />
                     {GENDER_DATA.map(renderItemGender)}
                     <View style={styles.buttonRule}>
