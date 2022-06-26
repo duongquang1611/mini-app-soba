@@ -21,7 +21,6 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { Keyboard, View } from 'react-native';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
-import { formatDate, YYYYMMDD_NORMAL } from 'utilities/format';
 import { GENDER_DATA, POPUP_TYPE, staticValue } from 'utilities/staticData';
 import { USERNAME_MAX_LENGTH } from 'utilities/validate';
 import yupValidate from 'utilities/yupValidate';
@@ -31,7 +30,6 @@ const EditProfileScreen = () => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     const { user = {} } = useSelector((state: any) => state.userInfo);
-    const birthdayRef = useRef<any>(null);
     const fullNameRef = useRef<any>(null);
 
     const registerSchema = yup.object().shape({
@@ -45,15 +43,15 @@ const EditProfileScreen = () => {
         resolver: yupResolver(registerSchema),
         defaultValues: {
             email: user?.member?.email,
-            birthday: user?.member?.birthday,
-            gender: `${user?.member?.gender}`,
+            birthday: user?.member?.birthday || '',
+            gender: user?.member?.gender === null ? '' : `${user?.member?.gender}`,
             fullName: user?.member?.fullName,
             avatar: user?.member?.avatar,
         },
     });
 
     const {
-        formState: { isValid },
+        formState: { isValid, errors },
         setValue,
         handleSubmit,
         watch,
@@ -75,9 +73,12 @@ const EditProfileScreen = () => {
             if (!newUser?.avatar) {
                 delete newUser.avatar;
             }
-            // if (newUser.birthday) {
-            //     newUser.birthday = formatDate(newUser.birthday, YYYYMMDD_NORMAL);
-            // }
+            if (newUser.birthday === '') {
+                delete newUser.birthday;
+            }
+            if (newUser.gender === '') {
+                delete newUser.gender;
+            }
             await editProfile(newUser);
             const resProfile = await getProfile();
             dispatch(userInfoActions.getUserInfoSuccess(resProfile?.data));
@@ -111,7 +112,6 @@ const EditProfileScreen = () => {
             </StyledTouchable>
         );
     };
-
     return (
         <View style={styles.container}>
             <StyledHeader title={'setting.editProfileTitle'} />
@@ -160,14 +160,20 @@ const EditProfileScreen = () => {
                         handleConfirm={(text: string) => setValueForm('birthday', text)}
                         containerStyle={styles.birthdayContainer}
                         wrapInputStyle={styles.wrapInputBirthday}
+                        labelRequire={''}
                         disabled
                     />
                     <LabelInput
                         label={'authen.labelRegister.gender'}
                         customStyle={styles.titleGender}
+                        labelRequire={''}
                         containerStyle={styles.containerStyleTitleGender}
                     />
-                    {GENDER_DATA.map(renderItemGender)}
+                    {watch('gender') === '' ? (
+                        <StyledText i18nText={'common.noData'} disabled customStyle={styles.textNoDataGender} />
+                    ) : (
+                        GENDER_DATA.map(renderItemGender)
+                    )}
                 </FormProvider>
                 <TextUnderline
                     onPress={goToChangePass}
@@ -315,5 +321,9 @@ const styles = ScaledSheet.create({
     customRadioView: {
         backgroundColor: Themes.COLORS.disabled,
         borderColor: Themes.COLORS.silver,
+    },
+    textNoDataGender: {
+        marginTop: '12@vs',
+        marginHorizontal: '20@s',
     },
 });

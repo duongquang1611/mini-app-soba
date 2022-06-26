@@ -20,9 +20,9 @@ const yupValidate = {
 
     email: () => yup.string().required('error.required').trim('error.trimSpace').email('error.emailInvalid'),
 
-    birthday: () => yup.string().required('error.required'),
+    birthday: () => yup.string(),
 
-    gender: () => yup.string().required('error.required'),
+    gender: () => yup.string(),
 
     phone: () => yup.string().required('error.required').matches(REGEX_PHONE, 'error.phoneInvalid'),
 
