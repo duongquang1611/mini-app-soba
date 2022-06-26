@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { deleteAccount } from 'api/modules/api-app/authenticate';
 import { getRankList } from 'api/modules/api-app/setting';
 import { RootState } from 'app-redux/hooks';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
-import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
+import { StyledButton, StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import { StyledImageBackground } from 'components/base/StyledImage';
@@ -28,7 +29,7 @@ import {
     numberWithCommas,
     openURL,
 } from 'utilities/helper';
-import { CONFIG_KEYS, defaultRankColor, listButton, OrderTypeMenu, statusUser } from 'utilities/staticData';
+import { CONFIG_KEYS, defaultRankColor, listButton, OrderTypeMenu, POPUP_TYPE, statusUser } from 'utilities/staticData';
 import UserStatus from './components/UserStatus';
 
 const InfoItem = (data: any) => {
@@ -173,6 +174,24 @@ const SettingScreen = () => {
                 ((Metrics.screenWidth - scale(60)) * fillNumber) / 100 - scale(contentWidth || 0) / 2 + scale(10) || 0,
         };
     };
+
+    const confirmDeleteAccount = async () => {
+        try {
+            await deleteAccount();
+            logout();
+        } catch (error) {
+            AlertMessage(error);
+        }
+    };
+
+    const onPressDeleteAccount = () => {
+        AlertMessage('deleteAccount.noteDelete', {
+            type: POPUP_TYPE.CONFIRM,
+            textButtonCancel: 'common.cancel',
+            onOk: confirmDeleteAccount,
+        });
+    };
+
     return (
         <View style={styles.container}>
             <View>
@@ -274,6 +293,11 @@ const SettingScreen = () => {
                         <InfoItem key={index} data={item} />
                     ))}
                 </View>
+                <StyledButton
+                    onPress={onPressDeleteAccount}
+                    title="deleteAccount.button"
+                    customStyle={styles.deleteBtn}
+                />
             </StyledKeyboardAware>
         </View>
     );
@@ -435,6 +459,10 @@ const styles = ScaledSheet.create({
     rank: {
         fontSize: '12@ms0.3',
         marginRight: '7@vs',
+    },
+    deleteBtn: {
+        alignSelf: 'center',
+        marginBottom: '15@vs',
     },
 });
 

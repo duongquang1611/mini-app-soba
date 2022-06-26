@@ -1,6 +1,8 @@
+import { RootState } from 'app-redux/hooks';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon } from 'components/base';
+import RequireLoginScreen from 'feature/authentication/RequireLoginScreen';
 import TabCouponListScreen from 'feature/coupon/TabCouponListScreen';
 // Screen
 import HomeScreen from 'feature/home/HomeScreen';
@@ -12,6 +14,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { AnimatedTabBarNavigator, DotSize } from 'react-native-animated-nav-tab-bar';
 import { scale, ScaledSheet } from 'react-native-size-matters';
+import { useSelector } from 'react-redux';
 
 const AnimateTabs = AnimatedTabBarNavigator();
 
@@ -27,6 +30,8 @@ const TabBarIcon = ({ focused, source }: any) => {
 
 const MainTabContainer = () => {
     const { t } = useTranslation();
+    const { withoutAccount } = useSelector((state: RootState) => state.globalDataUnSave);
+
     const ArrayTabs = [
         {
             name: HOME_ROUTE.ROOT,
@@ -38,7 +43,7 @@ const MainTabContainer = () => {
         {
             name: STAMP_ROUTE.ROOT,
             title: t('tab.stamp'),
-            component: StampCardScreen,
+            component: withoutAccount ? () => <RequireLoginScreen title={'stamp.title'} /> : StampCardScreen,
             icon: Images.icons.tab.stamp_card,
             tabBarIcon: (iconProps: any) => <TabBarIcon {...iconProps} source={Images.icons.tab.stamp_card} />,
         },
@@ -52,14 +57,14 @@ const MainTabContainer = () => {
         {
             name: COUPON_ROUTE.ROOT,
             title: t('tab.coupon'),
-            component: TabCouponListScreen,
+            component: withoutAccount ? () => <RequireLoginScreen title={'coupon.title'} /> : TabCouponListScreen,
             icon: Images.icons.tab.coupon,
             tabBarIcon: (iconProps: any) => <TabBarIcon {...iconProps} source={Images.icons.tab.coupon} />,
         },
         {
             name: SETTING_ROUTE.ROOT,
             title: t('tab.setting'),
-            component: SettingScreen,
+            component: withoutAccount ? () => <RequireLoginScreen title={'tab.setting'} /> : SettingScreen,
             icon: Images.icons.tab.user,
             tabBarIcon: (iconProps: any) => <TabBarIcon {...iconProps} source={Images.icons.tab.user} />,
         },

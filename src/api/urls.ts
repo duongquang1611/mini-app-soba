@@ -53,6 +53,7 @@ const AUTH_URL = {
     editProfile: 'profile/edit',
     changePass: 'auth/change-password',
     checkOldPass: 'auth/check-old-password',
+    deleteAccount: '/auth/delete-account',
 };
 const SETTING_URL = {
     contact: 'profile/send-contact',

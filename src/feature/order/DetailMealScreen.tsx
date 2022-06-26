@@ -8,6 +8,7 @@ import { Themes } from 'assets/themes';
 import { StyledIcon, StyledText } from 'components/base';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeaderImage from 'components/common/StyledHeaderImage';
+import { showModalRequireLogin } from 'feature/home/HomeScreen';
 import { goBack } from 'navigation/NavigationService';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
@@ -35,6 +36,7 @@ const DetailMealScreen = (props: any) => {
     const {
         order: orderStore,
         resource: { data: dataResource },
+        globalDataUnSave: { withoutAccount },
     } = useSelector((state: RootState) => state);
     const { cartOrder } = orderStore;
     const menuItem = dataResource?.menu?.find((item: any) => item?.id === id) || {};
@@ -82,7 +84,12 @@ const DetailMealScreen = (props: any) => {
     const totalNum = sumTotalAmount(saveOrder);
     let newAmountOrder = createDate ? totalNum + amountValue - (findIdStore?.totalAmount || 0) : totalNum + amountValue;
     if (checkSave) newAmountOrder = totalNum;
+
     const goToSaveOrder = () => {
+        if (withoutAccount) {
+            showModalRequireLogin();
+            return;
+        }
         setCheckSave(true);
         const dishesStore = isNew
             ? saveOrder?.dishes || []

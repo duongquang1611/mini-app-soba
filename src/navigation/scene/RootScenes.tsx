@@ -40,6 +40,7 @@ import ExchangeCouponListScreen from 'feature/stamp/ExchangeCouponListScreen';
 import StampCardDetailScreen from 'feature/stamp/StampCardDetailScreen';
 import StampCardScreen from 'feature/stamp/StampCardScreen';
 import useNetwork, { getDataProfile } from 'hooks/useNetwork';
+import { isEqual } from 'lodash';
 import React, { useEffect } from 'react';
 import { StatusBar } from 'react-native';
 import { Host } from 'react-native-portalize';
@@ -61,14 +62,15 @@ import MainTabContainer from './TabScenes';
 const MainStack = createStackNavigator();
 
 const AppStack = () => {
-    const { skipOrderDefault, viewedOrderDefault } = useSelector((state: RootState) => state.globalData);
+    const { withoutAccount } = useSelector((state: RootState) => state.globalDataUnSave, isEqual);
+    const { skipOrderDefault, viewedOrderDefault } = useSelector((state: RootState) => state.globalData, isEqual);
     return (
         <>
             <StatusBar backgroundColor={Themes.COLORS.headerBackground} barStyle={'dark-content'} />
             <Host>
                 <MainStack.Navigator
                     initialRouteName={
-                        skipOrderDefault
+                        skipOrderDefault || withoutAccount
                             ? APP_ROUTE.MAIN_TAB
                             : viewedOrderDefault
                             ? APP_ROUTE.MAIN_TAB
@@ -141,8 +143,10 @@ const AppStack = () => {
 const Navigation: React.FunctionComponent = () => {
     useNetwork();
 
-    const { userInfo } = useSelector((state: RootState) => state);
-    const { token } = userInfo;
+    const {
+        userInfo: { token },
+        globalDataUnSave: { withoutAccount },
+    } = useSelector((state: RootState) => state);
 
     useEffect(() => {
         if (token) {
@@ -150,7 +154,7 @@ const Navigation: React.FunctionComponent = () => {
         }
     }, []);
 
-    if (token) {
+    if (token || withoutAccount) {
         return <AppStack />;
     }
     return <AuthStack />;

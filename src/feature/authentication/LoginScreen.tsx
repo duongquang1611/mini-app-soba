@@ -1,4 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { updateGlobalDataUnSave } from 'app-redux/slices/globalDataUnSaveSlice';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledIcon, StyledImage, StyledInputForm, StyledText } from 'components/base';
@@ -12,6 +13,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { Keyboard, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
+import { useDispatch } from 'react-redux';
 import { useLogin } from 'utilities/authenticate/AuthenticateService';
 import { EMAIL_MAX_LENGTH, PASSWORD_MAX_LENGTH } from 'utilities/validate';
 import yupValidate from 'utilities/yupValidate';
@@ -29,8 +31,8 @@ const DEFAULT_FORM: any = __DEV__
           //   password: 'abc12345',
           //   email: 'tuyet10@gmail.com',
           //   password: 'abc12345',
-          //   email: 'tester4@gmail.com',
-          //   password: 'abc12345',
+          email: 'tester4@gmail.com',
+          password: 'abc12345',
           //   email: 'amela1@gmail.com',
           //   password: 'abc12345',
           //   email: 'amela01@gmail.com',
@@ -41,13 +43,15 @@ const DEFAULT_FORM: any = __DEV__
           //   password: 'abc12345',
           //   email: 'quang.duong@amela.vn',
           //   password: 'abc12345',
-          email: 'komoro.app.test001@gmail.com',
-          password: 'Test0320',
+          //   email: 'komoro.app.test001@gmail.com',
+          //   password: 'Test0320',
       }
     : {};
 
 const LoginScreen: FunctionComponent = () => {
     const passwordRef = useRef<any>(null);
+    const dispatch = useDispatch();
+
     const { requestLogin, loading } = useLogin();
     const insets = useSafeAreaInsets();
 
@@ -72,6 +76,10 @@ const LoginScreen: FunctionComponent = () => {
     };
     const goToForgotPassword = () => {
         navigate(AUTHENTICATE_ROUTE.FORGOT_PASS);
+    };
+
+    const useAppWithoutAcc = () => {
+        dispatch(updateGlobalDataUnSave({ withoutAccount: true }));
     };
 
     return (
@@ -123,6 +131,12 @@ const LoginScreen: FunctionComponent = () => {
                         disabled={!isValid}
                         customStyle={[styles.loginButton]}
                     />
+                    <StyledButton
+                        onPress={useAppWithoutAcc}
+                        title="authen.login.withoutAccount"
+                        customContentStyle={styles.btnWithoutAcc}
+                        colors={[Themes.COLORS.secondary, Themes.COLORS.secondary, Themes.COLORS.secondary]}
+                    />
                     <StyledText i18nText="authen.login.noAccountText" isBlack />
                     <TextUnderline
                         onPress={doRegister}
@@ -147,6 +161,9 @@ const styles = ScaledSheet.create({
     },
     loginButton: {
         marginTop: '20@vs',
+        marginBottom: '5@vs',
+    },
+    btnWithoutAcc: {
         marginBottom: '20@vs',
     },
     registerButton: {

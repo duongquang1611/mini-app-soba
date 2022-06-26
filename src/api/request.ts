@@ -11,9 +11,11 @@ import { logger } from 'utilities/helper';
 import i18next from 'utilities/i18next';
 import { apiLogger } from 'utilities/logger';
 import { apiLocal, ERRORS, POPUP_TYPE } from 'utilities/staticData';
+import { NOTIFICATION_URL } from './urls';
 
 const AUTH_URL_REFRESH_TOKEN = `${Config.API_URL}auth/request-access-token`;
 let hasAnyNetworkDialogShown = false;
+const { CancelToken } = axios;
 
 const request = axios.create({
     baseURL: Config.API_URL,
@@ -23,6 +25,7 @@ const request = axios.create({
 // for multiple requests
 let isRefreshing = false;
 let failedQueue: any = [];
+const urlNeedAuth = [NOTIFICATION_URL.list];
 
 const processQueue = (error: any, token: string | null | undefined = null) => {
     failedQueue.forEach((prom: any) => {
@@ -56,7 +59,15 @@ request.interceptors.request.use(
         if (token && !config?.headers?.Authorization) {
             config.headers.Authorization = `Bearer ${token}`;
         }
-        return config;
+
+        const { withoutAccount } = store.getState().globalDataUnSave;
+        // return config;
+        return withoutAccount && urlNeedAuth.find((itemUrl: any) => itemUrl?.includes(config.url))
+            ? {
+                  ...config,
+                  cancelToken: new CancelToken((cancel) => cancel('Cancel repeated request')),
+              }
+            : config;
     },
     (error: any) => {
         // Do something with API error
