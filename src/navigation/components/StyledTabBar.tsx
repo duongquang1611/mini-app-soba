@@ -1,9 +1,9 @@
-import React from 'react';
-import { Platform, View, Image, StyleSheet } from 'react-native';
 import Metrics from 'assets/metrics';
-import { StyledText, StyledTouchable } from 'components/base';
-import { Themes } from 'assets/themes';
 import Size from 'assets/sizes';
+import { Themes } from 'assets/themes';
+import { StyledText, StyledTouchable } from 'components/base';
+import React from 'react';
+import { Image, Platform, StyleSheet, View } from 'react-native';
 
 const StyledTabBar = ({ state, descriptors, navigation }: any) => {
     return (

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { RootState } from 'app-redux/hooks';
+import { updateGlobalDataUnSave } from 'app-redux/slices/globalDataUnSaveSlice';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledText } from 'components/base';
 import { AUTHENTICATE_ROUTE, HOME_ROUTE, ORDER_ROUTE } from 'navigation/config/routes';
@@ -8,15 +9,19 @@ import React, { useMemo } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { QR_TAB_TYPE } from 'utilities/enumData';
 import { checkSameData, decryptData, encryptData, isAmela, showActionQR } from 'utilities/helper';
 import { QR_TAB_DATA, staticValue } from 'utilities/staticData';
 
 const ShowQrTab = (props: any) => {
+    const dispatch = useDispatch();
     const { type = QR_TAB_TYPE.ORDER_DEFAULT, qrValue, onPress, newOrder = '' } = props;
     const qrComponentData: any = QR_TAB_DATA[type];
-    const { order } = useSelector((state: RootState) => state);
+    const {
+        order,
+        globalDataUnSave: { withoutAccount },
+    } = useSelector((state: RootState) => state);
     const { defaultOrder, defaultOrderLocal } = order;
     const {
         textButton,
@@ -65,9 +70,23 @@ const ShowQrTab = (props: any) => {
         return checkSameData(defaultOrder, defaultOrderLocal) ? textButtonNoEdit : textButtonEdited;
     };
 
+    const goToLogin = () => {
+        dispatch(updateGlobalDataUnSave({ withoutAccount: false }));
+    };
+
     return (
         <View style={[styles.containerQrTab]}>
-            {qrValue ? (
+            {withoutAccount && type === QR_TAB_TYPE.CHECK_IN ? (
+                <View style={[styles.noQrCodeView]}>
+                    <StyledText i18nText={'common.requireLogin'} customStyle={styles.content1} />
+                    <StyledButton
+                        onPress={goToLogin}
+                        title={'common.goToLogin'}
+                        customContentStyle={styles.detailButton}
+                        customStyleText={styles.textBtn}
+                    />
+                </View>
+            ) : qrValue ? (
                 <View style={[styles.qrCodeView]}>
                     {!!qrValue && (
                         <TouchableOpacity

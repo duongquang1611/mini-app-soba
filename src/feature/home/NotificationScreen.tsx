@@ -1,4 +1,5 @@
 import { getNotificationList, readAllNotification, readNotification } from 'api/modules/api-app/notification';
+import { RootState } from 'app-redux/hooks';
 import { updateNotificationUnRead } from 'app-redux/slices/globalDataSlice';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
@@ -14,11 +15,12 @@ import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { ScaledSheet } from 'react-native-size-matters';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { NotificationCategory } from 'utilities/enumData';
 import { formatDate } from 'utilities/format';
 import { wait } from 'utilities/helper';
 import { statusReadNotification } from 'utilities/staticData';
+import { showModalRequireLogin } from './HomeScreen';
 
 const NotificationItem = (props: any) => {
     const dispatch = useDispatch();
@@ -97,6 +99,7 @@ const getIcon = (category: any) => {
     }
 };
 const NotificationScreen = () => {
+    const { withoutAccount } = useSelector((state: RootState) => state.globalDataUnSave);
     const { pagingData, onRefresh, onLoadMore } = usePaging(getNotificationList, {}, 'notifications');
     const { list, refreshing } = pagingData;
     const { notifications = [], totalUnread = 0 } = list;
@@ -110,6 +113,10 @@ const NotificationScreen = () => {
 
     const handleReadAll = async () => {
         try {
+            if (withoutAccount) {
+                showModalRequireLogin();
+                return;
+            }
             setLoading(true);
             await readAllNotification();
             dispatch(updateNotificationUnRead(0));

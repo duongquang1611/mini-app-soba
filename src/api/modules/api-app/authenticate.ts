@@ -16,3 +16,5 @@ export const editProfile = (params: any) => request.put(AUTH_URL.editProfile, pa
 export const changePass = (params: any) => request.put(AUTH_URL.changePass, params);
 
 export const checkOldPass = (params: any) => request.post(AUTH_URL.checkOldPass, params);
+
+export const deleteAccount = () => request.put(AUTH_URL.deleteAccount);

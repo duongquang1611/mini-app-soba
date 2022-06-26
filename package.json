@@ -15,6 +15,7 @@
         "assets-link": "npx react-native link",
         "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
         "lint:ts": "tslint 'src/**/*.{ts,tsx,js}'",
+        "lint:husky": "eslint $(git diff --name-only | grep -E '(.js$|.ts$|.tsx$)')",
         "lint-fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
         "devtools": "react-devtools",
         "no-edit": "git add . && git commit --amend --no-edit && git push origin HEAD -f",

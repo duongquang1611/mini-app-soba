@@ -4,11 +4,13 @@ import { getNotificationList } from 'api/modules/api-app/notification';
 import { RootState } from 'app-redux/hooks';
 import { updateCoupon } from 'app-redux/slices/couponSlice';
 import { updateNotificationUnRead } from 'app-redux/slices/globalDataSlice';
+import { updateGlobalDataUnSave } from 'app-redux/slices/globalDataUnSaveSlice';
 import { store } from 'app-redux/store';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
+import AlertMessage from 'components/base/AlertMessage';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import { StyledImageBackground } from 'components/base/StyledImage';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
@@ -39,6 +41,7 @@ import {
     CouponStoreKeyByStatus,
     MODAL_ID,
     OrderType,
+    POPUP_TYPE,
     staticValue,
     TabCouponStatus,
 } from 'utilities/staticData';
@@ -57,6 +60,14 @@ const netWorkItem = (data: any) => {
             <StyledText originValue={item?.title} isBlack />
         </TouchableOpacity>
     );
+};
+
+export const showModalRequireLogin = () => {
+    AlertMessage('common.requireLogin', {
+        type: POPUP_TYPE.CONFIRM,
+        textButtonCancel: 'common.cancel',
+        onOk: () => store.dispatch(updateGlobalDataUnSave({ withoutAccount: false })),
+    });
 };
 
 export const getCouponData = async (status?: TabCouponStatus) => {
