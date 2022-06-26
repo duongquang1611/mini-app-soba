@@ -21,6 +21,7 @@
         "no-edit": "git add . && git commit --amend --no-edit && git push origin HEAD -f",
         "no-verify": "git add . && git commit --amend --no-edit --no-verify && git push origin HEAD -f",
         "rebase": "git checkout develop && git pull origin develop && git checkout - && git rebase -",
+        "push-update": "git add . && git commit -m fix/update-task && git branch -m fix/update-task && git push origin HEAD",
         "stash": "git stash && yarn rebase && git stash pop",
         "update-script": "cd scripts && sh ./fix-lib.sh && cd ..",
         "buildAndroid": "cd android && ./gradlew assembleRelease&& adb -d install app/build/outputs/apk/release/app-release.apk",
