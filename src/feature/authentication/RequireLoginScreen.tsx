@@ -17,7 +17,7 @@ const RequireLoginScreen = ({ title }: any) => {
         <>
             <StyledHeader title={title} hasBack={false} largeTitleHeader />
             <View style={styles.container}>
-                <StyledText i18nText="common.requireLogin" />
+                <StyledText i18nText="common.requireLogin" customStyle={styles.textRequire} />
                 <StyledButton onPress={goToLogin} title="common.goToLogin" customStyle={styles.loginBtn} />
             </View>
         </>
@@ -28,9 +28,16 @@ export default RequireLoginScreen;
 
 const styles = ScaledSheet.create({
     loginBtn: {},
+    textRequire: {
+        fontSize: '16@ms0.3',
+        marginBottom: '10@vs',
+        lineHeight: '24@ms',
+        textAlign: 'center',
+    },
     container: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
+        paddingHorizontal: '15@s',
     },
 });

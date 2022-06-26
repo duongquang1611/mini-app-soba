@@ -78,7 +78,7 @@ const ShowQrTab = (props: any) => {
         <View style={[styles.containerQrTab]}>
             {withoutAccount && type === QR_TAB_TYPE.CHECK_IN ? (
                 <View style={[styles.noQrCodeView]}>
-                    <StyledText i18nText={'common.requireLogin'} customStyle={styles.content1} />
+                    <StyledText i18nText={'common.requireLogin'} customStyle={styles.textRequire} />
                     <StyledButton
                         onPress={goToLogin}
                         title={'common.goToLogin'}
@@ -151,6 +151,13 @@ const styles = ScaledSheet.create({
         color: Themes.COLORS.mineShaft,
         fontSize: '12@ms0.3',
         lineHeight: '20@vs',
+    },
+    textRequire: {
+        textAlign: 'center',
+        marginBottom: '25@vs',
+        color: Themes.COLORS.mineShaft,
+        fontSize: '12@ms0.3',
+        lineHeight: '20@ms',
     },
     content2: {
         fontSize: '12@ms0.3',
