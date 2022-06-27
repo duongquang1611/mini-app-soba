@@ -55,8 +55,8 @@ export default {
         optionCamera: '写真を撮る',
         optionFolder: 'フォトライブラリ',
         menuNoData: '商品がありません。',
-        goToLogin: 'ログインに移動',
-        requireLogin: 'この機能を使用するには、ログインする必要があります。',
+        goToLogin: 'ログイン画面へ',
+        requireLogin: 'この機能を使用するには、\nログインする必要があります。',
     },
 
     // screens
@@ -82,7 +82,7 @@ export default {
             forgotPasswordText: 'パスワードを忘れた方',
             registerText: '新規登録',
             noAccountText: 'アカウントを持っていない方？',
-            withoutAccount: 'ログインせずに利用',
+            withoutAccount: 'ログインせずに閲覧する',
         },
         register: {
             title: '新規登録',
@@ -452,7 +452,7 @@ export default {
         subTitleSecond: 'スタンプカードには以下の２種類がございます。',
     },
     deleteAccount: {
-        button: 'アカウントを削除する',
-        noteDelete: 'アカウントを削除すると、すべてのデータが消去されます。 続行してもよろしいですか？',
+        button: '退会する',
+        noteDelete: '退会すると、全てのデータが消去されます。\n続行してもよろしいでしょうか？',
     },
 };

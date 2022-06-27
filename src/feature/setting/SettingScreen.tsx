@@ -293,11 +293,14 @@ const SettingScreen = () => {
                         <InfoItem key={index} data={item} />
                     ))}
                 </View>
-                <StyledButton
-                    onPress={onPressDeleteAccount}
-                    title="deleteAccount.button"
-                    customStyle={styles.deleteBtn}
-                />
+                <View style={styles.deleteContainer}>
+                    <View style={styles.infoRowDelete}>
+                        <StyledTouchable onPress={onPressDeleteAccount}>
+                            <StyledText customStyle={styles.textDelete} i18nText={'deleteAccount.button'} />
+                        </StyledTouchable>
+                    </View>
+                    <DashView />
+                </View>
             </StyledKeyboardAware>
         </View>
     );
@@ -424,8 +427,17 @@ const styles = ScaledSheet.create({
         alignItems: 'center',
         marginVertical: '10@vs',
     },
+    infoRowDelete: {
+        width: '100%',
+        alignItems: 'center',
+        marginVertical: '20@vs',
+    },
     infoContainer: {
         width: '100%',
+    },
+    deleteContainer: {
+        width: '100%',
+        backgroundColor: Themes.COLORS.white,
     },
     infoView: {
         paddingHorizontal: '20@vs',
@@ -441,7 +453,6 @@ const styles = ScaledSheet.create({
     },
     infoContainerView: {
         backgroundColor: Themes.COLORS.white,
-        marginBottom: '10@vs',
     },
     question: {
         position: 'absolute',
@@ -463,6 +474,9 @@ const styles = ScaledSheet.create({
     deleteBtn: {
         alignSelf: 'center',
         marginBottom: '15@vs',
+    },
+    textDelete: {
+        color: Themes.COLORS.primary,
     },
 });
 
