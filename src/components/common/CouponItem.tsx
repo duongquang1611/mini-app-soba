@@ -34,7 +34,7 @@ export const CouponItem = (props: any) => {
     } = props || {};
     const { coupon, usedDate, status, id: idMemberCoupon, receivedDate, stampAmount = 0 } = item;
 
-    const { image, title, startDate, endDate, dateType } = coupon || {};
+    const { image_150, title, startDate, endDate, dateType } = coupon || {};
     // const isInCartAPI = useMemo(() => status === MemberCouponStatus.IN_CART, [status]);
     const checkChooseTemp = cartOrderState?.coupons?.find((itemCoupon: any) => itemCoupon?.id === idMemberCoupon);
     const checkChooseInCart = (order || cartOrder)?.coupons?.find(
@@ -104,7 +104,7 @@ export const CouponItem = (props: any) => {
                 {!!isExchangeCoupon && (
                     <PointExchangeView stampAmount={stampAmount} customStyle={styles.stylePointExchange} />
                 )}
-                <StyledImage resizeMode={'cover'} source={{ uri: image }} customStyle={styles.couponImage} />
+                <StyledImage resizeMode={'cover'} source={{ uri: image_150 }} customStyle={styles.couponImage} />
                 <View style={styles.content}>
                     <StyledText originValue={title} numberOfLines={1} customStyle={styles.title} />
                     <View style={styles.rowView}>

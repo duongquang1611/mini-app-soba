@@ -97,7 +97,12 @@ export const getCouponData = async (status?: TabCouponStatus) => {
 const HomeScreen: FunctionComponent = () => {
     useOnesignal();
     const { t } = useTranslation();
-    const { order, userInfo, resource } = useSelector((state: RootState) => state);
+    const {
+        order,
+        userInfo,
+        resource,
+        globalDataUnSave: { withoutAccount },
+    } = useSelector((state: RootState) => state);
     const { banners = [], sns = [] } = resource?.data || {};
     const storeUrl = getConfig(CONFIG_KEYS.WEB_PAGE);
     const newsDisplay = Number(getConfig(CONFIG_KEYS.NEWS_DISPLAY));
@@ -123,8 +128,8 @@ const HomeScreen: FunctionComponent = () => {
         getNewsData();
         getCouponData();
         getNotification();
-        setTab(getIndexTab(defaultOrderLocal, mobileOrder));
-    }, []);
+        setTab(withoutAccount ? 2 : getIndexTab(defaultOrderLocal, mobileOrder));
+    }, [withoutAccount]);
 
     useEffect(() => {
         getNewsData();
