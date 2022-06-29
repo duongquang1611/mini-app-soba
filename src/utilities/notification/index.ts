@@ -149,6 +149,11 @@ const onReceived = async (data: NotificationReceivedEvent) => {
             console.log('saveOrder -> error', error);
         }
     }
+    try {
+        await getCouponData();
+    } catch (error) {
+        console.log('getProfile -> error', error);
+    }
     if (category === NotificationCategory.SUCCESS_PAYMENT || category === NotificationCategory.CANCEL_PAYMENT) {
         try {
             await getCouponData();

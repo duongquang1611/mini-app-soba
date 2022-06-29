@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { useIsFocused } from '@react-navigation/native';
 import { getStampList, tickStamp } from 'api/modules/api-app/stamp';
 import { RootState } from 'app-redux/hooks';
 import Images from 'assets/images';
@@ -19,7 +20,6 @@ import { Modalize } from 'react-native-modalize';
 import { Portal } from 'react-native-portalize';
 import { ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
-import { diffTime } from 'utilities/helper';
 import { POPUP_TYPE, staticValue } from 'utilities/staticData';
 import ChooseStampList from './components/ChooseStampList';
 import StampItem from './components/StampItem';
@@ -34,6 +34,8 @@ interface StampListProps {
 const StampList = (props: StampListProps) => {
     const { canUse = false } = props;
     const modalizeRef = useRef<Modalize>(null);
+    const isFocus = useIsFocused();
+    const isFirstRender = useRef(true);
     const [chooseTickStampIds, setChooseTickStampIds] = useState({});
     const { triggerReloadStamp } = useSelector((state: RootState) => state.globalData);
     const userTicked = useMemo(() => {
@@ -59,6 +61,16 @@ const StampList = (props: StampListProps) => {
     //         onRefresh();
     //     }
     // }, [triggerReloadStamp]);
+
+    useEffect(() => {
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
+        if (isFocus) {
+            onRefresh();
+        }
+    }, [isFocus]);
 
     const goToDetail = (item: any) => {
         navigate(STAMP_ROUTE.STAMP_CARD_DETAIL, { item });
