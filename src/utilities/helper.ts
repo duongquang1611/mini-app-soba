@@ -710,7 +710,7 @@ export const getConfig = (key: string, parseJSON = false) => {
 };
 
 export const isAmela = () => {
-    return false;
+    if (Config.ENV === 'PRODUCTION') return false;
     const { user } = store.getState().userInfo;
     const validData = ['amela.vn', 'love.you'];
     return validData.some((validKey: string) => user?.member?.email?.includes(validKey));
