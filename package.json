@@ -39,7 +39,7 @@
         "open-folder-apk": "open ./android/app/build/outputs/apk",
         "open-folder-aab": "open ./android/app/build/outputs/bundle",
         "code-push-ios-develop": "appcenter codepush release-react -a Amela/soba-ios -d Dev -t 1.0.0",
-        "code-push-ios-staging": "appcenter codepush release-react -a Amela/soba-ios -d Staging -t 1.0.0",
+        "code-push-ios-staging": "appcenter codepush release-react -a Amela/soba-ios -d Staging -t 1.0.2",
         "code-push-ios-production": "appcenter codepush release-react -a Amela/soba-ios -d Production -t 1.0.1",
         "code-push-android-develop": "appcenter codepush release-react -a Amela/soba-android -d Dev -t 1.0.0",
         "code-push-android-staging": "appcenter codepush release-react -a Amela/soba-android -d Staging -t 1.0.0",
