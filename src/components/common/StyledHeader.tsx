@@ -107,7 +107,7 @@ const StyledHeader = (props: StyledHeaderProps) => {
                             styles.containerCenter,
                             customCenterContainer,
                             {
-                                width: Metrics.screenWidth - scale(60) - rightLayout.width,
+                                width: Metrics.screenWidth - scale(65) - rightLayout.width,
                             },
                         ]}
                     >
