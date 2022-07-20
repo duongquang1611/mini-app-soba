@@ -18,6 +18,7 @@ interface IProps {
     isModal?: boolean;
     data: any;
     initDetailNavigate?: any;
+    hasSeparatorView?: boolean;
 }
 const CouponDishItem = ({ item }: any) => {
     const { type, dish, discount } = item;
@@ -40,7 +41,14 @@ const WrapComponent = ({ children, isModal, customStyle }: any) => {
 };
 
 const CouponContentView = (props: IProps) => {
-    const { customStyle, isModal = false, data = {}, canUse, initDetailNavigate } = props || {};
+    const {
+        customStyle,
+        isModal = false,
+        data = {},
+        canUse,
+        initDetailNavigate,
+        hasSeparatorView = true,
+    } = props || {};
     const { coupon = {}, usedDate } = data;
     const {
         title,
@@ -58,7 +66,7 @@ const CouponContentView = (props: IProps) => {
 
     return (
         <WrapComponent customStyle={[styles.container, customStyle]} isModal={isModal}>
-            <View style={styles.grayView} />
+            {hasSeparatorView && <View style={styles.grayView} />}
             <View style={styles.body}>
                 <View style={styles.contentContainer}>
                     {isModal ? (
