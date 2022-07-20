@@ -30,7 +30,7 @@ const PointExchangeView = ({
                 style={[
                     styles.textCouponAmount,
                     {
-                        fontSize: scale(bigSize ? (isLongText ? 12 : 14) : isLongText ? 10 : 12),
+                        fontSize: scale(bigSize ? (isLongText ? 11 : 13) : isLongText ? 9 : 11),
                     },
                     customStyleText,
                 ]}
@@ -40,7 +40,7 @@ const PointExchangeView = ({
                     style={[
                         styles.textCurrency,
                         {
-                            fontSize: scale(bigSize ? (isLongText ? 8 : 10) : isLongText ? 6 : 8),
+                            fontSize: scale(bigSize ? (isLongText ? 7 : 9) : isLongText ? 5 : 7),
                         },
                         customStyleCurrency,
                     ]}

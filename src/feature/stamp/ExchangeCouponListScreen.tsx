@@ -39,7 +39,7 @@ const ExchangeCouponListScreen = (props: any) => {
         });
     };
 
-    const handleExchangeCoupon = (item: any, cbSuccess?: any, cbError?: any, currentStampDetail) => {
+    const handleExchangeCoupon = (item: any, cbSuccess?: any, cbError?: any, currentStampDetail?: any) => {
         const { stampAmount = 0 } = item || {};
         const currentLeftAmount = (currentStampDetail ? currentStampDetail?.leftAmount || 0 : leftAmount) || 0;
         if (stampAmount > currentLeftAmount) {
@@ -95,24 +95,26 @@ const ExchangeCouponListScreen = (props: any) => {
     };
 
     return (
-        <View style={s.container}>
+        <>
             <StyledHeader title={'exchangeCoupon.title'} />
-            <SeparatorView />
-            <StampItem item={stampDetail} animation customStyle={s.customStyleItemStamp} />
+            <View style={s.container}>
+                <SeparatorView />
+                <StampItem item={stampDetail} animation customStyle={s.customStyleItemStamp} />
 
-            <SeparatorView />
-            <View style={s.wrapTextCanExchange}>
-                <StyledIcon size={24} source={Images.icons.couponBlue} />
-                <StyledText i18nText={'exchangeCoupon.listCanExchange'} customStyle={s.textCanExchange} />
+                <SeparatorView />
+                <View style={s.wrapTextCanExchange}>
+                    <StyledIcon size={24} source={Images.icons.couponBlue} />
+                    <StyledText i18nText={'exchangeCoupon.listCanExchange'} customStyle={s.textCanExchange} />
+                </View>
+                <StyledList
+                    data={orderBy(couponsExchange, ['id'], ['asc'])}
+                    renderItem={renderCouponItem}
+                    ItemSeparatorComponent={DashView}
+                    noDataText={'coupon.noData'}
+                    canRefresh={false}
+                />
             </View>
-            <StyledList
-                data={orderBy(couponsExchange, ['id'], ['asc'])}
-                renderItem={renderCouponItem}
-                ItemSeparatorComponent={DashView}
-                noDataText={'coupon.noData'}
-                canRefresh={false}
-            />
-        </View>
+        </>
     );
 };
 
