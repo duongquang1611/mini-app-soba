@@ -208,8 +208,8 @@ const styles = ScaledSheet.create({
     },
     stylePointExchange: {
         position: 'absolute',
-        top: '15@s',
-        left: '23@s',
+        top: '1@s',
+        left: '8@s',
         zIndex: 1,
     },
     dash: {

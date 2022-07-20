@@ -7,7 +7,7 @@ import PointExchangeView from 'components/common/PointExchangeView';
 import { isArray, orderBy } from 'lodash';
 import React from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
-import { ScaledSheet } from 'react-native-size-matters';
+import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { CouponDishType } from 'utilities/enumData';
 import { formatDate } from 'utilities/format';
 import { DateType, DiscountType } from 'utilities/staticData';
@@ -73,9 +73,21 @@ const CouponContentView = (props: IProps) => {
                             customStyle={styles.textId}
                         />
                     )}
-                    <View style={styles.wrapTitle}>
-                        <StyledText originValue={title} customStyle={styles.title} />
-                        <PointExchangeView stampAmount={initDetailNavigate?.stampAmount} bigSize />
+                    <View
+                        style={[
+                            styles.wrapTitle,
+                            initDetailNavigate?.stampAmount && { paddingBottom: verticalScale(10) },
+                        ]}
+                    >
+                        <StyledText
+                            originValue={title}
+                            customStyle={[styles.title, initDetailNavigate?.stampAmount && { marginRight: scale(32) }]}
+                        />
+                        <PointExchangeView
+                            stampAmount={initDetailNavigate?.stampAmount}
+                            bigSize
+                            customStyle={styles.pointExchangeView}
+                        />
                     </View>
                     <StyledImageBackground style={styles.img} source={{ uri: image }}>
                         {(isBlock || !canUse) && (
@@ -239,6 +251,11 @@ const styles = ScaledSheet.create({
         height: '10@vs',
         backgroundColor: Themes.COLORS.lightGray,
         marginBottom: '15@vs',
+    },
+    pointExchangeView: {
+        position: 'absolute',
+        top: '3@vs',
+        right: 0,
     },
 });
 
