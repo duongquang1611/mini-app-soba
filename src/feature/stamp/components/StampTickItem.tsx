@@ -3,6 +3,7 @@ import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledImage, StyledText, StyledTouchable } from 'components/base';
 import React, { memo } from 'react';
+import { View } from 'react-native';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { formatDate, MMDD } from 'utilities/format';
 import { staticValue } from 'utilities/staticData';
@@ -17,7 +18,7 @@ const separatorTop = 10;
 // close box: couponsCumulative
 
 const StampTickItem = ({ item, numCol, onPress, isOpen = false, index }: any) => {
-    const { createdDate } = item;
+    const { createdDate, status } = item;
     const isDisabled = !isOpen && !item?.positionBox && !createdDate;
     const isCloseBox = item?.positionBox && !isOpen;
 
@@ -66,11 +67,20 @@ const StampTickItem = ({ item, numCol, onPress, isOpen = false, index }: any) =>
                 }}
             />
             {!!createdDate && (
-                <StyledText
-                    originValue={formatDate(createdDate, MMDD)}
-                    isBlack
-                    customStyle={[s.textDate, { position: 'absolute', bottom: scale(2) }]}
-                />
+                <>
+                    <StyledText
+                        originValue={formatDate(createdDate, MMDD)}
+                        isBlack
+                        customStyle={[s.textDate, { position: 'absolute', bottom: scale(2) }]}
+                    />
+                    {status === 0 && (
+                        <View style={s.transparent}>
+                            <View style={s.wrapTextImgExpired}>
+                                <StyledText i18nText={'coupon.detail.invalid'} customStyle={s.textImgInvalid} />
+                            </View>
+                        </View>
+                    )}
+                </>
             )}
         </StyledTouchable>
     );
@@ -103,6 +113,22 @@ const s = ScaledSheet.create({
     textDate: {
         fontSize: '12@s',
         marginTop: '2@vs',
+    },
+    transparent: {
+        width: '100%',
+        height: '100%',
+        alignItems: 'center',
+        position: 'absolute',
+        justifyContent: 'center',
+        backgroundColor: Themes.COLORS.labelCouponUsed,
+    },
+    textImgInvalid: {
+        color: Themes.COLORS.textSecondary,
+    },
+    wrapTextImgExpired: {
+        backgroundColor: Themes.COLORS.mischka,
+        borderRadius: 10,
+        padding: '5@s',
     },
 });
 

@@ -299,6 +299,11 @@ export default {
         dishesApplyEach: 'スタンプ対象商品設定：',
         note: '注意',
         tickType: 'スタンプの貯め方: {{type}}',
+        numberExpired: '無効な数量',
+        dayTickRange: '1個のスタンプは{{tickDuration}}日間有効です。',
+        weekTickRange: '1個のスタンプは{{tickDuration}}週間有効です。',
+        monthTickRange: '1個のスタンプは{{tickDuration}}ヶ月間有効です。',
+        yearTickRange: '1個のスタンプは{{tickDuration}}年間有効です。',
     },
     exchangeCoupon: {
         title: 'クーポン交換',
@@ -339,6 +344,7 @@ export default {
         btnExpired: '有効期限切れ',
         btnBlock: '無効',
         noExpiredDate: '有効期間 : 無制限',
+        expiryDate: '{{expiryDate}}まで有効です。',
         detail: {
             id: 'クーポンＩＤ：{{id}}',
             expired: '有効期限切れ',
@@ -346,12 +352,15 @@ export default {
             discount: '{{title}} : ￥{{discount}}割引',
             free: '{{title}} : 無料',
             discountAllOrder: '注文全体用のクーポン : ￥{{discount}}割引',
+            invalid: '無効',
         },
         chooseDish: 'クーポンの適用商品を選択してください',
         moreCoupon: 'クーポン追加',
         noCoupon: 'なし',
         noData: '現在、クーポンがありません',
         couponAmount: '個',
+        exchangeLimitRange: 'クーポンは最大{{time}}回まで交換できます。',
+        exchangeLimit: '無制限交換クーポン。',
     },
     otp: {
         register: {

@@ -11,7 +11,7 @@ import CouponContentView from 'feature/coupon/components/CouponContentView';
 import React, { useEffect, useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { ScaledSheet, verticalScale } from 'react-native-size-matters';
-import { StampCardType, StampSettingBox } from 'utilities/enumData';
+import { CheckDurationType, StampCardType, StampSettingBox } from 'utilities/enumData';
 import { MODAL_ID, STAMP_NOTE, staticValue, tickTypeText } from 'utilities/staticData';
 import HistoryExchangeModal from './components/HistoryExchangeModal';
 import StampItem from './components/StampItem';
@@ -40,7 +40,7 @@ const StampCardDetailScreen = (props: any) => {
         histories: [],
     });
     const { stampDetail, histories } = stateData;
-    const { stamp = {}, leftAmount = 0, totalAmount = 0 } = stampDetail;
+    const { stamp = {}, leftAmount = 0, totalAmount = 0, expiredAmount = 0 } = stampDetail;
     const {
         cardType,
         width: numCol = staticValue.DEFAULT_STAMP_TICK_COLUMN,
@@ -52,6 +52,8 @@ const StampCardDetailScreen = (props: any) => {
         couponsCumulative = [],
         title: titleStamp,
         tickType = 0,
+        tickDurationType,
+        tickDuration = 0,
     } = stamp;
 
     const isExchange = useMemo(() => cardType === StampCardType.EXCHANGE, [cardType]);
@@ -150,6 +152,12 @@ const StampCardDetailScreen = (props: any) => {
             { title: 'stampDetail.modalGetCoupon' },
         );
     };
+    const getRangeTick = () => {
+        if (tickDurationType === CheckDurationType.DAY) return 'stampDetail.dayTickRange';
+        if (tickDurationType === CheckDurationType.WEEK) return 'stampDetail.weekTickRange';
+        if (tickDurationType === CheckDurationType.MONTH) return 'stampDetail.monthTickRange';
+        return 'stampDetail.yearTickRange';
+    };
 
     return (
         <>
@@ -168,8 +176,9 @@ const StampCardDetailScreen = (props: any) => {
                                     <StampNumberView title={'stampDetail.numberOfCollect'} count={totalAmount || 0} />
                                     <StampNumberView
                                         title={'stampDetail.numberOfUse'}
-                                        count={(totalAmount || 0) - (leftAmount || 0)}
+                                        count={(totalAmount || 0) - (leftAmount || 0) - (expiredAmount || 0)}
                                     />
+                                    <StampNumberView title={'stampDetail.numberExpired'} count={expiredAmount || 0} />
                                 </>
                             )}
                             <StyledTouchable
@@ -206,6 +215,11 @@ const StampCardDetailScreen = (props: any) => {
                             i18nText={
                                 stampDishes?.length ? 'stampDetail.dishesApplyEach' : 'stampDetail.dishesApplyAll'
                             }
+                            customStyle={styles.noteTextApply}
+                        />
+                        <StyledText
+                            i18nParams={{ tickDuration }}
+                            i18nText={getRangeTick()}
                             customStyle={styles.noteTextApply}
                         />
                         {stampDishes?.map((item: any, index: number) => {

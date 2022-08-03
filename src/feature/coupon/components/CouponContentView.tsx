@@ -9,8 +9,8 @@ import React from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { CouponDishType } from 'utilities/enumData';
-import { formatDate } from 'utilities/format';
-import { DateType, DiscountType } from 'utilities/staticData';
+import { formatDate, YYYYMMDD } from 'utilities/format';
+import { DiscountType } from 'utilities/staticData';
 
 interface IProps {
     canUse?: boolean;
@@ -19,6 +19,8 @@ interface IProps {
     data: any;
     initDetailNavigate?: any;
     hasSeparatorView?: boolean;
+    item?: any;
+    isExchange?: boolean;
 }
 const CouponDishItem = ({ item }: any) => {
     const { type, dish, discount } = item;
@@ -48,22 +50,13 @@ const CouponContentView = (props: IProps) => {
         canUse,
         initDetailNavigate,
         hasSeparatorView = true,
+        item,
+        isExchange,
     } = props || {};
-    const { coupon = {}, usedDate } = data;
-    const {
-        title,
-        image,
-        startDate,
-        endDate,
-        description,
-        dateType,
-        couponDish,
-        discountType,
-        discount,
-        stringId = '',
-    } = coupon || {};
+    const { coupon = {}, usedDate, expiryDate } = data;
+    const { exchangeLimit } = item || {};
+    const { title, image, description, couponDish, discountType, discount, stringId = '' } = coupon || {};
     const isBlock = Boolean(coupon?.isBlock);
-
     return (
         <WrapComponent customStyle={[styles.container, customStyle]} isModal={isModal}>
             {hasSeparatorView && <View style={styles.grayView} />}
@@ -97,6 +90,14 @@ const CouponContentView = (props: IProps) => {
                             customStyle={styles.pointExchangeView}
                         />
                     </View>
+
+                    {isExchange && (
+                        <StyledText
+                            customStyle={styles.exchangeLimit}
+                            i18nParams={{ time: exchangeLimit }}
+                            i18nText={exchangeLimit ? 'coupon.exchangeLimitRange' : 'coupon.exchangeLimit'}
+                        />
+                    )}
                     <StyledImageBackground style={styles.img} source={{ uri: image }}>
                         {(isBlock || !canUse) && (
                             <View style={styles.transparent}>
@@ -116,21 +117,14 @@ const CouponContentView = (props: IProps) => {
                     <View style={styles.rowView}>
                         <StyledIcon source={Images.icons.calendar} size={20} customStyle={styles.iconDate} />
                         <StyledText
-                            i18nText={
-                                usedDate
-                                    ? 'coupon.usedDate'
-                                    : dateType === DateType.EXPIRED_DATE
-                                    ? 'coupon.expiredDate'
-                                    : 'coupon.noExpiredDate'
-                            }
+                            i18nText={'coupon.expiryDate'}
                             i18nParams={{
-                                start: formatDate(startDate),
-                                end: formatDate(endDate),
-                                date: formatDate(usedDate),
+                                expiryDate: formatDate(expiryDate, YYYYMMDD),
                             }}
                             customStyle={styles.textDate}
                         />
                     </View>
+
                     <View style={styles.wrapTextCoupon}>
                         {discountType === DiscountType.ALL_ORDER ? (
                             <StyledText
@@ -265,6 +259,7 @@ const styles = ScaledSheet.create({
         top: '3@vs',
         right: 0,
     },
+    exchangeLimit: {},
 });
 
 export default CouponContentView;

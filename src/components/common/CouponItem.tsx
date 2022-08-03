@@ -9,9 +9,8 @@ import React from 'react';
 import { View } from 'react-native';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
-import { CouponStatus } from 'utilities/enumData';
 import { formatDate, YYYYMMDD } from 'utilities/format';
-import { DateType, staticValue } from 'utilities/staticData';
+import { staticValue } from 'utilities/staticData';
 import DashView from './DashView';
 import PointExchangeView from './PointExchangeView';
 
@@ -24,7 +23,6 @@ export const CouponItem = (props: any) => {
         goToDetail,
         cartOrder: cartOrderState,
         isTabCoupon = false,
-        orderType,
         order,
         isExchangeCoupon = false,
         customDashStyle,
@@ -32,8 +30,7 @@ export const CouponItem = (props: any) => {
         showDashTop = false,
         showDashBottom = true,
     } = props || {};
-    const { coupon, usedDate, status, id: idMemberCoupon, receivedDate, stampAmount = 0 } = item;
-
+    const { coupon, usedDate, id: idMemberCoupon, receivedDate, expiryDate, stampAmount = 0 } = item;
     const { image_150, title, startDate, endDate, dateType } = coupon || {};
     // const isInCartAPI = useMemo(() => status === MemberCouponStatus.IN_CART, [status]);
     const checkChooseTemp = cartOrderState?.coupons?.find((itemCoupon: any) => itemCoupon?.id === idMemberCoupon);
@@ -109,10 +106,9 @@ export const CouponItem = (props: any) => {
                     <StyledText originValue={title} numberOfLines={1} customStyle={styles.title} />
                     <View style={styles.rowView}>
                         <StyledText
-                            i18nText={dateType === DateType.EXPIRED_DATE ? 'coupon.rangeDate' : 'coupon.noExpiredDate'}
+                            i18nText={'coupon.expiryDate'}
                             i18nParams={{
-                                start: formatDate(startDate, YYYYMMDD),
-                                end: formatDate(endDate, YYYYMMDD),
+                                expiryDate: formatDate(expiryDate, YYYYMMDD),
                             }}
                             customStyle={styles.time}
                         />
