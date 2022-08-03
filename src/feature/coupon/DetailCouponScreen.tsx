@@ -121,6 +121,8 @@ const DetailCouponScreen = (props: any) => {
                 data={detailMemberCoupon}
                 initDetailNavigate={item}
                 hasSeparatorView={!handleExchangeCoupon}
+                item={item}
+                isExchange={!isEmpty(stampDetail)}
             />
 
             {(canUse === TabCouponStatus.CAN_USE || handleExchangeCoupon) && !fromNotify && (

@@ -92,3 +92,11 @@ export enum CheckPasswordType {
     CHECK_CONFIRM_PASS = 1,
     CHECK_NEW_PASS = 2,
 }
+
+// type check tick duration
+export enum CheckDurationType {
+    DAY = 1,
+    WEEK = 2,
+    MONTH = 3,
+    YEAR = 4,
+}
