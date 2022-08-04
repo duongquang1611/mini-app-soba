@@ -107,11 +107,11 @@ const NotificationDetailScreen = (props: any) => {
     const listImage = images?.map((item: any) => item?.image) || [];
 
     const checkCanUse = (itemMemberCoupon: any) => {
-        const { coupon, usedDate } = itemMemberCoupon;
+        const { coupon, usedDate, expiryDate } = itemMemberCoupon;
         if (usedDate || coupon?.isBlock) return TabCouponStatus.USED;
         const { dateType, endDate } = coupon || {};
         if (dateType === DateType.NO_EXPIRED_DATE) return TabCouponStatus.CAN_USE;
-        return endDate && !isTimePast(endDate) ? TabCouponStatus.CAN_USE : TabCouponStatus.USED;
+        return endDate && !isTimePast(expiryDate) ? TabCouponStatus.CAN_USE : TabCouponStatus.USED;
     };
 
     const goToDetailStamp = useCallback((item: any) => {

@@ -10,7 +10,7 @@ import { StyleProp, View, ViewStyle } from 'react-native';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { CouponDishType } from 'utilities/enumData';
 import { formatDate, YYYYMMDD } from 'utilities/format';
-import { DiscountType } from 'utilities/staticData';
+import { DateType, DiscountType } from 'utilities/staticData';
 
 interface IProps {
     canUse?: boolean;
@@ -55,7 +55,18 @@ const CouponContentView = (props: IProps) => {
     } = props || {};
     const { coupon = {}, usedDate, expiryDate } = data;
     const { exchangeLimit } = item || {};
-    const { title, image, description, couponDish, discountType, discount, stringId = '' } = coupon || {};
+    const {
+        title,
+        image,
+        description,
+        couponDish,
+        discountType,
+        discount,
+        stringId = '',
+        startDate,
+        endDate,
+        dateType,
+    } = coupon || {};
     const isBlock = Boolean(coupon?.isBlock);
     return (
         <WrapComponent customStyle={[styles.container, customStyle]} isModal={isModal}>
@@ -116,13 +127,32 @@ const CouponContentView = (props: IProps) => {
                     </StyledImageBackground>
                     <View style={styles.rowView}>
                         <StyledIcon source={Images.icons.calendar} size={20} customStyle={styles.iconDate} />
-                        <StyledText
-                            i18nText={'coupon.expiryDate'}
-                            i18nParams={{
-                                expiryDate: formatDate(expiryDate, YYYYMMDD),
-                            }}
-                            customStyle={styles.textDate}
-                        />
+                        {isExchange ? (
+                            <StyledText
+                                i18nText={
+                                    usedDate
+                                        ? 'coupon.usedDate'
+                                        : dateType === DateType.EXPIRED_DATE
+                                        ? 'coupon.expiredDate'
+                                        : 'coupon.noExpiredDate'
+                                }
+                                i18nParams={{
+                                    start: formatDate(startDate),
+                                    end: formatDate(endDate),
+                                    date: formatDate(usedDate),
+                                    expiryDate: formatDate(expiryDate, YYYYMMDD),
+                                }}
+                                customStyle={styles.textDate}
+                            />
+                        ) : (
+                            <StyledText
+                                i18nText={'coupon.expiryDate'}
+                                i18nParams={{
+                                    expiryDate: formatDate(expiryDate, YYYYMMDD),
+                                }}
+                                customStyle={styles.textDate}
+                            />
+                        )}
                     </View>
 
                     <View style={styles.wrapTextCoupon}>

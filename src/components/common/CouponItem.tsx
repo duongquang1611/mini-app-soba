@@ -10,7 +10,7 @@ import { View } from 'react-native';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
 import { formatDate, YYYYMMDD } from 'utilities/format';
-import { staticValue } from 'utilities/staticData';
+import { DateType, staticValue } from 'utilities/staticData';
 import DashView from './DashView';
 import PointExchangeView from './PointExchangeView';
 
@@ -105,13 +105,27 @@ export const CouponItem = (props: any) => {
                 <View style={styles.content}>
                     <StyledText originValue={title} numberOfLines={1} customStyle={styles.title} />
                     <View style={styles.rowView}>
-                        <StyledText
-                            i18nText={'coupon.expiryDate'}
-                            i18nParams={{
-                                expiryDate: formatDate(expiryDate, YYYYMMDD),
-                            }}
-                            customStyle={styles.time}
-                        />
+                        {isExchangeCoupon ? (
+                            <StyledText
+                                i18nText={
+                                    dateType === DateType.EXPIRED_DATE ? 'coupon.rangeDate' : 'coupon.noExpiredDate'
+                                }
+                                i18nParams={{
+                                    start: formatDate(startDate, YYYYMMDD),
+                                    end: formatDate(endDate, YYYYMMDD),
+                                    expiryDate: formatDate(expiryDate, YYYYMMDD),
+                                }}
+                                customStyle={styles.time}
+                            />
+                        ) : (
+                            <StyledText
+                                i18nText={'coupon.expiryDate'}
+                                i18nParams={{
+                                    expiryDate: formatDate(expiryDate, YYYYMMDD),
+                                }}
+                                customStyle={styles.time}
+                            />
+                        )}
                         {renderActionRight()}
                     </View>
                 </View>
