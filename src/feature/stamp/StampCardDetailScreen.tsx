@@ -217,11 +217,13 @@ const StampCardDetailScreen = (props: any) => {
                             }
                             customStyle={styles.noteTextApply}
                         />
-                        <StyledText
-                            i18nParams={{ tickDuration }}
-                            i18nText={getRangeTick()}
-                            customStyle={styles.noteTextApply}
-                        />
+                        {isExchange && (
+                            <StyledText
+                                i18nParams={{ tickDuration }}
+                                i18nText={getRangeTick()}
+                                customStyle={styles.noteTextApply}
+                            />
+                        )}
                         {stampDishes?.map((item: any, index: number) => {
                             return (
                                 <StyledText
