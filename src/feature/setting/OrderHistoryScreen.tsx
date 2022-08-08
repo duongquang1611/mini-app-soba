@@ -48,6 +48,7 @@ const OrderItem = ({ item }: any) => {
     );
 };
 const renderItemHistory = ({ item }: any) => <OrderItem key={item.id} item={item} />;
+
 const OrderHistoryScreen = () => {
     const { pagingData, onRefresh, onLoadMore } = usePaging(getListHistoryOrder);
     const { list, refreshing } = pagingData;

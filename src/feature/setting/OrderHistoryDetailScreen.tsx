@@ -170,7 +170,11 @@ const OrderHistoryDetailScreen = (props: any) => {
                                                 source={Images.icons.coupon}
                                                 customStyle={styles.couponItem}
                                             />
-                                            <StyledText originValue={itemCoupon?.coupon?.title} isBlack />
+                                            <StyledText
+                                                originValue={itemCoupon?.coupon?.title}
+                                                isBlack
+                                                customStyle={{ flexShrink: 1 }}
+                                            />
                                         </View>
                                         <StyledText
                                             i18nText={'order.rangeCouponPrice'}
@@ -346,6 +350,7 @@ const styles = ScaledSheet.create({
     contentRow: {
         flexDirection: 'row',
         alignItems: 'center',
+        flexShrink: 1,
     },
     rowSub: {
         justifyContent: 'space-between',
