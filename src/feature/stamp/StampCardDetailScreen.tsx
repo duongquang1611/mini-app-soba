@@ -179,6 +179,11 @@ const StampCardDetailScreen = (props: any) => {
                                         count={(totalAmount || 0) - (leftAmount || 0) - (expiredAmount || 0)}
                                     />
                                     <StampNumberView title={'stampDetail.numberExpired'} count={expiredAmount || 0} />
+                                    <StyledText
+                                        i18nParams={{ tickDuration }}
+                                        i18nText={getRangeTick()}
+                                        customStyle={styles.tickDuration}
+                                    />
                                 </>
                             )}
                             <StyledTouchable
@@ -217,13 +222,6 @@ const StampCardDetailScreen = (props: any) => {
                             }
                             customStyle={styles.noteTextApply}
                         />
-                        {isExchange && (
-                            <StyledText
-                                i18nParams={{ tickDuration }}
-                                i18nText={getRangeTick()}
-                                customStyle={styles.noteTextApply}
-                            />
-                        )}
                         {stampDishes?.map((item: any, index: number) => {
                             return (
                                 <StyledText
@@ -345,5 +343,10 @@ const styles = ScaledSheet.create({
         marginTop: '9@ms0.3',
         marginRight: '5@s',
         marginLeft: '3@s',
+    },
+    tickDuration: {
+        color: Themes.COLORS.primary,
+        fontWeight: 'bold',
+        fontSize: '16@ms0.3',
     },
 });
