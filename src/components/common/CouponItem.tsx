@@ -39,6 +39,7 @@ export const CouponItem = (props: any) => {
     );
     const disabledUse = checkChooseInCart;
     const isBlock = Boolean(coupon?.isBlock);
+    const hasExpired = dateType === DateType.EXPIRED_DATE;
 
     const handleGoToDetail = () => {
         goToDetail?.(item);
@@ -107,22 +108,27 @@ export const CouponItem = (props: any) => {
                     <View style={styles.rowView}>
                         {isExchangeCoupon ? (
                             <StyledText
-                                i18nText={
-                                    dateType === DateType.EXPIRED_DATE ? 'coupon.rangeDate' : 'coupon.noExpiredDate'
-                                }
+                                i18nText={hasExpired ? 'coupon.rangeDate' : 'coupon.noExpiredDate'}
                                 i18nParams={{
-                                    start: formatDate(startDate, YYYYMMDD),
-                                    end: formatDate(endDate, YYYYMMDD),
-                                    expiryDate: formatDate(expiryDate, YYYYMMDD),
+                                    start: formatDate(startDate),
+                                    end: formatDate(endDate),
+                                    expiryDate: formatDate(expiryDate),
                                 }}
                                 customStyle={styles.time}
                             />
                         ) : (
                             <StyledText
-                                i18nText={'coupon.expiryDate'}
-                                i18nParams={{
-                                    expiryDate: formatDate(expiryDate, YYYYMMDD),
-                                }}
+                                i18nText={hasExpired ? 'coupon.rangeDate' : 'coupon.expiryDate'}
+                                i18nParams={
+                                    hasExpired
+                                        ? {
+                                              start: formatDate(startDate),
+                                              end: formatDate(expiryDate),
+                                          }
+                                        : {
+                                              expiryDate: formatDate(expiryDate),
+                                          }
+                                }
                                 customStyle={styles.time}
                             />
                         )}
