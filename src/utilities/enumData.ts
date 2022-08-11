@@ -100,3 +100,24 @@ export enum CheckDurationType {
     MONTH = 3,
     YEAR = 4,
 }
+
+// type check expiryDayType coupon
+export enum ExpiryDayType {
+    DAY = 1,
+    WEEK = 2,
+    MONTH = 3,
+    YEAR = 4,
+}
+
+// type check show tick duration
+export enum TickExpiryType {
+    SHOW = 1,
+    hide = 2,
+}
+
+// type status stamp tick
+export enum StampTick {
+    EXPIRED = 0,
+    CAN_USE = 1,
+    USED = 2,
+}

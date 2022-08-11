@@ -13,7 +13,7 @@ import codePush from 'react-native-code-push';
 import Config from 'react-native-config';
 import Picker from 'react-native-picker';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
-import { CheckPasswordType, CouponDishType, CouponType } from './enumData';
+import { CheckPasswordType, CouponDishType, CouponType, ExpiryDayType } from './enumData';
 import { formatDate, YYYYMMDD_PUBLISH, formatDateJapan, YMDHms } from './format';
 import {
     DiscountType,
@@ -718,4 +718,11 @@ export const isAmela = () => {
 
 export const isTimePast = (firstDate: Date | string, secondDate: Date | string = new Date()) => {
     return new Date(secondDate).getTime() - new Date(firstDate).getTime() > 0;
+};
+
+export const getRangeCoupon = (expiryDayType: number) => {
+    if (expiryDayType === ExpiryDayType.DAY) return 'coupon.dayExpiryCoupon';
+    if (expiryDayType === ExpiryDayType.WEEK) return 'coupon.weekExpiryCoupon';
+    if (expiryDayType === ExpiryDayType.MONTH) return 'coupon.monthExpiryCoupon';
+    return 'coupon.yearExpiryCoupon';
 };

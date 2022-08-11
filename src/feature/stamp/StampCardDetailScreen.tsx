@@ -7,11 +7,10 @@ import { StyledIcon, StyledText, StyledTouchable } from 'components/base';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledHeader from 'components/common/StyledHeader';
 import CouponContentStampView from 'feature/coupon/components/CouponContentStampView';
-import CouponContentView from 'feature/coupon/components/CouponContentView';
 import React, { useEffect, useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { ScaledSheet, verticalScale } from 'react-native-size-matters';
-import { CheckDurationType, StampCardType, StampSettingBox } from 'utilities/enumData';
+import { CheckDurationType, StampCardType, StampSettingBox, TickExpiryType } from 'utilities/enumData';
 import { MODAL_ID, STAMP_NOTE, staticValue, tickTypeText } from 'utilities/staticData';
 import HistoryExchangeModal from './components/HistoryExchangeModal';
 import StampItem from './components/StampItem';
@@ -40,13 +39,12 @@ const StampCardDetailScreen = (props: any) => {
         histories: [],
     });
     const { stampDetail, histories } = stateData;
-    const { stamp = {}, leftAmount = 0, totalAmount = 0, expiredAmount = 0 } = stampDetail;
+    const { stamp = {}, totalAmount = 0, expiredAmount = 0, usedAmount } = stampDetail;
     const {
         cardType,
         width: numCol = staticValue.DEFAULT_STAMP_TICK_COLUMN,
         boxAmount = 0,
         stampTicks = [],
-        couponsExchange = [],
         settingBox,
         stampDishes = [],
         couponsCumulative = [],
@@ -54,6 +52,7 @@ const StampCardDetailScreen = (props: any) => {
         tickType = 0,
         tickDurationType,
         tickDuration = 0,
+        tickExpiryType,
     } = stamp;
 
     const isExchange = useMemo(() => cardType === StampCardType.EXCHANGE, [cardType]);
@@ -174,16 +173,15 @@ const StampCardDetailScreen = (props: any) => {
                             {isExchange && (
                                 <>
                                     <StampNumberView title={'stampDetail.numberOfCollect'} count={totalAmount || 0} />
-                                    <StampNumberView
-                                        title={'stampDetail.numberOfUse'}
-                                        count={(totalAmount || 0) - (leftAmount || 0) - (expiredAmount || 0)}
-                                    />
+                                    <StampNumberView title={'stampDetail.numberOfUse'} count={usedAmount || 0} />
                                     <StampNumberView title={'stampDetail.numberExpired'} count={expiredAmount || 0} />
-                                    <StyledText
-                                        i18nParams={{ tickDuration }}
-                                        i18nText={getRangeTick()}
-                                        customStyle={styles.tickDuration}
-                                    />
+                                    {tickExpiryType === TickExpiryType.SHOW && (
+                                        <StyledText
+                                            i18nParams={{ tickDuration }}
+                                            i18nText={getRangeTick()}
+                                            customStyle={styles.tickDuration}
+                                        />
+                                    )}
                                 </>
                             )}
                             <StyledTouchable

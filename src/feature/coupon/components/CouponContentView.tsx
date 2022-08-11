@@ -9,7 +9,8 @@ import React from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { CouponDishType } from 'utilities/enumData';
-import { formatDate, YYYYMMDD } from 'utilities/format';
+import { formatDate } from 'utilities/format';
+import { getRangeCoupon } from 'utilities/helper';
 import { DateType, DiscountType } from 'utilities/staticData';
 
 interface IProps {
@@ -53,7 +54,7 @@ const CouponContentView = (props: IProps) => {
         item,
         isExchange,
     } = props || {};
-    const { coupon = {}, usedDate, expiryDate } = data;
+    const { coupon = {}, usedDate, expiryDate, receivedDate } = data || {};
     const { exchangeLimit } = item || {};
     const {
         title,
@@ -66,6 +67,8 @@ const CouponContentView = (props: IProps) => {
         startDate,
         endDate,
         dateType,
+        expiryDay,
+        expiryDayType,
     } = coupon || {};
     const isBlock = Boolean(coupon?.isBlock);
     const hasExpired = dateType === DateType.EXPIRED_DATE;
@@ -130,37 +133,62 @@ const CouponContentView = (props: IProps) => {
                     <View style={styles.rowView}>
                         <StyledIcon source={Images.icons.calendar} size={20} customStyle={styles.iconDate} />
                         {isExchange ? (
-                            <StyledText
-                                i18nText={
-                                    usedDate
-                                        ? 'coupon.usedDate'
-                                        : hasExpired
-                                        ? 'coupon.expiredDate'
-                                        : 'coupon.noExpiredDate'
-                                }
-                                i18nParams={{
-                                    start: formatDate(startDate),
-                                    end: formatDate(endDate),
-                                    date: formatDate(usedDate),
-                                    expiryDate: formatDate(expiryDate),
-                                }}
-                                customStyle={styles.textDate}
-                            />
+                            <>
+                                {dateType === DateType.EXPIRED_FROM_RECEIVED ? (
+                                    <StyledText
+                                        i18nText={usedDate ? 'coupon.usedDate' : getRangeCoupon(expiryDayType)}
+                                        i18nParams={{
+                                            start: formatDate(startDate),
+                                            end: formatDate(endDate),
+                                            date: formatDate(usedDate),
+                                            expiryDate: formatDate(expiryDate),
+                                            value: expiryDay,
+                                        }}
+                                        customStyle={styles.textDate}
+                                    />
+                                ) : (
+                                    <StyledText
+                                        i18nText={
+                                            usedDate
+                                                ? 'coupon.usedDate'
+                                                : hasExpired
+                                                ? 'coupon.expiredDate'
+                                                : 'coupon.noExpiredDate'
+                                        }
+                                        i18nParams={{
+                                            start: formatDate(startDate),
+                                            end: formatDate(endDate),
+                                            date: formatDate(usedDate),
+                                            expiryDate: formatDate(expiryDate),
+                                        }}
+                                        customStyle={styles.textDate}
+                                    />
+                                )}
+                            </>
                         ) : (
-                            <StyledText
-                                i18nText={hasExpired ? 'coupon.expiredDate' : 'coupon.expiryDate'}
-                                i18nParams={
-                                    hasExpired
-                                        ? {
-                                              start: formatDate(startDate),
-                                              end: formatDate(expiryDate),
-                                          }
-                                        : {
-                                              expiryDate: formatDate(expiryDate),
-                                          }
-                                }
-                                customStyle={styles.textDate}
-                            />
+                            <>
+                                {dateType === DateType.NO_EXPIRED_DATE ? (
+                                    <StyledText i18nText={'coupon.noExpiredDate'} customStyle={styles.textDate} />
+                                ) : (
+                                    <StyledText
+                                        i18nText={'coupon.rangeDateDetail'}
+                                        i18nParams={
+                                            dateType === DateType.EXPIRED_DATE
+                                                ? {
+                                                      start: formatDate(startDate),
+                                                      end: formatDate(endDate),
+                                                  }
+                                                : dateType === DateType.EXPIRED_FROM_RECEIVED
+                                                ? {
+                                                      start: formatDate(receivedDate),
+                                                      end: formatDate(expiryDate),
+                                                  }
+                                                : {}
+                                        }
+                                        customStyle={styles.textDate}
+                                    />
+                                )}
+                            </>
                         )}
                     </View>
 

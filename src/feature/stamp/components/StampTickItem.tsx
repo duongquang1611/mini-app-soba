@@ -5,6 +5,7 @@ import { StyledImage, StyledText, StyledTouchable } from 'components/base';
 import React, { memo } from 'react';
 import { View } from 'react-native';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
+import { StampTick } from 'utilities/enumData';
 import { formatDate, MMDD } from 'utilities/format';
 import { staticValue } from 'utilities/staticData';
 
@@ -73,12 +74,15 @@ const StampTickItem = ({ item, numCol, onPress, isOpen = false, index }: any) =>
                         isBlack
                         customStyle={[s.textDate, { position: 'absolute', bottom: scale(2) }]}
                     />
-                    {status === 0 && (
+                    {status === StampTick.EXPIRED && (
                         <View style={s.transparent}>
                             <View style={s.wrapTextImgExpired}>
                                 <StyledText i18nText={'coupon.detail.invalid'} customStyle={s.textImgInvalid} />
                             </View>
                         </View>
+                    )}
+                    {status === StampTick.USED && (
+                        <StyledImage source={Images.photo.used} customStyle={s.transparent} />
                     )}
                 </>
             )}
