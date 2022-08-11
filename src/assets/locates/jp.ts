@@ -335,7 +335,8 @@ export default {
             used: '使用済み',
         },
         rangeDate: '{{start}}－{{end}}',
-        expiredDate: '有効期限 : {{start}}－{{end}}',
+        rangeDateDetail: '有効期間 : {{start}}－{{end}}',
+        expiredDate: '有効期間 : {{start}}－{{end}}',
         usedDate: '使用日付 : {{date}}',
         btnUse: 'クーポン選択',
         btnUseTabCoupon: 'クーポン使用',
@@ -361,6 +362,10 @@ export default {
         couponAmount: '個',
         exchangeLimitRange: 'クーポンは最大{{time}}回まで交換できます。',
         exchangeLimit: '無制限交換クーポン。',
+        dayExpiryCoupon: '有効期間はクーポンに交換した日から{{value}}日間です。',
+        weekExpiryCoupon: '有効期間はクーポンに交換した日から{{value}}週間です。',
+        monthExpiryCoupon: '有効期間はクーポンに交換した日から{{value}}ヶ月間です。',
+        yearExpiryCoupon: '有効期間はクーポンに交換した日から{{value}}年間です。',
     },
     otp: {
         register: {

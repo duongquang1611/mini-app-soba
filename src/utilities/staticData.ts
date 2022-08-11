@@ -768,6 +768,7 @@ export const CouponStoreKeyByStatus = ['couponsUsed', 'couponsCanUse'];
 export enum DateType {
     EXPIRED_DATE = 1,
     NO_EXPIRED_DATE = 2,
+    EXPIRED_FROM_RECEIVED = 3,
 }
 
 // coupon.discountType

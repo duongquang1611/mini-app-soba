@@ -9,7 +9,8 @@ import React from 'react';
 import { View } from 'react-native';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
-import { formatDate, YYYYMMDD } from 'utilities/format';
+import { formatDate } from 'utilities/format';
+import { getRangeCoupon } from 'utilities/helper';
 import { DateType, staticValue } from 'utilities/staticData';
 import DashView from './DashView';
 import PointExchangeView from './PointExchangeView';
@@ -31,7 +32,7 @@ export const CouponItem = (props: any) => {
         showDashBottom = true,
     } = props || {};
     const { coupon, usedDate, id: idMemberCoupon, receivedDate, expiryDate, stampAmount = 0 } = item;
-    const { image_150, title, startDate, endDate, dateType } = coupon || {};
+    const { image_150, title, startDate, endDate, dateType, expiryDay, expiryDayType } = coupon || {};
     // const isInCartAPI = useMemo(() => status === MemberCouponStatus.IN_CART, [status]);
     const checkChooseTemp = cartOrderState?.coupons?.find((itemCoupon: any) => itemCoupon?.id === idMemberCoupon);
     const checkChooseInCart = (order || cartOrder)?.coupons?.find(
@@ -107,30 +108,51 @@ export const CouponItem = (props: any) => {
                     <StyledText originValue={title} numberOfLines={1} customStyle={styles.title} />
                     <View style={styles.rowView}>
                         {isExchangeCoupon ? (
-                            <StyledText
-                                i18nText={hasExpired ? 'coupon.rangeDate' : 'coupon.noExpiredDate'}
-                                i18nParams={{
-                                    start: formatDate(startDate),
-                                    end: formatDate(endDate),
-                                    expiryDate: formatDate(expiryDate),
-                                }}
-                                customStyle={styles.time}
-                            />
+                            <>
+                                {dateType === DateType.EXPIRED_FROM_RECEIVED ? (
+                                    <StyledText
+                                        i18nText={getRangeCoupon(expiryDayType)}
+                                        i18nParams={{
+                                            value: expiryDay,
+                                        }}
+                                        customStyle={styles.time}
+                                    />
+                                ) : (
+                                    <StyledText
+                                        i18nText={hasExpired ? 'coupon.rangeDate' : 'coupon.noExpiredDate'}
+                                        i18nParams={{
+                                            start: formatDate(startDate),
+                                            end: formatDate(endDate),
+                                            expiryDate: formatDate(expiryDate),
+                                        }}
+                                        customStyle={styles.time}
+                                    />
+                                )}
+                            </>
                         ) : (
-                            <StyledText
-                                i18nText={hasExpired ? 'coupon.rangeDate' : 'coupon.expiryDate'}
-                                i18nParams={
-                                    hasExpired
-                                        ? {
-                                              start: formatDate(startDate),
-                                              end: formatDate(expiryDate),
-                                          }
-                                        : {
-                                              expiryDate: formatDate(expiryDate),
-                                          }
-                                }
-                                customStyle={styles.time}
-                            />
+                            <>
+                                {dateType === DateType.NO_EXPIRED_DATE ? (
+                                    <StyledText i18nText={'coupon.noExpiredDate'} customStyle={styles.time} />
+                                ) : (
+                                    <StyledText
+                                        i18nText={dateType ? 'coupon.rangeDate' : 'coupon.expiryDate'}
+                                        i18nParams={
+                                            dateType === DateType.EXPIRED_DATE
+                                                ? {
+                                                      start: formatDate(startDate),
+                                                      end: formatDate(endDate),
+                                                  }
+                                                : dateType === DateType.EXPIRED_FROM_RECEIVED
+                                                ? {
+                                                      start: formatDate(receivedDate),
+                                                      end: formatDate(expiryDate),
+                                                  }
+                                                : {}
+                                        }
+                                        customStyle={styles.time}
+                                    />
+                                )}
+                            </>
                         )}
                         {renderActionRight()}
                     </View>

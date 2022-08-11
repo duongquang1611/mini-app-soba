@@ -67,7 +67,7 @@ const StampItem = (props: IProps) => {
                     />
 
                     <View style={styles.wrapCount}>
-                        <View style={{ flexDirection: 'row' }}>
+                        <View style={styles.rowView}>
                             <StyledText
                                 i18nText={isExchange ? 'stamp.remain' : 'stamp.titleCount'}
                                 customStyle={styles.textTitleCount}
@@ -153,6 +153,10 @@ const styles = ScaledSheet.create({
         fontWeight: 'bold',
         position: 'absolute',
         right: 0,
+    },
+    rowView: {
+        flexDirection: 'row',
+        alignItems: 'center',
     },
 });
 

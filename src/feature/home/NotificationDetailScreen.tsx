@@ -109,9 +109,9 @@ const NotificationDetailScreen = (props: any) => {
     const checkCanUse = (itemMemberCoupon: any) => {
         const { coupon, usedDate, expiryDate } = itemMemberCoupon;
         if (usedDate || coupon?.isBlock) return TabCouponStatus.USED;
-        const { dateType, endDate } = coupon || {};
+        const { dateType } = coupon || {};
         if (dateType === DateType.NO_EXPIRED_DATE) return TabCouponStatus.CAN_USE;
-        return endDate && !isTimePast(expiryDate) ? TabCouponStatus.CAN_USE : TabCouponStatus.USED;
+        return expiryDate && !isTimePast(formatDate(expiryDate)) ? TabCouponStatus.CAN_USE : TabCouponStatus.USED;
     };
 
     const goToDetailStamp = useCallback((item: any) => {
