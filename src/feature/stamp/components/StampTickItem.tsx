@@ -18,7 +18,7 @@ const separatorTop = 10;
 // noodle off: normal
 // close box: couponsCumulative
 
-const StampTickItem = ({ item, numCol, onPress, isOpen = false, index }: any) => {
+const StampTickItem = ({ item, numCol, onPress, isOpen = false, index, isExchange }: any) => {
     const { createdDate, status } = item;
     const isDisabled = !isOpen && !item?.positionBox && !createdDate;
     const isCloseBox = item?.positionBox && !isOpen;
@@ -74,16 +74,18 @@ const StampTickItem = ({ item, numCol, onPress, isOpen = false, index }: any) =>
                         isBlack
                         customStyle={[s.textDate, { position: 'absolute', bottom: scale(2) }]}
                     />
-                    {status === StampTick.EXPIRED && (
-                        <View style={s.transparent}>
-                            <View style={s.wrapTextImgExpired}>
-                                <StyledText i18nText={'coupon.detail.invalid'} customStyle={s.textImgInvalid} />
+
+                    {isExchange ? (
+                        status === StampTick.USED ? (
+                            <StyledImage source={Images.photo.used} customStyle={s.transparent} />
+                        ) : status === StampTick.EXPIRED ? (
+                            <View style={s.transparent}>
+                                <View style={s.wrapTextImgExpired}>
+                                    <StyledText i18nText={'coupon.detail.invalid'} customStyle={s.textImgInvalid} />
+                                </View>
                             </View>
-                        </View>
-                    )}
-                    {status === StampTick.USED && (
-                        <StyledImage source={Images.photo.used} customStyle={s.transparent} />
-                    )}
+                        ) : null
+                    ) : null}
                 </>
             )}
         </StyledTouchable>

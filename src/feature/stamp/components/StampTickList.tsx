@@ -34,6 +34,7 @@ const StampTickList = ({
         const isOpen = item?.positionBox <= stampTicks.length;
         return (
             <StampTickItem
+                isExchange={isExchange}
                 item={item}
                 numCol={numCol}
                 onPress={() => onPressItemStampTick(item?.positionBox, isOpen)}
