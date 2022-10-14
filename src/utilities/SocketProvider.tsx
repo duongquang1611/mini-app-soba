@@ -1,176 +1,57 @@
-// /* eslint-disable no-underscore-dangle */
-// import { getProfile } from 'api/modules/api-app/authenticate';
-// import { getMessage } from 'api/modules/api-app/chat';
-// import Images from 'assets/images';
-// import React, { useCallback, useEffect, useState } from 'react';
-// import Config from 'react-native-config';
-// import { GiftedChat } from 'react-native-gifted-chat';
-// import { useSelector } from 'react-redux';
-// import socketIO from 'socket.io-client';
-// import { logger } from './helper';
+import { DefaultEventsMap } from '@socket.io/component-emitter';
+import { getProfile } from 'api/modules/api-app/authenticate';
+import React, { useEffect } from 'react';
+import Config from 'react-native-config';
+import { useSelector } from 'react-redux';
+import socketIO, { Socket } from 'socket.io-client';
+import { SocketEvent } from './enumData';
+import { logger } from './helper';
 
-// export const socket = socketIO(Config.API_URL, { timeout: 3000 });
-// let isConnectSocket = false;
-// export const SocketProvider = ({ children }: any) => {
-//     const userInfo = useSelector((state: any) => state.userInfo);
+let socket: Socket<DefaultEventsMap, DefaultEventsMap>;
 
-//     const startSocket = () => {
-//         socket?.off('connect');
-//         socket?.disconnect();
-//         socket.on('connect', () => {
-//             socket.emit('authenticate', { token: userInfo?.token });
-//         });
-//         socket.on('authenticated', () => {
-//             isConnectSocket = true;
-//             logger('connected');
-//         });
-//         socket.connect();
-//     };
-//     const stopSocket = () => {
-//         socket?.off('connect');
-//         socket?.off('reconnect');
-//         socket?.off('authenticated');
-//         socket?.off('server-send-message');
-//         socket?.disconnect();
-//     };
-//     useEffect(() => {
-//         if (userInfo?.token && !isConnectSocket) {
-//             startSocket();
-//         }
-//     }, [userInfo?.token]);
+export const SocketProvider = ({ children }: any) => {
+    const userInfo = useSelector((state: any) => state.userInfo);
+    const startSocket = () => {
+        socket = socketIO(Config.API_URL, {
+            extraHeaders: {
+                authorization: userInfo?.token,
+            },
+        });
 
-//     useEffect(() => {
-//         socket.on('unauthenticated', async () => {
-//             isConnectSocket = false;
-//             await getProfile();
-//         });
-//         return () => {
-//             stopSocket();
-//         };
-//     }, []);
+        socket.on(SocketEvent.connect, () => {
+            logger('connect success');
+        });
+        socket.on(SocketEvent.connectError, async (err: any) => {
+            if (err.message === 'Unauthorized') {
+                logger('Unauthorized');
+                await getProfile();
+            } else {
+                logger(err.message);
+            }
+        });
+        socket.on(SocketEvent.SUCCESS_PAYMENT, async (data) => {
+            console.log('socket.on -> SUCCESS_PAYMENT', data);
+        });
+        socket.on(SocketEvent.CANCEL_ORDER, async (data) => {
+            console.log('socket.on -> CANCEL_ORDER', data);
+        });
+    };
 
-//     return <>{children}</>;
-// };
+    const stopSocket = () => {
+        socket?.off(SocketEvent.connect);
+        socket?.off(SocketEvent.connectError);
+        socket?.off(SocketEvent.SUCCESS_PAYMENT);
+        socket?.off(SocketEvent.CANCEL_ORDER);
+    };
 
-// export const useSocket = (id?: string) => {
-//     const [conversationId, setConversationId] = useState(id);
-//     const userInfo = useSelector((state: any) => state?.userInfo);
-//     const [messages, setMessages] = useState<any>([]);
-//     // tuy vao tung api detail user User Data se khac nhau
-//     const [dataUser, setUser] = useState({
-//         _id: Number(`1${userInfo?.honbuId}`),
-//         name: userInfo?.honbuName,
-//     });
-//     const [image, setImage] = useState<any>('');
-//     const listStaff = useSelector((state: any) => state?.addStaff);
-//     const leaveRoom = () => {
-//         socket.emit('leave-room', { conversationId });
-//     };
-//     // neu id sau khac id truoc thì rời room
-//     if (id !== conversationId) {
-//         leaveRoom();
-//         setMessages([]);
-//         setConversationId(id);
-//     }
-//     useEffect(() => {
-//         setTimeout(() => {
-//             joinRoom();
-//         }, 100);
-//     }, [conversationId]);
-//     useEffect(() => {
-//         if (image) {
-//             onSend(
-//                 [
-//                     {
-//                         createdAt: new Date().getTime(),
-//                         _id: Math.random().toString(),
-//                     },
-//                 ],
-//                 1,
-//             );
-//             setImage('');
-//         }
-//     }, [image, conversationId]);
-//     const formatMessage = (item: any) => {
-//         return {
-//             _id: item?.createdAt || item?._id,
-//             text: item?.messageType === 0 && item?.body,
-//             createdAt: item?.createdAt,
-//             user: {
-//                 _id: Number(`${item?.memberType}${item?.memberId}`),
-//                 avatar:
-//                     listStaff?.find(
-//                         (staff: any) => Number(`2${staff?.staffId}`) === Number(`${item?.memberType}${item?.memberId}`),
-//                     )?.photo?.[0] || Images.icons?.avatar,
-//                 name:
-//                     listStaff?.find(
-//                         (staff: any) => Number(`2${staff?.staffId}`) === Number(`${item?.memberType}${item?.memberId}`),
-//                     )?.nickname || dataUser?.name,
-//             },
-//             image: item?.messageType === 1 && item?.body,
-//         };
-//     };
-//     const getListMessage = async (time?: any) => {
-//         const params = {
-//             conversationId,
-//             lastTime: time || new Date().getTime(),
-//             pageSize: 10,
-//         };
-//         const responseMessage = await getMessage(params);
-//         const messagesNew = responseMessage?.data?.data.map((item: any) => {
-//             return formatMessage(item);
-//         });
-//         setMessages((previousMessages: any) => {
-//             return GiftedChat.append(messagesNew, previousMessages);
-//         });
-//     };
-//     const onSend = useCallback(
-//         (mess: any = [], messageType = 0) => {
-//             sendMessage({
-//                 conversationId,
-//                 messageType,
-//                 body: messageType === 0 ? mess?.[0]?.text : image,
-//             });
-//             const newMess = {
-//                 ...mess[0],
-//                 user: dataUser,
-//                 image,
-//             };
-//             setMessages((previousMessages: any) => GiftedChat.append(previousMessages, newMess));
-//         },
-//         [conversationId, image],
-//     );
+    useEffect(() => {
+        if (userInfo?.token) {
+            startSocket();
+        }
+        return () => {
+            stopSocket();
+        };
+    }, [userInfo?.token]);
 
-//     const emitJoinRoom = (cb?: any) => {
-//         socket.emit(
-//             'join-room',
-//             {
-//                 conversationId,
-//                 lastTime: new Date().getTime(),
-//             },
-//             (res: any) => {
-//                 cb?.();
-//             },
-//         );
-//     };
-//     const joinRoom = () => {
-//         emitJoinRoom(getListMessage);
-//         socket.off('server-send-message');
-//         socket.on('server-send-message', (data: any) => {
-//             setMessages((previousMessages: any) => {
-//                 return GiftedChat.append(previousMessages, [formatMessage(data)]);
-//             });
-//         });
-//         socket.off('reconnect');
-//         socket.on('reconnect', (attempt: any) => {
-//             emitJoinRoom(getListMessage);
-//         });
-//     };
-//     const sendMessage = (obj: any) => {
-//         socket.emit('client-send-message', obj, (res: any) => {
-//             logger('client-send-message', false, res);
-//         });
-//     };
-
-//     return { leaveRoom, messages, onSend, getListMessage, setImage };
-// };
+    return <>{children}</>;
+};

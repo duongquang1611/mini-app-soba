@@ -13,6 +13,7 @@ import { addMenuClearAsyncStorage, getCodePushInfo, wait } from 'utilities/helpe
 import { loadLocaleLanguage } from 'utilities/i18next';
 import { staticValue } from 'utilities/staticData';
 import SplashScreen from 'react-native-splash-screen';
+import { SocketProvider } from 'utilities/SocketProvider';
 
 LogBox.ignoreLogs(['Require cycle:', 'Non-serializable', 'Sending `onAnimatedValueUpdate`']);
 addMenuClearAsyncStorage();
@@ -42,13 +43,13 @@ const App: FunctionComponent = () => {
     return (
         <Provider store={store}>
             <PersistGate loading={<ActivityIndicator />} persistor={persistor} onBeforeLift={onBeforeLift}>
-                <APIProvider>
+                <SocketProvider>
                     <RootSiblingParent>
                         <NavigationContainer ref={navigationRef}>
                             <Navigation />
                         </NavigationContainer>
                     </RootSiblingParent>
-                </APIProvider>
+                </SocketProvider>
             </PersistGate>
         </Provider>
     );

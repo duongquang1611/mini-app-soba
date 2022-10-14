@@ -496,7 +496,7 @@ export const showActionQR = (qrCode: any, newOrder: any, titleCancel = 'Create N
                     newOrderFormat.orderId = makeId();
                     newOrderFormat = addQRCodeEOS(newOrderFormat, true, false);
                     sendTeams(`${newOrderFormat}`, titleCancel);
-                    createNewOrder(JSON.parse(newOrderFormat));
+                    // createNewOrder(JSON.parse(newOrderFormat));
                 } else {
                     sendTeams(`${newOrder}`, titleCancel);
                 }
