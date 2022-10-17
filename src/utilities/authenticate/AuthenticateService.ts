@@ -11,7 +11,12 @@ import { AxiosRequestConfig } from 'axios';
 import AlertMessage from 'components/base/AlertMessage';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { changeOrderApiToStore, filterOrderStore } from 'utilities/helper';
+import {
+    changeOrderApiToStore,
+    filterOrderStore,
+    generateDataCheckAvailableCoupons,
+    removeCouponsOrder,
+} from 'utilities/helper';
 import { deleteTagOneSignal } from 'utilities/notification';
 import { OrderType } from 'utilities/staticData';
 
@@ -64,26 +69,25 @@ const getOrderData = async (token: any, userId: number | string) => {
     const dataMobile = changeOrderApiToStore(res?.[1]?.data || {});
     const dataDefaultHome = changeOrderApiToStore(res?.[2]?.data || {});
 
-    // const resCoupons = await Promise.all([
-    //     checkAvailableCouponsApi({ userId, coupons: res?.[0]?.data?.coupons || [] }),
-    //     checkAvailableCouponsApi({ userId, coupons: res?.[1]?.data?.coupons || [] }),
-    //     checkAvailableCouponsApi({ userId, coupons: res?.[2]?.data?.coupons || [] }),
-    // ]);
-    // console.log('getOrderData -> resCoupons', resCoupons);
+    const resCoupons = await Promise.all([
+        checkAvailableCouponsApi({ userId, coupons: generateDataCheckAvailableCoupons(res?.[0]?.data?.coupons || []) }),
+        checkAvailableCouponsApi({ userId, coupons: generateDataCheckAvailableCoupons(res?.[1]?.data?.coupons || []) }),
+        checkAvailableCouponsApi({ userId, coupons: generateDataCheckAvailableCoupons(res?.[2]?.data?.coupons || []) }),
+    ]);
     store.dispatch(
         updateAllOrder({
             defaultOrder: {
-                ...dataDefaultSetting,
                 dishes: filterOrderStore({ menu, categories, order: dataDefaultSetting }),
+                coupons: removeCouponsOrder(dataDefaultSetting.coupons, resCoupons?.[0]?.data?.coupons),
             },
             cartOrder: { dishes: [], coupons: [] },
             mobileOrder: {
-                ...dataMobile,
                 dishes: filterOrderStore({ menu, categories, order: dataMobile }),
+                coupons: removeCouponsOrder(dataMobile.coupons, resCoupons?.[1]?.data?.coupons),
             },
             defaultOrderLocal: {
-                ...dataDefaultHome,
                 dishes: filterOrderStore({ menu, categories, order: dataDefaultHome }),
+                coupons: removeCouponsOrder(dataDefaultHome.coupons, resCoupons?.[2]?.data?.coupons),
             },
         }),
     );
