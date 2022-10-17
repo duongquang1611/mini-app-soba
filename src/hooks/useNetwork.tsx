@@ -12,7 +12,7 @@ import { useEffect, useRef } from 'react';
 import { filterOrderStore, filterResources, generateDataSaveOrderOption } from 'utilities/helper';
 import { OrderType } from 'utilities/staticData';
 
-export const getResourcesData = async (updateOrderToAPI = true) => {
+export const getResourcesData = async (updateOrderToAPI = true, checkCoupons = false) => {
     try {
         const response = await getResources();
         const newResources = filterResources(response?.data);
@@ -28,7 +28,7 @@ export const getResourcesData = async (updateOrderToAPI = true) => {
             });
 
             // update save order api
-            updateOrderStore(allDishFilter);
+            updateOrderStore(allDishFilter, checkCoupons);
 
             // update dish to store
             store.dispatch(updateDishesAllOrder(allDishFilter));
@@ -41,9 +41,9 @@ export const getResourcesData = async (updateOrderToAPI = true) => {
     }
 };
 
-export const updateOrderStore = async (allDishFilter?: any) => {
+export const updateOrderStore = async (allDishFilter?: any, checkCoupons = false) => {
     const { userInfo, order } = store.getState();
-    const { defaultOrder, defaultOrderLocal, mobileOrder } = order;
+    const { defaultOrder, defaultOrderLocal, mobileOrder, cartOrder } = order;
     const { token } = userInfo;
     if (!token) return;
     const defaultOrderSettingSaveData = generateDataSaveOrderOption(
@@ -67,6 +67,7 @@ export const updateOrderStore = async (allDishFilter?: any) => {
         },
         OrderType.MOBILE,
     );
+
     Promise.all([
         saveOrderOption(defaultOrderSettingSaveData),
         saveOrderOption(defaultOrderHomeSaveData),
@@ -92,7 +93,7 @@ const useNetwork = () => {
                 isFirstRun.current = false;
             }
             if (state.isConnected && state.isInternetReachable && !isFirstRun.current) {
-                getResourcesData();
+                getResourcesData(true, true);
                 getCouponData();
             }
         });

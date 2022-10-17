@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { getProfile, login } from 'api/modules/api-app/authenticate';
-import { getOrder } from 'api/modules/api-app/order';
+import { checkAvailableCouponsApi, getOrder } from 'api/modules/api-app/order';
 import request from 'api/request';
 import { clearCoupon } from 'app-redux/slices/couponSlice';
 import { clearGlobalData, updateGlobalData } from 'app-redux/slices/globalDataSlice';
@@ -46,7 +47,7 @@ const AuthenticateService = {
         store.dispatch(userInfoActions.updateToken(tokenData));
     },
 };
-const getOrderData = async (token: any) => {
+const getOrderData = async (token: any, userId: number | string) => {
     const res = await Promise.all([
         getOrder(OrderType.DEFAULT_SETTING, token),
         getOrder(OrderType.MOBILE, token),
@@ -62,6 +63,13 @@ const getOrderData = async (token: any) => {
     const dataDefaultSetting = changeOrderApiToStore(res?.[0]?.data || {});
     const dataMobile = changeOrderApiToStore(res?.[1]?.data || {});
     const dataDefaultHome = changeOrderApiToStore(res?.[2]?.data || {});
+
+    // const resCoupons = await Promise.all([
+    //     checkAvailableCouponsApi({ userId, coupons: res?.[0]?.data?.coupons || [] }),
+    //     checkAvailableCouponsApi({ userId, coupons: res?.[1]?.data?.coupons || [] }),
+    //     checkAvailableCouponsApi({ userId, coupons: res?.[2]?.data?.coupons || [] }),
+    // ]);
+    // console.log('getOrderData -> resCoupons', resCoupons);
     store.dispatch(
         updateAllOrder({
             defaultOrder: {
@@ -92,7 +100,7 @@ export const useLogin = (): LoginRequest => {
             dispatch(updateGlobalData({ skipOrderDefault: true }));
             const resProfile = await getProfile(response?.data?.token);
             dispatch(userInfoActions.getUserInfoSuccess(resProfile?.data));
-            await getOrderData(response?.data?.token);
+            await getOrderData(response?.data?.token, resProfile?.data?.member?.id);
             setLoading(false);
             AuthenticateService.handlerLogin({ ...response.data });
         } catch (e) {

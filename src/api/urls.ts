@@ -33,6 +33,7 @@ const ORDER_URL = {
     listHistoryOrder: 'order/bill-history',
     detailHistoryOrder: (id: number) => `order/bill-history/${id}`,
     createNewOrder: 'order/create-new-order',
+    checkAvailableCoupons: 'order/check-available-coupons',
 };
 
 const HOME_URL = {

@@ -43,13 +43,13 @@ const App: FunctionComponent = () => {
     return (
         <Provider store={store}>
             <PersistGate loading={<ActivityIndicator />} persistor={persistor} onBeforeLift={onBeforeLift}>
-                <SocketProvider>
-                    <RootSiblingParent>
-                        <NavigationContainer ref={navigationRef}>
+                <RootSiblingParent>
+                    <NavigationContainer ref={navigationRef}>
+                        <SocketProvider>
                             <Navigation />
-                        </NavigationContainer>
-                    </RootSiblingParent>
-                </SocketProvider>
+                        </SocketProvider>
+                    </NavigationContainer>
+                </RootSiblingParent>
             </PersistGate>
         </Provider>
     );

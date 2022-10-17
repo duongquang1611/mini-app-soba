@@ -1,13 +1,96 @@
 import { DefaultEventsMap } from '@socket.io/component-emitter';
 import { getProfile } from 'api/modules/api-app/authenticate';
+import { saveOrderOption } from 'api/modules/api-app/order';
+import {
+    clearCartOrder,
+    clearMobileOrder,
+    updateCartOrder,
+    updateDefaultOrderLocal,
+    updateMobileOrder,
+} from 'app-redux/slices/orderSlice';
+import { userInfoActions } from 'app-redux/slices/userInfoSlice';
+import { store } from 'app-redux/store';
+import { getCouponData } from 'feature/home/HomeScreen';
+import { navigationRef } from 'navigation/NavigationService';
 import React, { useEffect } from 'react';
 import Config from 'react-native-config';
 import { useSelector } from 'react-redux';
 import socketIO, { Socket } from 'socket.io-client';
 import { SocketEvent } from './enumData';
-import { logger } from './helper';
+import { backHomeWhenPayment, deleteUsedCoupon, generateDataSaveOrderOption, logger } from './helper';
+import { listScreenBackWhenPayment, OrderType } from './staticData';
 
 let socket: Socket<DefaultEventsMap, DefaultEventsMap>;
+
+const generalActionSocket = async () => {
+    try {
+        await getCouponData();
+        const resProfile = await getProfile();
+        store.dispatch(userInfoActions.getUserInfoSuccess(resProfile?.data));
+    } catch (error) {
+        console.log('getProfile -> error', error);
+    }
+};
+
+const handleActionSuccessPayment = async (data: any) => {
+    if (!data) return;
+    const { order } = store.getState();
+    const { defaultOrder, defaultOrderLocal, mobileOrder, cartOrder } = order;
+    const { coupons = [], type, orderId = '' } = data || {};
+    const currentScreen = navigationRef?.current?.getCurrentRoute?.()?.name;
+    // update gio hang
+    store.dispatch(updateCartOrder(deleteUsedCoupon(cartOrder, coupons)));
+
+    if (Number(type) === OrderType.DEFAULT_SETTING) {
+        store.dispatch(updateMobileOrder(deleteUsedCoupon(mobileOrder, coupons)));
+        store.dispatch(updateDefaultOrderLocal(defaultOrder));
+        try {
+            const defaultOrderHomeSaveOrderOption = generateDataSaveOrderOption(defaultOrder, OrderType.DEFAULT_HOME);
+            const mobileSaveOrderOption = generateDataSaveOrderOption(
+                deleteUsedCoupon(mobileOrder, coupons),
+                OrderType.MOBILE,
+            );
+            await Promise.all([
+                saveOrderOption(defaultOrderHomeSaveOrderOption),
+                saveOrderOption(mobileSaveOrderOption),
+            ]);
+        } catch (error) {
+            console.log('saveOrder -> error', error);
+        }
+    } else if (Number(type) === OrderType.MOBILE) {
+        store.dispatch(clearMobileOrder());
+        store.dispatch(clearCartOrder());
+        store.dispatch(updateDefaultOrderLocal(deleteUsedCoupon(defaultOrderLocal, coupons)));
+        try {
+            const defaultOrderHomeSaveOrderOption = generateDataSaveOrderOption(
+                deleteUsedCoupon(defaultOrderLocal, coupons),
+                OrderType.DEFAULT_HOME,
+            );
+            const mobileSaveOrderOption = generateDataSaveOrderOption({}, OrderType.MOBILE);
+            await Promise.all([
+                saveOrderOption(defaultOrderHomeSaveOrderOption),
+                saveOrderOption(mobileSaveOrderOption),
+            ]);
+        } catch (error) {
+            console.log('saveOrder -> error', error);
+        }
+    }
+
+    if (listScreenBackWhenPayment.find((screen: any) => currentScreen === screen)) {
+        backHomeWhenPayment(orderId);
+    }
+
+    await generalActionSocket();
+};
+
+const handleActionCancelOrder = async (data: any) => {
+    if (!data) return;
+    const { order } = store.getState();
+    const { cartOrder } = order;
+    const { coupons = [] } = data || {};
+    store.dispatch(updateCartOrder(deleteUsedCoupon(cartOrder, coupons)));
+    await generalActionSocket();
+};
 
 export const SocketProvider = ({ children }: any) => {
     const userInfo = useSelector((state: any) => state.userInfo);
@@ -29,12 +112,8 @@ export const SocketProvider = ({ children }: any) => {
                 logger(err.message);
             }
         });
-        socket.on(SocketEvent.SUCCESS_PAYMENT, async (data) => {
-            console.log('socket.on -> SUCCESS_PAYMENT', data);
-        });
-        socket.on(SocketEvent.CANCEL_ORDER, async (data) => {
-            console.log('socket.on -> CANCEL_ORDER', data);
-        });
+        socket.on(SocketEvent.SUCCESS_PAYMENT, handleActionSuccessPayment);
+        socket.on(SocketEvent.CANCEL_ORDER, handleActionCancelOrder);
     };
 
     const stopSocket = () => {
