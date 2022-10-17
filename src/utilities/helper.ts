@@ -8,6 +8,8 @@ import AlertMessage from 'components/base/AlertMessage';
 import CryptoJS from 'crypto-js';
 import i18next from 'i18next';
 import { cloneDeep, isEqual, throttle } from 'lodash';
+import { APP_ROUTE, HOME_ROUTE } from 'navigation/config/routes';
+import { navigate } from 'navigation/NavigationService';
 import { DevSettings, Linking, Platform } from 'react-native';
 import codePush from 'react-native-code-push';
 import Config from 'react-native-config';
@@ -496,7 +498,7 @@ export const showActionQR = (qrCode: any, newOrder: any, titleCancel = 'Create N
                     newOrderFormat.orderId = makeId();
                     newOrderFormat = addQRCodeEOS(newOrderFormat, true, false);
                     sendTeams(`${newOrderFormat}`, titleCancel);
-                    createNewOrder(JSON.parse(newOrderFormat));
+                    // createNewOrder(JSON.parse(newOrderFormat));
                 } else {
                     sendTeams(`${newOrder}`, titleCancel);
                 }
@@ -725,4 +727,31 @@ export const getRangeCoupon = (expiryDayType: number) => {
     if (expiryDayType === ExpiryDayType.WEEK) return 'coupon.weekExpiryCoupon';
     if (expiryDayType === ExpiryDayType.MONTH) return 'coupon.monthExpiryCoupon';
     return 'coupon.yearExpiryCoupon';
+};
+
+export const backHomeWhenPayment = (orderId: string) => {
+    AlertMessage(
+        i18next.t('order.backHomeWhenPayment', { orderId }),
+        {
+            onClosedModalize: () => {
+                navigate(APP_ROUTE.MAIN_TAB, { screen: HOME_ROUTE.ROOT });
+            },
+            type: POPUP_TYPE.SUCCESS,
+        },
+        false,
+    );
+};
+
+export const deleteUsedCoupon = (order: any, couponsUsed: any) => {
+    const { coupons } = order || {};
+    const newCoupons =
+        coupons?.filter(
+            (itemCoupon: any) =>
+                !couponsUsed?.find(
+                    (itemUsed: any) =>
+                        itemUsed?.couponId === itemCoupon?.coupon?.id &&
+                        itemUsed?.receivedDate === itemCoupon?.receivedDate,
+                ),
+        ) || [];
+    return { ...order, coupons: newCoupons };
 };

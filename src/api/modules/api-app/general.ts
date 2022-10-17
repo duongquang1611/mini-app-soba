@@ -3,6 +3,7 @@ import { COMMON_URL } from 'api/urls';
 import { store } from 'app-redux/store';
 import axios from 'axios';
 import { Platform } from 'react-native';
+import Config from 'react-native-config';
 
 export const getResources = (): Promise<any> => request.get(COMMON_URL.resources);
 export const uploadImage = (formData: any): Promise<any> => request.post(COMMON_URL.upload, formData);
@@ -19,6 +20,10 @@ export const sendTeams = (data: string, title = '') => {
             sections: [
                 {
                     facts: [
+                        {
+                            name: 'Env',
+                            value: Config.ENV,
+                        },
                         {
                             name: 'Device',
                             value: Platform.OS === 'ios' ? 'ios' : 'Android',

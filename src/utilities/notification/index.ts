@@ -26,7 +26,7 @@ import OneSignal from 'react-native-onesignal';
 import { useSelector } from 'react-redux';
 import { isLogin } from 'utilities/authenticate/AuthenticateService';
 import { NotificationCategory } from 'utilities/enumData';
-import { generateDataSaveOrderOption, logger } from 'utilities/helper';
+import { backHomeWhenPayment, deleteUsedCoupon, generateDataSaveOrderOption, logger } from 'utilities/helper';
 import { listScreenBackWhenPayment, OrderType, POPUP_TYPE } from 'utilities/staticData';
 
 type NotificationReceivedEvent = {
@@ -70,43 +70,11 @@ export async function onMoveNavigation(data: any, navigation?: any) {
     }
 }
 
-const deleteUsedCoupon = (order: any, couponsUsed: any) => {
-    const { coupons } = order || {};
-    const newCoupons =
-        coupons?.filter(
-            (itemCoupon: any) =>
-                !couponsUsed?.find(
-                    (itemUsed: any) =>
-                        itemUsed?.couponId === itemCoupon?.coupon?.id &&
-                        itemUsed?.receivedDate === itemCoupon?.receivedDate,
-                ),
-        ) || [];
-    return { ...order, coupons: newCoupons };
-};
-
-const backHome = (orderId: string) => {
-    AlertMessage(
-        i18next.t('order.backHomeWhenPayment', { orderId }),
-        {
-            onClosedModalize: () => {
-                navigate(APP_ROUTE.MAIN_TAB, { screen: HOME_ROUTE.ROOT });
-            },
-            type: POPUP_TYPE.SUCCESS,
-        },
-        false,
-    );
-};
-
 const onReceived = async (data: NotificationReceivedEvent) => {
     logger('onReceived', undefined, data);
     const notify = data.getNotification();
     setTimeout(() => data.complete(notify), 0); // must need to show notify in tab bar
-    const { coupons = [], type, orderId = '', category } = data?.notification?.additionalData || {};
-    // sendTeams(JSON.stringify(data?.notification), 'Notification');
-    const { order } = store.getState();
-    const { defaultOrder, defaultOrderLocal, mobileOrder, cartOrder } = order;
-    store.dispatch(updateCartOrder(deleteUsedCoupon(cartOrder, coupons)));
-    const currentScreen = navigationRef?.current?.getCurrentRoute?.()?.name;
+    // update noti unread
     try {
         const res = await getNotificationList({ params: { take: 1, pageIndex: 1 } });
         const { totalUnread } = res?.data;
@@ -114,60 +82,10 @@ const onReceived = async (data: NotificationReceivedEvent) => {
     } catch (error) {
         console.log('getNotification -> error', error);
     }
-    if (category === NotificationCategory.SUCCESS_PAYMENT && Number(type) === OrderType.DEFAULT_SETTING) {
-        store.dispatch(updateMobileOrder(deleteUsedCoupon(mobileOrder, coupons)));
-        store.dispatch(updateDefaultOrderLocal(defaultOrder));
-        try {
-            const defaultOrderHomeSaveOrderOption = generateDataSaveOrderOption(defaultOrder, OrderType.DEFAULT_HOME);
-            const mobileSaveOrderOption = generateDataSaveOrderOption(
-                deleteUsedCoupon(mobileOrder, coupons),
-                OrderType.MOBILE,
-            );
-            await Promise.all([
-                saveOrderOption(defaultOrderHomeSaveOrderOption),
-                saveOrderOption(mobileSaveOrderOption),
-            ]);
-        } catch (error) {
-            console.log('saveOrder -> error', error);
-        }
-    }
-    if (category === NotificationCategory.SUCCESS_PAYMENT && Number(type) === OrderType.MOBILE) {
-        store.dispatch(clearMobileOrder());
-        store.dispatch(clearCartOrder());
-        store.dispatch(updateDefaultOrderLocal(deleteUsedCoupon(defaultOrderLocal, coupons)));
-        try {
-            const defaultOrderHomeSaveOrderOption = generateDataSaveOrderOption(
-                deleteUsedCoupon(defaultOrderLocal, coupons),
-                OrderType.DEFAULT_HOME,
-            );
-            const mobileSaveOrderOption = generateDataSaveOrderOption({}, OrderType.MOBILE);
-            await Promise.all([
-                saveOrderOption(defaultOrderHomeSaveOrderOption),
-                saveOrderOption(mobileSaveOrderOption),
-            ]);
-        } catch (error) {
-            console.log('saveOrder -> error', error);
-        }
-    }
     try {
         await getCouponData();
     } catch (error) {
         console.log('getProfile -> error', error);
-    }
-    if (category === NotificationCategory.SUCCESS_PAYMENT || category === NotificationCategory.CANCEL_PAYMENT) {
-        try {
-            await getCouponData();
-            const resProfile = await getProfile();
-            store.dispatch(userInfoActions.getUserInfoSuccess(resProfile?.data));
-        } catch (error) {
-            console.log('getProfile -> error', error);
-        }
-    }
-    if (
-        category === NotificationCategory.SUCCESS_PAYMENT &&
-        listScreenBackWhenPayment.find((screen: any) => currentScreen === screen)
-    ) {
-        backHome(orderId);
     }
 };
 

@@ -15,3 +15,7 @@ export const getDetailHistoryDetail = (id: number) => request.get(ORDER_URL.deta
 export const createNewOrder = (params: any) => {
     return request.post(ORDER_URL.createNewOrder, params);
 };
+
+export const checkAvailableCouponsApi = (params: any) => {
+    return request.post(ORDER_URL.checkAvailableCoupons, params);
+};

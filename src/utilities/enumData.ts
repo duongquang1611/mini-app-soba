@@ -121,3 +121,11 @@ export enum StampTick {
     CAN_USE = 1,
     USED = 2,
 }
+
+export enum SocketEvent {
+    connect = 'connect',
+    connectError = 'connect_error',
+    SUCCESS_PAYMENT = 'SUCCESS_PAYMENT',
+    CANCEL_ORDER = 'CANCEL_ORDER',
+    MESSAGE = 'MESSAGE',
+}
