@@ -4,6 +4,7 @@ import { saveOrderOption } from 'api/modules/api-app/order';
 import {
     clearCartOrder,
     clearMobileOrder,
+    updateAllOrder,
     updateCartOrder,
     updateDefaultOrderLocal,
     updateMobileOrder,
@@ -17,7 +18,13 @@ import Config from 'react-native-config';
 import { useSelector } from 'react-redux';
 import socketIO, { Socket } from 'socket.io-client';
 import { SocketEvent } from './enumData';
-import { backHomeWhenPayment, deleteUsedCoupon, generateDataSaveOrderOption, logger } from './helper';
+import {
+    backHomeWhenPayment,
+    checkAvailableCouponsAllOrder,
+    deleteUsedCoupon,
+    generateDataSaveOrderOption,
+    logger,
+} from './helper';
 import { listScreenBackWhenPayment, OrderType } from './staticData';
 
 let socket: Socket<DefaultEventsMap, DefaultEventsMap>;
@@ -33,6 +40,8 @@ const generalActionSocket = async () => {
 };
 
 const handleActionSuccessPayment = async (data: any) => {
+    console.log('handleActionSuccessPayment');
+
     if (!data) return;
     const { order } = store.getState();
     const { defaultOrder, defaultOrderLocal, mobileOrder, cartOrder } = order;
@@ -84,12 +93,44 @@ const handleActionSuccessPayment = async (data: any) => {
 };
 
 const handleActionCancelOrder = async (data: any) => {
+    console.log('handleActionCancelOrder');
+
     if (!data) return;
     const { order } = store.getState();
     const { cartOrder } = order;
     const { coupons = [] } = data || {};
     store.dispatch(updateCartOrder(deleteUsedCoupon(cartOrder, coupons)));
     await generalActionSocket();
+};
+
+const handleDisconnectSocket = async () => {
+    try {
+        const couponsOrder = await checkAvailableCouponsAllOrder();
+        const { order } = store.getState();
+
+        store.dispatch(
+            updateAllOrder({
+                defaultOrder: {
+                    ...order?.defaultOrder,
+                    coupons: couponsOrder?.defaultOrder || [],
+                },
+                mobileOrder: {
+                    ...order?.mobileOrder,
+                    coupons: couponsOrder?.mobileOrder || [],
+                },
+                defaultOrderLocal: {
+                    ...order?.defaultOrderLocal,
+                    coupons: couponsOrder?.defaultOrderLocal || [],
+                },
+                cartOrder: {
+                    ...order?.cartOrder,
+                    coupons: couponsOrder?.cartOrder || [],
+                },
+            }),
+        );
+    } catch (error) {
+        console.log('handleDisconnectSocket', error);
+    }
 };
 
 export const SocketProvider = ({ children }: any) => {
@@ -114,6 +155,7 @@ export const SocketProvider = ({ children }: any) => {
         });
         socket.on(SocketEvent.SUCCESS_PAYMENT, handleActionSuccessPayment);
         socket.on(SocketEvent.CANCEL_ORDER, handleActionCancelOrder);
+        socket.on(SocketEvent.DISCONNECT, handleDisconnectSocket);
     };
 
     const stopSocket = () => {
@@ -121,6 +163,8 @@ export const SocketProvider = ({ children }: any) => {
         socket?.off(SocketEvent.connectError);
         socket?.off(SocketEvent.SUCCESS_PAYMENT);
         socket?.off(SocketEvent.CANCEL_ORDER);
+        socket?.off(SocketEvent.DISCONNECT);
+        socket?.disconnect();
     };
 
     useEffect(() => {

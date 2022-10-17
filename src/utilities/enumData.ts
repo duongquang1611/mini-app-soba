@@ -128,4 +128,5 @@ export enum SocketEvent {
     SUCCESS_PAYMENT = 'SUCCESS_PAYMENT',
     CANCEL_ORDER = 'CANCEL_ORDER',
     MESSAGE = 'MESSAGE',
+    DISCONNECT = 'disconnect',
 }

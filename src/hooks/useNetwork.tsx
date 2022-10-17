@@ -2,7 +2,7 @@
 import NetInfo from '@react-native-community/netinfo';
 import { getProfile } from 'api/modules/api-app/authenticate';
 import { getResources } from 'api/modules/api-app/general';
-import { checkAvailableCouponsApi, saveOrderOption } from 'api/modules/api-app/order';
+import { saveOrderOption } from 'api/modules/api-app/order';
 import { updateAllOrder, updateDishesAllOrder } from 'app-redux/slices/orderSlice';
 import { resourceActions } from 'app-redux/slices/resourceSlice';
 import { userInfoActions } from 'app-redux/slices/userInfoSlice';
@@ -10,11 +10,10 @@ import { store } from 'app-redux/store';
 import { getCouponData } from 'feature/home/HomeScreen';
 import { useEffect, useRef } from 'react';
 import {
+    checkAvailableCouponsAllOrder,
     filterOrderStore,
     filterResources,
-    generateDataCheckAvailableCoupons,
     generateDataSaveOrderOption,
-    removeCouponsOrder,
 } from 'utilities/helper';
 import { OrderType } from 'utilities/staticData';
 
@@ -53,45 +52,25 @@ export const updateOrderStore = async (allDishFilter?: any, checkCoupons = false
     const { token, user: { member: { id: userId } } = {} } = userInfo;
     if (!token) return;
     try {
-        const resCoupons = await Promise.all([
-            checkAvailableCouponsApi({
-                userId,
-                coupons: generateDataCheckAvailableCoupons(defaultOrder?.coupons || []),
-            }),
-            checkAvailableCouponsApi({
-                userId,
-                coupons: generateDataCheckAvailableCoupons(defaultOrderLocal?.coupons || []),
-            }),
-            checkAvailableCouponsApi({
-                userId,
-                coupons: generateDataCheckAvailableCoupons(mobileOrder?.coupons || []),
-            }),
-            checkAvailableCouponsApi({ userId, coupons: generateDataCheckAvailableCoupons(cartOrder?.coupons || []) }),
-        ]);
-        const couponsOrder = {
-            defaultOrder: removeCouponsOrder(defaultOrder.coupons, resCoupons?.[0]?.data?.coupons),
-            defaultOrderLocal: removeCouponsOrder(defaultOrderLocal.coupons, resCoupons?.[1]?.data?.coupons),
-            mobileOrder: removeCouponsOrder(mobileOrder.coupons, resCoupons?.[2]?.data?.coupons),
-            cartOrder: removeCouponsOrder(cartOrder.coupons, resCoupons?.[3]?.data?.coupons),
-        };
+        const couponsOrder = await checkAvailableCouponsAllOrder();
 
         store.dispatch(
             updateAllOrder({
                 defaultOrder: {
                     dishes: allDishFilter?.defaultOrder,
-                    coupons: couponsOrder.defaultOrder,
+                    coupons: couponsOrder?.defaultOrder || [],
                 },
                 mobileOrder: {
                     dishes: allDishFilter?.mobileOrder,
-                    coupons: couponsOrder.mobileOrder,
+                    coupons: couponsOrder?.mobileOrder || [],
                 },
                 defaultOrderLocal: {
                     dishes: allDishFilter?.defaultOrderLocal,
-                    coupons: couponsOrder.defaultOrderLocal,
+                    coupons: couponsOrder?.defaultOrderLocal || [],
                 },
                 cartOrder: {
                     dishes: allDishFilter?.cartOrder,
-                    coupons: couponsOrder.cartOrder,
+                    coupons: couponsOrder?.cartOrder || [],
                 },
             }),
         );
