@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import AsyncStorage from '@react-native-community/async-storage';
 import { sendTeams } from 'api/modules/api-app/general';
-import { createNewOrder } from 'api/modules/api-app/order';
+import { checkAvailableCouponsApi, createNewOrder } from 'api/modules/api-app/order';
 import { store } from 'app-redux/store';
 import Images from 'assets/images';
 import AlertMessage from 'components/base/AlertMessage';
@@ -781,4 +781,33 @@ export const removeCouponsOrder = (couponsData = [], couponsAvailable = []) => {
         });
     });
     return newCoupons;
+};
+
+export const checkAvailableCouponsAllOrder = async () => {
+    const { userInfo, order } = store.getState();
+    const { user: { member: { id: userId } } = {} } = userInfo;
+    const { defaultOrder, defaultOrderLocal, mobileOrder, cartOrder } = order;
+
+    const resCoupons = await Promise.all([
+        checkAvailableCouponsApi({
+            userId,
+            coupons: generateDataCheckAvailableCoupons(defaultOrder?.coupons || []),
+        }),
+        checkAvailableCouponsApi({
+            userId,
+            coupons: generateDataCheckAvailableCoupons(defaultOrderLocal?.coupons || []),
+        }),
+        checkAvailableCouponsApi({
+            userId,
+            coupons: generateDataCheckAvailableCoupons(mobileOrder?.coupons || []),
+        }),
+        checkAvailableCouponsApi({ userId, coupons: generateDataCheckAvailableCoupons(cartOrder?.coupons || []) }),
+    ]);
+    const couponsOrder = {
+        defaultOrder: removeCouponsOrder(defaultOrder.coupons, resCoupons?.[0]?.data?.coupons),
+        defaultOrderLocal: removeCouponsOrder(defaultOrderLocal.coupons, resCoupons?.[1]?.data?.coupons),
+        mobileOrder: removeCouponsOrder(mobileOrder.coupons, resCoupons?.[2]?.data?.coupons),
+        cartOrder: removeCouponsOrder(cartOrder.coupons, resCoupons?.[3]?.data?.coupons),
+    };
+    return couponsOrder;
 };
