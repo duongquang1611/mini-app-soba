@@ -7,7 +7,7 @@ import Images from 'assets/images';
 import AlertMessage from 'components/base/AlertMessage';
 import CryptoJS from 'crypto-js';
 import i18next from 'i18next';
-import { cloneDeep, isEqual, throttle } from 'lodash';
+import { cloneDeep, isArray, isEqual, throttle } from 'lodash';
 import { APP_ROUTE, HOME_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import { DevSettings, Linking, Platform } from 'react-native';
@@ -754,4 +754,31 @@ export const deleteUsedCoupon = (order: any, couponsUsed: any) => {
                 ),
         ) || [];
     return { ...order, coupons: newCoupons };
+};
+
+export const generateDataCheckAvailableCoupons = (couponsData = []) => {
+    if (!isArray(couponsData) || couponsData.length <= 0) return [];
+    const couponsFormatted = couponsData.map((coupon: any) => {
+        return {
+            publishDatetime: coupon?.receivedDate || coupon?.memberCoupon?.receivedDate,
+            id: coupon?.coupon?.stringId,
+        };
+    });
+    return couponsFormatted;
+};
+
+export const removeCouponsOrder = (couponsData = [], couponsAvailable = []) => {
+    if (!isArray(couponsData) || couponsData.length <= 0 || !isArray(couponsAvailable) || couponsAvailable.length <= 0)
+        return [];
+    if (couponsData?.length === couponsAvailable?.length) return couponsData;
+
+    const newCoupons = couponsData.filter((coupon: any) => {
+        return couponsAvailable.find((couponAvailable: any) => {
+            return (
+                couponAvailable.id === coupon?.coupon?.stringId &&
+                couponAvailable.publishDatetime === (coupon?.receivedDate || coupon?.memberCoupon?.receivedDate)
+            );
+        });
+    });
+    return newCoupons;
 };

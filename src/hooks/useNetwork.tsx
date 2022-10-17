@@ -2,14 +2,20 @@
 import NetInfo from '@react-native-community/netinfo';
 import { getProfile } from 'api/modules/api-app/authenticate';
 import { getResources } from 'api/modules/api-app/general';
-import { saveOrderOption } from 'api/modules/api-app/order';
-import { updateDishesAllOrder } from 'app-redux/slices/orderSlice';
+import { checkAvailableCouponsApi, saveOrderOption } from 'api/modules/api-app/order';
+import { updateAllOrder, updateDishesAllOrder } from 'app-redux/slices/orderSlice';
 import { resourceActions } from 'app-redux/slices/resourceSlice';
 import { userInfoActions } from 'app-redux/slices/userInfoSlice';
 import { store } from 'app-redux/store';
 import { getCouponData } from 'feature/home/HomeScreen';
 import { useEffect, useRef } from 'react';
-import { filterOrderStore, filterResources, generateDataSaveOrderOption } from 'utilities/helper';
+import {
+    filterOrderStore,
+    filterResources,
+    generateDataCheckAvailableCoupons,
+    generateDataSaveOrderOption,
+    removeCouponsOrder,
+} from 'utilities/helper';
 import { OrderType } from 'utilities/staticData';
 
 export const getResourcesData = async (updateOrderToAPI = true, checkCoupons = false) => {
@@ -44,35 +50,75 @@ export const getResourcesData = async (updateOrderToAPI = true, checkCoupons = f
 export const updateOrderStore = async (allDishFilter?: any, checkCoupons = false) => {
     const { userInfo, order } = store.getState();
     const { defaultOrder, defaultOrderLocal, mobileOrder, cartOrder } = order;
-    const { token } = userInfo;
+    const { token, user: { member: { id: userId } } = {} } = userInfo;
     if (!token) return;
-    const defaultOrderSettingSaveData = generateDataSaveOrderOption(
-        {
-            ...defaultOrder,
-            dishes: allDishFilter?.defaultOrder || [],
-        },
-        OrderType.DEFAULT_SETTING,
-    );
-    const defaultOrderHomeSaveData = generateDataSaveOrderOption(
-        {
-            ...defaultOrderLocal,
-            dishes: allDishFilter?.defaultOrderLocal || [],
-        },
-        OrderType.DEFAULT_HOME,
-    );
-    const mobileOrderSaveData = generateDataSaveOrderOption(
-        {
-            ...mobileOrder,
-            dishes: allDishFilter?.mobileOrder || [],
-        },
-        OrderType.MOBILE,
-    );
+    try {
+        const resCoupons = await Promise.all([
+            checkAvailableCouponsApi({
+                userId,
+                coupons: generateDataCheckAvailableCoupons(defaultOrder?.coupons || []),
+            }),
+            checkAvailableCouponsApi({
+                userId,
+                coupons: generateDataCheckAvailableCoupons(defaultOrderLocal?.coupons || []),
+            }),
+            checkAvailableCouponsApi({
+                userId,
+                coupons: generateDataCheckAvailableCoupons(mobileOrder?.coupons || []),
+            }),
+            checkAvailableCouponsApi({ userId, coupons: generateDataCheckAvailableCoupons(cartOrder?.coupons || []) }),
+        ]);
+        store.dispatch(
+            updateAllOrder({
+                defaultOrder: {
+                    dishes: allDishFilter?.defaultOrder,
+                    coupons: removeCouponsOrder(defaultOrder.coupons, resCoupons?.[0]?.data?.coupons),
+                },
+                mobileOrder: {
+                    dishes: allDishFilter?.mobileOrder,
+                    coupons: removeCouponsOrder(mobileOrder.coupons, resCoupons?.[1]?.data?.coupons),
+                },
+                defaultOrderLocal: {
+                    dishes: allDishFilter?.defaultOrderLocal,
+                    coupons: removeCouponsOrder(defaultOrderLocal.coupons, resCoupons?.[2]?.data?.coupons),
+                },
+                cartOrder: {
+                    dishes: allDishFilter?.cartOrder,
+                    coupons: removeCouponsOrder(cartOrder.coupons, resCoupons?.[3]?.data?.coupons),
+                },
+            }),
+        );
 
-    Promise.all([
-        saveOrderOption(defaultOrderSettingSaveData),
-        saveOrderOption(defaultOrderHomeSaveData),
-        saveOrderOption(mobileOrderSaveData),
-    ]);
+        const defaultOrderSettingSaveData = generateDataSaveOrderOption(
+            {
+                ...defaultOrder,
+                dishes: allDishFilter?.defaultOrder || [],
+            },
+            OrderType.DEFAULT_SETTING,
+        );
+        const defaultOrderHomeSaveData = generateDataSaveOrderOption(
+            {
+                ...defaultOrderLocal,
+                dishes: allDishFilter?.defaultOrderLocal || [],
+            },
+            OrderType.DEFAULT_HOME,
+        );
+        const mobileOrderSaveData = generateDataSaveOrderOption(
+            {
+                ...mobileOrder,
+                dishes: allDishFilter?.mobileOrder || [],
+            },
+            OrderType.MOBILE,
+        );
+
+        Promise.all([
+            saveOrderOption(defaultOrderSettingSaveData),
+            saveOrderOption(defaultOrderHomeSaveData),
+            saveOrderOption(mobileOrderSaveData),
+        ]);
+    } catch (error) {
+        console.log('updateOrderStore -> error', error);
+    }
 };
 
 export const getDataProfile = async () => {
