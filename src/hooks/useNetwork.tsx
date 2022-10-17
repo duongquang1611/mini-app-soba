@@ -68,44 +68,51 @@ export const updateOrderStore = async (allDishFilter?: any, checkCoupons = false
             }),
             checkAvailableCouponsApi({ userId, coupons: generateDataCheckAvailableCoupons(cartOrder?.coupons || []) }),
         ]);
+        const couponsOrder = {
+            defaultOrder: removeCouponsOrder(defaultOrder.coupons, resCoupons?.[0]?.data?.coupons),
+            defaultOrderLocal: removeCouponsOrder(defaultOrderLocal.coupons, resCoupons?.[1]?.data?.coupons),
+            mobileOrder: removeCouponsOrder(mobileOrder.coupons, resCoupons?.[2]?.data?.coupons),
+            cartOrder: removeCouponsOrder(cartOrder.coupons, resCoupons?.[3]?.data?.coupons),
+        };
+
         store.dispatch(
             updateAllOrder({
                 defaultOrder: {
                     dishes: allDishFilter?.defaultOrder,
-                    coupons: removeCouponsOrder(defaultOrder.coupons, resCoupons?.[0]?.data?.coupons),
+                    coupons: couponsOrder.defaultOrder,
                 },
                 mobileOrder: {
                     dishes: allDishFilter?.mobileOrder,
-                    coupons: removeCouponsOrder(mobileOrder.coupons, resCoupons?.[1]?.data?.coupons),
+                    coupons: couponsOrder.mobileOrder,
                 },
                 defaultOrderLocal: {
                     dishes: allDishFilter?.defaultOrderLocal,
-                    coupons: removeCouponsOrder(defaultOrderLocal.coupons, resCoupons?.[2]?.data?.coupons),
+                    coupons: couponsOrder.defaultOrderLocal,
                 },
                 cartOrder: {
                     dishes: allDishFilter?.cartOrder,
-                    coupons: removeCouponsOrder(cartOrder.coupons, resCoupons?.[3]?.data?.coupons),
+                    coupons: couponsOrder.cartOrder,
                 },
             }),
         );
 
         const defaultOrderSettingSaveData = generateDataSaveOrderOption(
             {
-                ...defaultOrder,
+                coupons: couponsOrder.defaultOrder,
                 dishes: allDishFilter?.defaultOrder || [],
             },
             OrderType.DEFAULT_SETTING,
         );
         const defaultOrderHomeSaveData = generateDataSaveOrderOption(
             {
-                ...defaultOrderLocal,
+                coupons: couponsOrder.defaultOrderLocal,
                 dishes: allDishFilter?.defaultOrderLocal || [],
             },
             OrderType.DEFAULT_HOME,
         );
         const mobileOrderSaveData = generateDataSaveOrderOption(
             {
-                ...mobileOrder,
+                coupons: couponsOrder.mobileOrder,
                 dishes: allDishFilter?.mobileOrder || [],
             },
             OrderType.MOBILE,
