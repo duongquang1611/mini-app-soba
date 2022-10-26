@@ -22,7 +22,9 @@ import { OrderType, POPUP_TYPE, STORE_URL, VERSION_APP_KEY } from 'utilities/sta
 import AlertMessage from 'components/base/AlertMessage';
 
 const checkVersion = (configs: any[]) => {
-    const versionApp = configs.find((config) => VERSION_APP_KEY.includes(config?.key));
+    const versionApp = configs.find((config) => {
+        return VERSION_APP_KEY === config?.key;
+    });
     if (!versionApp?.value) return false;
     const versionDevice = DeviceInfo.getVersion();
     // const needUpdate = compare('1.0.1', versionApp.value, '<');
