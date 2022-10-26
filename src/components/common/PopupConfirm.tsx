@@ -16,6 +16,7 @@ interface IProps {
     onOk?: any;
     onCancel?: any;
     nonPaddingVertical?: boolean;
+    showClose?: boolean;
     onPressIconClose?: any;
 }
 const IMAGE_SIZE = [155, 120, 100];
@@ -34,13 +35,16 @@ const PopupConfirm = (props: IProps) => {
         onOk,
         nonPaddingVertical = false,
         onPressIconClose,
+        showClose = true,
     } = props;
 
     return (
         <View style={[styles.container, customStyle]}>
-            <StyledTouchable customStyle={styles.icClose} onPress={onPressIconClose}>
-                <StyledIcon source={Images.icons.closeCircle} size={20} />
-            </StyledTouchable>
+            {showClose && (
+                <StyledTouchable customStyle={styles.icClose} onPress={onPressIconClose}>
+                    <StyledIcon source={Images.icons.closeCircle} size={20} />
+                </StyledTouchable>
+            )}
             <View style={styles.wrapImg}>
                 <StyledIcon source={IMAGE_PATH[type]} size={IMAGE_SIZE[type]} />
             </View>

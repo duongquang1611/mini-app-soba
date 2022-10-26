@@ -54,6 +54,13 @@ export const staticValue = {
     TIMEOUT_CODEPUSH: 6000,
 };
 
+export const STORE_URL = Platform.select({
+    ios: 'https://apps.apple.com/us/app/%E3%82%A2%E3%83%97%E3%83%AAde%E5%B0%8F%E8%AB%B8%E3%81%9D%E3%81%B0/id1621435295',
+    android: 'https://play.google.com/store/apps/details?id=jp.co.mitsuwa.komoro.android',
+});
+
+export const VERSION_APP_KEY = ['IOS_VERSION', 'ANDROID_VERSION'];
+
 export const LINEAR_COLOR = {
     CATEGORY: [Themes.COLORS.thunderbird, Themes.COLORS.primary],
     NO_CHOOSE_CATEGORY: [Themes.COLORS.white, Themes.COLORS.white],
