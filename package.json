@@ -123,7 +123,7 @@
         "react-native-static-safe-area-insets": "^2.1.1",
         "react-native-svg": "^12.1.1",
         "react-native-switch-toggle": "^2.2.1",
-        "react-native-tab-view": "^3.1.1",
+        "react-native-tab-view": "3.1.1",
         "react-native-webview": "^11.6.5",
         "react-redux": "^7.2.4",
         "redux-logger": "^3.0.6",
