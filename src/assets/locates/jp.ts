@@ -21,6 +21,7 @@ export default {
         confirm: '決定',
         save: '保存',
         next: '次へ',
+        uploadVersion: 'アプリを最新バージョンにしてください',
         sendOTP: {
             title: '認証コード',
             titleForgotPassword: 'パスワードを忘れた',

@@ -14,12 +14,48 @@ import {
     filterOrderStore,
     filterResources,
     generateDataSaveOrderOption,
+    openURL,
 } from 'utilities/helper';
-import { OrderType } from 'utilities/staticData';
+import { compare } from 'compare-versions';
+import DeviceInfo from 'react-native-device-info';
+import { OrderType, POPUP_TYPE, STORE_URL, VERSION_APP_KEY } from 'utilities/staticData';
+import AlertMessage from 'components/base/AlertMessage';
+
+const checkVersion = (configs: any[]) => {
+    const versionApp = configs.find((config) => VERSION_APP_KEY.includes(config?.key));
+    if (!versionApp?.value) return false;
+    const versionDevice = DeviceInfo.getVersion();
+    // const needUpdate = compare('1.0.1', versionApp.value, '<');
+    const needUpdate = compare(versionDevice, versionApp.value, '<');
+    if (needUpdate) {
+        AlertMessage(
+            undefined,
+            {
+                type: POPUP_TYPE.CONFIRM,
+                onOk: () => {
+                    openURL(STORE_URL as string);
+                },
+                dismissModalOnOk: false,
+                dismissModalOnCancel: false,
+                content: 'common.uploadVersion',
+                showClose: false,
+            },
+            undefined,
+            {
+                panGestureEnabled: false,
+                closeOnOverlayTap: false,
+                onBackButtonPress: () => null,
+            },
+        );
+    }
+    return needUpdate;
+};
 
 export const getResourcesData = async (updateOrderToAPI = true, checkCoupons = false) => {
     try {
         const response = await getResources();
+        const needUpdate = checkVersion(response?.data?.configs || []);
+        if (needUpdate) return;
         const newResources = filterResources(response?.data);
         const { order } = store.getState();
         const { menu = [], categories = [] } = newResources || {};
