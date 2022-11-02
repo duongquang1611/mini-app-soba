@@ -28,7 +28,14 @@ export const dismissModal = (id: any) => {
 export const MODAL_POPUP_ID = [MODAL_ID.CONFIRM, MODAL_ID.SUCCESS, MODAL_ID.ERROR];
 export const TITLE_POPUP_ID = ['popup.titleConfirm', 'popup.titleSuccess', 'popup.titleError'];
 
-const AlertMessage = (message: any, popupProps?: IProps, checkNetworkError = true, modalizeProps?: any) => {
+const AlertMessage = (
+    message: any,
+    popupProps?: IProps,
+    checkNetworkError = true,
+    modalizeProps?: any,
+    customId?: number,
+    overrideModalizeProps?: any,
+) => {
     console.log('AlertMessage -> message', message || popupProps?.content);
     if (!(checkNetworkError && (message || popupProps?.content) === ERRORS.network)) {
         const {
@@ -42,7 +49,7 @@ const AlertMessage = (message: any, popupProps?: IProps, checkNetworkError = tru
             ...otherPopupProps
         } = popupProps || {};
 
-        const modalIdByType = MODAL_POPUP_ID[type];
+        const modalIdByType = customId || MODAL_POPUP_ID[type];
         const titleByType = TITLE_POPUP_ID[type];
 
         const handleOk = () => {
@@ -78,6 +85,8 @@ const AlertMessage = (message: any, popupProps?: IProps, checkNetworkError = tru
                 onClosed: onClosedModalize,
                 ...modalizeProps,
             },
+            undefined,
+            overrideModalizeProps,
         );
     }
 };

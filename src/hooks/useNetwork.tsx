@@ -18,10 +18,12 @@ import {
 } from 'utilities/helper';
 import { compare } from 'compare-versions';
 import DeviceInfo from 'react-native-device-info';
-import { OrderType, POPUP_TYPE, STORE_URL, VERSION_APP_KEY } from 'utilities/staticData';
+import { MODAL_ID, OrderType, POPUP_TYPE, STORE_URL, VERSION_APP_KEY } from 'utilities/staticData';
 import AlertMessage from 'components/base/AlertMessage';
+import ModalizeManager from 'components/base/modal/ModalizeManager';
 
 const checkVersion = (configs: any[]) => {
+    const modalize = ModalizeManager();
     const versionApp = configs.find((config) => {
         return VERSION_APP_KEY === config?.key;
     });
@@ -30,25 +32,33 @@ const checkVersion = (configs: any[]) => {
     // const needUpdate = compare('1.0.1', versionApp.value, '<');
     const needUpdate = compare(versionDevice, versionApp.value, '<');
     if (needUpdate) {
-        AlertMessage(
-            undefined,
-            {
-                type: POPUP_TYPE.CONFIRM,
-                onOk: () => {
-                    openURL(STORE_URL as string);
+        modalize?.dismiss?.(MODAL_ID.FORCE_UPDATE, () => {
+            AlertMessage(
+                undefined,
+                {
+                    type: POPUP_TYPE.CONFIRM,
+                    onOk: () => {
+                        openURL(STORE_URL as string);
+                    },
+                    dismissModalOnOk: false,
+                    dismissModalOnCancel: false,
+                    content: 'common.uploadVersion',
+                    showClose: false,
                 },
-                dismissModalOnOk: false,
-                dismissModalOnCancel: false,
-                content: 'common.uploadVersion',
-                showClose: false,
-            },
-            undefined,
-            {
-                panGestureEnabled: false,
-                closeOnOverlayTap: false,
-                onBackButtonPress: () => null,
-            },
-        );
+                undefined,
+                {
+                    panGestureEnabled: false,
+                    closeOnOverlayTap: false,
+                    onBackButtonPress: () => null,
+                },
+                MODAL_ID.FORCE_UPDATE,
+                {
+                    onClosed: () => {
+                        return null;
+                    },
+                },
+            );
+        });
     }
     return needUpdate;
 };
