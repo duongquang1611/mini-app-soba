@@ -35,7 +35,13 @@ export const HeaderDefault = ({ title = '', customStyle, onPress }: HeaderProps)
 const ModalizeManager = () => {
     const modalRef = React.createRef<any>();
 
-    const show = (id: any, element: any, props?: CustomModalizeProps, headerProps?: HeaderProps) => {
+    const show = (
+        id: any,
+        element: any,
+        props?: CustomModalizeProps,
+        headerProps?: HeaderProps,
+        overrideModalizeProps?: any,
+    ) => {
         if (!modalControl.find((e) => e.id === id)) {
             const sibling = new RootSiblings(
                 (
@@ -67,6 +73,7 @@ const ModalizeManager = () => {
                             minHeight: props?.isCenter ? '100%' : 0,
                             backgroundColor: props?.isCenter ? 'transparent' : Themes.COLORS.white,
                         }}
+                        {...overrideModalizeProps}
                     >
                         {props?.isCenter ? (
                             <ModalizeCenterComponent

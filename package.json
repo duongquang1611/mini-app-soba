@@ -50,8 +50,8 @@
         "code-push-prod": "yarn code-push-android-production && yarn code-push-ios-production",
         "code-push-dev-stg": "yarn code-push-dev && yarn code-push-stg",
         "code-push-all": "yarn code-push-prod && yarn code-push-dev && yarn code-push-stg",
-        "list-adv": "~/Library/Android/sdk/tools/emulator -list-avds",
-        "run-pixel2": "~/Library/Android/sdk/emulator/emulator -avd Pixel_2_API_30"
+        "list-adv": "emulator -list-avds",
+        "run-pixel2": "emulator -avd Pixel_2_API_30"
     },
     "dependencies": {
         "@gorhom/animated-tabbar": "^2.1.2",

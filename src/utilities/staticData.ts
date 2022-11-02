@@ -287,6 +287,7 @@ export const MODAL_ID = {
     DETAIL_MENU: 61,
     BOX_RECEIVE_TICK: 62,
     CHECK_IN_GUIDE: 63,
+    FORCE_UPDATE: 64,
 };
 
 export const INFORMATION = [
