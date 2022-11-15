@@ -44,7 +44,7 @@
         "code-push-ios-production": "appcenter codepush release-react -a Amela/soba-ios -d Production -t 1.0.1",
         "code-push-android-develop": "appcenter codepush release-react -a Amela/soba-android -d Dev -t 1.0.0",
         "code-push-android-staging": "appcenter codepush release-react -a Amela/soba-android -d Staging -t 1.0.2",
-        "code-push-android-production": "appcenter codepush release-react -a Amela/soba-android -d Production -t 1.0.0",
+        "code-push-android-production": "appcenter codepush release-react -a Amela/soba-android -d Production -t 1.0.3",
         "code-push-dev": "yarn code-push-android-develop && yarn code-push-ios-develop",
         "code-push-stg": "yarn code-push-android-staging && yarn code-push-ios-staging",
         "code-push-prod": "yarn code-push-android-production && yarn code-push-ios-production",
