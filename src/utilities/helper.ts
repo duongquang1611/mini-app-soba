@@ -104,14 +104,14 @@ export const getYesterday = () => {
 };
 
 export const openURL = (url: string, cbNotSupport?: any) => {
-    Linking.canOpenURL(url).then((supported) => {
-        if (supported) {
-            Linking.openURL(url);
-        } else {
-            cbNotSupport?.();
-            __DEV__ && console.log(`Don't know how to open URI: ${url}`);
-        }
-    });
+    // Linking.canOpenURL(url).then((supported) => {
+    //     if (supported) {
+    Linking.openURL(url);
+    //     } else {
+    //         cbNotSupport?.();
+    //         __DEV__ && console.log(`Don't know how to open URI: ${url}`);
+    //     }
+    // });
 };
 
 export const checkExpired = (endDate: any, compareDate = new Date()) => {
