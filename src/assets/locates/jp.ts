@@ -470,4 +470,8 @@ export default {
         button: '退会する',
         noteDelete: '退会すると、全てのデータが消去されます。\n続行してもよろしいでしょうか？',
     },
+    contact: {
+        sentTitle: '送信完了',
+        goToMyPage: 'マイページに戻る',
+    },
 };

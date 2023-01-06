@@ -39,6 +39,8 @@ const ContactScreen = () => {
                     goBack();
                 },
                 type: POPUP_TYPE.SUCCESS,
+                title: 'contact.sentTitle',
+                textButtonOk: 'contact.goToMyPage',
             });
         } catch (error) {
             console.log('sendContact -> formData', formData);
