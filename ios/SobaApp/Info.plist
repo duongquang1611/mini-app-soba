@@ -1,81 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>ja_JP</string>
-	<key>CFBundleDisplayName</key>
-	<string>APP_NAME</string>
-	<key>CFBundleExecutable</key>
-	<string>$(EXECUTABLE_NAME)</string>
-	<key>CFBundleIdentifier</key>
-	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleLocalizations</key>
-	<array>
-		<string>ja</string>
-	</array>
-	<key>CFBundleName</key>
-	<string>$(PRODUCT_NAME)</string>
-	<key>CFBundlePackageType</key>
-	<string>APPL</string>
-	<key>CFBundleShortVersionString</key>
-	<string>IOS_APP_VERSION_CODE</string>
-	<key>CFBundleSignature</key>
-	<string>????</string>
-	<key>CFBundleVersion</key>
-	<string>IOS_APP_BUILD_CODE</string>
-	<key>CodePushDeploymentKey</key>
-	<string>RNC_CODEPUSH_IOS_DEVELOPMENT_KEY</string>
-	<key>LSRequiresIPhoneOS</key>
-	<true/>
-	<key>NSAppTransportSecurity</key>
 	<dict>
-		<key>NSExceptionDomains</key>
+		<key>CFBundleDevelopmentRegion</key>
+		<string>ja_JP</string>
+		<key>CFBundleDisplayName</key>
+		<string>APP_NAME</string>
+		<key>CFBundleExecutable</key>
+		<string>$(EXECUTABLE_NAME)</string>
+		<key>CFBundleIdentifier</key>
+		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+		<key>CFBundleInfoDictionaryVersion</key>
+		<string>6.0</string>
+		<key>CFBundleLocalizations</key>
+		<array>
+			<string>ja</string>
+		</array>
+		<key>CFBundleName</key>
+		<string>$(PRODUCT_NAME)</string>
+		<key>CFBundlePackageType</key>
+		<string>APPL</string>
+		<key>CFBundleShortVersionString</key>
+		<string>IOS_APP_VERSION_CODE</string>
+		<key>CFBundleSignature</key>
+		<string>????</string>
+		<key>CFBundleVersion</key>
+		<string>IOS_APP_BUILD_CODE</string>
+		<key>CodePushDeploymentKey</key>
+		<string>CODEPUSH_IOS_DEVELOPMENT_KEY</string>
+		<key>LSRequiresIPhoneOS</key>
+		<true />
+		<key>NSAppTransportSecurity</key>
 		<dict>
-			<key>localhost</key>
+			<key>NSExceptionDomains</key>
 			<dict>
-				<key>NSExceptionAllowsInsecureHTTPLoads</key>
-				<true/>
+				<key>localhost</key>
+				<dict>
+					<key>NSExceptionAllowsInsecureHTTPLoads</key>
+					<true />
+				</dict>
 			</dict>
 		</dict>
+		<key>NSCameraUsageDescription</key>
+		<string>プロフィール画像を更新するにはアプリにカメラへのアクセスを許可する必要があります。</string>
+		<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+		<string>アプリに位置情報へのアクセスを許可する必要があります。</string>
+		<key>NSLocationAlwaysUsageDescription</key>
+		<string>アプリに位置情報へのアクセスを許可する必要があります。</string>
+		<key>NSLocationWhenInUseUsageDescription</key>
+		<string>アプリに位置情報へのアクセスを許可する必要があります。</string>
+		<key>NSPhotoLibraryAddUsageDescription</key>
+		<string>プロフィール画像を更新するにはアプリに写真へのアクセスを許可する必要があります。</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>プロフィール画像を更新するにはアプリに写真へのアクセスを許可する必要があります。</string>
+		<key>PHPhotoLibraryPreventAutomaticLimitedAccessAlert</key>
+		<true />
+		<key>UIAppFonts</key>
+		<array>
+			<string>ZenMaruGothic-Bold.ttf</string>
+		</array>
+		<key>UIBackgroundModes</key>
+		<array>
+			<string>remote-notification</string>
+		</array>
+		<key>UILaunchStoryboardName</key>
+		<string>LaunchScreen</string>
+		<key>UIMainStoryboardFile</key>
+		<string>LaunchScreen</string>
+		<key>UIRequiredDeviceCapabilities</key>
+		<array>
+			<string>armv7</string>
+		</array>
+		<key>UISupportedInterfaceOrientations</key>
+		<array>
+			<string>UIInterfaceOrientationPortrait</string>
+		</array>
+		<key>UIViewControllerBasedStatusBarAppearance</key>
+		<false />
 	</dict>
-	<key>NSCameraUsageDescription</key>
-	<string>プロフィール画像を更新するにはアプリにカメラへのアクセスを許可する必要があります。</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>アプリに位置情報へのアクセスを許可する必要があります。</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>アプリに位置情報へのアクセスを許可する必要があります。</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>アプリに位置情報へのアクセスを許可する必要があります。</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>プロフィール画像を更新するにはアプリに写真へのアクセスを許可する必要があります。</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>プロフィール画像を更新するにはアプリに写真へのアクセスを許可する必要があります。</string>
-	<key>PHPhotoLibraryPreventAutomaticLimitedAccessAlert</key>
-	<true/>
-	<key>UIAppFonts</key>
-	<array>
-		<string>ZenMaruGothic-Bold.ttf</string>
-	</array>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>remote-notification</string>
-	</array>
-	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
-	<key>UIMainStoryboardFile</key>
-	<string>LaunchScreen</string>
-	<key>UIRequiredDeviceCapabilities</key>
-	<array>
-		<string>armv7</string>
-	</array>
-	<key>UISupportedInterfaceOrientations</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-	</array>
-	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
-</dict>
 </plist>
