@@ -22,7 +22,7 @@ const StampTickList = ({
     data = [],
     fromNotify = false,
 }: any) => {
-    const { leftAmount, stamp = {} } = stampDetail || {};
+    const { stamp = {} } = stampDetail || {};
     const { stampTicks = [], settingDuration, endDate, isBlock } = stamp;
     const isExchange = useMemo(() => stamp.cardType === StampCardType.EXCHANGE, [stamp.cardType]);
     const isNoExpired = useMemo(() => settingDuration === StampSettingDuration.NO_EXPIRED_DATE, [settingDuration]);
@@ -66,7 +66,7 @@ const StampTickList = ({
                 <StyledButton
                     title={'stampDetail.couponExchangeBtn'}
                     customStyle={styles.btnExchange}
-                    disabled={leftAmount <= 0 || isExpired}
+                    disabled={isExpired}
                     onPress={goToExchangeCoupon}
                 />
             )}
