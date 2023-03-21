@@ -12,7 +12,12 @@ import StampCardScreen from 'feature/stamp/StampCardScreen';
 import { COUPON_ROUTE, HOME_ROUTE, ORDER_ROUTE, SETTING_ROUTE, STAMP_ROUTE } from 'navigation/config/routes';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { AnimatedTabBarNavigator, DotSize } from 'react-native-animated-nav-tab-bar';
+import {
+    AnimatedTabBarNavigator,
+    DotSize,
+    TabButtonLayout,
+    TabElementDisplayOptions,
+} from 'react-native-animated-nav-tab-bar';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
 
@@ -83,7 +88,9 @@ const MainTabContainer = () => {
             appearance={{
                 dotCornerRadius: 10,
                 horizontalPadding: scale(15),
-                dotSize: DotSize.LARGE,
+                dotSize: DotSize.SMALL,
+                whenInactiveShow: TabElementDisplayOptions.BOTH,
+                tabButtonLayout: TabButtonLayout.VERTICAL,
             }}
         >
             {ArrayTabs.map((item, index) => (
@@ -95,7 +102,7 @@ const MainTabContainer = () => {
 
 const styles = ScaledSheet.create({
     labelStyle: {
-        fontSize: '14@ms0.3',
+        fontSize: '13@ms0.3',
         marginLeft: '5@s',
         fontWeight: 'bold',
     },
