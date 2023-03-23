@@ -9,6 +9,7 @@ import { StyledButton, StyledInputForm, StyledText, StyledTouchable } from 'comp
 import AlertMessage from 'components/base/AlertMessage';
 import { LabelInput } from 'components/base/StyledInput';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
+import StyledOverlayLoading from 'components/base/StyledOverlayLoading';
 import RadioCheckView from 'components/common/RadioCheckView';
 import StyledHeader from 'components/common/StyledHeader';
 import TextUnderline from 'components/common/TextUnderline';
@@ -16,7 +17,7 @@ import UpLoadAvatar from 'feature/authentication/components/UpLoadAvatar';
 import { cloneDeep } from 'lodash';
 import { APP_ROUTE, AUTHENTICATE_ROUTE, SETTING_ROUTE } from 'navigation/config/routes';
 import { goBack, navigate } from 'navigation/NavigationService';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Keyboard, View } from 'react-native';
 import { scale, ScaledSheet } from 'react-native-size-matters';
@@ -112,8 +113,18 @@ const EditProfileScreen = () => {
             </StyledTouchable>
         );
     };
+
+    useEffect(() => {
+        const getNewProfile = async () => {
+            const resProfile = await getProfile();
+            dispatch(userInfoActions.getUserInfoSuccess(resProfile?.data));
+        };
+        getNewProfile();
+    }, []);
+
     return (
         <View style={styles.container}>
+            <StyledOverlayLoading visible={loading} />
             <StyledHeader title={'setting.editProfileTitle'} />
             <StyledKeyboardAware
                 style={styles.scrollView}
@@ -154,14 +165,14 @@ const EditProfileScreen = () => {
                         label={'authen.labelRegister.birthday'}
                         customPlaceHolder={'authen.hintRegister.birthday'}
                         icBirthday={Images.icons.calendar}
-                        customStyle={styles.inputBirthday}
+                        customStyle={!user?.member?.canUpdateBirthday ? styles.disableBirthday : styles.canEditBirthday}
                         editable={false}
                         pointerEvents={'none'}
                         handleConfirm={(text: string) => setValueForm('birthday', text)}
                         containerStyle={styles.birthdayContainer}
-                        wrapInputStyle={styles.wrapInputBirthday}
+                        wrapInputStyle={!user?.member?.canUpdateBirthday && styles.wrapInputBirthday}
                         labelRequire={''}
-                        disabled
+                        disabled={!user?.member?.canUpdateBirthday}
                     />
                     <LabelInput
                         label={'authen.labelRegister.gender'}
@@ -294,9 +305,12 @@ const styles = ScaledSheet.create({
     changePassText: {
         fontWeight: 'bold',
     },
-    inputBirthday: {
+    disableBirthday: {
         flex: 1,
         color: Themes.COLORS.silver,
+    },
+    canEditBirthday: {
+        flex: 1,
     },
     inputEmail: {
         backgroundColor: Themes.COLORS.disabled,
