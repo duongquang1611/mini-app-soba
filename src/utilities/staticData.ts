@@ -652,14 +652,14 @@ export const guideStamp = [
         content: 'アプリ対応の店舗に行く',
         // textLink: 'こちら',
         link: 'https://www.facebook.com/',
-        icLine: Images.icons.lineStampFirst,
+        // icLine: Images.icons.lineStampFirst,
         lineSize: 30,
     },
     {
         id: 2,
         name: '手順 2：',
         content: '券売機にQRコード（いつもの！／事前選択／会員証のいずれか）をかざしてログイン',
-        icLine: Images.icons.lineStampSecond,
+        // icLine: Images.icons.lineStampSecond,
         lineSize: 50,
     },
     {
