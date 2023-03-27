@@ -18,7 +18,7 @@ import {
     TabButtonLayout,
     TabElementDisplayOptions,
 } from 'react-native-animated-nav-tab-bar';
-import { scale, ScaledSheet } from 'react-native-size-matters';
+import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
 
 const AnimateTabs = AnimatedTabBarNavigator();
@@ -79,6 +79,7 @@ const MainTabContainer = () => {
         <AnimateTabs.Navigator
             tabBarOptions={{
                 activeTintColor: Themes.COLORS.primary,
+                inactiveTintColor: Themes.COLORS.silver,
                 activeBackgroundColor: '#FFE8EC',
                 tabStyle: {
                     shadowOpacity: 0.1,
@@ -86,6 +87,7 @@ const MainTabContainer = () => {
                 labelStyle: styles.labelStyle,
             }}
             appearance={{
+                topPadding: verticalScale(10),
                 dotCornerRadius: 10,
                 horizontalPadding: scale(15),
                 dotSize: DotSize.SMALL,
@@ -103,8 +105,8 @@ const MainTabContainer = () => {
 const styles = ScaledSheet.create({
     labelStyle: {
         fontSize: '13@ms0.3',
-        marginLeft: '5@s',
         fontWeight: 'bold',
+        marginTop: '7@vs',
     },
 });
 
