@@ -95,7 +95,7 @@ const ShowQrTab = (props: any) => {
                             delayLongPress={staticValue.DELAY_LONG_PRESS}
                             onPress={handleOnPressQR}
                         >
-                            <QRCode value={qrEncrypt} size={scale(staticValue.QR_SIZE_HOME)} />
+                            <QRCode value={qrEncrypt} size={staticValue.QR_SIZE_2CM} />
                         </TouchableOpacity>
                     )}
                     <StyledButton

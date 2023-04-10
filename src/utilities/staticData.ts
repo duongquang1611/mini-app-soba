@@ -35,6 +35,7 @@ export const staticValue = {
     NUMBER_ITEM_LIST_COUPON_MODAL: 3,
     QR_SIZE: 163,
     QR_SIZE_HOME: 110,
+    QR_SIZE_2CM: 120,
     END_CODE_QR: 'EOS',
     orderDetail: [
         {
