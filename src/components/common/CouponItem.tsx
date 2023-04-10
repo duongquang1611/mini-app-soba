@@ -65,7 +65,7 @@ export const CouponItem = (props: any) => {
                     <StyledTouchable
                         customStyle={styles.btnCanUSe}
                         onPress={handleUseCoupon}
-                        disabled={isExchangeCoupon ? false : disabledUse}
+                        disabled={isExchangeCoupon ? true : disabledUse}
                         hitSlop={staticValue.DEFAULT_HIT_SLOP}
                     >
                         <StyledText

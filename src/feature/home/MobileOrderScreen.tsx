@@ -198,7 +198,7 @@ const MobileOrderScreen = () => {
                                         Clipboard.setString(mobileOrderQR);
                                     }}
                                 >
-                                    <QRCode value={mobileOrderQR} size={scale(staticValue.QR_SIZE)} />
+                                    <QRCode value={mobileOrderQR} size={staticValue.QR_SIZE_2CM} />
                                 </TouchableOpacity>
                             )}
                             <StyledButton
