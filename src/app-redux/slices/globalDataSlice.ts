@@ -3,6 +3,13 @@ import { cloneDeep } from 'lodash';
 import { persistReducer } from 'redux-persist';
 import { generatePersistConfig } from 'utilities/helper';
 
+export interface IRestaurants {
+    id: number;
+    name: string;
+    address?: string;
+    openDate?: any;
+    closeDate?: any;
+}
 interface IGlobalDataState {
     isPushDisabled: boolean;
     skipOrderDefault: boolean;
@@ -10,6 +17,7 @@ interface IGlobalDataState {
     chooseTickStampIds: any;
     notificationUnRead: number;
     triggerReloadStamp: number;
+    listRestaurants: IRestaurants[];
 }
 
 const initialState: IGlobalDataState = {
@@ -19,6 +27,7 @@ const initialState: IGlobalDataState = {
     chooseTickStampIds: {},
     notificationUnRead: 0,
     triggerReloadStamp: 0,
+    listRestaurants: [],
 };
 
 const globalDataSlice = createSlice({

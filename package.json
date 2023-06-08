@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "init-project": "react-native eject && npm run pod-install",
-        "start": "NODE_OPTIONS=--openssl-legacy-provider react-native start ",
+        "start": "react-native start ",
         "android": "react-native run-android",
         "ios": "react-native run-ios",
         "test": "jest",

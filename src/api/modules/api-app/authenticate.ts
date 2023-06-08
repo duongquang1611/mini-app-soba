@@ -18,3 +18,5 @@ export const changePass = (params: any) => request.put(AUTH_URL.changePass, para
 export const checkOldPass = (params: any) => request.post(AUTH_URL.checkOldPass, params);
 
 export const deleteAccount = () => request.put(AUTH_URL.deleteAccount);
+
+export const getRestaurantsApi = () => request.get(AUTH_URL.listRestaurants);

@@ -5,20 +5,21 @@ import { RootState } from 'app-redux/hooks';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
-import { StyledButton, StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
+import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
-import ModalizeManager from 'components/base/modal/ModalizeManager';
 import { StyledImageBackground } from 'components/base/StyledImage';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
+import ModalizeManager from 'components/base/modal/ModalizeManager';
 import DashView from 'components/common/DashView';
 import LinearView from 'components/common/LinearView';
 import StyledHeader from 'components/common/StyledHeader';
+import useChooseRestaurant from 'hooks/useChooseRestaurant';
 import { getDataProfile } from 'hooks/useNetwork';
-import { AUTHENTICATE_ROUTE, ORDER_ROUTE, SETTING_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
+import { HOME_ROUTE, ORDER_ROUTE, SETTING_ROUTE } from 'navigation/config/routes';
 import React, { useEffect, useMemo, useState } from 'react';
 import { RefreshControl, View } from 'react-native';
-import { scale, ScaledSheet } from 'react-native-size-matters';
+import { ScaledSheet, scale } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
 import AuthenticateService from 'utilities/authenticate/AuthenticateService';
 import {
@@ -29,7 +30,7 @@ import {
     numberWithCommas,
     openURL,
 } from 'utilities/helper';
-import { CONFIG_KEYS, defaultRankColor, listButton, OrderTypeMenu, POPUP_TYPE, statusUser } from 'utilities/staticData';
+import { CONFIG_KEYS, OrderTypeMenu, POPUP_TYPE, defaultRankColor, listButton, statusUser } from 'utilities/staticData';
 import UserStatus from './components/UserStatus';
 
 const InfoItem = (data: any) => {
@@ -47,6 +48,7 @@ const InfoItem = (data: any) => {
     );
 };
 const SettingScreen = () => {
+    const { chooseBranch, setChooseBranch } = useChooseRestaurant();
     const modalize = ModalizeManager();
     const { order, userInfo } = useSelector((state: RootState) => state);
     const [rankList, setRankList] = useState([]);
@@ -105,11 +107,13 @@ const SettingScreen = () => {
     const goToHistory = () => {
         navigate(SETTING_ROUTE.ORDER_HISTORY);
     };
-    const goToOrderDefault = () => {
+    const goToChooseRestaurants = () => {
         if (defaultOrderQR) {
             navigate(ORDER_ROUTE.ORDER_QR_CODE, { orderType: OrderTypeMenu.DEFAULT_ORDER, saveOrder: false });
         } else {
-            navigate(AUTHENTICATE_ROUTE.ORDER_DEFAULT_MENU, { screen: SETTING_ROUTE.ORDER_DEFAULT_SETTING });
+            navigate(HOME_ROUTE.CHOOSE_RESTAURANT, { chooseBranch, setChooseBranch });
+            // TODO : comment 116 change navigate choose restaurants
+            // navigate(AUTHENTICATE_ROUTE.ORDER_DEFAULT_MENU, { screen: SETTING_ROUTE.ORDER_DEFAULT_SETTING });
         }
     };
     const goToNotification = () => {
@@ -131,8 +135,8 @@ const SettingScreen = () => {
             case 'history':
                 goToHistory();
                 break;
-            case 'orderDefault':
-                goToOrderDefault();
+            case 'chooseRestaurants':
+                goToChooseRestaurants();
                 break;
             case 'notification':
                 goToNotification();
@@ -239,7 +243,13 @@ const SettingScreen = () => {
                                     <StyledIcon source={Images.icons.questionGray} size={24} />
                                 </StyledTouchable> */}
                             </View>
-
+                            <View style={styles.viewRestaurants}>
+                                <StyledText
+                                    i18nText={'authen.register.selectBranchStore.chooseStore'}
+                                    customStyle={{ color: Themes.COLORS.white }}
+                                />
+                                <StyledText originValue={chooseBranch?.name} customStyle={styles.txtNameRestaurants} />
+                            </View>
                             <View
                                 style={[
                                     {
@@ -477,6 +487,20 @@ const styles = ScaledSheet.create({
     },
     textDelete: {
         color: Themes.COLORS.primary,
+    },
+    viewRestaurants: {
+        flexDirection: 'row',
+        paddingVertical: '10@vs',
+        backgroundColor: Themes.COLORS.midnightBlue,
+        alignSelf: 'flex-end',
+        marginRight: '10@s',
+        alignItems: 'center',
+        paddingHorizontal: '5@s',
+    },
+    txtNameRestaurants: {
+        fontSize: '18@ms',
+        marginLeft: '5@s',
+        color: Themes.COLORS.white,
     },
 });
 

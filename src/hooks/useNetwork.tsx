@@ -7,8 +7,12 @@ import { updateAllOrder, updateDishesAllOrder } from 'app-redux/slices/orderSlic
 import { resourceActions } from 'app-redux/slices/resourceSlice';
 import { userInfoActions } from 'app-redux/slices/userInfoSlice';
 import { store } from 'app-redux/store';
+import { compare } from 'compare-versions';
+import AlertMessage from 'components/base/AlertMessage';
+import ModalizeManager from 'components/base/modal/ModalizeManager';
 import { getCouponData } from 'feature/home/HomeScreen';
 import { useEffect, useRef } from 'react';
+import DeviceInfo from 'react-native-device-info';
 import {
     checkAvailableCouponsAllOrder,
     filterOrderStore,
@@ -16,11 +20,7 @@ import {
     generateDataSaveOrderOption,
     openURL,
 } from 'utilities/helper';
-import { compare } from 'compare-versions';
-import DeviceInfo from 'react-native-device-info';
 import { MODAL_ID, OrderType, POPUP_TYPE, STORE_URL, VERSION_APP_KEY } from 'utilities/staticData';
-import AlertMessage from 'components/base/AlertMessage';
-import ModalizeManager from 'components/base/modal/ModalizeManager';
 
 const checkVersion = (configs: any[]) => {
     const modalize = ModalizeManager();

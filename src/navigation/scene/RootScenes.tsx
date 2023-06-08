@@ -1,10 +1,13 @@
 import { createStackNavigator } from '@react-navigation/stack';
+import { getRestaurantsApi } from 'api/modules/api-app/authenticate';
 import { RootState } from 'app-redux/hooks';
+import { updateGlobalData } from 'app-redux/slices/globalDataSlice';
 import { Themes } from 'assets/themes';
 import ChangePassword from 'feature/authentication/ChangePassword';
 import OrderDefaultMenu from 'feature/authentication/OrderDefaultMenu';
 import RegisterStep2 from 'feature/authentication/RegisterStep2';
 import RegisterStep3 from 'feature/authentication/RegisterStep3';
+import SelectBranchStoreScreen from 'feature/authentication/SelectBranchStoreScreen';
 import SendOTP from 'feature/authentication/SendOtp';
 import SendOtpForgotPass from 'feature/authentication/SendOtpForgotPass';
 import DetailCouponScreen from 'feature/coupon/DetailCouponScreen';
@@ -44,7 +47,7 @@ import { isEqual } from 'lodash';
 import React, { useEffect } from 'react';
 import { StatusBar } from 'react-native';
 import { Host } from 'react-native-portalize';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { isIos } from 'utilities/helper';
 import navigationConfigs from '../config/options';
 import {
@@ -89,6 +92,7 @@ const AppStack = () => {
 
                     {/* HOME_ROUTE */}
                     <MainStack.Screen name={HOME_ROUTE.HOME} component={HomeScreen} />
+                    <MainStack.Screen name={HOME_ROUTE.CHOOSE_RESTAURANT} component={SelectBranchStoreScreen} />
                     <MainStack.Screen name={HOME_ROUTE.NOTIFICATION} component={NotificationScreen} />
                     <MainStack.Screen name={HOME_ROUTE.NEW_LIST} component={NewsListScreen} />
                     <MainStack.Screen name={HOME_ROUTE.NEW_DETAIL} component={NewsDetailScreen} />
@@ -142,16 +146,28 @@ const AppStack = () => {
 
 const Navigation: React.FunctionComponent = () => {
     useNetwork();
+    const dispatch = useDispatch();
 
     const {
         userInfo: { token },
         globalDataUnSave: { withoutAccount },
     } = useSelector((state: RootState) => state);
 
+    const getListRestaurants = async () => {
+        try {
+            const resRestaurants = await getRestaurantsApi();
+            if (!resRestaurants?.data) return;
+            dispatch(updateGlobalData({ listRestaurants: resRestaurants?.data }));
+        } catch (error) {
+            console.log('getListRestaurants -> error', error);
+        }
+    };
+
     useEffect(() => {
         if (token) {
             getDataProfile();
         }
+        getListRestaurants();
     }, []);
 
     if (token || withoutAccount) {

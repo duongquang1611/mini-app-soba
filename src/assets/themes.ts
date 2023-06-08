@@ -55,6 +55,9 @@ const Light = {
         readNotificationBackground: 'rgba(254, 236, 210, 0.2)',
         astra: '#FBE3C0',
         linkDefault: '#3373FA',
+        midnightBlue: '#0A2060',
+        pastelYellow: '#FEFF99',
+        goldenRod: '#F9C002',
     },
     FONTS: {
         defaultFont: 'Montserrat-Regular',

@@ -1,12 +1,28 @@
-import { AnyAction, CaseReducer, createSlice, PayloadAction, Action } from '@reduxjs/toolkit';
+import { Action, AnyAction, CaseReducer, PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { persistReducer } from 'redux-persist';
 import { generatePersistConfig } from 'utilities/helper';
 import { CommonStatus } from './types';
 
+interface IMember {
+    id?: number;
+    email?: string;
+    fullName?: string;
+    gender?: number;
+    birthday?: string;
+    canUpdateBirthday?: number;
+    avatar?: number;
+    levelRank?: any;
+    money?: number;
+    isPaid?: number;
+    frequentlyUsedRestaurantId?: number;
+    /* eslint-disable camelcase */
+    avatar_50?: string;
+    avatar_150?: string;
+}
 interface IUser {
     id: number;
     username: string;
-    member?: any;
+    member?: IMember;
     moneyToNextRank?: number;
     nextRank?: string;
     // ...

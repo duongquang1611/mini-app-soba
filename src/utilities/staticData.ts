@@ -212,9 +212,9 @@ export const listButton = [
     },
     {
         id: 2,
-        name: 'いつもの！選択',
-        img: Images.icons.cart,
-        key: 'orderDefault',
+        name: '店舗選択',
+        img: Images.icons.restaurant,
+        key: 'chooseRestaurants',
     },
     {
         id: 3,
@@ -892,3 +892,18 @@ export const RESTAURANT_NEW_ORDER = {
     id: '9212',
     name: 'Komorosoba',
 };
+
+export const SELECT_COUPON_ITEM = [
+    {
+        id: 1,
+        name: '男性',
+    },
+    {
+        id: 2,
+        name: '女性',
+    },
+    {
+        id: 3,
+        name: 'No Select',
+    },
+];

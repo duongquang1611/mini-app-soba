@@ -8,25 +8,25 @@ import AlertMessage from 'components/base/AlertMessage';
 import CryptoJS from 'crypto-js';
 import i18next from 'i18next';
 import { cloneDeep, isArray, isEqual, throttle } from 'lodash';
-import { APP_ROUTE, HOME_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
+import { APP_ROUTE, HOME_ROUTE } from 'navigation/config/routes';
 import { DevSettings, Linking, Platform } from 'react-native';
 import codePush from 'react-native-code-push';
 import Config from 'react-native-config';
 import Picker from 'react-native-picker';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import { CheckPasswordType, CouponDishType, CouponType, ExpiryDayType } from './enumData';
-import { formatDate, YYYYMMDD_PUBLISH, formatDateJapan, YMDHms } from './format';
+import { YYYYMMDD_PUBLISH, formatDate } from './format';
 import {
+    CRYPTO_DATA,
     DiscountType,
     Gender,
     MenuType,
     OrderType,
     OrderTypeMenu,
     POPUP_TYPE,
-    staticValue,
-    CRYPTO_DATA,
     RESTAURANT_NEW_ORDER,
+    staticValue,
 } from './staticData';
 
 export const isAndroid = Platform.OS === 'android';

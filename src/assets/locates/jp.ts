@@ -104,6 +104,24 @@ export default {
             female: '女性',
             contentOrderDefault:
                 'この画面では、自分が普段よく食べる商品を設定することができます。\n設定することで、ホーム画面に表示されるQRコードを店舗券売機にかざすだけで簡単に注文ができるようになります。\n※後でも設定・変更可能です。',
+            selectBranchStore: {
+                title: '問い合わせ',
+                attention: {
+                    first: '【注意点】',
+                    second: '・事前注文・クーポンの使用は、店舗指定が必要となります。',
+                    three: '・店舗指定は都度変更できます。',
+                },
+                chooseStore: '選択店舗',
+                currentlySelected: '店舗索',
+                btnChangeBranch: '店舗検\n検索',
+                description: '使用する店舗を選択してくださ',
+                labelInput: 'タイトル',
+                describeLabel: '券売機に来店QRコードをかざす',
+                labelBranch: 'ブランチを選択',
+                descriptionInput: 'いつもの注文',
+                placeHolderBranch: '選択してください',
+                titleModal: '店舗選択',
+            },
         },
         hintRegister: {
             email: 'メールを入力してください',

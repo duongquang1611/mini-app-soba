@@ -9,22 +9,24 @@ import { store } from 'app-redux/store';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
-import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
+import { StyledIcon, StyledImage, StyledText } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
-import ModalizeManager from 'components/base/modal/ModalizeManager';
 import { StyledImageBackground } from 'components/base/StyledImage';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
+import ModalizeManager from 'components/base/modal/ModalizeManager';
+import BtnChooseRestaurants from 'components/common/BtnChooseRestaurants';
 import StyledHeaderImage from 'components/common/StyledHeaderImage';
 import StyledTabTopView from 'components/common/StyledTabTopView';
+import useChooseRestaurant from 'hooks/useChooseRestaurant';
 import { getResourcesData } from 'hooks/useNetwork';
 import { SIZE_LIMIT } from 'hooks/usePaging';
-import { APP_ROUTE, HOME_ROUTE, STAMP_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
+import { APP_ROUTE, HOME_ROUTE, STAMP_ROUTE } from 'navigation/config/routes';
 import React, { FunctionComponent, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RefreshControl, View } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
-import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
+import { ScaledSheet, scale, verticalScale } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
 import { QR_TAB_TYPE } from 'utilities/enumData';
 import {
@@ -42,8 +44,8 @@ import {
     MODAL_ID,
     OrderType,
     POPUP_TYPE,
-    staticValue,
     TabCouponStatus,
+    staticValue,
 } from 'utilities/staticData';
 import ListNewsItem from './components/ListNewsItem';
 import ModalGuideCheckIn from './components/ModalGuideCheckIn';
@@ -97,6 +99,7 @@ export const getCouponData = async (status?: TabCouponStatus) => {
 const HomeScreen: FunctionComponent = () => {
     useOnesignal();
     const { t } = useTranslation();
+    const { chooseBranch, setChooseBranch } = useChooseRestaurant();
     const {
         order,
         userInfo,
@@ -104,7 +107,7 @@ const HomeScreen: FunctionComponent = () => {
         globalDataUnSave: { withoutAccount },
     } = useSelector((state: RootState) => state);
     const { banners = [], sns = [] } = resource?.data || {};
-    const storeUrl = getConfig(CONFIG_KEYS.WEB_PAGE);
+    // const storeUrl = getConfig(CONFIG_KEYS.WEB_PAGE);
     const newsDisplay = Number(getConfig(CONFIG_KEYS.NEWS_DISPLAY));
     const { user } = userInfo;
     const { mobileOrder, defaultOrderLocal } = order;
@@ -217,6 +220,7 @@ const HomeScreen: FunctionComponent = () => {
             setRefreshing(false);
         }
     };
+
     return (
         <View style={styles.container}>
             <StyledKeyboardAware
@@ -242,10 +246,11 @@ const HomeScreen: FunctionComponent = () => {
                         <View style={styles.logoView}>
                             <StyledIcon source={Images.icons.rectangle} size={85} customStyle={styles.icRectangle} />
                             <StyledImage source={Images.photo.logo} customStyle={styles.logoIcon} />
-                            <StyledTouchable onPress={() => openURL(storeUrl)} customStyle={styles.buttonMobile}>
+                            {/* <StyledTouchable onPress={() => openURL(storeUrl)} customStyle={styles.buttonMobile}>
                                 <StyledText i18nText={'home.storeSearch'} customStyle={styles.textPrimary} />
                                 <StyledIcon source={Images.icons.arrow_left} size={20} />
-                            </StyledTouchable>
+                            </StyledTouchable> */}
+                            <BtnChooseRestaurants setChooseBranch={setChooseBranch} chooseBranch={chooseBranch} />
                         </View>
                         <FlatList
                             horizontal
@@ -323,7 +328,8 @@ const styles = ScaledSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingHorizontal: '20@s',
+        paddingLeft: '20@s',
+        flex: 1,
     },
     newsView: {
         flexDirection: 'row',
