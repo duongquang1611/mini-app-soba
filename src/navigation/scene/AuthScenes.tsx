@@ -6,6 +6,7 @@ import Information from 'feature/authentication/Information';
 import LoginScreen from 'feature/authentication/LoginScreen';
 import RegisterScreen from 'feature/authentication/RegisterScreen';
 import ResetPasswordScreen from 'feature/authentication/ResetPasswordScreen';
+import SelectBranchStoreScreen from 'feature/authentication/SelectBranchStoreScreen';
 import SendOTP from 'feature/authentication/SendOtp';
 import SendOtpForgotPass from 'feature/authentication/SendOtpForgotPass';
 import navigationConfigs from 'navigation/config/options';
@@ -27,6 +28,7 @@ const AuthStack = () => (
         >
             <MainStack.Screen name={AUTHENTICATE_ROUTE.LOGIN} component={LoginScreen} />
             <MainStack.Screen name={AUTHENTICATE_ROUTE.REGISTER} component={RegisterScreen} />
+            <MainStack.Screen name={AUTHENTICATE_ROUTE.SELECT_BRANCH_RESTAURANT} component={SelectBranchStoreScreen} />
             <MainStack.Screen name={AUTHENTICATE_ROUTE.FORGOT_PASS} component={ForgotPasswordScreen} />
             <MainStack.Screen name={AUTHENTICATE_ROUTE.SEND_OTP} component={SendOTP} />
             <MainStack.Screen name={AUTHENTICATE_ROUTE.CHANGE_PASS} component={ChangePassword} />

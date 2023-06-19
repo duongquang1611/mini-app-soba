@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { yupResolver } from '@hookform/resolvers/yup';
 import { checkIsExistEmail, getVerifyCode } from 'api/modules/api-app/authenticate';
+import { IRestaurants } from 'app-redux/slices/globalDataSlice';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledIcon, StyledImage, StyledInputForm, StyledText, StyledTouchable } from 'components/base';
@@ -10,14 +11,15 @@ import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledOverlayLoading from 'components/base/StyledOverlayLoading';
 import RadioCheckView from 'components/common/RadioCheckView';
 import StyledHeader from 'components/common/StyledHeader';
-import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
+import InputChooseRestaurants from 'feature/authentication/components/InputChooseRestaurants';
 import { navigate } from 'navigation/NavigationService';
+import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
 import React, { useCallback, useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Keyboard, Text, View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import { checkPasswordMatch, getConfig, openURL } from 'utilities/helper';
-import { CONFIG_KEYS, GENDER_DATA, staticValue, VerifiedCodeType } from 'utilities/staticData';
+import { CONFIG_KEYS, GENDER_DATA, VerifiedCodeType, staticValue } from 'utilities/staticData';
 import { PASSWORD_MAX_LENGTH, USERNAME_MAX_LENGTH } from 'utilities/validate';
 import yupValidate from 'utilities/yupValidate';
 import * as yup from 'yup';
@@ -35,6 +37,10 @@ const REGISTER_DEFAULT_FORM = __DEV__
     : {};
 
 const RegisterScreen = () => {
+    const [chooseBranch, setChooseBranch] = useState<IRestaurants>({
+        id: 0,
+        name: '',
+    });
     const [rule, setRule] = useState(__DEV__);
     const passwordRef = useRef<any>(null);
     const passwordConfirmRef = useRef<any>(null);
@@ -77,7 +83,7 @@ const RegisterScreen = () => {
             Keyboard.dismiss();
             await getVerifyCode({ email: user?.email, type: VerifiedCodeType.REGISTER });
             setLoading(false);
-            const newUser = { ...user };
+            const newUser = { ...user, frequentlyUsedRestaurantId: chooseBranch?.id };
             delete newUser.confirmPassword;
             if (newUser?.gender) {
                 newUser.gender = Number(newUser.gender);
@@ -190,6 +196,7 @@ const RegisterScreen = () => {
                         containerStyle={styles.normalInputContainer}
                         onSubmitEditing={Keyboard.dismiss}
                     />
+                    <InputChooseRestaurants setChooseBranch={setChooseBranch} chooseBranch={chooseBranch} />
                     <StyledInputForm
                         name={'birthday'}
                         label={'authen.labelRegister.birthday'}
@@ -346,5 +353,8 @@ const styles = ScaledSheet.create({
     },
     normalInputContainer: {
         marginTop: '13@vs',
+    },
+    ml20: {
+        marginLeft: '20@s',
     },
 });

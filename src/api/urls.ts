@@ -55,6 +55,7 @@ const AUTH_URL = {
     changePass: 'auth/change-password',
     checkOldPass: 'auth/check-old-password',
     deleteAccount: '/auth/delete-account',
+    listRestaurants: '/restaurants',
 };
 const SETTING_URL = {
     contact: 'profile/send-contact',

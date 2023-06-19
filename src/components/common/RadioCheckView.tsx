@@ -1,9 +1,9 @@
 import { Themes } from 'assets/themes';
 import React from 'react';
-import { View } from 'react-native';
+import { StyleProp, View, ViewStyle } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 
-const RadioCheckView = ({ check, customStyle }: any) => {
+const RadioCheckView = ({ check, customStyle }: { check: boolean; customStyle?: StyleProp<ViewStyle> }) => {
     return (
         <View
             style={[
