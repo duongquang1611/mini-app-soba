@@ -67,7 +67,7 @@ const ModalChooseRestaurants = (props: IProps) => {
                     </StyledTouchable>
                 );
             });
-        }, [listRestaurants]);
+        }, [listRestaurants, selectBox]);
 
         const handleOk = () => {
             setChooseBranch(selectBox);
