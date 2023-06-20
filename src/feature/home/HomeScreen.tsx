@@ -47,6 +47,7 @@ import {
     TabCouponStatus,
     staticValue,
 } from 'utilities/staticData';
+import ChooseCouponTab from './components/ChooseCouponTab';
 import ListNewsItem from './components/ListNewsItem';
 import ModalGuideCheckIn from './components/ModalGuideCheckIn';
 import ShowQrTab from './components/ShowQrTab';
@@ -195,11 +196,16 @@ const HomeScreen: FunctionComponent = () => {
     //     qrMobile: () => <ShowQrTab type={QR_TAB_TYPE.MOBILE_ORDER} qrValue={mobileOrderQR} newOrder={newOrderMobile} />,
     //     qrCheckIn: () => <ShowQrTab type={QR_TAB_TYPE.CHECK_IN} qrValue={checkInQR} onPress={showGuideCheckIn} />,
     // });
+    console.log({ mobileOrderQR, checkInQR });
     const renderScene = ({ route }: any) => {
         switch (route.key) {
             case 'qrDefault':
                 return (
-                    <ShowQrTab type={QR_TAB_TYPE.ORDER_DEFAULT} qrValue={defaultOrderQR} newOrder={newOrderDefault} />
+                    <ChooseCouponTab
+                        type={QR_TAB_TYPE.ORDER_DEFAULT}
+                        qrValue={defaultOrderQR}
+                        newOrder={newOrderDefault}
+                    />
                 );
             case 'qrMobile':
                 return <ShowQrTab type={QR_TAB_TYPE.MOBILE_ORDER} qrValue={mobileOrderQR} newOrder={newOrderMobile} />;
