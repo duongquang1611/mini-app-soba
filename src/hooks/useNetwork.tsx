@@ -33,31 +33,33 @@ const checkVersion = (configs: any[]) => {
     const needUpdate = compare(versionDevice, versionApp.value, '<');
     if (needUpdate) {
         modalize?.dismiss?.(MODAL_ID.FORCE_UPDATE, () => {
-            AlertMessage(
-                undefined,
-                {
-                    type: POPUP_TYPE.CONFIRM,
-                    onOk: () => {
-                        openURL(STORE_URL as string);
+            if (!__DEV__) {
+                AlertMessage(
+                    undefined,
+                    {
+                        type: POPUP_TYPE.CONFIRM,
+                        onOk: () => {
+                            openURL(STORE_URL as string);
+                        },
+                        dismissModalOnOk: false,
+                        dismissModalOnCancel: false,
+                        content: 'common.uploadVersion',
+                        showClose: false,
                     },
-                    dismissModalOnOk: false,
-                    dismissModalOnCancel: false,
-                    content: 'common.uploadVersion',
-                    showClose: false,
-                },
-                undefined,
-                {
-                    panGestureEnabled: false,
-                    closeOnOverlayTap: false,
-                    onBackButtonPress: () => null,
-                },
-                MODAL_ID.FORCE_UPDATE,
-                {
-                    onClosed: () => {
-                        return null;
+                    undefined,
+                    {
+                        panGestureEnabled: false,
+                        closeOnOverlayTap: false,
+                        onBackButtonPress: () => null,
                     },
-                },
-            );
+                    MODAL_ID.FORCE_UPDATE,
+                    {
+                        onClosed: () => {
+                            return null;
+                        },
+                    },
+                );
+            }
         });
     }
     return needUpdate;
@@ -67,7 +69,7 @@ export const getResourcesData = async (updateOrderToAPI = true, checkCoupons = f
     try {
         const response = await getResources();
         const needUpdate = checkVersion(response?.data?.configs || []);
-        if (needUpdate) return;
+        if (needUpdate && !__DEV__) return;
         const newResources = filterResources(response?.data);
         const { order } = store.getState();
         const { menu = [], categories = [] } = newResources || {};

@@ -37,7 +37,6 @@ const ItemCoupon = (props: any) => {
     const modalize = ModalizeManager();
     const dispatch = useDispatch();
     const updateCouponsCart = (coupons: any) => {
-        console.log({ coupons });
         setSaveOrderCoupon(coupons);
         if (orderType === OrderTypeMenu.CART_ORDER) {
             dispatch(updateCartOrder({ ...cartOrder, coupons }));

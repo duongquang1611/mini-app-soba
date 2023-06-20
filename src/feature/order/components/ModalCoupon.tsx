@@ -6,14 +6,28 @@ import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 
-const OrderDish = (props: any) => {
-    const { setChooseDish, chooseDish, item, idCoupon, setEnableButton, enableButton } = props;
-    const choose = chooseDish?.id === item?.id;
+export const OrderDish = (props: any) => {
+    const {
+        setChooseDish,
+        chooseDish,
+        item,
+        idCoupon,
+        setEnableButton,
+        enableButton,
+        customImageProps,
+        customNameOrder,
+        isMultiChoose = false,
+    } = props;
+    const choose = isMultiChoose ? chooseDish?.includes(item) : chooseDish?.id === item?.id;
     const onChoose = () => {
-        setChooseDish(item);
-        const findItemChoose = enableButton?.find((itemChoose: any) => itemChoose?.id === idCoupon) || {};
-        const findItemNotChange = enableButton?.filter((itemChoose: any) => itemChoose?.id !== idCoupon) || [];
-        setEnableButton([...findItemNotChange, { ...findItemChoose, choose: item }]);
+        if (isMultiChoose) {
+            setChooseDish([...chooseDish, item]);
+        } else {
+            setChooseDish(item);
+            const findItemChoose = enableButton?.find((itemChoose: any) => itemChoose?.id === idCoupon) || {};
+            const findItemNotChange = enableButton?.filter((itemChoose: any) => itemChoose?.id !== idCoupon) || [];
+            setEnableButton([...findItemNotChange, { ...findItemChoose, choose: item }]);
+        }
     };
     return (
         <StyledTouchable customStyle={styles.containerItem} onPress={onChoose}>
@@ -21,9 +35,9 @@ const OrderDish = (props: any) => {
                 <StyledImage
                     resizeMode={'cover'}
                     source={{ uri: item?.dish?.thumbnail }}
-                    customStyle={styles.imgItem}
+                    customStyle={[styles.imgItem, customImageProps]}
                 />
-                <StyledText originValue={item?.dish?.title} customStyle={styles.nameOrder} />
+                <StyledText originValue={item?.dish?.title} customStyle={[styles.nameOrder, customNameOrder]} />
             </View>
             <View
                 style={[
@@ -37,13 +51,19 @@ const OrderDish = (props: any) => {
         </StyledTouchable>
     );
 };
-const OneCoupon = (props: any) => {
-    const { item, enableButton, setEnableButton, dashView } = props;
+export const OneCoupon = (props: any) => {
+    const { item, enableButton, setEnableButton, dashView, isHomeTab } = props;
     const [chooseDish, setChooseDish] = useState(item?.choose);
     return (
         <View>
-            <StyledText originValue={item?.coupon?.title} customStyle={styles.couponName} />
-            <StyledText i18nText={'coupon.chooseDish'} customStyle={styles.conTentCoupon} />
+            <StyledText
+                originValue={item?.coupon?.title}
+                customStyle={[styles.couponName, isHomeTab && styles.couponNameHomeTab]}
+            />
+            <StyledText
+                i18nText={'coupon.chooseDish'}
+                customStyle={[styles.conTentCoupon, isHomeTab && styles.conTentCouponHomeTab]}
+            />
             {item?.coupon?.couponDish?.map((itemDish: any, indexDish: number) => (
                 <OrderDish
                     idCoupon={item?.id}
@@ -53,6 +73,8 @@ const OneCoupon = (props: any) => {
                     setChooseDish={setChooseDish}
                     setEnableButton={setEnableButton}
                     enableButton={enableButton}
+                    customImageProps={isHomeTab && styles.customImage}
+                    customNameOrder={isHomeTab && styles.customNameOrder}
                 />
             ))}
             {dashView && <DashView customStyle={styles.dash} />}
@@ -60,7 +82,15 @@ const OneCoupon = (props: any) => {
     );
 };
 const ModalCoupon = (props: any) => {
-    const { listCouponsModal, setCartListCouponOrder, updateCouponsCart, cartListCouponAll, applyChooseDish } = props;
+    const {
+        listCouponsModal,
+        setCartListCouponOrder,
+        updateCouponsCart,
+        cartListCouponAll,
+        applyChooseDish,
+        customStyle,
+        isHomeTab,
+    } = props;
     const [enableButton, setEnableButton] = useState(listCouponsModal?.map((item: any) => ({ ...item })));
 
     useEffect(() => {
@@ -71,7 +101,7 @@ const ModalCoupon = (props: any) => {
     const numCheck = enableButton?.filter((item: any) => item?.choose)?.length || 0;
 
     return (
-        <View style={styles.modalView}>
+        <View style={[styles.modalView, customStyle]}>
             {listCouponsModal?.length > 1 && (
                 <StyledText
                     i18nText={'order.rangeEditMenu'}
@@ -89,21 +119,24 @@ const ModalCoupon = (props: any) => {
                     item={item}
                     setEnableButton={setEnableButton}
                     enableButton={enableButton}
+                    isHomeTab={isHomeTab}
                 />
             ))}
-            <StyledButton
-                title={'order.keep'}
-                onPress={() => {
-                    if (applyChooseDish) {
-                        applyChooseDish?.(enableButton);
-                    } else {
-                        setCartListCouponOrder?.([...enableButton, ...cartListCouponAll]);
-                        updateCouponsCart([...enableButton, ...cartListCouponAll]);
-                    }
-                }}
-                disabled={checkDisableButton.length > 0}
-                customStyle={styles.saveButton}
-            />
+            {!isHomeTab && (
+                <StyledButton
+                    title={'order.keep'}
+                    onPress={() => {
+                        if (applyChooseDish) {
+                            applyChooseDish?.(enableButton);
+                        } else {
+                            setCartListCouponOrder?.([...enableButton, ...cartListCouponAll]);
+                            updateCouponsCart([...enableButton, ...cartListCouponAll]);
+                        }
+                    }}
+                    disabled={checkDisableButton.length > 0}
+                    customStyle={styles.saveButton}
+                />
+            )}
         </View>
     );
 };
@@ -138,16 +171,25 @@ const styles = ScaledSheet.create({
         fontSize: '16@ms0.3',
         paddingVertical: '10@vs',
     },
+    couponNameHomeTab: {
+        fontSize: '14@ms0.3',
+        paddingVertical: '0@vs',
+    },
     conTentCoupon: {
         fontWeight: '700',
         fontSize: '16@ms0.3',
         paddingBottom: '10@vs',
         color: Themes.COLORS.primary,
     },
+    conTentCouponHomeTab: {
+        fontSize: '14@ms0.3',
+        paddingBottom: '5@vs',
+    },
     modalView: {
         paddingHorizontal: '20@s',
         paddingBottom: '20@s',
     },
+
     chooseButton: {
         width: '20@s',
         height: '20@s',
@@ -169,5 +211,13 @@ const styles = ScaledSheet.create({
         marginVertical: '5@vs',
         width: Metrics.screenWidth,
         alignSelf: 'center',
+    },
+    customImage: {
+        width: '30@s',
+        height: '30@s',
+    },
+    customNameOrder: {
+        marginRight: '0@s',
+        marginLeft: '-15@vs',
     },
 });

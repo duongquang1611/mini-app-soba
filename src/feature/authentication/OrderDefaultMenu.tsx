@@ -129,7 +129,7 @@ const OrderDefaultMenu = (props: any) => {
         );
     };
 
-    const menuFilter = menuList.filter((item: any) => {
+    const menuFilter = menuList?.filter((item: any) => {
         if (category) {
             const check = item?.category?.find((itemCate: any) => itemCate?.categoryId === category);
             if (!check?.categoryId) return false;
@@ -219,7 +219,7 @@ const OrderDefaultMenu = (props: any) => {
                     <View style={styles.categoryContainer}>
                         <ListViewSelect
                             onPressCategory={onPressCategory}
-                            data={categories?.filter((item: any) => item?.status === MenuType.ENABLE)}
+                            data={categories?.filter((item: any) => item?.status === MenuType.ENABLE) || []}
                             category={category}
                             isCategory
                         />
