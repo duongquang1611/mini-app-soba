@@ -7,6 +7,8 @@ interface IOrderState {
     cartOrder: any;
     mobileOrder: any;
     defaultOrderLocal: any;
+    couponOrder: any;
+    choose: any;
 }
 
 const initialState: IOrderState = {
@@ -14,6 +16,8 @@ const initialState: IOrderState = {
     cartOrder: { dishes: [], coupons: [] },
     mobileOrder: { dishes: [], coupons: [] },
     defaultOrderLocal: { dishes: [], coupons: [] },
+    couponOrder: { dishes: [], coupons: [] },
+    choose: [],
 };
 
 const orderSlice = createSlice({
@@ -105,6 +109,9 @@ const orderSlice = createSlice({
                 },
             };
             return state;
+        },
+        updateTest: (state, action: PayloadAction<any>) => {
+            state.choose = action?.payload;
         },
         clearMobileOrder: (state) => {
             state = { ...state, mobileOrder: initialState.mobileOrder };

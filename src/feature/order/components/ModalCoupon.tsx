@@ -1,3 +1,4 @@
+import { updateTest } from 'app-redux/slices/orderSlice';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledImage, StyledText, StyledTouchable } from 'components/base';
@@ -5,6 +6,7 @@ import DashView from 'components/common/DashView';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
+import { useDispatch } from 'react-redux';
 
 export const OrderDish = (props: any) => {
     const {
@@ -90,10 +92,14 @@ const ModalCoupon = (props: any) => {
         showButton,
     } = props;
     const [enableButton, setEnableButton] = useState(listCouponsModal?.map((item: any) => ({ ...item })));
-
+    const dispatch = useDispatch();
     useEffect(() => {
         setEnableButton(listCouponsModal?.map((item: any) => ({ ...item })));
     }, [listCouponsModal]);
+
+    useEffect(() => {
+        dispatch(updateTest(enableButton));
+    }, [enableButton[0]?.id, dispatch]);
 
     const checkDisableButton = enableButton?.filter((item: any) => !item?.choose);
     const numCheck = enableButton?.filter((item: any) => item?.choose)?.length || 0;
