@@ -1,36 +1,27 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { saveOrderOption } from 'api/modules/api-app/order';
 import { RootState } from 'app-redux/hooks';
-import {
-    clearCartOrder,
-    clearDefaultOrder,
-    clearDefaultOrderLocal,
-    clearMobileOrder,
-    updateCartOrder,
-    updateDefaultOrderLocal,
-} from 'app-redux/slices/orderSlice';
+import { clearCartOrder, clearDefaultOrder, clearMobileOrder, updateCartOrder } from 'app-redux/slices/orderSlice';
 import Images from 'assets/images';
-import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledIcon, StyledText, StyledTouchable } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
-import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
+import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledHeader from 'components/common/StyledHeader';
 import AmountOrder from 'feature/order/components/AmountOrder';
 import ModalCoupon from 'feature/order/components/ModalCoupon';
 import OrderItemCart from 'feature/order/components/OrderItemCart';
 import useBackHandler from 'hooks/useBackHandler';
-import { APP_ROUTE, HOME_ROUTE, SETTING_ROUTE, TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
+import { getResourcesData } from 'hooks/useNetwork';
 import { navigate } from 'navigation/NavigationService';
+import { APP_ROUTE, HOME_ROUTE, SETTING_ROUTE, TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import React, { useEffect, useMemo, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
-import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
+import { ScaledSheet, scale, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-    checkSameData,
-    decryptData,
     encryptData,
     generateDataSaveOrderOption,
     generateNewOrder,
@@ -40,7 +31,6 @@ import {
     showActionQR,
     titleOrder,
 } from 'utilities/helper';
-import { getResourcesData } from 'hooks/useNetwork';
 import { DiscountType, MODAL_ID, OrderType, OrderTypeMenu, POPUP_TYPE, staticValue } from 'utilities/staticData';
 import ModalGuideMenu from './components/ModalGuideMenu';
 
@@ -201,14 +191,14 @@ const OrderQrCodeScreen = (props: any) => {
         }
         if (orderType === OrderTypeMenu.DEFAULT_ORDER) {
             dispatch(clearDefaultOrder());
-            if (checkSameData(defaultOrder, defaultOrderLocal)) {
-                dispatch(clearDefaultOrderLocal());
-                clearOrder(3);
-            }
+            // if (checkSameData(defaultOrder, defaultOrderLocal)) {
+            //     dispatch(clearDefaultOrderLocal());
+            //     clearOrder(3);
+            // }
         }
-        if (orderType === OrderTypeMenu.DEFAULT_ORDER_LOCAL) {
-            dispatch(updateDefaultOrderLocal(defaultOrder));
-        }
+        // if (orderType === OrderTypeMenu.DEFAULT_ORDER_LOCAL) {
+        //     dispatch(updateDefaultOrderLocal(defaultOrder));
+        // }
         clearOrder();
         navigate(APP_ROUTE.MAIN_TAB, { screen: HOME_ROUTE.HOME });
     };

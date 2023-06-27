@@ -3,10 +3,12 @@ import { getProfile } from 'api/modules/api-app/authenticate';
 import { saveOrderOption } from 'api/modules/api-app/order';
 import {
     clearCartOrder,
+    clearDefaultOrder,
+    clearDefaultOrderLocal,
     clearMobileOrder,
     updateAllOrder,
     updateCartOrder,
-    updateDefaultOrderLocal,
+    updateDefaultOrder,
     updateMobileOrder,
 } from 'app-redux/slices/orderSlice';
 import { userInfoActions } from 'app-redux/slices/userInfoSlice';
@@ -25,7 +27,7 @@ import {
     generateDataSaveOrderOption,
     logger,
 } from './helper';
-import { listScreenBackWhenPayment, OrderType } from './staticData';
+import { OrderType, listScreenBackWhenPayment } from './staticData';
 
 let socket: Socket<DefaultEventsMap, DefaultEventsMap>;
 
@@ -52,7 +54,8 @@ const handleActionSuccessPayment = async (data: any) => {
 
     if (Number(type) === OrderType.DEFAULT_SETTING) {
         store.dispatch(updateMobileOrder(deleteUsedCoupon(mobileOrder, coupons)));
-        store.dispatch(updateDefaultOrderLocal(defaultOrder));
+        store.dispatch(clearDefaultOrder());
+        store.dispatch(clearDefaultOrderLocal());
         try {
             const defaultOrderHomeSaveOrderOption = generateDataSaveOrderOption(defaultOrder, OrderType.DEFAULT_HOME);
             const mobileSaveOrderOption = generateDataSaveOrderOption(
@@ -69,7 +72,7 @@ const handleActionSuccessPayment = async (data: any) => {
     } else if (Number(type) === OrderType.MOBILE) {
         store.dispatch(clearMobileOrder());
         store.dispatch(clearCartOrder());
-        store.dispatch(updateDefaultOrderLocal(deleteUsedCoupon(defaultOrderLocal, coupons)));
+        store.dispatch(updateDefaultOrder(deleteUsedCoupon(defaultOrder, coupons)));
         try {
             const defaultOrderHomeSaveOrderOption = generateDataSaveOrderOption(
                 deleteUsedCoupon(defaultOrderLocal, coupons),

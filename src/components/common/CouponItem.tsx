@@ -7,7 +7,7 @@ import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
 import React from 'react';
 import { View } from 'react-native';
-import { scale, ScaledSheet } from 'react-native-size-matters';
+import { ScaledSheet, scale } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
 import { formatDate } from 'utilities/format';
 import { getRangeCoupon } from 'utilities/helper';
@@ -16,7 +16,7 @@ import DashView from './DashView';
 import PointExchangeView from './PointExchangeView';
 
 export const CouponItem = (props: any) => {
-    const { cartOrder } = useSelector((state: RootState) => state.order);
+    const { cartOrder, defaultOrderLocal } = useSelector((state: RootState) => state.order);
     const {
         item = {},
         canUse,
@@ -30,14 +30,21 @@ export const CouponItem = (props: any) => {
         customStyle,
         showDashTop = false,
         showDashBottom = true,
+        isHomeTab,
     } = props || {};
+
+    const blStyle = isHomeTab ? stylesSmall : styles;
+
     const { coupon, usedDate, id: idMemberCoupon, receivedDate, expiryDate, stampAmount = 0 } = item;
     const { image_150, title, startDate, endDate, dateType, expiryDay, expiryDayType } = coupon || {};
     // const isInCartAPI = useMemo(() => status === MemberCouponStatus.IN_CART, [status]);
-    const checkChooseTemp = cartOrderState?.coupons?.find((itemCoupon: any) => itemCoupon?.id === idMemberCoupon);
-    const checkChooseInCart = (order || cartOrder)?.coupons?.find(
+    const checkChooseTemp = (isHomeTab ? defaultOrderLocal : cartOrderState)?.coupons?.find(
+        (itemCoupon: any) => itemCoupon?.id === idMemberCoupon,
+    );
+    const checkChooseInCart = (isHomeTab ? {} : order || cartOrder)?.coupons?.find(
         (itemCoupon: any) => itemCoupon?.id === idMemberCoupon && itemCoupon?.receivedDate === receivedDate,
     );
+
     const disabledUse = checkChooseInCart;
     const isBlock = Boolean(coupon?.isBlock);
     const hasExpired = dateType === DateType.EXPIRED_DATE;
@@ -63,7 +70,7 @@ export const CouponItem = (props: any) => {
             <>
                 {canUse ? (
                     <StyledTouchable
-                        customStyle={styles.btnCanUSe}
+                        customStyle={blStyle.btnCanUSe}
                         onPress={handleUseCoupon}
                         disabled={isExchangeCoupon ? true : disabledUse}
                         hitSlop={staticValue.DEFAULT_HIT_SLOP}
@@ -71,7 +78,7 @@ export const CouponItem = (props: any) => {
                         <StyledText
                             i18nText={getText()}
                             customStyle={[
-                                styles.useText,
+                                blStyle.useText,
                                 {
                                     color:
                                         !checkChooseTemp || isExchangeCoupon
@@ -84,10 +91,10 @@ export const CouponItem = (props: any) => {
                         <StyledIcon source={getIcon()} size={20} />
                     </StyledTouchable>
                 ) : isBlock || !usedDate ? (
-                    <View style={styles.btnCanUSe}>
+                    <View style={blStyle.btnCanUSe}>
                         <StyledText
                             i18nText={isBlock ? 'coupon.btnBlock' : 'coupon.btnExpired'}
-                            customStyle={styles.textDisable}
+                            customStyle={blStyle.textDisable}
                             disabled={true}
                         />
                     </View>
@@ -98,15 +105,15 @@ export const CouponItem = (props: any) => {
 
     return (
         <>
-            {showDashTop && <DashView customStyle={styles.dash} />}
-            <StyledTouchable customStyle={[styles.couponItem, customStyle]} onPress={handleGoToDetail}>
+            {showDashTop && <DashView customStyle={blStyle.dash} />}
+            <StyledTouchable customStyle={[blStyle.couponItem, customStyle]} onPress={handleGoToDetail}>
                 {!!isExchangeCoupon && (
-                    <PointExchangeView stampAmount={stampAmount} customStyle={styles.stylePointExchange} />
+                    <PointExchangeView stampAmount={stampAmount} customStyle={blStyle.stylePointExchange} />
                 )}
-                <StyledImage resizeMode={'cover'} source={{ uri: image_150 }} customStyle={styles.couponImage} />
-                <View style={styles.content}>
-                    <StyledText originValue={title} numberOfLines={1} customStyle={styles.title} />
-                    <View style={styles.rowView}>
+                <StyledImage resizeMode={'cover'} source={{ uri: image_150 }} customStyle={blStyle.couponImage} />
+                <View style={blStyle.content}>
+                    <StyledText originValue={title} numberOfLines={1} customStyle={blStyle.title} />
+                    <View style={blStyle.rowView}>
                         {isExchangeCoupon ? (
                             <>
                                 {dateType === DateType.EXPIRED_FROM_RECEIVED ? (
@@ -115,7 +122,7 @@ export const CouponItem = (props: any) => {
                                         i18nParams={{
                                             value: expiryDay,
                                         }}
-                                        customStyle={styles.time}
+                                        customStyle={blStyle.time}
                                     />
                                 ) : (
                                     <StyledText
@@ -125,14 +132,14 @@ export const CouponItem = (props: any) => {
                                             end: formatDate(endDate),
                                             expiryDate: formatDate(expiryDate),
                                         }}
-                                        customStyle={styles.time}
+                                        customStyle={blStyle.time}
                                     />
                                 )}
                             </>
                         ) : (
                             <>
                                 {dateType === DateType.NO_EXPIRED_DATE ? (
-                                    <StyledText i18nText={'coupon.noExpiredDate'} customStyle={styles.time} />
+                                    <StyledText i18nText={'coupon.noExpiredDate'} customStyle={blStyle.time} />
                                 ) : (
                                     <StyledText
                                         i18nText={dateType ? 'coupon.rangeDate' : 'coupon.expiryDate'}
@@ -149,7 +156,7 @@ export const CouponItem = (props: any) => {
                                                   }
                                                 : {}
                                         }
-                                        customStyle={styles.time}
+                                        customStyle={blStyle.time}
                                     />
                                 )}
                             </>
@@ -157,7 +164,9 @@ export const CouponItem = (props: any) => {
                         {renderActionRight()}
                     </View>
                 </View>
-                {!!usedDate && <StyledIcon source={Images.icons.couponUsed} size={70} customStyle={styles.stampUsed} />}
+                {!!usedDate && (
+                    <StyledIcon source={Images.icons.couponUsed} size={70} customStyle={blStyle.stampUsed} />
+                )}
             </StyledTouchable>
             {showDashBottom && <DashView customStyle={customDashStyle} />}
         </>
@@ -205,6 +214,95 @@ const styles = ScaledSheet.create({
     },
     title: {
         fontSize: '16@ms0.3',
+        fontWeight: 'bold',
+        color: Themes.COLORS.secondary,
+        marginRight: '18@s',
+    },
+    rowView: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '10@vs',
+    },
+    btnCanUSe: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: 'auto',
+    },
+    stampUsed: {
+        position: 'absolute',
+        top: '-2@vs',
+        right: 0,
+    },
+    imgCouponAmount: {
+        width: '26@s',
+        height: '26@s',
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'absolute',
+        top: '15@s',
+        left: '23@s',
+        zIndex: 1,
+    },
+    textCouponAmount: {
+        fontWeight: 'bold',
+        color: Themes.COLORS.headerBackground,
+        fontSize: '12@s',
+    },
+    textCurrency: {
+        fontSize: '8@s',
+        textAlign: 'center',
+    },
+    stylePointExchange: {
+        position: 'absolute',
+        top: '1@s',
+        left: '8@s',
+        zIndex: 1,
+    },
+    dash: {
+        alignSelf: 'center',
+    },
+});
+
+const stylesSmall = ScaledSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: Themes.COLORS.lightGray,
+    },
+    couponItem: {
+        flexDirection: 'row',
+        paddingTop: '5@vs',
+        backgroundColor: Themes.COLORS.white,
+        paddingLeft: '5@s',
+        paddingRight: '5@s',
+    },
+    couponImage: {
+        width: '30@s',
+        height: '30@s',
+    },
+    content: {
+        flexShrink: 1,
+        justifyContent: 'space-between',
+        marginLeft: '5@s',
+        flexGrow: 1,
+    },
+    time: {
+        fontSize: '7@ms0.3',
+        color: Themes.COLORS.silver,
+        letterSpacing: '-0.5@ms0.3',
+        maxWidth: '65@s',
+    },
+    useText: {
+        color: Themes.COLORS.primary,
+        fontSize: '11@ms0.3',
+        marginRight: '2@s',
+    },
+    textDisable: {
+        fontSize: '11@ms0.3',
+        fontWeight: 'bold',
+    },
+    title: {
+        fontSize: '12@ms0.3',
         fontWeight: 'bold',
         color: Themes.COLORS.secondary,
         marginRight: '18@s',

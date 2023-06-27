@@ -149,6 +149,9 @@ export default {
         newsTitle: 'ニュース一覧',
         storeSearch: '店舗検索',
         newsNoData: 'ニュースがありません。',
+        listDishesOfCoupon: '適用商品選択',
+        createOr: 'QRコード発行',
+        detailCouponOr: '選択中の商品を確認する',
     },
     account: {},
     notification: {

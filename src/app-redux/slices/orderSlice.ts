@@ -7,7 +7,6 @@ interface IOrderState {
     cartOrder: any;
     mobileOrder: any;
     defaultOrderLocal: any;
-    couponOrder: any;
 }
 
 const initialState: IOrderState = {
@@ -15,7 +14,6 @@ const initialState: IOrderState = {
     cartOrder: { dishes: [], coupons: [] },
     mobileOrder: { dishes: [], coupons: [] },
     defaultOrderLocal: { dishes: [], coupons: [] },
-    couponOrder: { dishes: [], coupons: [] },
 };
 
 const orderSlice = createSlice({
@@ -61,8 +59,8 @@ const orderSlice = createSlice({
             };
             return state;
         },
-        updateDefaultOrderLocal: (state, action: PayloadAction<any>) => {
-            state = { ...state, defaultOrderLocal: action.payload };
+        updateDefaultOrderLocal: (state) => {
+            // state = { ...state, defaultOrderLocal: action.payload };
             return state;
         },
         updateCouponMobileOrder: (state, action: PayloadAction<any>) => {
@@ -87,13 +85,23 @@ const orderSlice = createSlice({
             };
             return state;
         },
-        updateCouponOrder: (state, action: PayloadAction<any>) => {
-            const oldCoupons = state.couponOrder?.coupons || [];
+        updateCouponDefaultOrder: (state, action: PayloadAction<any>) => {
             state = {
                 ...state,
-                couponOrder: {
-                    ...state.couponOrder,
-                    coupons: [...oldCoupons, ...action.payload],
+                defaultOrder: {
+                    ...state.defaultOrder,
+                    coupons: action.payload,
+                },
+            };
+            return state;
+        },
+
+        updateCouponDefaultOrderLocal: (state, action: PayloadAction<any>) => {
+            state = {
+                ...state,
+                defaultOrderLocal: {
+                    ...state.defaultOrderLocal,
+                    coupons: action.payload,
                 },
             };
             return state;
@@ -114,23 +122,13 @@ const orderSlice = createSlice({
             state = { ...state, defaultOrderLocal: initialState.defaultOrderLocal };
             return state;
         },
-        clearCouponOrder: (state) => {
-            state = { ...state, couponOrder: initialState.couponOrder };
-            return state;
-        },
         clearOrder: () => {
             return initialState;
         },
     },
 });
 
-const persistConfig = generatePersistConfig('order', [
-    'cartOrder',
-    'mobileOrder',
-    'defaultOrder',
-    'defaultOrderLocal',
-    'couponOrder',
-]);
+const persistConfig = generatePersistConfig('order', ['cartOrder', 'mobileOrder', 'defaultOrder', 'defaultOrderLocal']);
 
 export const {
     updateMobileOrder,
@@ -147,8 +145,8 @@ export const {
     updateDefaultOrderLocal,
     updateDishesAllOrder,
     updateAllOrder,
-    updateCouponOrder,
-    clearCouponOrder,
+    updateCouponDefaultOrder,
+    updateCouponDefaultOrderLocal,
 } = orderSlice.actions;
 
 export default persistReducer<IOrderState>(persistConfig, orderSlice.reducer);

@@ -1,33 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useNavigation } from '@react-navigation/native';
-import { getProfile } from 'api/modules/api-app/authenticate';
-import { sendTeams } from 'api/modules/api-app/general';
 import { getNotificationList, readNotification } from 'api/modules/api-app/notification';
-import { saveOrderOption } from 'api/modules/api-app/order';
 import { RootState } from 'app-redux/hooks';
 import { updateNotificationUnRead } from 'app-redux/slices/globalDataSlice';
-import {
-    clearCartOrder,
-    clearMobileOrder,
-    updateCartOrder,
-    updateDefaultOrderLocal,
-    updateMobileOrder,
-} from 'app-redux/slices/orderSlice';
-import { userInfoActions } from 'app-redux/slices/userInfoSlice';
 import { store } from 'app-redux/store';
-import AlertMessage from 'components/base/AlertMessage';
 import { getCouponData } from 'feature/home/HomeScreen';
-import i18next from 'i18next';
-import { APP_ROUTE, HOME_ROUTE, SETTING_ROUTE } from 'navigation/config/routes';
-import { navigate, navigationRef } from 'navigation/NavigationService';
+import { HOME_ROUTE, SETTING_ROUTE } from 'navigation/config/routes';
 import { useEffect } from 'react';
 import Config from 'react-native-config';
 import OneSignal from 'react-native-onesignal';
 import { useSelector } from 'react-redux';
 import { isLogin } from 'utilities/authenticate/AuthenticateService';
 import { NotificationCategory } from 'utilities/enumData';
-import { backHomeWhenPayment, deleteUsedCoupon, generateDataSaveOrderOption, logger } from 'utilities/helper';
-import { listScreenBackWhenPayment, OrderType, POPUP_TYPE } from 'utilities/staticData';
+import { logger } from 'utilities/helper';
 
 type NotificationReceivedEvent = {
     complete: (notification?: any) => void;

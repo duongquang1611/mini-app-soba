@@ -1,27 +1,19 @@
 import { RootState } from 'app-redux/hooks';
-import { updateDefaultOrder, updateDefaultOrderLocal } from 'app-redux/slices/orderSlice';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledIcon, StyledList, StyledText, StyledTouchable } from 'components/base';
-import ModalizeManager from 'components/base/modal/ModalizeManager';
 import { StyledImageBackground } from 'components/base/StyledImage';
+import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledHeader from 'components/common/StyledHeader';
 import { getResourcesData } from 'hooks/useNetwork';
-import { ORDER_ROUTE } from 'navigation/config/routes';
 import { goBack, navigate } from 'navigation/NavigationService';
+import { ORDER_ROUTE } from 'navigation/config/routes';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { View } from 'react-native';
-import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
+import { ScaledSheet, scale, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-    checkHasDataOrder,
-    checkSameData,
-    funcFilterStatus,
-    isIos,
-    sumTotalAmount,
-    titleOrder,
-} from 'utilities/helper';
+import { funcFilterStatus, isIos, sumTotalAmount, titleOrder } from 'utilities/helper';
 import { MODAL_ID, OrderTypeMenu, staticValue } from 'utilities/staticData';
 import ButtonCart from './components/ButtonCart';
 import ListViewSelect from './components/ListViewSelect';
@@ -66,7 +58,6 @@ const ItemMenu = (props: any) => {
 const MenuEditQrScreen = (props: any) => {
     const { orderType, order, setOrder } = props?.route?.params || { orderType: OrderTypeMenu.CART_ORDER };
     const { resource } = useSelector((state: RootState) => state);
-    const { defaultOrderLocal, defaultOrder } = useSelector((state: RootState) => state.order);
     const [orderEditMenu, setOrderEditMenu] = useState(order);
     const { dishes } = orderEditMenu || [];
     const numOrder = sumTotalAmount(orderEditMenu);
@@ -85,7 +76,6 @@ const MenuEditQrScreen = (props: any) => {
         setListSubCategory(newListCategory);
         setRecommendSelected(newListCategory?.[0]?.id);
     };
-    const dispatch = useDispatch();
 
     useEffect(() => {
         const categoryIds = listEnableCategory.map((item: any) => item?.id);
@@ -156,11 +146,11 @@ const MenuEditQrScreen = (props: any) => {
         );
     };
     const saveDefaultOrder = () => {
-        dispatch(updateDefaultOrder(orderEditMenu));
-        if (!checkHasDataOrder(defaultOrderLocal) || checkSameData(defaultOrder, defaultOrderLocal)) {
-            dispatch(updateDefaultOrderLocal(orderEditMenu));
-        }
-        navigate(ORDER_ROUTE.ORDER_QR_CODE, { orderType, saveOrder: true });
+        // dispatch(updateDefaultOrder(orderEditMenu));
+        // if (!checkHasDataOrder(defaultOrderLocal) || checkSameData(defaultOrder, defaultOrderLocal)) {
+        //     dispatch(updateDefaultOrderLocal(orderEditMenu));
+        // }
+        // navigate(ORDER_ROUTE.ORDER_QR_CODE, { orderType, saveOrder: true });
     };
 
     const menuFilter = menuList?.filter((item: any) => {

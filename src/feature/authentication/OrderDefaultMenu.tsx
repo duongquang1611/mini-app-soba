@@ -1,7 +1,6 @@
 import { getMenu } from 'api/modules/api-app/order';
 import { RootState } from 'app-redux/hooks';
 import { updateGlobalData } from 'app-redux/slices/globalDataSlice';
-import { updateDefaultOrder, updateDefaultOrderLocal } from 'app-redux/slices/orderSlice';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
@@ -156,9 +155,9 @@ const OrderDefaultMenu = (props: any) => {
         });
     };
     const saveDefaultOrder = () => {
-        dispatch(updateDefaultOrder(orderDefault));
+        // dispatch(updateDefaultOrder(orderDefault));
         if (!checkHasDataOrder(defaultOrderLocal) || checkSameData(defaultOrder, defaultOrderLocal)) {
-            dispatch(updateDefaultOrderLocal(orderDefault));
+            // dispatch(updateDefaultOrderLocal(orderDefault));
         }
         dispatch(updateGlobalData({ skipOrderDefault: true }));
         if (!screen) {

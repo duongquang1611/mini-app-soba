@@ -56,7 +56,7 @@ const getOrderData = async (token: any, userId: number | string) => {
     const res = await Promise.all([
         getOrder(OrderType.DEFAULT_SETTING, token),
         getOrder(OrderType.MOBILE, token),
-        getOrder(OrderType.DEFAULT_HOME, token),
+        // getOrder(OrderType.DEFAULT_HOME, token),
     ]);
 
     // update order into redux
@@ -67,7 +67,7 @@ const getOrderData = async (token: any, userId: number | string) => {
 
     const dataDefaultSetting = changeOrderApiToStore(res?.[0]?.data || {});
     const dataMobile = changeOrderApiToStore(res?.[1]?.data || {});
-    const dataDefaultHome = changeOrderApiToStore(res?.[2]?.data || {});
+    const dataDefaultHome = changeOrderApiToStore({});
 
     const resCoupons = await Promise.all([
         checkAvailableCouponsApi({ userId, coupons: generateDataCheckAvailableCoupons(res?.[0]?.data?.coupons || []) }),
@@ -77,7 +77,8 @@ const getOrderData = async (token: any, userId: number | string) => {
     store.dispatch(
         updateAllOrder({
             defaultOrder: {
-                dishes: filterOrderStore({ menu, categories, order: dataDefaultSetting }),
+                // dishes: filterOrderStore({ menu, categories, order: dataDefaultSetting }),
+                dishes: [],
                 coupons: removeCouponsOrder(dataDefaultSetting.coupons, resCoupons?.[0]?.data?.coupons),
             },
             cartOrder: { dishes: [], coupons: [] },
