@@ -1,175 +1,133 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { saveOrderOption } from 'api/modules/api-app/order';
 import { RootState } from 'app-redux/hooks';
-import { updateGlobalDataUnSave } from 'app-redux/slices/globalDataUnSaveSlice';
-import { updateCouponOrder } from 'app-redux/slices/orderSlice';
+import {
+    clearDefaultOrder,
+    clearDefaultOrderLocal,
+    updateCouponDefaultOrder,
+    updateCouponDefaultOrderLocal,
+    updateDefaultOrder,
+} from 'app-redux/slices/orderSlice';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
-import { StyledButton, StyledIcon, StyledList, StyledText, StyledTouchable } from 'components/base';
-import ModalCoupon, { OrderDish } from 'feature/order/components/ModalCoupon';
+import { StyledButton, StyledIcon, StyledText, StyledTouchable } from 'components/base';
+import CouponTab from 'feature/coupon/components/CouponTab';
+import ModalCoupon from 'feature/order/components/ModalCoupon';
 import { navigate } from 'navigation/NavigationService';
-import { AUTHENTICATE_ROUTE, HOME_ROUTE, ORDER_ROUTE } from 'navigation/config/routes';
+import { ORDER_ROUTE } from 'navigation/config/routes';
 import React, { useMemo, useState } from 'react';
-import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { ScaledSheet, scale, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
 import { QR_TAB_TYPE } from 'utilities/enumData';
-import { checkSameData, encryptData, isAmela, showActionQR } from 'utilities/helper';
-import { DiscountType, QR_TAB_DATA, staticValue } from 'utilities/staticData';
-import CouponItemQR from './CouponItemQR';
+import { encryptData, generateDataSaveOrderOption, generateOrderQR } from 'utilities/helper';
+import {
+    DiscountType,
+    OrderType,
+    OrderTypeMenu,
+    QR_TAB_DATA,
+    TabCouponStatus,
+    staticValue,
+} from 'utilities/staticData';
 
 const ChooseCouponTab = (props: any) => {
     const dispatch = useDispatch();
     const { type = QR_TAB_TYPE.ORDER_DEFAULT, qrValue, onPress, newOrder = '' } = props;
-    const [couponChoose, setCouponChoose] = useState<any>(null);
-    const [chooseDish, setChooseDish] = useState<any>([]);
-    const [enableButton, setEnableButton] = useState([]);
-    const [showQrCode, setShowQrCode] = useState(false);
     const qrComponentData: any = QR_TAB_DATA[type];
     const {
         coupon,
         order,
         globalDataUnSave: { withoutAccount },
     } = useSelector((state: RootState) => state);
+    const { user } = useSelector((state: RootState) => state.userInfo);
 
-    const { couponsCanUse = [] } = coupon || {};
-    const { defaultOrder, defaultOrderLocal, couponOrder } = order;
-    const [cartListCouponOrder, setCartListCouponOrder] = useState(couponOrder);
+    const { defaultOrder, defaultOrderLocal } = order;
+    const [showQrCode, setShowQrCode] = useState(!!defaultOrder?.coupons?.length);
 
-    const {
-        textButton,
-        textButtonNoEdit,
-        textButtonEdited,
-        content1,
-        content2,
-        navigateScreen,
-        orderType,
-        createButton,
-    } = qrComponentData;
-    const qrEncrypt = useMemo(() => encryptData(qrValue), [JSON.stringify(qrValue)]);
-
-    const handleQrPress = () => {
-        if (qrValue) {
-            type === QR_TAB_TYPE.CHECK_IN ? onPress?.() : navigate(navigateScreen, { orderType, saveOrder: false });
-        } else {
-            switch (type) {
-                case QR_TAB_TYPE.ORDER_DEFAULT:
-                    navigate(AUTHENTICATE_ROUTE.ORDER_DEFAULT_MENU, { screen: HOME_ROUTE.HOME });
-                    break;
-                case QR_TAB_TYPE.MOBILE_ORDER:
-                    navigate(ORDER_ROUTE.ROOT);
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
-
-    const handleLongPress = () => {
-        if (!isAmela()) return;
-
-        type === QR_TAB_TYPE.CHECK_IN
-            ? showActionQR(qrEncrypt, qrValue, 'QR Check In', 'QR Encrypt')
-            : showActionQR(qrEncrypt, newOrder);
-    };
-
+    const couponOrderQR = useMemo(() => generateOrderQR(defaultOrder, user), [defaultOrder, user]);
+    const qrEncrypt = useMemo(() => encryptData(couponOrderQR), [JSON.stringify(defaultOrder)]);
     const handleOnPressQR = () => {
         // decryptData(qrEncrypt);
     };
-    const getTextButton = () => {
-        if (type !== QR_TAB_TYPE.ORDER_DEFAULT) {
-            return textButton;
-        }
-        return checkSameData(defaultOrder, defaultOrderLocal) ? textButtonNoEdit : textButtonEdited;
-    };
-
-    const goToLogin = () => {
-        dispatch(updateGlobalDataUnSave({ withoutAccount: false }));
-    };
 
     const handleUseCoupon = (item: any) => {
-        if (item?.coupon?.discountType === DiscountType.EACH_DISH) {
-            // show popup choose dish to use coupon
-            showApplyCoupon([item]);
+        if (item?.id === defaultOrderLocal?.coupons?.[0]?.id) {
+            dispatch(clearDefaultOrderLocal());
         } else {
-            // coupon apply all order
-            // dispatch(updateCouponCartOrder([item]));
-            // goToCart();
+            dispatch(updateCouponDefaultOrderLocal([item]));
         }
     };
-    const showApplyCoupon = (listCouponsModal: any) => {
-        console.log({ listCouponsModal });
+
+    const applyChooseDish = async (data?: any) => {
+        const newOrder = { dishes: [], coupons: data };
+        const defaultOrderSettingSaveOrderOption = generateDataSaveOrderOption(newOrder, OrderType.DEFAULT_SETTING);
+        try {
+            await saveOrderOption(defaultOrderSettingSaveOrderOption);
+            dispatch(updateCouponDefaultOrder(data));
+            dispatch(clearDefaultOrderLocal());
+            setShowQrCode(true);
+        } catch (error) {
+            console.log('saveOrderDefault -> error', error);
+        }
     };
 
-    const CreateQrCode = () => {
+    const handleChooseDish = (coupons: any) => {
+        dispatch(clearDefaultOrderLocal());
+        dispatch(updateDefaultOrder(coupons));
         setShowQrCode(true);
     };
 
-    const applyChooseDish = (data?: any) => {
-        console.log({ data });
-        dispatch(updateCouponOrder(data));
-        // goToCart();
+    const handleQrPress = () => {
+        navigate(ORDER_ROUTE.ORDER_QR_CODE, { orderType: OrderTypeMenu.DEFAULT_ORDER, saveOrder: false });
     };
 
-    const renderItemCoupon = ({ item }: any) => {
-        return (
-            <CouponItemQR
-                // isTabCoupon={isTabCoupon}
-                canUse={true}
-                item={item}
-                goToDetail={() => {}}
-                cartOrder={cartListCouponOrder}
-                handleUseCoupon={() => setCouponChoose(item)}
-                orderType={orderType}
-                order={order}
-            />
-        );
-    };
-    const renderItemDish = ({ item }: any) => {
-        console.log({ item });
-        return (
-            <OrderDish
-                idCoupon={item?.id}
-                item={item}
-                chooseDish={chooseDish}
-                setChooseDish={setChooseDish}
-                setEnableButton={setEnableButton}
-                enableButton={enableButton}
-                customImageProps={styles.customImage}
-                customNameOrder={styles.nameOrder}
-                isMultiChoose={true}
-                applyChooseDish={applyChooseDish}
-            />
-        );
+    const checkChooseCouponNoDish = useMemo(
+        () => defaultOrderLocal?.coupons?.[0]?.coupon?.discountType === DiscountType.ALL_ORDER,
+        [defaultOrderLocal],
+    );
+    const noCouponChoose = useMemo(() => !defaultOrderLocal?.coupons?.[0]?.coupon, [defaultOrderLocal]);
+
+    const onBackChooseCoupon = async () => {
+        try {
+            const saveOrderParams = {
+                orderType: OrderType.DEFAULT_HOME,
+                totalAmount: 0,
+                dishes: [],
+                coupons: [],
+            };
+            const res = await saveOrderOption(saveOrderParams);
+            dispatch(clearDefaultOrderLocal());
+            dispatch(clearDefaultOrder());
+            setShowQrCode(false);
+
+            console.log('saveOrderDefault -> res', res);
+        } catch (error) {
+            console.log('saveOrderDefault -> error', error);
+        }
     };
 
     return (
         <View style={[styles.containerQrTab]}>
-            {showQrCode ? (
+            {showQrCode && !!qrEncrypt ? (
                 <>
                     <View style={[styles.qrCodeView]}>
                         <StyledTouchable
                             hitSlop={staticValue.DEFAULT_HIT_SLOP}
-                            onPress={() => setShowQrCode(false)}
+                            onPress={onBackChooseCoupon}
                             customStyle={styles.containerBack}
                         >
                             <StyledIcon size={24} source={Images.icons.back} />
                         </StyledTouchable>
 
-                        <TouchableOpacity
-                            activeOpacity={1}
-                            onLongPress={handleLongPress}
-                            delayLongPress={staticValue.DELAY_LONG_PRESS}
-                            onPress={handleOnPressQR}
-                            style={styles.qrView}
-                        >
-                            <QRCode value={'aa'} size={staticValue.QR_SIZE_2CM} />
+                        <TouchableOpacity activeOpacity={1} onPress={handleOnPressQR} style={styles.qrView}>
+                            <QRCode value={qrEncrypt} size={staticValue.QR_SIZE_2CM} />
                         </TouchableOpacity>
 
                         <StyledButton
-                            onPress={() => {}}
-                            title={getTextButton()}
+                            onPress={handleQrPress}
+                            title={'home.detailCouponOr'}
                             customContentStyle={styles.detailButton}
                             customStyleText={styles.textBtn}
                         />
@@ -179,49 +137,44 @@ const ChooseCouponTab = (props: any) => {
                 <>
                     <View style={styles.halfViewLeft}>
                         <View style={styles.titleView}>
-                            <StyledText customStyle={styles.title} i18nText="aaa" />
+                            <StyledText customStyle={styles.title} i18nText="notification.couponList" />
                         </View>
-                        <StyledList
-                            data={couponsCanUse}
-                            renderItem={renderItemCoupon}
-                            customStyle={styles.listCoupon}
-                            refreshing={false}
-                            noDataText={'coupon.noData'}
+                        <CouponTab
+                            canUse={TabCouponStatus.CAN_USE}
+                            isHomeTab={true}
+                            handleUseCoupon={handleUseCoupon}
+                            order={defaultOrderLocal}
                         />
                     </View>
                     <View style={styles.halfViewRight}>
                         <View style={styles.titleView}>
-                            <StyledText customStyle={styles.title} i18nText="aaa" />
+                            <StyledText customStyle={styles.title} i18nText="home.listDishesOfCoupon" />
                         </View>
-                        <View style={styles.viewDish}>
-                            {/* {!!couponChoose?.coupon?.couponDish && (
-                                <StyledList
-                                    data={couponChoose?.coupon?.couponDish || []}
-                                    renderItem={renderItemDish}
-                                    customStyle={styles.listDish}
-                                    refreshing={false}
-                                    noDataText={'coupon.noData'}
-                                />
-                            )} */}
-                            <ScrollView>
+                        <View style={(checkChooseCouponNoDish || noCouponChoose) && styles.viewDish}>
+                            {!noCouponChoose && (
                                 <ModalCoupon
                                     isHomeTab={true}
-                                    listCouponsModal={[couponChoose]}
-                                    customStyle={styles.customModal}
-                                    // cartListCouponAll={listCouponsNoChange}
-                                    updateCouponsCart={(coupons: any) => dispatch(updateCouponOrder(coupons))}
+                                    listCouponsModal={defaultOrderLocal?.coupons}
+                                    customStyle={[styles.customModal, styles.viewDish]}
+                                    applyChooseDish={applyChooseDish}
+                                    updateCouponsCart={(coupons: any) => handleChooseDish(coupons)}
+                                    showButton={!checkChooseCouponNoDish && defaultOrder?.coupons}
                                 />
-                            </ScrollView>
+                            )}
                         </View>
-                        <View style={styles.buttonView}>
-                            <StyledButton
-                                onPress={CreateQrCode}
-                                title={'createButton'}
-                                customContentStyle={styles.detailButton}
-                                customStyle={styles.button}
-                                customStyleText={styles.textBtn}
-                            />
-                        </View>
+                        {checkChooseCouponNoDish ||
+                            (noCouponChoose && (
+                                <View style={styles.buttonView}>
+                                    <StyledButton
+                                        onPress={() => applyChooseDish(defaultOrderLocal?.coupons)}
+                                        title={'home.createOr'}
+                                        customContentStyle={styles.detailButton}
+                                        customStyle={styles.button}
+                                        customStyleText={styles.textBtn}
+                                        disabled={noCouponChoose}
+                                    />
+                                </View>
+                            ))}
                     </View>
                 </>
             )}
@@ -246,6 +199,7 @@ const styles = ScaledSheet.create({
     },
     button: {
         width: '170@s',
+        marginTop: '5@s',
     },
     noQrCodeView: {
         alignItems: 'center',
@@ -276,9 +230,8 @@ const styles = ScaledSheet.create({
         marginBottom: '8@vs',
     },
     textBtn: {
-        color: Themes.COLORS.headerBackground,
         fontSize: '14@ms0.3',
-        lineHeight: '21@vs',
+        // lineHeight: '21@vs',
     },
     listCoupon: {
         backgroundColor: Themes.COLORS.white,
@@ -286,7 +239,7 @@ const styles = ScaledSheet.create({
         paddingBottom: '10@vs',
     },
     viewDish: {
-        height: '100@vs',
+        height: '115@s',
     },
     listDish: {
         backgroundColor: Themes.COLORS.white,
@@ -303,6 +256,7 @@ const styles = ScaledSheet.create({
     },
     buttonView: {
         alignItems: 'center',
+        justifyContent: 'center',
         // flexGrow: 1,
     },
     titleView: {
@@ -310,6 +264,7 @@ const styles = ScaledSheet.create({
         borderBottomWidth: 0.5,
         paddingVertical: '5@vs',
         marginBottom: '5@vs',
+        height: '28@s',
     },
     title: {
         fontSize: '16@ms0.3',
@@ -325,11 +280,13 @@ const styles = ScaledSheet.create({
     containerBack: {
         alignSelf: 'flex-start',
         position: 'absolute',
+        top: '15@vs',
     },
     qrView: {
         marginTop: '20@vs',
     },
     customModal: {
         paddingHorizontal: '5@s',
+        paddingTop: '5@vs',
     },
 });

@@ -1,26 +1,20 @@
 import { RootState } from 'app-redux/hooks';
 import { updateGlobalData } from 'app-redux/slices/globalDataSlice';
-import {
-    clearCartOrder,
-    updateCartOrder,
-    updateDefaultOrder,
-    updateDefaultOrderLocal,
-    updateMobileOrder,
-} from 'app-redux/slices/orderSlice';
+import { clearCartOrder, updateCartOrder, updateMobileOrder } from 'app-redux/slices/orderSlice';
 import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledIcon, StyledText, StyledTouchable } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
-import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
+import ModalizeManager from 'components/base/modal/ModalizeManager';
 import StyledHeader from 'components/common/StyledHeader';
-import { APP_ROUTE, ORDER_ROUTE, SETTING_ROUTE, TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { goBack, navigate, reset } from 'navigation/NavigationService';
+import { APP_ROUTE, ORDER_ROUTE, SETTING_ROUTE, TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import React, { useRef, useState } from 'react';
 import { View } from 'react-native';
-import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
+import { ScaledSheet, scale, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
-import { checkHasDataOrder, checkSameData, titleOrder } from 'utilities/helper';
+import { titleOrder } from 'utilities/helper';
 import { DiscountType, MODAL_ID, OrderTypeMenu, POPUP_TYPE, staticValue } from 'utilities/staticData';
 import AmountOrder from './components/AmountOrder';
 import ModalCoupon from './components/ModalCoupon';
@@ -90,7 +84,7 @@ const ItemCoupon = (props: any) => {
 };
 const CartScreen = (props: any) => {
     const { isDefaultOrder, order, setOrder, orderType, screen, isTabCoupon } = props?.route?.params;
-    const { cartOrder, defaultOrderLocal, defaultOrder } = useSelector((state: RootState) => state.order);
+    const { cartOrder } = useSelector((state: RootState) => state.order);
     const [saveOrderCart, setSaveOrderCart] = useState(order);
     const saveOrder = isDefaultOrder ? saveOrderCart : cartOrder;
     const dispatch = useDispatch();
@@ -171,18 +165,18 @@ const CartScreen = (props: any) => {
         // navigate(HOME_ROUTE.MOBILE_ORDER);
         navigate(ORDER_ROUTE.ORDER_QR_CODE, { orderType, saveOrder: true });
     };
-    const saveDefaultOrder = () => {
-        dispatch(updateDefaultOrder(saveOrderCart));
-        if (!checkHasDataOrder(defaultOrderLocal) || !checkSameData(defaultOrder, defaultOrderLocal)) {
-            dispatch(updateDefaultOrderLocal(saveOrderCart));
-        }
-        dispatch(updateGlobalData({ skipOrderDefault: true }));
-        if (isDefaultOrder && !screen) {
-            reset(APP_ROUTE.MAIN_TAB);
-        } else {
-            navigate(ORDER_ROUTE.ORDER_QR_CODE, { orderType, saveOrder: true });
-        }
-    };
+    // const saveDefaultOrder = () => {
+    //     dispatch(updateDefaultOrder(saveOrderCart));
+    //     if (!checkHasDataOrder(defaultOrderLocal) || !checkSameData(defaultOrder, defaultOrderLocal)) {
+    //         dispatch(updateDefaultOrderLocal(saveOrderCart));
+    //     }
+    //     dispatch(updateGlobalData({ skipOrderDefault: true }));
+    //     if (isDefaultOrder && !screen) {
+    //         reset(APP_ROUTE.MAIN_TAB);
+    //     } else {
+    //         navigate(ORDER_ROUTE.ORDER_QR_CODE, { orderType, saveOrder: true });
+    //     }
+    // };
     const getTextHeaderCancel = () => {
         if (isDefaultOrder && !!screen) return 'order.cancelOrderDefault';
         if (isDefaultOrder) return 'authen.register.skipOrderDefault';
@@ -252,13 +246,13 @@ const CartScreen = (props: any) => {
                                 onPress={createQRCode}
                             />
                         )}
-                        {isDefaultOrder && (
+                        {/* {isDefaultOrder && (
                             <StyledButton
                                 disabled={num <= 0 || num > staticValue.MAX_ORDER}
                                 title={'common.save'}
                                 onPress={saveDefaultOrder}
                             />
-                        )}
+                        )} */}
                         <StyledButton
                             isNormal={true}
                             title={'order.editCartButton'}

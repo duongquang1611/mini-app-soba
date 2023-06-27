@@ -751,6 +751,7 @@ export const deleteUsedCoupon = (order: any, couponsUsed: any) => {
                         itemUsed?.receivedDate === itemCoupon?.receivedDate,
                 ),
         ) || [];
+    if (!newCoupons && !order?.dishes) return {};
     return { ...order, coupons: newCoupons };
 };
 

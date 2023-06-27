@@ -3,7 +3,7 @@ import { RootState } from 'app-redux/hooks';
 import { updateGlobalDataUnSave } from 'app-redux/slices/globalDataUnSaveSlice';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledText } from 'components/base';
-import { AUTHENTICATE_ROUTE, HOME_ROUTE, ORDER_ROUTE } from 'navigation/config/routes';
+import { ORDER_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useMemo } from 'react';
 import { TouchableOpacity, View } from 'react-native';
@@ -11,7 +11,7 @@ import QRCode from 'react-native-qrcode-svg';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
 import { QR_TAB_TYPE } from 'utilities/enumData';
-import { checkSameData, decryptData, encryptData, isAmela, showActionQR } from 'utilities/helper';
+import { checkSameData, encryptData, isAmela, showActionQR } from 'utilities/helper';
 import { QR_TAB_DATA, staticValue } from 'utilities/staticData';
 
 const ShowQrTab = (props: any) => {
@@ -40,9 +40,9 @@ const ShowQrTab = (props: any) => {
             type === QR_TAB_TYPE.CHECK_IN ? onPress?.() : navigate(navigateScreen, { orderType, saveOrder: false });
         } else {
             switch (type) {
-                case QR_TAB_TYPE.ORDER_DEFAULT:
-                    navigate(AUTHENTICATE_ROUTE.ORDER_DEFAULT_MENU, { screen: HOME_ROUTE.HOME });
-                    break;
+                // case QR_TAB_TYPE.ORDER_DEFAULT:
+                //     navigate(AUTHENTICATE_ROUTE.ORDER_DEFAULT_MENU, { screen: HOME_ROUTE.HOME });
+                //     break;
                 case QR_TAB_TYPE.MOBILE_ORDER:
                     navigate(ORDER_ROUTE.ROOT);
                     break;

@@ -18,10 +18,11 @@ interface CouponTabProps {
     isTabCoupon?: boolean;
     orderType?: any;
     order?: any;
+    isHomeTab?: boolean;
 }
 
 const CouponTab = (props: CouponTabProps) => {
-    const { canUse, handleUseCoupon, cartListCouponOrder, isTabCoupon, orderType, order } = props;
+    const { canUse, handleUseCoupon, cartListCouponOrder, isTabCoupon, orderType, order, isHomeTab } = props;
     const { coupon } = useSelector((state: RootState) => state);
     const { couponsCanUse = [], couponsUsed = [] } = coupon || {};
 
@@ -44,12 +45,13 @@ const CouponTab = (props: CouponTabProps) => {
                 handleUseCoupon={() => handleUseCouponItem(item)}
                 orderType={orderType}
                 order={order}
+                isHomeTab={isHomeTab}
             />
         );
     };
     return (
         <View style={styles.container}>
-            <View style={styles.separator} />
+            {!isHomeTab && <View style={styles.separator} />}
             <StyledList
                 data={canUse ? couponsCanUse : couponsUsed}
                 renderItem={renderItem}
@@ -57,7 +59,7 @@ const CouponTab = (props: CouponTabProps) => {
                 onRefresh={() => getCouponData(canUse)}
                 refreshing={false}
                 noDataText={'coupon.noData'}
-                removeClippedSubviews={true}
+                removeClippedSubviews={!isHomeTab}
             />
         </View>
     );

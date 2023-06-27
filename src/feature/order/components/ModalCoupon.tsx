@@ -3,7 +3,7 @@ import { Themes } from 'assets/themes';
 import { StyledButton, StyledImage, StyledText, StyledTouchable } from 'components/base';
 import DashView from 'components/common/DashView';
 import React, { useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 
 export const OrderDish = (props: any) => {
@@ -16,18 +16,14 @@ export const OrderDish = (props: any) => {
         enableButton,
         customImageProps,
         customNameOrder,
-        isMultiChoose = false,
+        isHomeTab,
     } = props;
-    const choose = isMultiChoose ? chooseDish?.includes(item) : chooseDish?.id === item?.id;
+    const choose = chooseDish?.id === item?.id;
     const onChoose = () => {
-        if (isMultiChoose) {
-            setChooseDish([...chooseDish, item]);
-        } else {
-            setChooseDish(item);
-            const findItemChoose = enableButton?.find((itemChoose: any) => itemChoose?.id === idCoupon) || {};
-            const findItemNotChange = enableButton?.filter((itemChoose: any) => itemChoose?.id !== idCoupon) || [];
-            setEnableButton([...findItemNotChange, { ...findItemChoose, choose: item }]);
-        }
+        setChooseDish(item);
+        const findItemChoose = enableButton?.find((itemChoose: any) => itemChoose?.id === idCoupon) || {};
+        const findItemNotChange = enableButton?.filter((itemChoose: any) => itemChoose?.id !== idCoupon) || [];
+        setEnableButton([...findItemNotChange, { ...findItemChoose, choose: item }]);
     };
     return (
         <StyledTouchable customStyle={styles.containerItem} onPress={onChoose}>
@@ -41,7 +37,7 @@ export const OrderDish = (props: any) => {
             </View>
             <View
                 style={[
-                    styles.chooseButton,
+                    isHomeTab ? styles.chooseButtonHomeTab : styles.chooseButton,
                     {
                         backgroundColor: choose ? Themes.COLORS.primary : Themes.COLORS.white,
                         borderColor: choose ? Themes.COLORS.sweetPink : Themes.COLORS.silver,
@@ -75,6 +71,7 @@ export const OneCoupon = (props: any) => {
                     enableButton={enableButton}
                     customImageProps={isHomeTab && styles.customImage}
                     customNameOrder={isHomeTab && styles.customNameOrder}
+                    isHomeTab={isHomeTab}
                 />
             ))}
             {dashView && <DashView customStyle={styles.dash} />}
@@ -90,6 +87,7 @@ const ModalCoupon = (props: any) => {
         applyChooseDish,
         customStyle,
         isHomeTab,
+        showButton,
     } = props;
     const [enableButton, setEnableButton] = useState(listCouponsModal?.map((item: any) => ({ ...item })));
 
@@ -101,43 +99,66 @@ const ModalCoupon = (props: any) => {
     const numCheck = enableButton?.filter((item: any) => item?.choose)?.length || 0;
 
     return (
-        <View style={[styles.modalView, customStyle]}>
-            {listCouponsModal?.length > 1 && (
-                <StyledText
-                    i18nText={'order.rangeEditMenu'}
-                    i18nParams={{
-                        numOrderCheck: numCheck,
-                        numOrder: listCouponsModal?.length,
-                    }}
-                    customStyle={styles.textNumCheck}
-                />
+        <>
+            <ScrollView scrollEnabled={isHomeTab}>
+                <View style={[styles.modalView, customStyle]}>
+                    {!isHomeTab && listCouponsModal?.length > 1 && (
+                        <StyledText
+                            i18nText={'order.rangeEditMenu'}
+                            i18nParams={{
+                                numOrderCheck: numCheck,
+                                numOrder: listCouponsModal?.length,
+                            }}
+                            customStyle={styles.textNumCheck}
+                        />
+                    )}
+                    {listCouponsModal?.map((item: any, index: number) => (
+                        <OneCoupon
+                            dashView={index < listCouponsModal?.length - 1}
+                            key={index}
+                            item={item}
+                            setEnableButton={setEnableButton}
+                            enableButton={enableButton}
+                            isHomeTab={isHomeTab}
+                        />
+                    ))}
+                    {!isHomeTab && (
+                        <StyledButton
+                            title={'order.keep'}
+                            onPress={() => {
+                                if (applyChooseDish) {
+                                    applyChooseDish?.(enableButton);
+                                } else {
+                                    setCartListCouponOrder?.([...enableButton, ...cartListCouponAll]);
+                                    updateCouponsCart?.([...enableButton, ...cartListCouponAll]);
+                                }
+                            }}
+                            disabled={checkDisableButton.length > 0}
+                            customStyle={styles.saveButton}
+                        />
+                    )}
+                </View>
+            </ScrollView>
+            {showButton && isHomeTab && (
+                <View style={styles.buttonView}>
+                    <StyledButton
+                        title={'home.createOr'}
+                        onPress={() => {
+                            if (applyChooseDish) {
+                                applyChooseDish?.(enableButton);
+                            } else {
+                                setCartListCouponOrder?.([...enableButton, ...cartListCouponAll]);
+                                updateCouponsCart?.([...enableButton, ...cartListCouponAll]);
+                            }
+                        }}
+                        disabled={checkDisableButton.length > 0}
+                        customContentStyle={styles.detailButton}
+                        customStyle={styles.button}
+                        customStyleText={styles.textBtn}
+                    />
+                </View>
             )}
-            {listCouponsModal?.map((item: any, index: number) => (
-                <OneCoupon
-                    dashView={index < listCouponsModal?.length - 1}
-                    key={index}
-                    item={item}
-                    setEnableButton={setEnableButton}
-                    enableButton={enableButton}
-                    isHomeTab={isHomeTab}
-                />
-            ))}
-            {!isHomeTab && (
-                <StyledButton
-                    title={'order.keep'}
-                    onPress={() => {
-                        if (applyChooseDish) {
-                            applyChooseDish?.(enableButton);
-                        } else {
-                            setCartListCouponOrder?.([...enableButton, ...cartListCouponAll]);
-                            updateCouponsCart([...enableButton, ...cartListCouponAll]);
-                        }
-                    }}
-                    disabled={checkDisableButton.length > 0}
-                    customStyle={styles.saveButton}
-                />
-            )}
-        </View>
+        </>
     );
 };
 
@@ -182,7 +203,7 @@ const styles = ScaledSheet.create({
         color: Themes.COLORS.primary,
     },
     conTentCouponHomeTab: {
-        fontSize: '14@ms0.3',
+        fontSize: '12@ms0.3',
         paddingBottom: '5@vs',
     },
     modalView: {
@@ -193,6 +214,12 @@ const styles = ScaledSheet.create({
     chooseButton: {
         width: '20@s',
         height: '20@s',
+        borderRadius: 16,
+        borderWidth: 2,
+    },
+    chooseButtonHomeTab: {
+        width: '15@s',
+        height: '15@s',
         borderRadius: 16,
         borderWidth: 2,
     },
@@ -219,5 +246,29 @@ const styles = ScaledSheet.create({
     customNameOrder: {
         marginRight: '0@s',
         marginLeft: '-15@vs',
+    },
+    saveHome: {
+        width: '170@s',
+        padding: 0,
+        marginTop: '5@vs',
+        paddingVertical: '8@vs',
+    },
+    detailButton: {
+        width: '170@s',
+        padding: 0,
+        marginTop: '5@vs',
+        paddingVertical: '8@vs',
+    },
+    buttonView: {
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    button: {
+        width: '170@s',
+        marginTop: '5@s',
+    },
+    textBtn: {
+        fontSize: '14@ms0.3',
+        // lineHeight: '21@vs',
     },
 });

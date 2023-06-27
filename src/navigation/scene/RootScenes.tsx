@@ -65,19 +65,20 @@ import MainTabContainer from './TabScenes';
 const MainStack = createStackNavigator();
 
 const AppStack = () => {
-    const { withoutAccount } = useSelector((state: RootState) => state.globalDataUnSave, isEqual);
-    const { skipOrderDefault, viewedOrderDefault } = useSelector((state: RootState) => state.globalData, isEqual);
+    // const { withoutAccount } = useSelector((state: RootState) => state.globalDataUnSave, isEqual);
+    // const { skipOrderDefault, viewedOrderDefault } = useSelector((state: RootState) => state.globalData, isEqual);
     return (
         <>
             <StatusBar backgroundColor={Themes.COLORS.headerBackground} barStyle={'dark-content'} />
             <Host>
                 <MainStack.Navigator
                     initialRouteName={
-                        skipOrderDefault || withoutAccount
-                            ? APP_ROUTE.MAIN_TAB
-                            : viewedOrderDefault
-                            ? APP_ROUTE.MAIN_TAB
-                            : AUTHENTICATE_ROUTE.ORDER_DEFAULT_MENU
+                        // skipOrderDefault || withoutAccount
+                        //     ? APP_ROUTE.MAIN_TAB
+                        //     : viewedOrderDefault
+                        //     ? APP_ROUTE.MAIN_TAB
+                        //     : AUTHENTICATE_ROUTE.ORDER_DEFAULT_MENU
+                        APP_ROUTE.MAIN_TAB
                     }
                     keyboardHandlingEnabled={isIos}
                     headerMode={'none'}
@@ -86,7 +87,7 @@ const AppStack = () => {
                     <MainStack.Screen name={APP_ROUTE.MAIN_TAB} component={MainTabContainer} />
 
                     {/* Order Default */}
-                    <MainStack.Screen name={AUTHENTICATE_ROUTE.ORDER_DEFAULT_MENU} component={OrderDefaultMenu} />
+                    {/* <MainStack.Screen name={AUTHENTICATE_ROUTE.ORDER_DEFAULT_MENU} component={OrderDefaultMenu} /> */}
                     <MainStack.Screen name={AUTHENTICATE_ROUTE.REGISTER_STEP_3} component={RegisterStep3} />
                     <MainStack.Screen name={AUTHENTICATE_ROUTE.REGISTER_STEP_2} component={RegisterStep2} />
 
