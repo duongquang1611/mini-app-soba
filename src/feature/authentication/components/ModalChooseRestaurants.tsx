@@ -1,15 +1,14 @@
 import { useAppSelector } from 'app-redux/hooks';
 import { IRestaurants } from 'app-redux/slices/globalDataSlice';
-import Images from 'assets/images';
+import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
-import { StyledButton, StyledIcon, StyledText, StyledTouchable } from 'components/base';
-import ModalizeManager from 'components/base/modal/ModalizeManager';
+import { StyledButton, StyledText, StyledTouchable } from 'components/base';
+import { HeaderDefault } from 'components/base/modal/ModalizeManager';
 import RadioCheckView from 'components/common/RadioCheckView';
-import React, { useMemo, useState } from 'react';
+import React, { forwardRef, useMemo, useState } from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
+import { Modalize } from 'react-native-modalize';
 import { ScaledSheet, verticalScale } from 'react-native-size-matters';
-
-const modalize = ModalizeManager();
 
 interface IProps {
     onOk?: any;
@@ -21,102 +20,107 @@ interface IProps {
     dismissModalOnOk?: boolean;
     dismissModalOnCancel?: boolean;
     showClose?: boolean;
-    customModalId?: number;
     customStyle?: StyleProp<ViewStyle>;
     setChooseBranch: (value: any) => void;
-    chooseBranch: IRestaurants;
+    chooseBranch?: IRestaurants;
 }
 
-export const dismissModal = (id: any) => {
-    modalize.dismiss(id);
-};
+interface IPopupConfirm extends IProps {
+    selectBox: any;
+    setSelectBox: (value: any) => void;
+    handlePressIconClose?: () => void;
+    handleOk?: () => void;
+}
 
-const ModalChooseRestaurants = (props: IProps) => {
-    const {
-        title = 'authen.register.selectBranchStore.titleModal',
-        customModalId,
-        onOk,
-        dismissModalOnOk = true,
-        dismissModalOnCancel = true,
-        onCancel,
-        customStyle,
-        setChooseBranch,
-        chooseBranch,
-    } = props;
+const ModalChooseRestaurants = (props: IProps, ref: any) => {
+    const { title, onOk, onCancel, customStyle, setChooseBranch, chooseBranch } = props;
+    const [selectBox, setSelectBox] = useState<any>(chooseBranch);
 
-    const modalIdByType = +1 || customModalId;
-
-    const PopupConfirm = () => {
-        const { listRestaurants } = useAppSelector((state) => state.globalData);
-        const [selectBox, setSelectBox] = useState<any>(chooseBranch);
-
-        const handleChooseBranch = (itemBranch: { id?: number; name: string }) => {
-            setSelectBox(itemBranch);
-        };
-
-        const renderSelectRestaurants = useMemo(() => {
-            return listRestaurants.map((item: { id?: number; name: string }) => {
-                return (
-                    <StyledTouchable
-                        customStyle={styles.viewSelect}
-                        key={item?.id}
-                        onPress={() => handleChooseBranch(item)}
-                    >
-                        <RadioCheckView check={selectBox?.id === item.id} />
-                        <StyledText i18nText={item?.name} customStyle={styles.cssTxtName} />
-                    </StyledTouchable>
-                );
-            });
-        }, [listRestaurants, selectBox]);
-
-        const handleOk = () => {
-            setChooseBranch(selectBox);
-            onOk?.();
-            dismissModalOnOk && dismissModal(modalIdByType);
-        };
-
-        const handlePressIconClose = () => {
-            dismissModalOnCancel && dismissModal(modalIdByType);
-            onCancel?.();
-        };
-
-        return (
-            <View style={[styles.container, customStyle]}>
-                <View style={styles.header}>
-                    <StyledText i18nText={title} customStyle={styles.title} />
-                    <StyledTouchable customStyle={[styles.icClose]} onPress={handlePressIconClose}>
-                        <StyledIcon source={Images.icons.closeCircle} size={20} />
-                    </StyledTouchable>
-                </View>
-                <View style={styles.viewContainerSelect}>{renderSelectRestaurants}</View>
-                <View style={styles.wrapButton}>
-                    <StyledButton
-                        title={'common.save'}
-                        customStyle={styles.okBtn}
-                        onPress={handleOk}
-                        customStyleText={styles.okBtnText}
-                    />
-                </View>
-            </View>
-        );
+    const handleOk = () => {
+        setChooseBranch(selectBox);
+        onOk?.();
+        ref?.current?.close();
     };
 
-    modalize.show(
-        modalIdByType,
-        <PopupConfirm />,
-        {
-            scrollViewProps: {
-                scrollEnabled: false,
-            },
-            modalHeight: verticalScale(350),
-        },
-        undefined,
+    const handlePressIconClose = () => {
+        onCancel?.();
+        ref?.current?.close();
+    };
+
+    return (
+        <Modalize
+            ref={ref}
+            withHandle={false}
+            scrollViewProps={{
+                keyboardShouldPersistTaps: 'handled',
+            }}
+            FooterComponent={<FooterComponent handleOk={handleOk} selectBox={selectBox} />}
+            modalHeight={verticalScale(350)}
+            HeaderComponent={
+                <HeaderDefault title={'authen.register.selectBranchStore.titleModal'} onPress={handlePressIconClose} />
+            }
+        >
+            <PopupConfirm
+                selectBox={selectBox}
+                setSelectBox={setSelectBox}
+                setChooseBranch={setChooseBranch}
+                title={title}
+                handleOk={handleOk}
+                onCancel={onCancel}
+                customStyle={customStyle}
+                handlePressIconClose={handlePressIconClose}
+            />
+        </Modalize>
+    );
+};
+
+const PopupConfirm = (props: IPopupConfirm) => {
+    const { selectBox, setSelectBox, customStyle } = props;
+    const { listRestaurants } = useAppSelector((state) => state.globalData);
+
+    const handleChooseBranch = (itemBranch: { id?: number; name: string }) => {
+        setSelectBox(itemBranch);
+    };
+
+    const renderSelectRestaurants = useMemo(() => {
+        return listRestaurants?.map((item: { id?: number; name: string }) => {
+            return (
+                <StyledTouchable
+                    customStyle={styles.viewSelect}
+                    key={item?.id}
+                    onPress={() => handleChooseBranch(item)}
+                >
+                    <RadioCheckView check={selectBox?.id === item?.id} />
+                    <StyledText i18nText={item?.name} customStyle={styles.cssTxtName} />
+                </StyledTouchable>
+            );
+        });
+    }, [listRestaurants, selectBox]);
+
+    return <View style={[styles.container, customStyle]}>{renderSelectRestaurants}</View>;
+};
+
+const FooterComponent = (props: { handleOk: () => void; selectBox?: any }) => {
+    const { handleOk, selectBox } = props;
+
+    return (
+        <View style={styles.wrapButton}>
+            <StyledButton
+                title={'common.save'}
+                customStyle={styles.okBtn}
+                onPress={handleOk}
+                disabled={!selectBox?.name}
+                customStyleText={styles.okBtnText}
+            />
+        </View>
     );
 };
 
 const styles = ScaledSheet.create({
     container: {
         flex: 1,
+        paddingVertical: '20@vs',
+        paddingHorizontal: '20@vs',
     },
     header: {
         paddingVertical: '17@vs',
@@ -133,7 +137,7 @@ const styles = ScaledSheet.create({
     wrapButton: {
         flexDirection: 'row',
         paddingHorizontal: '20@vs',
-        marginTop: '27@vs',
+        marginBottom: Metrics.safeBottomPadding,
     },
     viewContainerSelect: {
         paddingTop: '20@vs',
@@ -199,4 +203,4 @@ const styles = ScaledSheet.create({
     },
 });
 
-export default ModalChooseRestaurants;
+export default forwardRef(ModalChooseRestaurants);

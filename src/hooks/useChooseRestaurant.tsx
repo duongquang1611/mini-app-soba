@@ -11,7 +11,7 @@ const useChooseRestaurant = () => {
     const { user = {} } = useSelector((state: any) => state.userInfo);
     const { listRestaurants } = useAppSelector((state) => state.globalData);
     const [chooseBranch, setChooseBranch] = useState<any>(
-        listRestaurants.find((item: { id: number }) => item?.id === user?.member?.frequentlyUsedRestaurantId),
+        listRestaurants?.find((item: { id?: number }) => item?.id === user?.member?.frequentlyUsedRestaurantId) || {},
     );
 
     const handleUpdateProfile = async () => {
