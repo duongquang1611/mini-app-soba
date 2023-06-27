@@ -248,7 +248,11 @@ const SettingScreen = () => {
                                     i18nText={'authen.register.selectBranchStore.chooseStore'}
                                     customStyle={{ color: Themes.COLORS.white }}
                                 />
-                                <StyledText originValue={chooseBranch?.name} customStyle={styles.txtNameRestaurants} />
+                                <StyledText
+                                    originValue={chooseBranch?.name}
+                                    customStyle={styles.txtNameRestaurants}
+                                    numberOfLines={1}
+                                />
                             </View>
                             <View
                                 style={[

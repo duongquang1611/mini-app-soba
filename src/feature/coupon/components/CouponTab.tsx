@@ -25,6 +25,7 @@ const CouponTab = (props: CouponTabProps) => {
     const { canUse, handleUseCoupon, cartListCouponOrder, isTabCoupon, orderType, order, isHomeTab } = props;
     const { coupon } = useSelector((state: RootState) => state);
     const { couponsCanUse = [], couponsUsed = [] } = coupon || {};
+
     const goToDetail = (item: any) => {
         navigate(COUPON_ROUTE.DETAIL_COUPON, { item, canUse, handleUseCoupon, cartOrder: cartListCouponOrder });
     };

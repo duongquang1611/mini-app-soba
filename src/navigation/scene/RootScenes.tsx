@@ -4,7 +4,6 @@ import { RootState } from 'app-redux/hooks';
 import { updateGlobalData } from 'app-redux/slices/globalDataSlice';
 import { Themes } from 'assets/themes';
 import ChangePassword from 'feature/authentication/ChangePassword';
-import OrderDefaultMenu from 'feature/authentication/OrderDefaultMenu';
 import RegisterStep2 from 'feature/authentication/RegisterStep2';
 import RegisterStep3 from 'feature/authentication/RegisterStep3';
 import SelectBranchStoreScreen from 'feature/authentication/SelectBranchStoreScreen';
@@ -43,8 +42,8 @@ import ExchangeCouponListScreen from 'feature/stamp/ExchangeCouponListScreen';
 import StampCardDetailScreen from 'feature/stamp/StampCardDetailScreen';
 import StampCardScreen from 'feature/stamp/StampCardScreen';
 import useNetwork, { getDataProfile } from 'hooks/useNetwork';
-import { isEqual } from 'lodash';
 import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { StatusBar } from 'react-native';
 import { Host } from 'react-native-portalize';
 import { useDispatch, useSelector } from 'react-redux';
@@ -147,6 +146,8 @@ const AppStack = () => {
 
 const Navigation: React.FunctionComponent = () => {
     useNetwork();
+    const { t } = useTranslation();
+    const restaurantsDefault = [{ id: null, name: t('common.defaultRestaurants') }];
     const dispatch = useDispatch();
 
     const {
@@ -158,7 +159,7 @@ const Navigation: React.FunctionComponent = () => {
         try {
             const resRestaurants = await getRestaurantsApi();
             if (!resRestaurants?.data) return;
-            dispatch(updateGlobalData({ listRestaurants: resRestaurants?.data }));
+            dispatch(updateGlobalData({ listRestaurants: [...resRestaurants?.data, ...restaurantsDefault] }));
         } catch (error) {
             console.log('getListRestaurants -> error', error);
         }

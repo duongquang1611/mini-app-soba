@@ -5,8 +5,9 @@ import { LabelInput } from 'components/base/StyledInput';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledHeader from 'components/common/StyledHeader';
 import ModalChooseRestaurants from 'feature/authentication/components/ModalChooseRestaurants';
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useRef } from 'react';
 import { View } from 'react-native';
+import { Modalize } from 'react-native-modalize';
 import { ScaledSheet } from 'react-native-size-matters';
 
 interface IProps {
@@ -16,9 +17,11 @@ interface IProps {
 
 const SelectBranchStoreScreen: FunctionComponent = (props: any) => {
     const { chooseBranch, setChooseBranch }: IProps = props?.route?.params;
+    const modalRef = useRef<Modalize>();
 
     return (
         <View style={styles.container}>
+            <ModalChooseRestaurants ref={modalRef} chooseBranch={chooseBranch} setChooseBranch={setChooseBranch} />
             <StyledHeader title={'authen.register.selectBranchStore.title'} />
             <StyledKeyboardAware customStyle={styles.scrollView}>
                 <View style={styles.containerContent}>
@@ -33,14 +36,7 @@ const SelectBranchStoreScreen: FunctionComponent = (props: any) => {
                             i18nText="authen.register.selectBranchStore.describeLabel"
                             customStyle={styles.describeLabel}
                         />
-                        <StyledTouchable
-                            onPress={() =>
-                                ModalChooseRestaurants({
-                                    chooseBranch,
-                                    setChooseBranch,
-                                })
-                            }
-                        >
+                        <StyledTouchable onPress={() => modalRef?.current?.open()}>
                             <StyledText
                                 i18nText={'authen.register.selectBranchStore.descriptionInput'}
                                 customStyle={styles.cssTxtInput}
