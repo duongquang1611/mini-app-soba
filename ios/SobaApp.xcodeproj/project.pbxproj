@@ -15,6 +15,8 @@
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		B7100F3F27F1585E00A3BD7E /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7100F3E27F1585E00A3BD7E /* File.swift */; };
 		B77B9E1527D9DB8200DCBDE5 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 8D8EAB38E71348519537EAD1 /* Config.xcconfig */; };
+		C222C9C92A4D324F005B3357 /* AppCenter-Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = C222C9C82A4D324E005B3357 /* AppCenter-Config.plist */; };
+		C222C9CA2A4D324F005B3357 /* AppCenter-Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = C222C9C82A4D324E005B3357 /* AppCenter-Config.plist */; };
 		D1CA186A4EC16FEC2E6BFF2D /* libPods-SobaApp-SobaAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F060459F6B9E55330CC392D /* libPods-SobaApp-SobaAppTests.a */; };
 		DFFC20EB6F65DBECC23F87DC /* libPods-SobaApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 10C4E39958D1D4C614034CE2 /* libPods-SobaApp.a */; };
 /* End PBXBuildFile section */
@@ -49,6 +51,7 @@
 		B7100F3D27F1585E00A3BD7E /* SobaApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SobaApp-Bridging-Header.h"; sourceTree = "<group>"; };
 		B7100F3E27F1585E00A3BD7E /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		B77B9E1827D9ED8700DCBDE5 /* SobaApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = SobaApp.entitlements; path = SobaApp/SobaApp.entitlements; sourceTree = "<group>"; };
+		C222C9C82A4D324E005B3357 /* AppCenter-Config.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "AppCenter-Config.plist"; sourceTree = "<group>"; };
 		E5F48B90A9BBCBF34ACF275E /* Pods-SobaApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SobaApp.debug.xcconfig"; path = "Target Support Files/Pods-SobaApp/Pods-SobaApp.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -126,6 +129,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				C222C9C82A4D324E005B3357 /* AppCenter-Config.plist */,
 				8D8EAB38E71348519537EAD1 /* Config.xcconfig */,
 				13B07FAE1A68108700A75B9A /* SobaApp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -248,6 +252,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B77B9E1527D9DB8200DCBDE5 /* Config.xcconfig in Resources */,
+				C222C9CA2A4D324F005B3357 /* AppCenter-Config.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -256,6 +261,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
+				C222C9C92A4D324F005B3357 /* AppCenter-Config.plist in Resources */,
 				7079ED839FE0423DA653B9EF /* Config.xcconfig in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 			);
@@ -519,6 +525,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = Z7GG33DDSP;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = Z7GG33DDSP;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = SobaApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -534,6 +541,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = jp.co.mitsuwa.komoro.ios;
 				PRODUCT_NAME = SobaApp;
 				PROVISIONING_PROFILE_SPECIFIER = "Soba production";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Soba production";
 				SWIFT_OBJC_BRIDGING_HEADER = "SobaApp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -552,6 +560,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = Z7GG33DDSP;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = Z7GG33DDSP;
 				INFOPLIST_FILE = SobaApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -566,6 +575,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = jp.co.mitsuwa.komoro.ios;
 				PRODUCT_NAME = SobaApp;
 				PROVISIONING_PROFILE_SPECIFIER = "Soba production";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Soba production";
 				SWIFT_OBJC_BRIDGING_HEADER = "SobaApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
