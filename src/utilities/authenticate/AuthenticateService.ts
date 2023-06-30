@@ -3,7 +3,7 @@ import { getProfile, login } from 'api/modules/api-app/authenticate';
 import { checkAvailableCouponsApi, getOrder } from 'api/modules/api-app/order';
 import request from 'api/request';
 import { clearCoupon } from 'app-redux/slices/couponSlice';
-import { clearGlobalData, updateGlobalData } from 'app-redux/slices/globalDataSlice';
+import { clearGlobalData, updateChooseBranch, updateGlobalData } from 'app-redux/slices/globalDataSlice';
 import { clearOrder, updateAllOrder } from 'app-redux/slices/orderSlice';
 import { userInfoActions } from 'app-redux/slices/userInfoSlice';
 import { store } from 'app-redux/store';
@@ -45,6 +45,7 @@ const AuthenticateService = {
         store.dispatch(clearGlobalData());
         store.dispatch(clearCoupon());
         store.dispatch(clearOrder());
+        store.dispatch(updateChooseBranch(null));
         store.dispatch(userInfoActions.logOut());
         deleteTagOneSignal();
     },
@@ -72,7 +73,7 @@ const getOrderData = async (token: any, userId: number | string) => {
     const resCoupons = await Promise.all([
         checkAvailableCouponsApi({ userId, coupons: generateDataCheckAvailableCoupons(res?.[0]?.data?.coupons || []) }),
         checkAvailableCouponsApi({ userId, coupons: generateDataCheckAvailableCoupons(res?.[1]?.data?.coupons || []) }),
-        checkAvailableCouponsApi({ userId, coupons: generateDataCheckAvailableCoupons(res?.[2]?.data?.coupons || []) }),
+        // checkAvailableCouponsApi({ userId, coupons: generateDataCheckAvailableCoupons(res?.[2]?.data?.coupons || []) }),
     ]);
     store.dispatch(
         updateAllOrder({
@@ -86,10 +87,10 @@ const getOrderData = async (token: any, userId: number | string) => {
                 dishes: filterOrderStore({ menu, categories, order: dataMobile }),
                 coupons: removeCouponsOrder(dataMobile.coupons, resCoupons?.[1]?.data?.coupons),
             },
-            defaultOrderLocal: {
-                dishes: filterOrderStore({ menu, categories, order: dataDefaultHome }),
-                coupons: removeCouponsOrder(dataDefaultHome.coupons, resCoupons?.[2]?.data?.coupons),
-            },
+            // defaultOrderLocal: {
+            //     dishes: filterOrderStore({ menu, categories, order: dataDefaultHome }),
+            //     coupons: removeCouponsOrder(dataDefaultHome.coupons, resCoupons?.[2]?.data?.coupons),
+            // },
         }),
     );
 };

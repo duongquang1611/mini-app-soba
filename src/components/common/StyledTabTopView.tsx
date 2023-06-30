@@ -1,10 +1,14 @@
+import { RootState } from 'app-redux/hooks';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledText } from 'components/base';
+import { navigate } from 'navigation/NavigationService';
+import { HOME_ROUTE } from 'navigation/config/routes';
 import React, { memo, useEffect, useState } from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
-import { scale, ScaledSheet } from 'react-native-size-matters';
+import { ScaledSheet, scale } from 'react-native-size-matters';
 import { TabBar, TabView } from 'react-native-tab-view';
+import { useSelector } from 'react-redux';
 
 interface IProps {
     defaultIndex?: number;
@@ -41,6 +45,10 @@ const StyledTabTopView = (propsTab: IProps) => {
         customTabStyle,
     } = propsTab;
     const [index, setIndex] = useState(defaultIndex || 0);
+    const {
+        globalData: { chooseBranch },
+    } = useSelector((state: RootState) => state);
+    const branchId = chooseBranch?.id;
 
     useEffect(() => {
         setIndex(defaultIndex);
@@ -84,6 +92,12 @@ const StyledTabTopView = (propsTab: IProps) => {
                         indicatorStyle={[styles.indicatorTabBar, customIndicatorStyle]}
                         contentContainerStyle={[styles.contentContainerTabBar, contentContainerStyle]}
                         renderLabel={renderLabel}
+                        onTabPress={(e) => {
+                            if (isHome && !branchId) {
+                                e.preventDefault();
+                                navigate(HOME_ROUTE.CHOOSE_RESTAURANT);
+                            }
+                        }}
                         {...props}
                     />
                 )}

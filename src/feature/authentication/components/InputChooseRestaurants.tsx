@@ -1,3 +1,4 @@
+import { RootState } from 'app-redux/hooks';
 import { IRestaurants } from 'app-redux/slices/globalDataSlice';
 import { Themes } from 'assets/themes';
 import { StyledText, StyledTouchable } from 'components/base';
@@ -7,10 +8,11 @@ import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
 import React from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
+import { useSelector } from 'react-redux';
 
 export interface IInputChooseBranch {
     chooseBranch: IRestaurants;
-    setChooseBranch: (value: any) => void;
+    setChooseBranch?: (value: any) => void;
     route?: string;
     isLabel?: boolean;
     isBtn?: boolean;
@@ -19,19 +21,19 @@ export interface IInputChooseBranch {
 
 const InputChooseRestaurants = (props: IInputChooseBranch) => {
     const {
-        chooseBranch,
-        setChooseBranch,
         isLabel = true,
         isBtn = false,
         route = AUTHENTICATE_ROUTE.SELECT_BRANCH_RESTAURANT,
         customStyleContainer,
+        setChooseBranch,
+        chooseBranch: chooseBranchRegister,
     } = props;
 
+    const {
+        globalData: { chooseBranch },
+    } = useSelector((state: RootState) => state);
     const goToSelectBranch = () => {
-        navigate(route, {
-            chooseBranch,
-            setChooseBranch,
-        });
+        navigate(route, { setChooseBranch, chooseBranchRegister });
     };
 
     return (
@@ -48,7 +50,7 @@ const InputChooseRestaurants = (props: IInputChooseBranch) => {
                 </View>
             ) : (
                 <StyledInput
-                    value={chooseBranch?.name}
+                    value={chooseBranchRegister?.name || chooseBranch?.name}
                     containerStyle={styles.containerStyleBtn}
                     pointerEvents="none"
                     customPlaceHolder="authen.register.selectBranchStore.placeHolderBranch"

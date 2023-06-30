@@ -18,6 +18,7 @@ interface IGlobalDataState {
     notificationUnRead: number;
     triggerReloadStamp: number;
     listRestaurants: IRestaurants[];
+    chooseBranch: any;
 }
 
 const initialState: IGlobalDataState = {
@@ -28,6 +29,7 @@ const initialState: IGlobalDataState = {
     notificationUnRead: 0,
     triggerReloadStamp: 0,
     listRestaurants: [],
+    chooseBranch: {},
 };
 
 const globalDataSlice = createSlice({
@@ -46,11 +48,15 @@ const globalDataSlice = createSlice({
             state = { ...state, chooseTickStampIds: newIds };
             return state;
         },
-        clearGlobalData: () => {
-            return initialState;
+        clearGlobalData: (state) => {
+            return { ...initialState, listRestaurants: state.listRestaurants };
         },
         updateNotificationUnRead: (state, action: PayloadAction<any>) => {
             state = { ...state, notificationUnRead: action.payload };
+            return state;
+        },
+        updateChooseBranch: (state, action: PayloadAction<any>) => {
+            state = { ...state, chooseBranch: action.payload };
             return state;
         },
     },
@@ -58,6 +64,11 @@ const globalDataSlice = createSlice({
 
 const persistConfig = generatePersistConfig('globalData', Object.keys(initialState));
 
-export const { updateGlobalData, clearGlobalData, updateChooseTickStampIds, updateNotificationUnRead } =
-    globalDataSlice.actions;
+export const {
+    updateGlobalData,
+    clearGlobalData,
+    updateChooseTickStampIds,
+    updateNotificationUnRead,
+    updateChooseBranch,
+} = globalDataSlice.actions;
 export default persistReducer<IGlobalDataState>(persistConfig, globalDataSlice.reducer);

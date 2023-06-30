@@ -3,7 +3,7 @@ import { getNewsList } from 'api/modules/api-app/home';
 import { getNotificationList } from 'api/modules/api-app/notification';
 import { RootState } from 'app-redux/hooks';
 import { updateCoupon } from 'app-redux/slices/couponSlice';
-import { updateNotificationUnRead } from 'app-redux/slices/globalDataSlice';
+import { updateChooseBranch, updateNotificationUnRead } from 'app-redux/slices/globalDataSlice';
 import { updateGlobalDataUnSave } from 'app-redux/slices/globalDataUnSaveSlice';
 import { store } from 'app-redux/store';
 import Images from 'assets/images';
@@ -17,7 +17,6 @@ import ModalizeManager from 'components/base/modal/ModalizeManager';
 import BtnChooseRestaurants from 'components/common/BtnChooseRestaurants';
 import StyledHeaderImage from 'components/common/StyledHeaderImage';
 import StyledTabTopView from 'components/common/StyledTabTopView';
-import useChooseRestaurant from 'hooks/useChooseRestaurant';
 import { getResourcesData } from 'hooks/useNetwork';
 import { SIZE_LIMIT } from 'hooks/usePaging';
 import { navigate } from 'navigation/NavigationService';
@@ -100,17 +99,20 @@ export const getCouponData = async (status?: TabCouponStatus) => {
 const HomeScreen: FunctionComponent = () => {
     useOnesignal();
     const { t } = useTranslation();
-    const { chooseBranch, setChooseBranch } = useChooseRestaurant();
     const {
         order,
         userInfo,
         resource,
+        globalData: { chooseBranch, listRestaurants },
         globalDataUnSave: { withoutAccount },
     } = useSelector((state: RootState) => state);
     const { banners = [], sns = [] } = resource?.data || {};
+    const branchId = chooseBranch?.id;
     // const storeUrl = getConfig(CONFIG_KEYS.WEB_PAGE);
     const newsDisplay = Number(getConfig(CONFIG_KEYS.NEWS_DISPLAY));
     const { user } = userInfo;
+    const { frequentlyUsedRestaurantId } = user?.member || {};
+
     const { mobileOrder, defaultOrderLocal } = order;
     const newOrderMobile = useMemo(() => generateNewOrder(mobileOrder, user), [mobileOrder, user]);
     const newOrderDefault = useMemo(
@@ -132,8 +134,8 @@ const HomeScreen: FunctionComponent = () => {
         getNewsData();
         getCouponData();
         getNotification();
-        setTab(withoutAccount ? 2 : getIndexTab(defaultOrderLocal, mobileOrder));
-    }, [withoutAccount]);
+        setTab(withoutAccount || !branchId ? 2 : getIndexTab(defaultOrderLocal, mobileOrder));
+    }, [withoutAccount, branchId]);
 
     useEffect(() => {
         getNewsData();
@@ -196,7 +198,7 @@ const HomeScreen: FunctionComponent = () => {
     //     qrMobile: () => <ShowQrTab type={QR_TAB_TYPE.MOBILE_ORDER} qrValue={mobileOrderQR} newOrder={newOrderMobile} />,
     //     qrCheckIn: () => <ShowQrTab type={QR_TAB_TYPE.CHECK_IN} qrValue={checkInQR} onPress={showGuideCheckIn} />,
     // });
-    console.log({ mobileOrderQR, checkInQR });
+
     const renderScene = ({ route }: any) => {
         switch (route.key) {
             case 'qrDefault':
@@ -226,6 +228,13 @@ const HomeScreen: FunctionComponent = () => {
             setRefreshing(false);
         }
     };
+    useEffect(() => {
+        if (listRestaurants) {
+            const fullInfoBranch =
+                listRestaurants?.find((item: { id?: number }) => item?.id === frequentlyUsedRestaurantId) || {};
+            store.dispatch(updateChooseBranch(fullInfoBranch));
+        }
+    }, [listRestaurants, frequentlyUsedRestaurantId]);
 
     return (
         <View style={styles.container}>
@@ -256,7 +265,7 @@ const HomeScreen: FunctionComponent = () => {
                                 <StyledText i18nText={'home.storeSearch'} customStyle={styles.textPrimary} />
                                 <StyledIcon source={Images.icons.arrow_left} size={20} />
                             </StyledTouchable> */}
-                            <BtnChooseRestaurants setChooseBranch={setChooseBranch} chooseBranch={chooseBranch} />
+                            <BtnChooseRestaurants />
                         </View>
                         <FlatList
                             horizontal
@@ -274,6 +283,7 @@ const HomeScreen: FunctionComponent = () => {
                         renderScene={renderScene}
                         isHome={true}
                         defaultIndex={tab}
+                        swipeEnable={!!branchId}
                     />
                     <StyledImageBackground source={Images.photo.news} resizeMode="cover" style={styles.newsView}>
                         <View style={styles.buttonMobile}>
