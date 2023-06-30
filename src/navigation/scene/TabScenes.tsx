@@ -3,12 +3,14 @@ import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon } from 'components/base';
 import RequireLoginScreen from 'feature/authentication/RequireLoginScreen';
+import SelectBranchStoreScreen from 'feature/authentication/SelectBranchStoreScreen';
 import TabCouponListScreen from 'feature/coupon/TabCouponListScreen';
 // Screen
 import HomeScreen from 'feature/home/HomeScreen';
 import MenuScreen from 'feature/order/MenuScreen';
 import SettingScreen from 'feature/setting/SettingScreen';
 import StampCardScreen from 'feature/stamp/StampCardScreen';
+import { navigate } from 'navigation/NavigationService';
 import { COUPON_ROUTE, HOME_ROUTE, ORDER_ROUTE, SETTING_ROUTE, STAMP_ROUTE } from 'navigation/config/routes';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -18,7 +20,7 @@ import {
     TabButtonLayout,
     TabElementDisplayOptions,
 } from 'react-native-animated-nav-tab-bar';
-import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
+import { ScaledSheet, scale, verticalScale } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
 
 const AnimateTabs = AnimatedTabBarNavigator();
@@ -36,6 +38,10 @@ const TabBarIcon = ({ focused, source }: any) => {
 const MainTabContainer = () => {
     const { t } = useTranslation();
     const { withoutAccount } = useSelector((state: RootState) => state.globalDataUnSave);
+    const {
+        globalData: { chooseBranch },
+    } = useSelector((state: RootState) => state);
+    const branchId = chooseBranch?.id;
 
     const ArrayTabs = [
         {
@@ -55,14 +61,18 @@ const MainTabContainer = () => {
         {
             name: ORDER_ROUTE.ROOT,
             title: t('tab.order'),
-            component: MenuScreen,
+            component: branchId ? MenuScreen : SelectBranchStoreScreen,
             icon: Images.icons.tab.bag,
             tabBarIcon: (iconProps: any) => <TabBarIcon {...iconProps} source={Images.icons.tab.bag} />,
         },
         {
             name: COUPON_ROUTE.ROOT,
             title: t('tab.coupon'),
-            component: withoutAccount ? () => <RequireLoginScreen title={'coupon.title'} /> : TabCouponListScreen,
+            component: withoutAccount
+                ? () => <RequireLoginScreen title={'coupon.title'} />
+                : !branchId
+                ? SelectBranchStoreScreen
+                : TabCouponListScreen,
             icon: Images.icons.tab.coupon,
             tabBarIcon: (iconProps: any) => <TabBarIcon {...iconProps} source={Images.icons.tab.coupon} />,
         },
@@ -96,7 +106,20 @@ const MainTabContainer = () => {
             }}
         >
             {ArrayTabs.map((item, index) => (
-                <AnimateTabs.Screen key={`${index}`} options={{ ...item }} {...item} />
+                <AnimateTabs.Screen
+                    key={`${index}`}
+                    options={{ ...item }}
+                    {...item}
+                    listeners={{
+                        tabPress: (e: any) => {
+                            // Prevent default action
+                            if ([ORDER_ROUTE.ROOT, COUPON_ROUTE.ROOT].includes(item.name) && !branchId) {
+                                e.preventDefault();
+                                navigate(HOME_ROUTE.CHOOSE_RESTAURANT);
+                            }
+                        },
+                    }}
+                />
             ))}
         </AnimateTabs.Navigator>
     );

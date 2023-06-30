@@ -233,7 +233,7 @@ const RegisterScreen = () => {
                     </View>
                 </FormProvider>
                 <StyledButton
-                    disabled={!(isValid && rule && !checkPassword() && chooseBranch?.id)}
+                    disabled={!(isValid && rule && !checkPassword() && chooseBranch?.name)}
                     title={'common.next'}
                     onPress={handleSubmit(submit)}
                     customStyle={styles.buttonSave}

@@ -99,7 +99,7 @@ export const getResourcesData = async (updateOrderToAPI = true, checkCoupons = f
 export const updateOrderStore = async (allDishFilter?: any, checkCoupons = false) => {
     const { userInfo, order } = store.getState();
     const { defaultOrder, defaultOrderLocal, mobileOrder, cartOrder } = order;
-    const { token, user: { member: { id: userId } } = {} } = userInfo;
+    const { token, user: { member } = {} } = userInfo;
     if (!token) return;
     try {
         const couponsOrder = await checkAvailableCouponsAllOrder();

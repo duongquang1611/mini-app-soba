@@ -1,4 +1,4 @@
-import { IRestaurants } from 'app-redux/slices/globalDataSlice';
+import { RootState } from 'app-redux/hooks';
 import { Themes } from 'assets/themes';
 import { StyledText } from 'components/base';
 import InputChooseRestaurants from 'feature/authentication/components/InputChooseRestaurants';
@@ -6,26 +6,39 @@ import { HOME_ROUTE } from 'navigation/config/routes';
 import React from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
+import { useSelector } from 'react-redux';
 
 interface IProps {
-    chooseBranch: IRestaurants;
-    setChooseBranch: (value: any) => void;
     customContainerStyle?: StyleProp<ViewStyle>;
 }
 
 const BtnChooseRestaurants = (props: IProps) => {
-    const { chooseBranch, setChooseBranch, customContainerStyle } = props;
+    const {
+        globalDataUnSave: { withoutAccount },
+        globalData: { chooseBranch },
+    } = useSelector((state: RootState) => state);
+    const { customContainerStyle } = props;
+    if (withoutAccount) return null;
 
     return (
         <View style={[styles.container, customContainerStyle]}>
-            <StyledText originValue={chooseBranch?.name} customStyle={styles.txtAddress} numberOfLines={1} />
-            <StyledText
-                i18nText={'authen.register.selectBranchStore.currentlySelected'}
-                customStyle={styles.txtDefault}
-            />
+            {!chooseBranch?.id ? (
+                <StyledText
+                    i18nText={'authen.register.selectBranchStore.noBranch'}
+                    customStyle={[styles.txtAddress, styles.txtDefault]}
+                    numberOfLines={1}
+                />
+            ) : (
+                <>
+                    <StyledText originValue={chooseBranch?.name} customStyle={styles.txtAddress} numberOfLines={1} />
+                    <StyledText
+                        i18nText={'authen.register.selectBranchStore.currentlySelected'}
+                        customStyle={styles.txtDefault}
+                    />
+                </>
+            )}
             <InputChooseRestaurants
                 chooseBranch={chooseBranch}
-                setChooseBranch={setChooseBranch}
                 route={HOME_ROUTE.CHOOSE_RESTAURANT}
                 isLabel={false}
                 isBtn
@@ -51,9 +64,11 @@ const styles = ScaledSheet.create({
         fontWeight: 'bold',
         fontSize: '16@ms0.3',
         flexShrink: 1,
+        color: Themes.COLORS.textSecondary,
     },
     txtDefault: {
         marginHorizontal: '8@s',
+        color: Themes.COLORS.textSecondary,
     },
 });
 

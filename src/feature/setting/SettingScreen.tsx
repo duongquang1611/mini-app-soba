@@ -2,6 +2,7 @@
 import { deleteAccount } from 'api/modules/api-app/authenticate';
 import { getRankList } from 'api/modules/api-app/setting';
 import { RootState } from 'app-redux/hooks';
+import { updateChooseBranch } from 'app-redux/slices/globalDataSlice';
 import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
@@ -13,14 +14,14 @@ import ModalizeManager from 'components/base/modal/ModalizeManager';
 import DashView from 'components/common/DashView';
 import LinearView from 'components/common/LinearView';
 import StyledHeader from 'components/common/StyledHeader';
-import useChooseRestaurant from 'hooks/useChooseRestaurant';
 import { getDataProfile } from 'hooks/useNetwork';
 import { navigate } from 'navigation/NavigationService';
 import { HOME_ROUTE, ORDER_ROUTE, SETTING_ROUTE } from 'navigation/config/routes';
 import React, { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { RefreshControl, View } from 'react-native';
 import { ScaledSheet, scale } from 'react-native-size-matters';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import AuthenticateService from 'utilities/authenticate/AuthenticateService';
 import {
     checkValidRank,
@@ -48,7 +49,12 @@ const InfoItem = (data: any) => {
     );
 };
 const SettingScreen = () => {
-    const { chooseBranch, setChooseBranch } = useChooseRestaurant();
+    const {
+        globalData: { chooseBranch },
+    } = useSelector((state: RootState) => state);
+    const dispatch = useDispatch();
+    const branchId = chooseBranch?.id;
+    const { t } = useTranslation();
     const modalize = ModalizeManager();
     const { order, userInfo } = useSelector((state: RootState) => state);
     const [rankList, setRankList] = useState([]);
@@ -111,7 +117,7 @@ const SettingScreen = () => {
         if (defaultOrderQR) {
             navigate(ORDER_ROUTE.ORDER_QR_CODE, { orderType: OrderTypeMenu.DEFAULT_ORDER, saveOrder: false });
         } else {
-            navigate(HOME_ROUTE.CHOOSE_RESTAURANT, { chooseBranch, setChooseBranch });
+            navigate(HOME_ROUTE.CHOOSE_RESTAURANT);
             // TODO : comment 116 change navigate choose restaurants
             // navigate(AUTHENTICATE_ROUTE.ORDER_DEFAULT_MENU, { screen: SETTING_ROUTE.ORDER_DEFAULT_SETTING });
         }
@@ -249,7 +255,9 @@ const SettingScreen = () => {
                                     customStyle={{ color: Themes.COLORS.white }}
                                 />
                                 <StyledText
-                                    originValue={chooseBranch?.name}
+                                    originValue={
+                                        !branchId ? t('authen.register.selectBranchStore.noBranch') : chooseBranch?.name
+                                    }
                                     customStyle={styles.txtNameRestaurants}
                                     numberOfLines={1}
                                 />

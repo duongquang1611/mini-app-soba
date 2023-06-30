@@ -105,10 +105,10 @@ const StyledHeader = (props: StyledHeaderProps) => {
                     <View
                         style={[
                             styles.containerCenter,
-                            customCenterContainer,
                             {
                                 width: Metrics.screenWidth - scale(65) - rightLayout.width,
                             },
+                            customCenterContainer,
                         ]}
                     >
                         {iconCenter && (

@@ -810,3 +810,11 @@ export const checkAvailableCouponsAllOrder = async () => {
     };
     return couponsOrder;
 };
+
+export const onClickCheckBranch = ({ onActive, branchId }: { onActive?: any; branchId: number | null }) => {
+    if (!branchId) {
+        navigate(HOME_ROUTE.CHOOSE_RESTAURANT);
+    } else {
+        onActive();
+    }
+};

@@ -1,18 +1,19 @@
 import { updateCouponCartOrder } from 'app-redux/slices/orderSlice';
 import { Themes } from 'assets/themes';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
+import BtnChooseRestaurants from 'components/common/BtnChooseRestaurants';
 import StyledHeader from 'components/common/StyledHeader';
 import StyledTabTopView from 'components/common/StyledTabTopView';
 import ModalCoupon from 'feature/order/components/ModalCoupon';
-import { ORDER_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
+import { ORDER_ROUTE } from 'navigation/config/routes';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import { ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { SceneMap } from 'react-native-tab-view';
 import { useDispatch } from 'react-redux';
-import { DiscountType, MODAL_ID, OrderTypeMenu, staticValue, TabCouponStatus } from 'utilities/staticData';
+import { DiscountType, MODAL_ID, OrderTypeMenu, TabCouponStatus, staticValue } from 'utilities/staticData';
 import CouponTab from './components/CouponTab';
 
 const TabCouponListScreen = () => {
@@ -67,7 +68,13 @@ const TabCouponListScreen = () => {
 
     return (
         <View style={styles.container}>
-            <StyledHeader title={'coupon.title'} hasBack={false} largeTitleHeader />
+            <StyledHeader
+                title={'coupon.title'}
+                hasBack={false}
+                largeTitleHeader
+                customCenterContainer={{ width: 150 }}
+                renderRight={() => <BtnChooseRestaurants />}
+            />
             <StyledTabTopView routes={routes} renderScene={renderScene} />
         </View>
     );
@@ -79,6 +86,9 @@ const styles = ScaledSheet.create({
     container: {
         flex: 1,
         backgroundColor: Themes.COLORS.white,
+    },
+    customCenterContainer: {
+        width: '150@s',
     },
     body: {
         justifyContent: 'center',

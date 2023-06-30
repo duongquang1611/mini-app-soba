@@ -3,15 +3,16 @@ import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledList, StyledText, StyledTouchable } from 'components/base';
-import ModalizeManager from 'components/base/modal/ModalizeManager';
 import { StyledImageBackground } from 'components/base/StyledImage';
+import ModalizeManager from 'components/base/modal/ModalizeManager';
+import BtnChooseRestaurants from 'components/common/BtnChooseRestaurants';
 import StyledHeader from 'components/common/StyledHeader';
 import { getResourcesData } from 'hooks/useNetwork';
-import { ORDER_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
+import { ORDER_ROUTE } from 'navigation/config/routes';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { View } from 'react-native';
-import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
+import { ScaledSheet, scale, verticalScale } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
 import { funcFilterStatus, isIos, sumTotalAmount } from 'utilities/helper';
 import { MODAL_ID, OrderTypeMenu, staticValue } from 'utilities/staticData';
@@ -154,6 +155,14 @@ const MenuScreen = () => {
         }
         return item;
     });
+    const renderRightHeader = () => {
+        return (
+            <View style={styles.rowHeader}>
+                <StyledText numberOfLines={1} customStyle={styles.textCenter} i18nText={'order.menuTitle'} />
+                <BtnChooseRestaurants />
+            </View>
+        );
+    };
 
     return (
         <View style={styles.container}>
@@ -162,6 +171,7 @@ const MenuScreen = () => {
                 title={'order.menuTitle'}
                 iconRight={Images.icons.question}
                 hasBack={false}
+                renderCenter={renderRightHeader}
                 largeTitleHeader
             />
             <View style={styles.categoryContainer}>
@@ -414,5 +424,16 @@ const styles = ScaledSheet.create({
         marginBottom: '15@vs',
         flexShrink: 1,
         width: '50%',
+    },
+    textCenter: {
+        color: Themes.COLORS.textPrimary,
+        fontWeight: 'bold',
+        fontSize: '24@ms0.3',
+        lineHeight: '32@vs',
+        marginRight: '10@s',
+    },
+    rowHeader: {
+        flexDirection: 'row',
+        alignItems: 'center',
     },
 });

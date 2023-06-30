@@ -21,7 +21,7 @@ interface IProps {
     dismissModalOnCancel?: boolean;
     showClose?: boolean;
     customStyle?: StyleProp<ViewStyle>;
-    setChooseBranch: (value: any) => void;
+    selectBranch: (value: any) => void;
     chooseBranch?: IRestaurants;
 }
 
@@ -33,11 +33,11 @@ interface IPopupConfirm extends IProps {
 }
 
 const ModalChooseRestaurants = (props: IProps, ref: any) => {
-    const { title, onOk, onCancel, customStyle, setChooseBranch, chooseBranch } = props;
+    const { title, onOk, onCancel, customStyle, selectBranch, chooseBranch } = props;
     const [selectBox, setSelectBox] = useState<any>(chooseBranch);
 
     const handleOk = () => {
-        setChooseBranch(selectBox);
+        selectBranch?.(selectBox);
         onOk?.();
         ref?.current?.close();
     };
@@ -63,7 +63,7 @@ const ModalChooseRestaurants = (props: IProps, ref: any) => {
             <PopupConfirm
                 selectBox={selectBox}
                 setSelectBox={setSelectBox}
-                setChooseBranch={setChooseBranch}
+                selectBranch={selectBranch}
                 title={title}
                 handleOk={handleOk}
                 onCancel={onCancel}
