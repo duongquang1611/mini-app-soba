@@ -52,7 +52,8 @@
         "code-push-dev-stg": "yarn code-push-dev && yarn code-push-stg",
         "code-push-all": "yarn code-push-prod && yarn code-push-dev && yarn code-push-stg",
         "list-adv": "emulator -list-avds",
-        "run-pixel2": "emulator -avd Pixel_2_API_30"
+        "run-pixel2": "emulator -avd Pixel_2_API_30",
+        "clean-auto": "react-native clean-project-auto"
     },
     "dependencies": {
         "@gorhom/animated-tabbar": "^2.1.2",
@@ -108,7 +109,7 @@
         "react-native-modalize": "^2.0.8",
         "react-native-onesignal": "^4.1.1",
         "react-native-pager-view": "^5.4.15",
-        "react-native-permissions": "^3.0.5",
+        "react-native-permissions": "^3.8.3",
         "react-native-picker": "^4.3.7",
         "react-native-portalize": "^1.0.7",
         "react-native-progress": "^5.0.0",
@@ -164,6 +165,7 @@
         "metro-react-native-babel-preset": "^0.66.1",
         "prettier": "^2.3.2",
         "react-devtools": "^4.13.5",
+        "react-native-clean-project": "^4.0.1",
         "react-native-eject": "^0.1.2",
         "react-test-renderer": "17.0.2",
         "typescript": "^4.3.5"
