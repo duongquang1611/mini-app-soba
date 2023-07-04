@@ -2,8 +2,9 @@ import { editProfile, getProfile } from 'api/modules/api-app/authenticate';
 import { RootState } from 'app-redux/hooks';
 import { updateChooseBranch } from 'app-redux/slices/globalDataSlice';
 import { userInfoActions } from 'app-redux/slices/userInfoSlice';
+import Images from 'assets/images';
 import { Themes } from 'assets/themes';
-import { StyledButton, StyledText, StyledTouchable } from 'components/base';
+import { StyledButton, StyledImage, StyledText, StyledTouchable } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
 import StyledInput, { LabelInput } from 'components/base/StyledInput';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
@@ -17,7 +18,7 @@ import { ScaledSheet } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
 
 const SelectBranchStoreScreen: FunctionComponent = (props: any) => {
-    const { setChooseBranch, chooseBranchRegister } = props?.route?.params;
+    const { setChooseBranch, chooseBranchRegister } = props?.route?.params || {};
     const {
         userInfo,
         globalData: { chooseBranch },
@@ -42,11 +43,19 @@ const SelectBranchStoreScreen: FunctionComponent = (props: any) => {
             AlertMessage(error);
         }
     };
+    const renderCenter = () => {
+        return <StyledImage source={Images.photo.logo} customStyle={styles.logo} />;
+    };
 
     return (
         <View style={styles.container}>
             <ModalChooseRestaurants ref={modalRef} chooseBranch={chooseBranch} selectBranch={setRestaurant} />
-            <StyledHeader title={'authen.register.selectBranchStore.title'} />
+            {/* <StyledHeader title={'authen.register.selectBranchStore.title'} /> */}
+            <StyledHeader
+                title={'authen.register.selectBranchStore.title'}
+                renderCenter={renderCenter}
+                customContainer={styles.customContainerHeader}
+            />
             <StyledKeyboardAware customStyle={styles.scrollView}>
                 <View style={styles.containerContent}>
                     <StyledText customStyle={styles.title} i18nText={'authen.register.selectBranchStore.description'} />
@@ -166,6 +175,15 @@ const styles = ScaledSheet.create({
         marginLeft: '11@s',
         width: '90@s',
         borderRadius: 5,
+    },
+    logo: {
+        width: '125@s',
+        height: '65@s',
+        alignSelf: 'center',
+        flex: 1,
+    },
+    customContainerHeader: {
+        paddingVertical: 0,
     },
 });
 

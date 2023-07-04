@@ -86,8 +86,8 @@ export const getCouponData = async (status?: TabCouponStatus) => {
             ]);
             store.dispatch(
                 updateCoupon({
-                    couponsCanUse: res[0].data,
-                    couponsUsed: res[1].data,
+                    couponsCanUse: res?.[0].data,
+                    couponsUsed: res?.[1].data,
                 }),
             );
         }
@@ -142,7 +142,6 @@ const HomeScreen: FunctionComponent = () => {
     }, [newsDisplay]);
 
     // useBackHandler(() => BackHandler.exitApp());
-
     const getNotification = async () => {
         try {
             const res = await getNotificationList({ params: { take: 1, pageIndex: 1 } });

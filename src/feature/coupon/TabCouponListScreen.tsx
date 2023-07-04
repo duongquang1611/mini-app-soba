@@ -62,8 +62,22 @@ const TabCouponListScreen = () => {
     };
 
     const renderScene = SceneMap({
-        stampCanUse: () => <CouponTab isTabCoupon canUse={TabCouponStatus.CAN_USE} handleUseCoupon={handleUseCoupon} />,
-        stampUsed: () => <CouponTab isTabCoupon canUse={TabCouponStatus.USED} handleUseCoupon={handleUseCoupon} />,
+        stampCanUse: () => (
+            <CouponTab
+                isTabCoupon
+                canUse={TabCouponStatus.CAN_USE}
+                handleUseCoupon={handleUseCoupon}
+                isAllRestaurants={true}
+            />
+        ),
+        stampUsed: () => (
+            <CouponTab
+                isTabCoupon
+                canUse={TabCouponStatus.USED}
+                handleUseCoupon={handleUseCoupon}
+                isAllRestaurants={true}
+            />
+        ),
     });
 
     return (

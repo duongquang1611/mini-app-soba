@@ -9,6 +9,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { ScaledSheet, scale } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
+import { TypeDiscountCoupon } from 'utilities/enumData';
 import { formatDate } from 'utilities/format';
 import { getRangeCoupon } from 'utilities/helper';
 import { DateType, staticValue } from 'utilities/staticData';
@@ -17,6 +18,9 @@ import PointExchangeView from './PointExchangeView';
 
 export const CouponItem = (props: any) => {
     const { cartOrder, defaultOrderLocal } = useSelector((state: RootState) => state.order);
+    const {
+        globalData: { chooseBranch },
+    } = useSelector((state: RootState) => state);
     const {
         item = {},
         canUse,
@@ -31,6 +35,7 @@ export const CouponItem = (props: any) => {
         showDashTop = false,
         showDashBottom = true,
         isHomeTab,
+        isAllRestaurants,
     } = props || {};
 
     const blStyle = isHomeTab ? stylesSmall : styles;
@@ -45,7 +50,12 @@ export const CouponItem = (props: any) => {
         (itemCoupon: any) => itemCoupon?.id === idMemberCoupon && itemCoupon?.receivedDate === receivedDate,
     );
 
-    const disabledUse = checkChooseInCart;
+    const checkNotRestaurant =
+        isAllRestaurants &&
+        item?.coupon?.isDiscountAllRestaurants === TypeDiscountCoupon.NOT_DISCOUNT_ALL &&
+        !item?.coupon?.restaurants?.map((itemBranch: any) => itemBranch?.id)?.includes(chooseBranch?.id);
+
+    const disabledUse = checkChooseInCart || checkNotRestaurant;
     const isBlock = Boolean(coupon?.isBlock);
     const hasExpired = dateType === DateType.EXPIRED_DATE;
 
@@ -72,7 +82,7 @@ export const CouponItem = (props: any) => {
                     <StyledTouchable
                         customStyle={blStyle.btnCanUSe}
                         onPress={handleUseCoupon}
-                        disabled={isExchangeCoupon ? true : disabledUse}
+                        disabled={isExchangeCoupon || checkNotRestaurant ? true : disabledUse}
                         hitSlop={staticValue.DEFAULT_HIT_SLOP}
                     >
                         <StyledText

@@ -120,7 +120,7 @@ export default {
                 labelInput: '選択中店舗',
                 describeLabel: '券売機に来店QRコードをかざす',
                 labelBranch: 'ブランチを選択',
-                descriptionInput: 'いつもの注文',
+                descriptionInput: '変更は\nこちら',
                 placeHolderBranch: '選択してください',
                 titleModal: '店舗選択',
             },
