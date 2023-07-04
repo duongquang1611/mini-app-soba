@@ -9,20 +9,25 @@ import AlertMessage from 'components/base/AlertMessage';
 import StyledHeader from 'components/common/StyledHeader';
 import StampItem from 'feature/stamp/components/StampItem';
 import { isEmpty } from 'lodash';
-import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { goBack, navigate } from 'navigation/NavigationService';
+import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
 import { commonStyles } from 'utilities/commonStyles';
+import { TypeDiscountCoupon } from 'utilities/enumData';
 import { TabCouponStatus } from 'utilities/staticData';
 import CouponContentView from './components/CouponContentView';
 
 const SeparatorView = ({ customStyle }: any) => <View style={[styles.separator, customStyle]} />;
 
 const DetailCouponScreen = (props: any) => {
-    const { order } = useSelector((state: RootState) => state);
+    const {
+        order,
+        globalData: { chooseBranch },
+    } = useSelector((state: RootState) => state);
+
     const dispatch = useDispatch();
     const {
         canUse,
@@ -44,7 +49,11 @@ const DetailCouponScreen = (props: any) => {
     const checkChooseInOrderMobile = order.mobileOrder?.coupons?.find(
         (itemCoupon: any) => itemCoupon?.id === idMemberCoupon,
     );
-    const disabledUse = checkChooseInCart || disabled;
+    const checkNotRestaurant =
+        item?.coupon?.isDiscountAllRestaurants === TypeDiscountCoupon.NOT_DISCOUNT_ALL &&
+        !item?.coupon?.restaurants?.map((itemBranch: any) => itemBranch?.id)?.includes(chooseBranch?.id);
+
+    const disabledUse = checkChooseInCart || disabled || checkNotRestaurant;
     const checkChooseTemp = cartOrderState?.coupons?.find((itemCouponCart: any) => item?.id === itemCouponCart?.id);
     const [isChooseTemp, setIsChooseTemp] = useState(!!checkChooseTemp);
 

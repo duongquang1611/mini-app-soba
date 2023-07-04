@@ -1,3 +1,4 @@
+import { RootState } from 'app-redux/hooks';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledImage, StyledText, StyledTouchable } from 'components/base';
@@ -5,6 +6,7 @@ import DashView from 'components/common/DashView';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
+import { useSelector } from 'react-redux';
 
 export const OrderDish = (props: any) => {
     const {
@@ -18,6 +20,7 @@ export const OrderDish = (props: any) => {
         customNameOrder,
         isHomeTab,
     } = props;
+
     const choose = chooseDish?.id === item?.id;
     const onChoose = () => {
         setChooseDish(item);
@@ -49,7 +52,15 @@ export const OrderDish = (props: any) => {
 };
 export const OneCoupon = (props: any) => {
     const { item, enableButton, setEnableButton, dashView, isHomeTab } = props;
+    const {
+        globalData: { chooseBranch },
+    } = useSelector((state: RootState) => state);
     const [chooseDish, setChooseDish] = useState(item?.choose);
+    const newListCouponDish =
+        item?.coupon?.couponDish?.filter((itemDish: any) =>
+            itemDish?.restaurants?.map((itemBranch: any) => itemBranch?.id)?.includes(chooseBranch?.id),
+        ) || [];
+
     return (
         <View>
             <StyledText
@@ -60,7 +71,7 @@ export const OneCoupon = (props: any) => {
                 i18nText={'coupon.chooseDish'}
                 customStyle={[styles.conTentCoupon, isHomeTab && styles.conTentCouponHomeTab]}
             />
-            {item?.coupon?.couponDish?.map((itemDish: any, indexDish: number) => (
+            {newListCouponDish?.map((itemDish: any, indexDish: number) => (
                 <OrderDish
                     idCoupon={item?.id}
                     key={indexDish}

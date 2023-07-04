@@ -3,7 +3,6 @@ import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledIcon } from 'components/base';
 import RequireLoginScreen from 'feature/authentication/RequireLoginScreen';
-import SelectBranchStoreScreen from 'feature/authentication/SelectBranchStoreScreen';
 import TabCouponListScreen from 'feature/coupon/TabCouponListScreen';
 // Screen
 import HomeScreen from 'feature/home/HomeScreen';
@@ -61,18 +60,14 @@ const MainTabContainer = () => {
         {
             name: ORDER_ROUTE.ROOT,
             title: t('tab.order'),
-            component: branchId ? MenuScreen : SelectBranchStoreScreen,
+            component: MenuScreen,
             icon: Images.icons.tab.bag,
             tabBarIcon: (iconProps: any) => <TabBarIcon {...iconProps} source={Images.icons.tab.bag} />,
         },
         {
             name: COUPON_ROUTE.ROOT,
             title: t('tab.coupon'),
-            component: withoutAccount
-                ? () => <RequireLoginScreen title={'coupon.title'} />
-                : !branchId
-                ? SelectBranchStoreScreen
-                : TabCouponListScreen,
+            component: withoutAccount ? () => <RequireLoginScreen title={'coupon.title'} /> : TabCouponListScreen,
             icon: Images.icons.tab.coupon,
             tabBarIcon: (iconProps: any) => <TabBarIcon {...iconProps} source={Images.icons.tab.coupon} />,
         },
@@ -113,7 +108,11 @@ const MainTabContainer = () => {
                     listeners={{
                         tabPress: (e: any) => {
                             // Prevent default action
-                            if ([ORDER_ROUTE.ROOT, COUPON_ROUTE.ROOT].includes(item.name) && !branchId) {
+                            if (
+                                [ORDER_ROUTE.ROOT, COUPON_ROUTE.ROOT].includes(item.name) &&
+                                !branchId &&
+                                !withoutAccount
+                            ) {
                                 e.preventDefault();
                                 navigate(HOME_ROUTE.CHOOSE_RESTAURANT);
                             }

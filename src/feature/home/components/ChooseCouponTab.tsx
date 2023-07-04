@@ -147,34 +147,35 @@ const ChooseCouponTab = (props: any) => {
                         />
                     </View>
                     <View style={styles.halfViewRight}>
-                        <View style={styles.titleView}>
-                            <StyledText customStyle={styles.title} i18nText="home.listDishesOfCoupon" />
-                        </View>
-                        <View style={(checkChooseCouponNoDish || noCouponChoose) && styles.viewDish}>
-                            {!noCouponChoose && (
-                                <ModalCoupon
-                                    isHomeTab={true}
-                                    listCouponsModal={defaultOrderLocal?.coupons}
-                                    customStyle={[styles.customModal, styles.viewDish]}
-                                    applyChooseDish={applyChooseDish}
-                                    updateCouponsCart={(coupons: any) => handleChooseDish(coupons)}
-                                    showButton={!checkChooseCouponNoDish && defaultOrder?.coupons}
-                                />
-                            )}
-                        </View>
-                        {checkChooseCouponNoDish ||
-                            (noCouponChoose && (
-                                <View style={styles.buttonView}>
-                                    <StyledButton
-                                        onPress={() => applyChooseDish(defaultOrderLocal?.coupons)}
-                                        title={'home.createOr'}
-                                        customContentStyle={styles.detailButton}
-                                        customStyle={styles.button}
-                                        customStyleText={styles.textBtn}
-                                        disabled={noCouponChoose}
+                        <View>
+                            <View style={styles.titleView}>
+                                <StyledText customStyle={styles.title} i18nText="home.listDishesOfCoupon" />
+                            </View>
+                            <View style={(checkChooseCouponNoDish || noCouponChoose) && styles.viewDish}>
+                                {!noCouponChoose && (
+                                    <ModalCoupon
+                                        isHomeTab={true}
+                                        listCouponsModal={defaultOrderLocal?.coupons}
+                                        customStyle={[styles.customModal, styles.viewDish]}
+                                        applyChooseDish={applyChooseDish}
+                                        updateCouponsCart={(coupons: any) => handleChooseDish(coupons)}
+                                        showButton={!checkChooseCouponNoDish && defaultOrder?.coupons}
                                     />
-                                </View>
-                            ))}
+                                )}
+                            </View>
+                        </View>
+                        {checkChooseCouponNoDish && (
+                            <View style={styles.buttonView}>
+                                <StyledButton
+                                    onPress={() => applyChooseDish(defaultOrderLocal?.coupons)}
+                                    title={'home.createOr'}
+                                    customContentStyle={styles.detailButton}
+                                    customStyle={styles.button}
+                                    customStyleText={styles.textBtn}
+                                    disabled={noCouponChoose}
+                                />
+                            </View>
+                        )}
                     </View>
                 </>
             )}
@@ -188,18 +189,17 @@ const styles = ScaledSheet.create({
     containerQrTab: {
         height: verticalScale(90) + scale(staticValue.QR_SIZE_HOME),
         justifyContent: 'center',
-        backgroundColor: Themes.COLORS.white,
         flexDirection: 'row',
     },
     detailButton: {
         width: '170@s',
         padding: 0,
-        marginTop: '5@vs',
+        // marginTop: '5@vs',
         paddingVertical: '8@vs',
     },
     button: {
         width: '170@s',
-        marginTop: '5@s',
+        marginTop: '0@s',
     },
     noQrCodeView: {
         alignItems: 'center',
@@ -239,7 +239,7 @@ const styles = ScaledSheet.create({
         paddingBottom: '10@vs',
     },
     viewDish: {
-        height: '115@s',
+        height: '100@s',
     },
     listDish: {
         backgroundColor: Themes.COLORS.white,
@@ -253,11 +253,12 @@ const styles = ScaledSheet.create({
     },
     halfViewRight: {
         width: Metrics.screenWidth / 2,
+        justifyContent: 'space-between',
     },
     buttonView: {
         alignItems: 'center',
         justifyContent: 'center',
-        // flexGrow: 1,
+        height: '55@s',
     },
     titleView: {
         alignItems: 'center',

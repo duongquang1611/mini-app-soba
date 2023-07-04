@@ -159,7 +159,7 @@ const MenuScreen = () => {
         return (
             <View style={styles.rowHeader}>
                 <StyledText numberOfLines={1} customStyle={styles.textCenter} i18nText={'order.menuTitle'} />
-                <BtnChooseRestaurants />
+                <BtnChooseRestaurants customContainerStyle={styles.chooseBranch} />
             </View>
         );
     };
@@ -435,5 +435,8 @@ const styles = ScaledSheet.create({
     rowHeader: {
         flexDirection: 'row',
         alignItems: 'center',
+    },
+    chooseBranch: {
+        maxWidth: '200@s',
     },
 });

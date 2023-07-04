@@ -5,10 +5,11 @@ import CouponItem from 'components/common/CouponItem';
 import { getCouponData } from 'feature/home/HomeScreen';
 import { COUPON_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
+import { TypeDiscountCoupon } from 'utilities/enumData';
 import { TabCouponStatus } from 'utilities/staticData';
 
 interface CouponTabProps {
@@ -19,12 +20,27 @@ interface CouponTabProps {
     orderType?: any;
     order?: any;
     isHomeTab?: boolean;
+    isAllRestaurants?: boolean;
 }
 
 const CouponTab = (props: CouponTabProps) => {
-    const { canUse, handleUseCoupon, cartListCouponOrder, isTabCoupon, orderType, order, isHomeTab } = props;
-    const { coupon } = useSelector((state: RootState) => state);
+    const { canUse, handleUseCoupon, cartListCouponOrder, isTabCoupon, orderType, order, isHomeTab, isAllRestaurants } =
+        props;
+    const {
+        coupon,
+        globalData: { chooseBranch },
+    } = useSelector((state: RootState) => state);
+
+    const branchId = chooseBranch?.id;
     const { couponsCanUse = [], couponsUsed = [] } = coupon || {};
+    const newCouponsCanUse = useMemo(() => {
+        if (isAllRestaurants) return couponsCanUse;
+        return couponsCanUse?.filter(
+            (item) =>
+                item?.coupon?.isDiscountAllRestaurants === TypeDiscountCoupon.ALL_RESTAURANT ||
+                item?.coupon?.restaurants?.map((itemBranch: any) => itemBranch?.id)?.includes(branchId),
+        );
+    }, [couponsCanUse]);
 
     const goToDetail = (item: any) => {
         navigate(COUPON_ROUTE.DETAIL_COUPON, { item, canUse, handleUseCoupon, cartOrder: cartListCouponOrder });
@@ -46,6 +62,7 @@ const CouponTab = (props: CouponTabProps) => {
                 orderType={orderType}
                 order={order}
                 isHomeTab={isHomeTab}
+                isAllRestaurants={isAllRestaurants}
             />
         );
     };
@@ -53,7 +70,7 @@ const CouponTab = (props: CouponTabProps) => {
         <View style={styles.container}>
             {!isHomeTab && <View style={styles.separator} />}
             <StyledList
-                data={canUse ? couponsCanUse : couponsUsed}
+                data={canUse ? newCouponsCanUse : couponsUsed}
                 renderItem={renderItem}
                 customStyle={styles.listCoupon}
                 onRefresh={() => getCouponData(canUse)}

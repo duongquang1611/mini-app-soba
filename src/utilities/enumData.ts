@@ -130,3 +130,9 @@ export enum SocketEvent {
     MESSAGE = 'MESSAGE',
     DISCONNECT = 'disconnect',
 }
+
+// coupon.isDiscountAllRestaurants
+export enum TypeDiscountCoupon {
+    ALL_RESTAURANT = 1,
+    NOT_DISCOUNT_ALL = 0,
+}

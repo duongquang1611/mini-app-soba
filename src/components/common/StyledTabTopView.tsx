@@ -45,8 +45,10 @@ const StyledTabTopView = (propsTab: IProps) => {
         customTabStyle,
     } = propsTab;
     const [index, setIndex] = useState(defaultIndex || 0);
+
     const {
         globalData: { chooseBranch },
+        globalDataUnSave: { withoutAccount },
     } = useSelector((state: RootState) => state);
     const branchId = chooseBranch?.id;
 
@@ -93,7 +95,7 @@ const StyledTabTopView = (propsTab: IProps) => {
                         contentContainerStyle={[styles.contentContainerTabBar, contentContainerStyle]}
                         renderLabel={renderLabel}
                         onTabPress={(e) => {
-                            if (isHome && !branchId) {
+                            if (isHome && !branchId && !withoutAccount) {
                                 e.preventDefault();
                                 navigate(HOME_ROUTE.CHOOSE_RESTAURANT);
                             }
