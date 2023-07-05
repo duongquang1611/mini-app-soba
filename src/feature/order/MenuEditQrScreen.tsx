@@ -59,12 +59,14 @@ const MenuEditQrScreen = (props: any) => {
     const { orderType, order, setOrder } = props?.route?.params || { orderType: OrderTypeMenu.CART_ORDER };
     const {
         resource,
-        globalData: { menu },
+        globalData: { menu: menuApi },
+        globalDataUnSave: { withoutAccount },
     } = useSelector((state: RootState) => state);
     const [orderEditMenu, setOrderEditMenu] = useState(order);
     const { dishes } = orderEditMenu || [];
     const numOrder = sumTotalAmount(orderEditMenu);
-    const { categories } = resource?.data || {};
+    const { categories, menu: menuResource } = resource?.data || {};
+    const menu = withoutAccount ? menuResource : menuApi;
     const listEnableCategory: any[] = useMemo(() => funcFilterStatus(categories), [categories]);
     const modalize = ModalizeManager();
     const [category, setCategory] = useState<any>(listEnableCategory?.[0]?.id);

@@ -69,6 +69,7 @@ const checkVersion = (configs: any[]) => {
 export const getResourcesData = async (updateOrderToAPI = true, checkCoupons = false) => {
     const {
         globalData: { chooseBranch },
+        globalDataUnSave: { withoutAccount },
     } = store.getState();
     try {
         getMenuData();
@@ -77,10 +78,12 @@ export const getResourcesData = async (updateOrderToAPI = true, checkCoupons = f
         if (needUpdate && !__DEV__) return;
         const newResources = filterResources(response?.data);
         const { order } = store.getState();
-        const { categories = [] } = newResources || {};
-
-        const res = await getMenu(chooseBranch?.id);
-        const menu = res?.data?.filter((item: any) => item?.status === MenuType.ENABLE);
+        const { menu: menuResource, categories = [] } = newResources || {};
+        let menu = menuResource;
+        if (!withoutAccount) {
+            const res = await getMenu(chooseBranch?.id);
+            menu = res?.data?.filter((item: any) => item?.status === MenuType.ENABLE);
+        }
 
         // handle menu,categories change => update order in store
         if (updateOrderToAPI) {

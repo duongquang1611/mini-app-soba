@@ -2,9 +2,8 @@ import { editProfile, getProfile } from 'api/modules/api-app/authenticate';
 import { RootState } from 'app-redux/hooks';
 import { updateChooseBranch } from 'app-redux/slices/globalDataSlice';
 import { userInfoActions } from 'app-redux/slices/userInfoSlice';
-import Images from 'assets/images';
 import { Themes } from 'assets/themes';
-import { StyledButton, StyledImage, StyledText, StyledTouchable } from 'components/base';
+import { StyledButton, StyledText, StyledTouchable } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
 import StyledInput, { LabelInput } from 'components/base/StyledInput';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
@@ -43,19 +42,16 @@ const SelectBranchStoreScreen: FunctionComponent = (props: any) => {
             AlertMessage(error);
         }
     };
-    const renderCenter = () => {
-        return <StyledImage source={Images.photo.logo} customStyle={styles.logo} />;
-    };
 
     return (
         <View style={styles.container}>
             <ModalChooseRestaurants ref={modalRef} chooseBranch={chooseBranch} selectBranch={setRestaurant} />
-            {/* <StyledHeader title={'authen.register.selectBranchStore.title'} /> */}
-            <StyledHeader
+            <StyledHeader title={'authen.register.selectBranchStore.labelBranch'} />
+            {/* <StyledHeader
                 title={'authen.register.selectBranchStore.title'}
                 renderCenter={renderCenter}
                 customContainer={styles.customContainerHeader}
-            />
+            /> */}
             <StyledKeyboardAware customStyle={styles.scrollView}>
                 <View style={styles.containerContent}>
                     <StyledText customStyle={styles.title} i18nText={'authen.register.selectBranchStore.description'} />
