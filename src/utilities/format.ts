@@ -3,6 +3,7 @@ import 'dayjs/locale/ja';
 import i18next from 'i18next';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
+import { TypeDiscountCoupon } from './enumData';
 
 dayjs.locale('ja');
 dayjs.extend(utc);
@@ -36,4 +37,19 @@ export const formatDate = (date: Date | string | number, defaultFormat = YYYYMMD
 export const formatDateJapan = (date: Date | string | number, defaultFormat = YYYYMMDD) => {
     if (!date) return '';
     return `${dayjs(date).tz('Asia/Tokyo').format(defaultFormat)}`;
+};
+export const formatRestaurantsCouponShow = (
+    restaurants: any,
+    isDiscountAllRestaurants: number,
+    detailScreen: boolean,
+) => {
+    if (isDiscountAllRestaurants === TypeDiscountCoupon.ALL_RESTAURANT)
+        return detailScreen ? i18next.t('coupon.allRestaurant') : `[${i18next.t('coupon.allRestaurant')}]`;
+    if (restaurants?.length) {
+        const restaurantsShow = restaurants
+            .map((item: any) => `${item.name}${i18next.t('coupon.itemRestaurantShow')}`)
+            .join(i18next.t('common.comma'));
+        return detailScreen ? restaurantsShow : `[${restaurantsShow}]`;
+    }
+    return '';
 };

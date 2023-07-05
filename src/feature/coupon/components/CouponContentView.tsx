@@ -9,7 +9,7 @@ import React from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { CouponDishType } from 'utilities/enumData';
-import { formatDate } from 'utilities/format';
+import { formatDate, formatRestaurantsCouponShow } from 'utilities/format';
 import { getRangeCoupon } from 'utilities/helper';
 import { DateType, DiscountType } from 'utilities/staticData';
 
@@ -69,7 +69,10 @@ const CouponContentView = (props: IProps) => {
         dateType,
         expiryDay,
         expiryDayType,
+        isDiscountAllRestaurants,
+        restaurants,
     } = coupon || {};
+
     const isBlock = Boolean(coupon?.isBlock);
     const hasExpired = dateType === DateType.EXPIRED_DATE;
 
@@ -100,10 +103,22 @@ const CouponContentView = (props: IProps) => {
                             originValue={title}
                             customStyle={[styles.title, initDetailNavigate?.stampAmount && { marginRight: scale(32) }]}
                         />
+
                         <PointExchangeView
                             stampAmount={initDetailNavigate?.stampAmount}
                             bigSize
                             customStyle={styles.pointExchangeView}
+                        />
+                    </View>
+                    <View style={styles.applyBranch}>
+                        <StyledText
+                            i18nText={'coupon.restaurantsTitle'}
+                            customStyle={[styles.title, styles.restaurantHeight]}
+                        />
+
+                        <StyledText
+                            originValue={formatRestaurantsCouponShow(restaurants, isDiscountAllRestaurants, true)}
+                            customStyle={[styles.restaurant, styles.restaurantHeight]}
                         />
                     </View>
 
@@ -244,6 +259,9 @@ const styles = ScaledSheet.create({
         fontWeight: 'bold',
         color: Themes.COLORS.secondary,
     },
+    restaurantHeight: {
+        lineHeight: '20@vs',
+    },
     discountText: {
         fontSize: '16@ms0.3',
         fontWeight: 'bold',
@@ -316,6 +334,11 @@ const styles = ScaledSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
     },
+    applyBranch: {
+        flexDirection: 'row',
+        // alignItems: 'center',
+        marginTop: '10@s',
+    },
     grayView: {
         height: '10@vs',
         backgroundColor: Themes.COLORS.lightGray,
@@ -327,6 +350,10 @@ const styles = ScaledSheet.create({
         right: 0,
     },
     exchangeLimit: {},
+    restaurant: {
+        flexShrink: 1,
+        marginLeft: '5@s',
+    },
 });
 
 export default CouponContentView;

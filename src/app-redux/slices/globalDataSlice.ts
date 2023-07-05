@@ -19,6 +19,7 @@ interface IGlobalDataState {
     triggerReloadStamp: number;
     listRestaurants: IRestaurants[];
     chooseBranch: any;
+    menu: any;
 }
 
 const initialState: IGlobalDataState = {
@@ -30,6 +31,7 @@ const initialState: IGlobalDataState = {
     triggerReloadStamp: 0,
     listRestaurants: [],
     chooseBranch: {},
+    menu: [],
 };
 
 const globalDataSlice = createSlice({
@@ -59,6 +61,10 @@ const globalDataSlice = createSlice({
             state = { ...state, chooseBranch: action.payload };
             return state;
         },
+        updateMenu: (state, action: PayloadAction<any>) => {
+            state = { ...state, menu: action.payload };
+            return state;
+        },
     },
 });
 
@@ -70,5 +76,6 @@ export const {
     updateChooseTickStampIds,
     updateNotificationUnRead,
     updateChooseBranch,
+    updateMenu,
 } = globalDataSlice.actions;
 export default persistReducer<IGlobalDataState>(persistConfig, globalDataSlice.reducer);

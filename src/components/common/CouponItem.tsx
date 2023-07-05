@@ -10,7 +10,7 @@ import { View } from 'react-native';
 import { ScaledSheet, scale } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
 import { TypeDiscountCoupon } from 'utilities/enumData';
-import { formatDate } from 'utilities/format';
+import { formatDate, formatRestaurantsCouponShow } from 'utilities/format';
 import { getRangeCoupon } from 'utilities/helper';
 import { DateType, staticValue } from 'utilities/staticData';
 import DashView from './DashView';
@@ -122,7 +122,15 @@ export const CouponItem = (props: any) => {
                 )}
                 <StyledImage resizeMode={'cover'} source={{ uri: image_150 }} customStyle={blStyle.couponImage} />
                 <View style={blStyle.content}>
-                    <StyledText originValue={title} numberOfLines={1} customStyle={blStyle.title} />
+                    <StyledText
+                        i18nText={'coupon.titleItemCoupon'}
+                        i18nParams={{
+                            restaurants: formatRestaurantsCouponShow(coupon?.restaurants, isAllRestaurants, false),
+                            title,
+                        }}
+                        numberOfLines={1}
+                        customStyle={blStyle.title}
+                    />
                     <View style={blStyle.rowView}>
                         {isExchangeCoupon ? (
                             <>

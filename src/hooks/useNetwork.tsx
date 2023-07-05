@@ -2,7 +2,8 @@
 import NetInfo from '@react-native-community/netinfo';
 import { getProfile } from 'api/modules/api-app/authenticate';
 import { getResources } from 'api/modules/api-app/general';
-import { saveOrderOption } from 'api/modules/api-app/order';
+import { getMenu, saveOrderOption } from 'api/modules/api-app/order';
+import { updateMenu } from 'app-redux/slices/globalDataSlice';
 import { updateAllOrder, updateDishesAllOrder } from 'app-redux/slices/orderSlice';
 import { resourceActions } from 'app-redux/slices/resourceSlice';
 import { userInfoActions } from 'app-redux/slices/userInfoSlice';
@@ -10,7 +11,7 @@ import { store } from 'app-redux/store';
 import { compare } from 'compare-versions';
 import AlertMessage from 'components/base/AlertMessage';
 import ModalizeManager from 'components/base/modal/ModalizeManager';
-import { getCouponData } from 'feature/home/HomeScreen';
+import { getCouponData, getMenuData } from 'feature/home/HomeScreen';
 import { useEffect, useRef } from 'react';
 import DeviceInfo from 'react-native-device-info';
 import {
@@ -20,7 +21,7 @@ import {
     generateDataSaveOrderOption,
     openURL,
 } from 'utilities/helper';
-import { MODAL_ID, OrderType, POPUP_TYPE, STORE_URL, VERSION_APP_KEY } from 'utilities/staticData';
+import { MODAL_ID, MenuType, OrderType, POPUP_TYPE, STORE_URL, VERSION_APP_KEY } from 'utilities/staticData';
 
 const checkVersion = (configs: any[]) => {
     const modalize = ModalizeManager();
@@ -66,13 +67,20 @@ const checkVersion = (configs: any[]) => {
 };
 
 export const getResourcesData = async (updateOrderToAPI = true, checkCoupons = false) => {
+    const {
+        globalData: { chooseBranch },
+    } = store.getState();
     try {
+        getMenuData();
         const response = await getResources();
         const needUpdate = checkVersion(response?.data?.configs || []);
         if (needUpdate && !__DEV__) return;
         const newResources = filterResources(response?.data);
         const { order } = store.getState();
-        const { menu = [], categories = [] } = newResources || {};
+        const { categories = [] } = newResources || {};
+
+        const res = await getMenu(chooseBranch?.id);
+        const menu = res?.data?.filter((item: any) => item?.status === MenuType.ENABLE);
 
         // handle menu,categories change => update order in store
         if (updateOrderToAPI) {
@@ -91,6 +99,7 @@ export const getResourcesData = async (updateOrderToAPI = true, checkCoupons = f
 
         // update resource to store
         store.dispatch(resourceActions.getResourceSuccess(newResources));
+        store.dispatch(updateMenu(menu));
     } catch (error) {
         console.log('getCouponData -> error', error);
     }
