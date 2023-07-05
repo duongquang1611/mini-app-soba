@@ -60,11 +60,13 @@ const MenuScreen = () => {
     const {
         order: { cartOrder },
         resource,
-        globalData: { menu },
+        globalData: { menu: menuApi },
+        globalDataUnSave: { withoutAccount },
     } = useSelector((state: RootState) => state);
     const { dishes } = cartOrder || [];
     const numOrder = sumTotalAmount(cartOrder);
-    const { categories } = resource?.data || {};
+    const { categories, menu: menuResource } = resource?.data || {};
+    const menu = withoutAccount ? menuResource : menuApi;
     const listEnableCategory: any[] = useMemo(() => funcFilterStatus(categories), [categories]);
     const modalize = ModalizeManager();
     const [category, setCategory] = useState<any>(listEnableCategory?.[0]?.id);

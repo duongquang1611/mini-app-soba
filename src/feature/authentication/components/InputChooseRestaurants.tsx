@@ -53,7 +53,6 @@ const InputChooseRestaurants = (props: IInputChooseBranch) => {
                     value={chooseBranchRegister?.name || chooseBranch?.name}
                     containerStyle={styles.containerStyleBtn}
                     pointerEvents="none"
-                    customPlaceHolder="authen.register.selectBranchStore.placeHolderBranch"
                 />
             )}
         </StyledTouchable>

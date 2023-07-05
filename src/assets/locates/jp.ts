@@ -120,7 +120,7 @@ export default {
                 description: '使用する店舗を選択してくださ',
                 labelInput: '選択中店舗',
                 describeLabel: '券売機に来店QRコードをかざす',
-                labelBranch: 'ブランチを選択',
+                labelBranch: 'よく使用する店舗',
                 descriptionInput: '変更は\nこちら',
                 placeHolderBranch: '選択してください',
                 titleModal: '店舗選択',
@@ -468,7 +468,7 @@ export default {
     },
     qrHome: {
         default: {
-            title: 'いつもの！選択',
+            title: 'クーポン選択',
             buttonNoEdit: 'いつもの！をアレンジ',
             buttonEdited: '選択中の商品を確認する',
             content1: '”いつもの！注文”がまだ設定されていません。',
