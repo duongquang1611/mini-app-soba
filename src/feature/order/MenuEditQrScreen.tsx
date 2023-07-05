@@ -12,7 +12,7 @@ import { ORDER_ROUTE } from 'navigation/config/routes';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { View } from 'react-native';
 import { ScaledSheet, scale, verticalScale } from 'react-native-size-matters';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { funcFilterStatus, isIos, sumTotalAmount, titleOrder } from 'utilities/helper';
 import { MODAL_ID, OrderTypeMenu, staticValue } from 'utilities/staticData';
 import ButtonCart from './components/ButtonCart';
@@ -57,11 +57,14 @@ const ItemMenu = (props: any) => {
 
 const MenuEditQrScreen = (props: any) => {
     const { orderType, order, setOrder } = props?.route?.params || { orderType: OrderTypeMenu.CART_ORDER };
-    const { resource } = useSelector((state: RootState) => state);
+    const {
+        resource,
+        globalData: { menu },
+    } = useSelector((state: RootState) => state);
     const [orderEditMenu, setOrderEditMenu] = useState(order);
     const { dishes } = orderEditMenu || [];
     const numOrder = sumTotalAmount(orderEditMenu);
-    const { categories, menu } = resource?.data || {};
+    const { categories } = resource?.data || {};
     const listEnableCategory: any[] = useMemo(() => funcFilterStatus(categories), [categories]);
     const modalize = ModalizeManager();
     const [category, setCategory] = useState<any>(listEnableCategory?.[0]?.id);

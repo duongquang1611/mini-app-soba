@@ -1,9 +1,10 @@
 import { getCouponList } from 'api/modules/api-app/coupon';
 import { getNewsList } from 'api/modules/api-app/home';
 import { getNotificationList } from 'api/modules/api-app/notification';
+import { getMenu } from 'api/modules/api-app/order';
 import { RootState } from 'app-redux/hooks';
 import { updateCoupon } from 'app-redux/slices/couponSlice';
-import { updateChooseBranch, updateNotificationUnRead } from 'app-redux/slices/globalDataSlice';
+import { updateChooseBranch, updateMenu, updateNotificationUnRead } from 'app-redux/slices/globalDataSlice';
 import { updateGlobalDataUnSave } from 'app-redux/slices/globalDataUnSaveSlice';
 import { store } from 'app-redux/store';
 import Images from 'assets/images';
@@ -41,6 +42,7 @@ import {
     CONFIG_KEYS,
     CouponStoreKeyByStatus,
     MODAL_ID,
+    MenuType,
     OrderType,
     POPUP_TYPE,
     TabCouponStatus,
@@ -96,6 +98,20 @@ export const getCouponData = async (status?: TabCouponStatus) => {
     }
 };
 
+export const getMenuData = async () => {
+    try {
+        const {
+            globalData: { chooseBranch },
+        } = store.getState();
+        const { token }: any = store.getState().userInfo;
+        if (!token || !chooseBranch?.id) return;
+        const res = await getMenu(chooseBranch?.id);
+        store.dispatch(updateMenu(res?.data?.filter((item: any) => item?.status === MenuType.ENABLE)));
+    } catch (error) {
+        console.log('getCouponData -> error', error);
+    }
+};
+
 const HomeScreen: FunctionComponent = () => {
     useOnesignal();
     const { t } = useTranslation();
@@ -132,6 +148,7 @@ const HomeScreen: FunctionComponent = () => {
 
     useEffect(() => {
         getNewsData();
+        getMenuData();
         getCouponData();
         getNotification();
         setTab(withoutAccount || !branchId ? 2 : getIndexTab(defaultOrderLocal, mobileOrder));

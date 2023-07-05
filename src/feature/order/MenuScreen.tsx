@@ -60,10 +60,11 @@ const MenuScreen = () => {
     const {
         order: { cartOrder },
         resource,
+        globalData: { menu },
     } = useSelector((state: RootState) => state);
     const { dishes } = cartOrder || [];
     const numOrder = sumTotalAmount(cartOrder);
-    const { categories, menu } = resource?.data || {};
+    const { categories } = resource?.data || {};
     const listEnableCategory: any[] = useMemo(() => funcFilterStatus(categories), [categories]);
     const modalize = ModalizeManager();
     const [category, setCategory] = useState<any>(listEnableCategory?.[0]?.id);
@@ -435,8 +436,10 @@ const styles = ScaledSheet.create({
     rowHeader: {
         flexDirection: 'row',
         alignItems: 'center',
+        flexShrink: 1,
     },
     chooseBranch: {
-        maxWidth: '200@s',
+        marginRight: '10@s',
+        flexShrink: 1,
     },
 });

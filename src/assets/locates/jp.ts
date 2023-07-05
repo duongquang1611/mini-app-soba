@@ -59,6 +59,7 @@ export default {
         menuNoData: '商品がありません。',
         goToLogin: 'ログイン画面へ',
         requireLogin: 'この機能を使用するには、\nログインする必要があります。',
+        comma: '、',
     },
 
     // screens
@@ -391,6 +392,10 @@ export default {
         weekExpiryCoupon: '有効期間はクーポンに交換した日から{{value}}週間です。',
         monthExpiryCoupon: '有効期間はクーポンに交換した日から{{value}}ヶ月間です。',
         yearExpiryCoupon: '有効期間はクーポンに交換した日から{{value}}年間です。',
+        allRestaurant: 'tat ca chi nhanh',
+        itemRestaurantShow: '{{name}}限定',
+        titleItemCoupon: '{{restaurants}}{{title}}',
+        restaurantsTitle: 'restaurants: {{restaurants}}',
     },
     otp: {
         register: {
