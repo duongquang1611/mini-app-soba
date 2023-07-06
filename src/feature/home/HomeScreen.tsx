@@ -300,6 +300,7 @@ const HomeScreen: FunctionComponent = () => {
                         isHome={true}
                         defaultIndex={tab}
                         swipeEnable={!!branchId}
+                        setIndexTab={setTab}
                     />
                     <StyledImageBackground source={Images.photo.news} resizeMode="cover" style={styles.newsView}>
                         <View style={styles.buttonMobile}>
