@@ -55,7 +55,7 @@ const ModalChooseRestaurants = (props: IProps, ref: any) => {
                 keyboardShouldPersistTaps: 'handled',
             }}
             FooterComponent={<FooterComponent handleOk={handleOk} selectBox={selectBox} />}
-            modalHeight={verticalScale(350)}
+            modalHeight={verticalScale(450)}
             HeaderComponent={
                 <HeaderDefault title={'authen.register.selectBranchStore.titleModal'} onPress={handlePressIconClose} />
             }

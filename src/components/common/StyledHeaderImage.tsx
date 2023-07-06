@@ -1,16 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { RootState } from 'app-redux/hooks';
 import Images from 'assets/images';
+import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
 import { goBack } from 'navigation/NavigationService';
 import React, { useState } from 'react';
 import { StyleProp, View, ViewProps, ViewStyle } from 'react-native';
-import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
-import { logger } from 'utilities/helper';
+import { ScaledSheet, scale, verticalScale } from 'react-native-size-matters';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
-import { RootState } from 'app-redux/hooks';
 import { useSelector } from 'react-redux';
-import Metrics from 'assets/metrics';
+import { getConfig, logger } from 'utilities/helper';
+import { CONFIG_KEYS } from 'utilities/staticData';
 
 interface HeaderProps extends ViewProps {
     isBack?: boolean;
@@ -48,8 +49,11 @@ const StyledHeaderImage = (props: HeaderProps) => {
         heightImage = verticalScale(260),
         sliderWidth,
     } = props;
+
     const { globalData } = useSelector((state: RootState) => state);
     const { notificationUnRead } = globalData;
+    const transitionTime = Number(getConfig(CONFIG_KEYS.BANNER_TRANSITION_TIME));
+
     const [index, setIndex] = useState(0);
 
     const onBack = () => {
@@ -94,6 +98,9 @@ const StyledHeaderImage = (props: HeaderProps) => {
                             removeClippedSubviews={false}
                             inactiveSlideOpacity={1}
                             inactiveSlideScale={1}
+                            lockScrollWhileSnapping={true}
+                            autoplay={!!transitionTime}
+                            autoplayInterval={transitionTime * 1000}
                         />
                     ) : (
                         <StyledImage
@@ -179,7 +186,7 @@ const StyledHeaderImage = (props: HeaderProps) => {
     );
 };
 
-const styles = ScaledSheet.create({
+const styles: any = ScaledSheet.create({
     container: {
         backgroundColor: Themes.COLORS.white,
     },
@@ -246,7 +253,6 @@ const styles = ScaledSheet.create({
         marginLeft: '-5@s',
     },
     wrapDot: {
-        width: '40@s',
         height: '5@vs',
         borderRadius: 2,
         backgroundColor: Themes.COLORS.disabled,
