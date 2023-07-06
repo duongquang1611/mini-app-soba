@@ -6,6 +6,7 @@ import StyledInput, { LabelInput } from 'components/base/StyledInput';
 import { navigate } from 'navigation/NavigationService';
 import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
@@ -32,6 +33,7 @@ const InputChooseRestaurants = (props: IInputChooseBranch) => {
     const {
         globalData: { chooseBranch },
     } = useSelector((state: RootState) => state);
+    const { t } = useTranslation();
     const goToSelectBranch = () => {
         navigate(route, { setChooseBranch, chooseBranchRegister });
     };
@@ -50,7 +52,11 @@ const InputChooseRestaurants = (props: IInputChooseBranch) => {
                 </View>
             ) : (
                 <StyledInput
-                    value={chooseBranchRegister?.name || chooseBranch?.name}
+                    value={
+                        !chooseBranchRegister?.id && chooseBranchRegister?.name
+                            ? t('authen.register.selectBranchStore.noBranch')
+                            : chooseBranchRegister?.name || chooseBranch?.name
+                    }
                     containerStyle={styles.containerStyleBtn}
                     pointerEvents="none"
                 />

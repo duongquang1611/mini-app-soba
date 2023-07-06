@@ -53,3 +53,9 @@ export const formatRestaurantsCouponShow = (
     }
     return '';
 };
+
+export const formatCouponStringId = (stringId: string, exchangeTime?: number) => {
+    if (!exchangeTime) return stringId;
+    if (exchangeTime < 10) return `${stringId}_0${exchangeTime}`;
+    return `${stringId}_${exchangeTime}`;
+};

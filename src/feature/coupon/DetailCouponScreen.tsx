@@ -7,6 +7,7 @@ import { Themes } from 'assets/themes';
 import { StyledButton } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
 import StyledHeader from 'components/common/StyledHeader';
+import { getCouponData } from 'feature/home/HomeScreen';
 import StampItem from 'feature/stamp/components/StampItem';
 import { isEmpty } from 'lodash';
 import { goBack, navigate } from 'navigation/NavigationService';
@@ -58,10 +59,10 @@ const DetailCouponScreen = (props: any) => {
     const [isChooseTemp, setIsChooseTemp] = useState(!!checkChooseTemp);
 
     useEffect(() => {
-        getCouponData();
+        getDetailCouponData();
     }, []);
 
-    const getCouponData = async () => {
+    const getDetailCouponData = async () => {
         try {
             // if is exchange coupon => get coupon by id coupon
             const res = handleExchangeCoupon
@@ -102,6 +103,7 @@ const DetailCouponScreen = (props: any) => {
                 async () => {
                     const resStampDetail = await getDetailMemberStamp(stampDetail?.id);
                     setStampDetail(resStampDetail?.data);
+                    await getCouponData();
                 },
                 undefined,
                 stampDetail,

@@ -11,6 +11,7 @@ import StyledHeader from 'components/common/StyledHeader';
 import ModalChooseRestaurants from 'feature/authentication/components/ModalChooseRestaurants';
 import { goBack } from 'navigation/NavigationService';
 import React, { FunctionComponent, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { ScaledSheet } from 'react-native-size-matters';
@@ -25,6 +26,7 @@ const SelectBranchStoreScreen: FunctionComponent = (props: any) => {
 
     const { user } = userInfo;
     const dispatch = useDispatch();
+    const { t } = useTranslation();
     const [restaurant, setRestaurant] = useState<any>(chooseBranchRegister || chooseBranch);
     const { name } = restaurant || {};
     const modalRef = useRef<Modalize>();
@@ -63,7 +65,7 @@ const SelectBranchStoreScreen: FunctionComponent = (props: any) => {
 
                     <View style={styles.viewInput}>
                         <StyledInput
-                            value={name}
+                            value={!restaurant?.id && name ? t('authen.register.selectBranchStore.noBranch') : name}
                             containerStyle={styles.restaurant}
                             pointerEvents="none"
                             customPlaceHolder="authen.register.selectBranchStore.placeHolderBranch"

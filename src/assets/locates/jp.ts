@@ -392,10 +392,10 @@ export default {
         weekExpiryCoupon: '有効期間はクーポンに交換した日から{{value}}週間です。',
         monthExpiryCoupon: '有効期間はクーポンに交換した日から{{value}}ヶ月間です。',
         yearExpiryCoupon: '有効期間はクーポンに交換した日から{{value}}年間です。',
-        allRestaurant: 'tat ca chi nhanh',
+        allRestaurant: '全店舗利用可能',
         itemRestaurantShow: '{{name}}限定',
         titleItemCoupon: '{{restaurants}}{{title}}',
-        restaurantsTitle: 'restaurants: {{restaurants}}',
+        restaurantsTitle: '利用可能店舗: {{restaurants}}',
     },
     otp: {
         register: {

@@ -9,7 +9,7 @@ import React from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { CouponDishType } from 'utilities/enumData';
-import { formatDate, formatRestaurantsCouponShow } from 'utilities/format';
+import { formatCouponStringId, formatDate, formatRestaurantsCouponShow } from 'utilities/format';
 import { getRangeCoupon } from 'utilities/helper';
 import { DateType, DiscountType } from 'utilities/staticData';
 
@@ -54,7 +54,7 @@ const CouponContentView = (props: IProps) => {
         item,
         isExchange,
     } = props || {};
-    const { coupon = {}, usedDate, expiryDate, receivedDate } = data || {};
+    const { coupon = {}, usedDate, expiryDate, receivedDate, exchangeTime } = data || {};
     const { exchangeLimit } = item || {};
     const {
         title,
@@ -89,7 +89,7 @@ const CouponContentView = (props: IProps) => {
                     ) : (
                         <StyledText
                             i18nText={'coupon.detail.id'}
-                            i18nParams={{ id: stringId }}
+                            i18nParams={{ id: formatCouponStringId(stringId, exchangeTime) }}
                             customStyle={styles.textId}
                         />
                     )}
