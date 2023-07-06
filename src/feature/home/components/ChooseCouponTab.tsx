@@ -152,7 +152,7 @@ const ChooseCouponTab = (props: any) => {
                                 <StyledText customStyle={styles.title} i18nText="home.listDishesOfCoupon" />
                             </View>
                             <View style={(checkChooseCouponNoDish || noCouponChoose) && styles.viewDish}>
-                                {!noCouponChoose && (
+                                {!noCouponChoose && !checkChooseCouponNoDish && (
                                     <ModalCoupon
                                         isHomeTab={true}
                                         listCouponsModal={defaultOrderLocal?.coupons}
