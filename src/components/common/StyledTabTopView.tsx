@@ -9,6 +9,7 @@ import { StyleProp, View, ViewStyle } from 'react-native';
 import { ScaledSheet, scale } from 'react-native-size-matters';
 import { TabBar, TabView } from 'react-native-tab-view';
 import { useSelector } from 'react-redux';
+import { QR_TAB_TYPE } from 'utilities/enumData';
 
 interface IProps {
     defaultIndex?: number;
@@ -95,8 +96,13 @@ const StyledTabTopView = (propsTab: IProps) => {
                         contentContainerStyle={[styles.contentContainerTabBar, contentContainerStyle]}
                         renderLabel={renderLabel}
                         onTabPress={(e) => {
-                            if (isHome && !branchId && !withoutAccount) {
+                            const { key } = e?.route || {};
+                            if (isHome && !branchId && !withoutAccount && key !== 'qrCheckIn') {
                                 e.preventDefault();
+                                if (index !== QR_TAB_TYPE.CHECK_IN) {
+                                    setIndex?.(QR_TAB_TYPE.CHECK_IN);
+                                    setIndexTab?.(QR_TAB_TYPE.CHECK_IN);
+                                }
                                 navigate(HOME_ROUTE.CHOOSE_RESTAURANT);
                             }
                         }}
