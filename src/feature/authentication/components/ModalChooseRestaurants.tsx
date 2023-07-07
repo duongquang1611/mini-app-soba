@@ -53,9 +53,11 @@ const ModalChooseRestaurants = (props: IProps, ref: any) => {
             withHandle={false}
             scrollViewProps={{
                 keyboardShouldPersistTaps: 'handled',
+                contentContainerStyle: styles.contentContainerStyle,
             }}
             FooterComponent={<FooterComponent handleOk={handleOk} selectBox={selectBox} />}
-            modalHeight={verticalScale(450)}
+            modalHeight={Metrics.screenHeight * 0.8}
+            snapPoint={verticalScale(370)}
             HeaderComponent={
                 <HeaderDefault title={'authen.register.selectBranchStore.titleModal'} onPress={handlePressIconClose} />
             }
@@ -121,6 +123,9 @@ const styles = ScaledSheet.create({
         flex: 1,
         paddingVertical: '20@vs',
         paddingHorizontal: '20@vs',
+    },
+    contentContainerStyle: {
+        flexGrow: 1,
     },
     header: {
         paddingVertical: '17@vs',
