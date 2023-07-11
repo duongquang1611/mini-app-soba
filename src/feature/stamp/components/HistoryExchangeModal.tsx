@@ -14,7 +14,8 @@ const ItemHistory = ({ item }: any) => {
         <View style={styles.wrapItem}>
             <View style={styles.wrapTitleDate}>
                 <StyledText originValue={`${formatDate(receivedDate)} : `} customStyle={styles.textDate} />
-                <StyledText originValue={title} customStyle={styles.textTitle} />
+                <StyledText originValue={title} />
+                {/* <StyledText originValue={formatRestaurantsCouponShow(title, isDiscountAllRestaurants)} customStyle={styles.textTitle} /> */}
             </View>
             {!!stampAmount && (
                 <View style={styles.wrapCount}>

@@ -396,6 +396,7 @@ export default {
         itemRestaurantShow: '{{name}}限定',
         titleItemCoupon: '{{restaurants}}{{title}}',
         restaurantsTitle: '利用可能店舗: {{restaurants}}',
+        noRestaurant: 'ありません。',
     },
     otp: {
         register: {

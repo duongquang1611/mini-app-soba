@@ -35,13 +35,13 @@ export const CouponItem = (props: any) => {
         showDashTop = false,
         showDashBottom = true,
         isHomeTab,
-        isAllRestaurants,
     } = props || {};
 
     const blStyle = isHomeTab ? stylesSmall : styles;
 
     const { coupon, usedDate, id: idMemberCoupon, receivedDate, expiryDate, stampAmount = 0 } = item;
-    const { image_150, title, startDate, endDate, dateType, expiryDay, expiryDayType } = coupon || {};
+    const { image_150, title, startDate, endDate, dateType, expiryDay, expiryDayType, isDiscountAllRestaurants } =
+        coupon || {};
     // const isInCartAPI = useMemo(() => status === MemberCouponStatus.IN_CART, [status]);
     const checkChooseTemp = (isHomeTab ? defaultOrderLocal : cartOrderState)?.coupons?.find(
         (itemCoupon: any) => itemCoupon?.id === idMemberCoupon,
@@ -51,7 +51,6 @@ export const CouponItem = (props: any) => {
     );
 
     const checkNotRestaurant =
-        isAllRestaurants &&
         item?.coupon?.isDiscountAllRestaurants === TypeDiscountCoupon.NOT_DISCOUNT_ALL &&
         !item?.coupon?.restaurants?.map((itemBranch: any) => itemBranch?.id)?.includes(chooseBranch?.id);
 
@@ -125,7 +124,11 @@ export const CouponItem = (props: any) => {
                     <StyledText
                         i18nText={'coupon.titleItemCoupon'}
                         i18nParams={{
-                            restaurants: formatRestaurantsCouponShow(coupon?.restaurants, isAllRestaurants, false),
+                            restaurants: formatRestaurantsCouponShow(
+                                coupon?.restaurants,
+                                isDiscountAllRestaurants,
+                                false,
+                            ),
                             title,
                         }}
                         numberOfLines={1}

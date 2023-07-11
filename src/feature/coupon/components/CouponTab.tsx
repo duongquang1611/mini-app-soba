@@ -20,12 +20,20 @@ interface CouponTabProps {
     orderType?: any;
     order?: any;
     isHomeTab?: boolean;
-    isAllRestaurants?: boolean;
+    isShowAllRestaurants?: boolean;
 }
 
 const CouponTab = (props: CouponTabProps) => {
-    const { canUse, handleUseCoupon, cartListCouponOrder, isTabCoupon, orderType, order, isHomeTab, isAllRestaurants } =
-        props;
+    const {
+        canUse,
+        handleUseCoupon,
+        cartListCouponOrder,
+        isTabCoupon,
+        orderType,
+        order,
+        isHomeTab,
+        isShowAllRestaurants,
+    } = props;
     const {
         coupon,
         globalData: { chooseBranch },
@@ -34,7 +42,7 @@ const CouponTab = (props: CouponTabProps) => {
     const branchId = chooseBranch?.id;
     const { couponsCanUse = [], couponsUsed = [] } = coupon || {};
     const newCouponsCanUse = useMemo(() => {
-        if (isAllRestaurants) return couponsCanUse;
+        if (isShowAllRestaurants) return couponsCanUse;
         return couponsCanUse?.filter(
             (item) =>
                 item?.coupon?.isDiscountAllRestaurants === TypeDiscountCoupon.ALL_RESTAURANT ||
@@ -62,7 +70,7 @@ const CouponTab = (props: CouponTabProps) => {
                 orderType={orderType}
                 order={order}
                 isHomeTab={isHomeTab}
-                isAllRestaurants={isAllRestaurants}
+                isShowAllRestaurants={isShowAllRestaurants}
             />
         );
     };
