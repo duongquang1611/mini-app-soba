@@ -123,7 +123,7 @@ const styles = ScaledSheet.create({
         marginTop: '8@vs',
     },
     cssTxtInput: {
-        fontSize: '16@ms',
+        fontSize: 16,
         fontWeight: 'bold',
         color: Themes.COLORS.textSecondary,
     },

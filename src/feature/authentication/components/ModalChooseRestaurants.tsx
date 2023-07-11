@@ -158,6 +158,7 @@ const styles = ScaledSheet.create({
         marginLeft: '10@s',
         fontSize: '16@ms0.3',
         lineHeight: '23@vs',
+        flexShrink: 1,
     },
     cancelBtn: {
         width: 'auto',
