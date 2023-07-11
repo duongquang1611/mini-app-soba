@@ -9,7 +9,7 @@ import React from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import { CouponDishType } from 'utilities/enumData';
-import { formatDate } from 'utilities/format';
+import { formatDate, formatRestaurantsCouponShow } from 'utilities/format';
 import { getRangeCoupon } from 'utilities/helper';
 import { DateType, DiscountType } from 'utilities/staticData';
 
@@ -54,12 +54,21 @@ const CouponContentItem = ({ item }: any) => {
         stringId = '',
         expiryDayType,
         expiryDay,
+        restaurants,
+        isDiscountAllRestaurants,
     } = coupon;
 
     return (
         <>
             <StyledText i18nText={'coupon.detail.id'} i18nParams={{ id: stringId }} customStyle={styles.textId} />
-            <StyledText originValue={title} customStyle={styles.title} />
+            <StyledText
+                i18nParams={{
+                    restaurants: formatRestaurantsCouponShow(restaurants, isDiscountAllRestaurants, false),
+                    title,
+                }}
+                i18nText={'coupon.titleItemCoupon'}
+                customStyle={styles.title}
+            />
             <StyledImageBackground style={styles.img} source={{ uri: image }} />
             <View style={styles.rowView}>
                 <StyledIcon source={Images.icons.calendar} size={20} customStyle={styles.iconDate} />

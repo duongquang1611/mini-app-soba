@@ -53,6 +53,7 @@ export const staticValue = {
     DELAY_LONG_PRESS: Platform.OS === 'ios' ? 400 : 350,
     ENCRYPT_KEY: '@Soba$',
     TIMEOUT_CODEPUSH: 6000,
+    DEFAULT_TIME_BANNER: '5',
 };
 
 export const STORE_URL = Platform.select({

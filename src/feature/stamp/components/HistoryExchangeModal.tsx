@@ -3,19 +3,25 @@ import { StyledText } from 'components/base';
 import React from 'react';
 import { View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
-import { formatDate } from 'utilities/format';
+import { formatDate, formatRestaurantsCouponShow } from 'utilities/format';
 
 const ItemHistory = ({ item }: any) => {
     const { receivedDate, coupon = {} } = item;
-    const { title = '', stampCoupon = {} } = coupon?.[0] || {};
+    const { title = '', stampCoupon = {}, restaurants, isDiscountAllRestaurants } = coupon?.[0] || {};
     const { stampAmount } = stampCoupon;
 
     return (
         <View style={styles.wrapItem}>
             <View style={styles.wrapTitleDate}>
                 <StyledText originValue={`${formatDate(receivedDate)} : `} customStyle={styles.textDate} />
-                <StyledText originValue={title} />
-                {/* <StyledText originValue={formatRestaurantsCouponShow(title, isDiscountAllRestaurants)} customStyle={styles.textTitle} /> */}
+                <StyledText
+                    i18nParams={{
+                        restaurants: formatRestaurantsCouponShow(restaurants, isDiscountAllRestaurants, false),
+                        title,
+                    }}
+                    i18nText={'coupon.titleItemCoupon'}
+                    customStyle={styles.textTitle}
+                />
             </View>
             {!!stampAmount && (
                 <View style={styles.wrapCount}>

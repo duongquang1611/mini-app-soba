@@ -205,7 +205,6 @@ const styles = ScaledSheet.create({
     detailButton: {
         width: '170@s',
         padding: 0,
-        // marginTop: '5@vs',
         paddingVertical: '8@vs',
     },
     button: {
@@ -218,6 +217,9 @@ const styles = ScaledSheet.create({
     },
     qrCodeView: {
         alignItems: 'center',
+        justifyContent: 'space-between',
+        flexGrow: 1,
+        paddingBottom: '15@vs',
     },
     content1: {
         textAlign: 'center',
@@ -242,7 +244,6 @@ const styles = ScaledSheet.create({
     },
     textBtn: {
         fontSize: '14@ms0.3',
-        // lineHeight: '21@vs',
     },
     listCoupon: {
         backgroundColor: Themes.COLORS.white,
@@ -293,6 +294,7 @@ const styles = ScaledSheet.create({
         alignSelf: 'flex-start',
         position: 'absolute',
         top: '15@vs',
+        left: '15@s',
     },
     qrView: {
         marginTop: '20@vs',

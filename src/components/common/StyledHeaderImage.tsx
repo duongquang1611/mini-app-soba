@@ -10,8 +10,8 @@ import { StyleProp, View, ViewProps, ViewStyle } from 'react-native';
 import { ScaledSheet, scale, verticalScale } from 'react-native-size-matters';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { useSelector } from 'react-redux';
-import { getConfig, logger } from 'utilities/helper';
-import { CONFIG_KEYS } from 'utilities/staticData';
+import { logger } from 'utilities/helper';
+import { CONFIG_KEYS, staticValue } from 'utilities/staticData';
 
 interface HeaderProps extends ViewProps {
     isBack?: boolean;
@@ -54,7 +54,7 @@ const StyledHeaderImage = (props: HeaderProps) => {
     const { notificationUnRead } = globalData;
     const { configs = [] } = resource?.data || {};
     const dataConfig = configs.find((item: any) => item.key === CONFIG_KEYS.BANNER_TRANSITION_TIME) || {};
-    const transitionTime = Number(dataConfig?.value);
+    const transitionTime = Number(dataConfig?.value || staticValue.DEFAULT_TIME_BANNER);
 
     const [index, setIndex] = useState(0);
 
@@ -90,6 +90,7 @@ const StyledHeaderImage = (props: HeaderProps) => {
                 <View style={[styles.slide, { height: heightImage }]}>
                     {images?.length ? (
                         <Carousel
+                            key={transitionTime}
                             data={images}
                             renderItem={renderItem}
                             onSnapToItem={setIndex}

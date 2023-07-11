@@ -10,7 +10,7 @@ import AmountOrder from 'feature/order/components/AmountOrder';
 import React, { useEffect, useRef, useState } from 'react';
 import { RefreshControl, View } from 'react-native';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
-import { formatDate, YMDHm } from 'utilities/format';
+import { formatDate, formatRestaurantsCouponShow, YMDHm } from 'utilities/format';
 import { numberWithCommas } from 'utilities/helper';
 
 const OrderItem = (props: any) => {
@@ -171,7 +171,15 @@ const OrderHistoryDetailScreen = (props: any) => {
                                                 customStyle={styles.couponItem}
                                             />
                                             <StyledText
-                                                originValue={itemCoupon?.coupon?.title}
+                                                i18nParams={{
+                                                    restaurants: formatRestaurantsCouponShow(
+                                                        itemCoupon?.coupon?.restaurants,
+                                                        itemCoupon?.coupon?.isDiscountAllRestaurants,
+                                                        false,
+                                                    ),
+                                                    title: itemCoupon?.coupon?.title,
+                                                }}
+                                                i18nText={'coupon.titleItemCoupon'}
                                                 isBlack
                                                 customStyle={{ flexShrink: 1 }}
                                             />
