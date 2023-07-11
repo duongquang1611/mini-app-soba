@@ -67,7 +67,7 @@ const TabCouponListScreen = () => {
                 isTabCoupon
                 canUse={TabCouponStatus.CAN_USE}
                 handleUseCoupon={handleUseCoupon}
-                isAllRestaurants={true}
+                isShowAllRestaurants={true}
             />
         ),
         stampUsed: () => (
@@ -75,7 +75,7 @@ const TabCouponListScreen = () => {
                 isTabCoupon
                 canUse={TabCouponStatus.USED}
                 handleUseCoupon={handleUseCoupon}
-                isAllRestaurants={true}
+                isShowAllRestaurants={true}
             />
         ),
     });

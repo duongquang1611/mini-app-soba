@@ -51,7 +51,7 @@ export const formatRestaurantsCouponShow = (
             .join(i18next.t('common.comma'));
         return detailScreen ? restaurantsShow : `[${restaurantsShow}]`;
     }
-    return '';
+    return detailScreen ? i18next.t('coupon.noRestaurant') : '';
 };
 
 export const formatCouponStringId = (stringId: string, exchangeTime?: number) => {

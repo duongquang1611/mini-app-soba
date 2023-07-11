@@ -50,9 +50,11 @@ const StyledHeaderImage = (props: HeaderProps) => {
         sliderWidth,
     } = props;
 
-    const { globalData } = useSelector((state: RootState) => state);
+    const { globalData, resource } = useSelector((state: RootState) => state);
     const { notificationUnRead } = globalData;
-    const transitionTime = Number(getConfig(CONFIG_KEYS.BANNER_TRANSITION_TIME));
+    const { configs = [] } = resource?.data || {};
+    const dataConfig = configs.find((item: any) => item.key === CONFIG_KEYS.BANNER_TRANSITION_TIME) || {};
+    const transitionTime = Number(dataConfig?.value);
 
     const [index, setIndex] = useState(0);
 

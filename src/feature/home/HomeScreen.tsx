@@ -129,11 +129,11 @@ const HomeScreen: FunctionComponent = () => {
     const { user } = userInfo;
     const { frequentlyUsedRestaurantId } = user?.member || {};
 
-    const { mobileOrder, defaultOrderLocal } = order;
+    const { mobileOrder, defaultOrderLocal, defaultOrder } = order;
     const newOrderMobile = useMemo(() => generateNewOrder(mobileOrder, user), [mobileOrder, user]);
     const newOrderDefault = useMemo(
-        () => generateNewOrder(defaultOrderLocal, user, OrderType.DEFAULT_HOME),
-        [defaultOrderLocal, user],
+        () => generateNewOrder(defaultOrder, user, OrderType.DEFAULT_HOME),
+        [defaultOrder, user],
     );
     const mobileOrderQR = useMemo(() => generateOrderQR(mobileOrder, user), [mobileOrder, user]);
     const defaultOrderQR = useMemo(

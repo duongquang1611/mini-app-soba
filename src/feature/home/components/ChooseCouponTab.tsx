@@ -22,7 +22,7 @@ import QRCode from 'react-native-qrcode-svg';
 import { ScaledSheet, scale, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
 import { QR_TAB_TYPE } from 'utilities/enumData';
-import { encryptData, generateDataSaveOrderOption, generateOrderQR } from 'utilities/helper';
+import { encryptData, generateDataSaveOrderOption, generateOrderQR, isAmela, showActionQR } from 'utilities/helper';
 import {
     DiscountType,
     OrderType,
@@ -34,7 +34,7 @@ import {
 
 const ChooseCouponTab = (props: any) => {
     const dispatch = useDispatch();
-    const { type = QR_TAB_TYPE.ORDER_DEFAULT, qrValue, onPress, newOrder = '' } = props;
+    const { type = QR_TAB_TYPE.ORDER_DEFAULT, onPress, newOrder = '' } = props;
     const qrComponentData: any = QR_TAB_DATA[type];
     const {
         coupon,
@@ -47,7 +47,7 @@ const ChooseCouponTab = (props: any) => {
     const [showQrCode, setShowQrCode] = useState(!!defaultOrder?.coupons?.length);
 
     const couponOrderQR = useMemo(() => generateOrderQR(defaultOrder, user), [defaultOrder, user]);
-    const qrEncrypt = useMemo(() => encryptData(couponOrderQR), [JSON.stringify(defaultOrder)]);
+    const qrEncrypt = useMemo(() => encryptData(couponOrderQR), [JSON.stringify(couponOrderQR)]);
     const handleOnPressQR = () => {
         // decryptData(qrEncrypt);
     };
@@ -77,6 +77,12 @@ const ChooseCouponTab = (props: any) => {
         dispatch(clearDefaultOrderLocal());
         dispatch(updateDefaultOrder(coupons));
         setShowQrCode(true);
+    };
+
+    const handleLongPress = () => {
+        if (!isAmela()) return;
+
+        showActionQR(qrEncrypt, newOrder);
     };
 
     const handleQrPress = () => {
@@ -121,7 +127,12 @@ const ChooseCouponTab = (props: any) => {
                             <StyledIcon size={24} source={Images.icons.back} />
                         </StyledTouchable>
 
-                        <TouchableOpacity activeOpacity={1} onPress={handleOnPressQR} style={styles.qrView}>
+                        <TouchableOpacity
+                            activeOpacity={1}
+                            onLongPress={handleLongPress}
+                            onPress={handleOnPressQR}
+                            style={styles.qrView}
+                        >
                             <QRCode value={qrEncrypt} size={staticValue.QR_SIZE_2CM} />
                         </TouchableOpacity>
 
