@@ -41,7 +41,7 @@ export const formatDateJapan = (date: Date | string | number, defaultFormat = YY
 export const formatRestaurantsCouponShow = (
     restaurants: any,
     isDiscountAllRestaurants: number,
-    detailScreen: boolean,
+    detailScreen?: boolean,
 ) => {
     if (isDiscountAllRestaurants === TypeDiscountCoupon.ALL_RESTAURANT)
         return detailScreen ? i18next.t('coupon.allRestaurant') : `[${i18next.t('coupon.allRestaurant')}]`;

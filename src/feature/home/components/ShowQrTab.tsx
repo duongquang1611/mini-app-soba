@@ -75,7 +75,7 @@ const ShowQrTab = (props: any) => {
     };
 
     return (
-        <View style={[styles.containerQrTab]}>
+        <View style={!qrValue ? styles.containerNoQrTab : styles.containerQrTab}>
             {withoutAccount && type === QR_TAB_TYPE.CHECK_IN ? (
                 <View style={[styles.noQrCodeView]}>
                     <StyledText i18nText={'common.requireLogin'} customStyle={styles.textRequire} />
@@ -126,6 +126,12 @@ export default ShowQrTab;
 const styles = ScaledSheet.create({
     containerQrTab: {
         alignItems: 'center',
+        height: verticalScale(90) + scale(staticValue.QR_SIZE_HOME),
+        backgroundColor: Themes.COLORS.white,
+        paddingTop: '20@vs',
+    },
+    containerNoQrTab: {
+        alignItems: 'center',
         paddingBottom: '15@vs',
         paddingTop: '15@vs',
         height: verticalScale(90) + scale(staticValue.QR_SIZE_HOME),
@@ -135,7 +141,6 @@ const styles = ScaledSheet.create({
     detailButton: {
         width: '170@s',
         padding: 0,
-        marginTop: '10@vs',
         paddingVertical: '8@vs',
     },
     noQrCodeView: {
@@ -144,6 +149,9 @@ const styles = ScaledSheet.create({
     },
     qrCodeView: {
         alignItems: 'center',
+        justifyContent: 'space-between',
+        flexGrow: 1,
+        paddingBottom: '15@vs',
     },
     content1: {
         textAlign: 'center',
@@ -169,6 +177,5 @@ const styles = ScaledSheet.create({
     textBtn: {
         color: Themes.COLORS.headerBackground,
         fontSize: '14@ms0.3',
-        lineHeight: '21@vs',
     },
 });

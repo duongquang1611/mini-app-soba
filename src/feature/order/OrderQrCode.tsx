@@ -21,6 +21,7 @@ import { TouchableOpacity, View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { ScaledSheet, scale, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
+import { formatRestaurantsCouponShow } from 'utilities/format';
 import {
     encryptData,
     generateDataSaveOrderOption,
@@ -38,6 +39,7 @@ const ItemCoupon = (props: any) => {
     const { cancelCouponItem, data } = props;
     const { cartOrder } = useSelector((state: RootState) => state.order);
     const { coupon, id, choose } = data || {};
+    const { restaurants, isDiscountAllRestaurants } = coupon || {};
     const modalize = ModalizeManager();
     const dispatch = useDispatch();
     const updateCouponsCart = (coupons: any) => {
@@ -81,7 +83,14 @@ const ItemCoupon = (props: any) => {
                 <View style={styles.rowItem}>
                     <StyledIcon source={Images.icons.coupon} size={20} customStyle={styles.icCoupon} />
                     <View style={styles.nameCoupon}>
-                        <StyledText originValue={coupon?.title} isBlack />
+                        <StyledText
+                            i18nParams={{
+                                restaurants: formatRestaurantsCouponShow(restaurants, isDiscountAllRestaurants, false),
+                                title: coupon?.title,
+                            }}
+                            i18nText={'coupon.titleItemCoupon'}
+                            isBlack
+                        />
                     </View>
                 </View>
                 {choose && (
