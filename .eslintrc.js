@@ -8,6 +8,7 @@ module.exports = {
         'plugin:@typescript-eslint/recommended', // Uses the recommended rules from the @typescript-eslint/eslint-plugin
         'plugin:prettier/recommended',
         'plugin:import/errors',
+        '@react-native'
     ],
     parser: '@typescript-eslint/parser',
     plugins: ['prettier', '@typescript-eslint', 'react-hooks', 'import', 'unused-imports'],

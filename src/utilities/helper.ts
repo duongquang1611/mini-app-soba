@@ -13,7 +13,7 @@ import { APP_ROUTE, HOME_ROUTE } from 'navigation/config/routes';
 import { DevSettings, Linking, Platform } from 'react-native';
 import codePush from 'react-native-code-push';
 import Config from 'react-native-config';
-import Picker from 'react-native-picker';
+// import Picker from 'react-native-picker';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import { CheckPasswordType, CouponDishType, CouponType, ExpiryDayType } from './enumData';
 import { YYYYMMDD_PUBLISH, formatDate } from './format';
@@ -34,7 +34,7 @@ export const isAndroid = Platform.OS === 'android';
 export const isIos = Platform.OS === 'ios';
 
 export function wait(timeout: number): Promise<any> {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
         setTimeout(resolve, timeout);
     });
 }
@@ -51,12 +51,12 @@ export function logger(msg: string, isWarning?: boolean, params?: any): void {
 }
 
 export function initPicker(params?: any) {
-    Picker.init({
-        pickerTextEllipsisLen: 10,
-        pickerCancelBtnText: i18next.t('common.cancel'),
-        pickerConfirmBtnText: i18next.t('common.confirm'),
-        ...params,
-    });
+    // Picker.init({
+    //     pickerTextEllipsisLen: 10,
+    //     pickerCancelBtnText: i18next.t('common.cancel'),
+    //     pickerConfirmBtnText: i18next.t('common.confirm'),
+    //     ...params,
+    // });
 }
 
 export const addMenuClearAsyncStorage = () => {
