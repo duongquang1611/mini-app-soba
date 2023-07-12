@@ -10,6 +10,7 @@ import { ScaledSheet, scale } from 'react-native-size-matters';
 import { TabBar, TabView } from 'react-native-tab-view';
 import { useSelector } from 'react-redux';
 import { QR_TAB_TYPE } from 'utilities/enumData';
+import { isAndroid } from 'utilities/helper';
 
 interface IProps {
     defaultIndex?: number;
@@ -66,6 +67,7 @@ const StyledTabTopView = (propsTab: IProps) => {
                     color: focused ? Themes.COLORS.headerBackground : Themes.COLORS.silver,
                     fontWeight: focused ? 'bold' : 'normal',
                 },
+                isAndroid && styles.labelAndroid,
                 labelStyle,
             ]}
             originValue={route?.title || ''}
@@ -133,6 +135,10 @@ const styles = ScaledSheet.create({
     label: {
         fontSize: '14@ms0.3',
         textAlign: 'center',
+    },
+    labelAndroid: {
+        lineHeight: '20@vs',
+        marginBottom: '-5@vs',
     },
     viewLabel: {
         alignItems: 'center',

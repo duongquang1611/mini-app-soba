@@ -75,7 +75,12 @@ const ShowQrTab = (props: any) => {
     };
 
     return (
-        <View style={!qrValue ? styles.containerNoQrTab : styles.containerQrTab}>
+        <View
+            style={
+                !qrValue || (withoutAccount && type === QR_TAB_TYPE.CHECK_IN)
+                    ? styles.containerNoQrTab
+                    : styles.containerQrTab
+            }>
             {withoutAccount && type === QR_TAB_TYPE.CHECK_IN ? (
                 <View style={[styles.noQrCodeView]}>
                     <StyledText i18nText={'common.requireLogin'} customStyle={styles.textRequire} />
@@ -93,8 +98,7 @@ const ShowQrTab = (props: any) => {
                             activeOpacity={1}
                             onLongPress={handleLongPress}
                             delayLongPress={staticValue.DELAY_LONG_PRESS}
-                            onPress={handleOnPressQR}
-                        >
+                            onPress={handleOnPressQR}>
                             <QRCode value={qrEncrypt} size={staticValue.QR_SIZE_2CM} />
                         </TouchableOpacity>
                     )}
