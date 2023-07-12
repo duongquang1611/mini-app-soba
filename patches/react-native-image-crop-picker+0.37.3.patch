@@ -1,0 +1,13 @@
+diff --git a/node_modules/react-native-image-crop-picker/ios/src/ImageCropPicker.m b/node_modules/react-native-image-crop-picker/ios/src/ImageCropPicker.m
+index 7101410..cb0aaf9 100644
+--- a/node_modules/react-native-image-crop-picker/ios/src/ImageCropPicker.m
++++ b/node_modules/react-native-image-crop-picker/ios/src/ImageCropPicker.m
+@@ -907,7 +907,7 @@ RCT_EXPORT_METHOD(openCropper:(NSDictionary *)options
+ 
+ - (void)cropViewController:(TOCropViewController *)cropViewController didFinishCancelled:(BOOL)cancelled {
+     [self dismissCropper:cropViewController selectionDone:NO completion:[self waitAnimationEnd:^{
+-        if (self.currentSelectionMode == CROPPING) {
++        if (self.currentSelectionMode == CROPPING || self.currentSelectionMode == CAMERA) {
+             self.reject(ERROR_PICKER_CANCEL_KEY, ERROR_PICKER_CANCEL_MSG, nil);
+         }
+     }]];

@@ -85,17 +85,17 @@ const StyledTabTopView = (propsTab: IProps) => {
                 }}
                 lazy
                 initialLayout={{ width: Metrics.screenWidth }}
-                renderTabBar={(props) => (
+                renderTabBar={props => (
                     <TabBar
                         style={[styles.tabBar, customTabBar]}
                         pressColor={'transparent'}
                         activeColor={activeColor || Themes.COLORS.primary}
-                        tabStyle={customTabStyle}
+                        tabStyle={[styles.tabStyle, customTabStyle]}
                         inactiveColor={inactiveColor || Themes.COLORS.white}
                         indicatorStyle={[styles.indicatorTabBar, customIndicatorStyle]}
                         contentContainerStyle={[styles.contentContainerTabBar, contentContainerStyle]}
                         renderLabel={renderLabel}
-                        onTabPress={(e) => {
+                        onTabPress={e => {
                             const { key } = e?.route || {};
                             if (isHome && !branchId && !withoutAccount && key !== 'qrCheckIn') {
                                 e.preventDefault();
@@ -146,6 +146,10 @@ const styles = ScaledSheet.create({
     separator: {
         height: '10@vs',
         backgroundColor: Themes.COLORS.lightGray,
+    },
+    tabStyle: {
+        flex: undefined,
+        minHeight: undefined,
     },
 });
 

@@ -5,15 +5,14 @@ import { navigationRef } from 'navigation/NavigationService';
 import Navigation from 'navigation/scene/RootScenes';
 import React, { FunctionComponent, useEffect } from 'react';
 import { ActivityIndicator, LogBox } from 'react-native';
+import RNBootSplash from 'react-native-bootsplash';
 import { RootSiblingParent } from 'react-native-root-siblings';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import APIProvider from 'utilities/context/APIProvider';
+import { SocketProvider } from 'utilities/SocketProvider';
 import { addMenuClearAsyncStorage, getCodePushInfo, wait } from 'utilities/helper';
 import { loadLocaleLanguage } from 'utilities/i18next';
 import { staticValue } from 'utilities/staticData';
-import SplashScreen from 'react-native-splash-screen';
-import { SocketProvider } from 'utilities/SocketProvider';
 
 LogBox.ignoreLogs(['Require cycle:', 'Non-serializable', 'Sending `onAnimatedValueUpdate`']);
 addMenuClearAsyncStorage();
@@ -26,16 +25,16 @@ const App: FunctionComponent = () => {
 
     const getCodepushSuccess = () => {
         getCodePushSuccess = true;
-        SplashScreen.hide();
+        RNBootSplash.hide();
     };
 
     useEffect(() => {
         if (__DEV__) {
-            SplashScreen.hide();
+            RNBootSplash.hide();
         } else {
             getCodePushInfo(getCodepushSuccess);
             wait(staticValue.TIMEOUT_CODEPUSH).then(() => {
-                !getCodePushSuccess && SplashScreen.hide();
+                !getCodePushSuccess && RNBootSplash.hide();
             });
         }
     }, []);
