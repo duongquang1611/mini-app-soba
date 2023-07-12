@@ -82,9 +82,7 @@ const styles = ScaledSheet.create({
         marginBottom: 0,
         width: 'auto',
     },
-    txtBtn: {
-        lineHeight: '17@vs',
-    },
+    txtBtn: {},
 });
 
 export default InputChooseRestaurants;

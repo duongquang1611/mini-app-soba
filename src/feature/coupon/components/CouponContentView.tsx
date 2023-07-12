@@ -97,8 +97,7 @@ const CouponContentView = (props: IProps) => {
                         style={[
                             styles.wrapTitle,
                             initDetailNavigate?.stampAmount && { paddingBottom: verticalScale(10) },
-                        ]}
-                    >
+                        ]}>
                         <StyledText
                             originValue={title}
                             customStyle={[styles.title, initDetailNavigate?.stampAmount && { marginRight: scale(32) }]}
