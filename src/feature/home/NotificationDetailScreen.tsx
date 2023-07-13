@@ -173,8 +173,7 @@ const NotificationDetailScreen = (props: any) => {
                     />
                 }
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={styles.scrollView}
-            >
+                contentContainerStyle={styles.scrollView}>
                 <View style={styles.body}>
                     <View style={styles.grayView} />
                     <View style={styles.contentContainer}>

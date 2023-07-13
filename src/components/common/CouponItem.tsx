@@ -54,7 +54,7 @@ export const CouponItem = (props: any) => {
         item?.coupon?.isDiscountAllRestaurants === TypeDiscountCoupon.NOT_DISCOUNT_ALL &&
         !item?.coupon?.restaurants?.map((itemBranch: any) => itemBranch?.id)?.includes(chooseBranch?.id);
 
-    const disabledUse = checkChooseInCart || checkNotRestaurant;
+    const disabledUse = !!checkChooseInCart || checkNotRestaurant;
     const isBlock = Boolean(coupon?.isBlock);
     const hasExpired = dateType === DateType.EXPIRED_DATE;
 
@@ -77,13 +77,12 @@ export const CouponItem = (props: any) => {
     const renderActionRight = () => {
         return (
             <>
-                {canUse ? (
+                {!!canUse ? (
                     <StyledTouchable
                         customStyle={blStyle.btnCanUSe}
                         onPress={handleUseCoupon}
-                        disabled={isExchangeCoupon || checkNotRestaurant ? true : disabledUse}
-                        hitSlop={staticValue.DEFAULT_HIT_SLOP}
-                    >
+                        disabled={!!isExchangeCoupon || !!checkNotRestaurant ? true : !!disabledUse}
+                        hitSlop={staticValue.DEFAULT_HIT_SLOP}>
                         <StyledText
                             i18nText={getText()}
                             customStyle={[
@@ -95,9 +94,9 @@ export const CouponItem = (props: any) => {
                                             : Themes.COLORS.secondary,
                                 },
                             ]}
-                            disabled={isExchangeCoupon ? false : disabledUse}
+                            disabled={!!isExchangeCoupon ? false : !!disabledUse}
                         />
-                        <StyledIcon source={getIcon()} size={20} />
+                        <StyledIcon source={getIcon()} size={isHomeTab ? 18 : 20} />
                     </StyledTouchable>
                 ) : isBlock || !usedDate ? (
                     <View style={blStyle.btnCanUSe}>
@@ -315,7 +314,7 @@ const stylesSmall = ScaledSheet.create({
     },
     useText: {
         color: Themes.COLORS.primary,
-        fontSize: '11@ms0.3',
+        fontSize: '9@ms0.3',
         marginRight: '2@s',
     },
     textDisable: {
