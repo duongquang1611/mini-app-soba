@@ -39,6 +39,7 @@ const DetailCouponScreen = (props: any) => {
         handleUseCoupon,
         cartOrder: cartOrderState,
         fromNotify = false,
+        fromHome = false,
     } = props?.route?.params || {};
     const [disabled, setDisabled] = useState(disabledProps);
     const [stampDetail, setStampDetail] = useState(props?.route?.params?.stampDetail || {});
@@ -55,6 +56,7 @@ const DetailCouponScreen = (props: any) => {
         !item?.coupon?.restaurants?.map((itemBranch: any) => itemBranch?.id)?.includes(chooseBranch?.id);
 
     const disabledUse = checkChooseInCart || disabled || checkNotRestaurant;
+    const disableTextUse = checkChooseInCart || disabled;
     const checkChooseTemp = cartOrderState?.coupons?.find((itemCouponCart: any) => item?.id === itemCouponCart?.id);
     const [isChooseTemp, setIsChooseTemp] = useState(!!checkChooseTemp);
 
@@ -136,12 +138,12 @@ const DetailCouponScreen = (props: any) => {
                 isExchange={!isEmpty(stampDetail)}
             />
 
-            {(canUse === TabCouponStatus.CAN_USE || handleExchangeCoupon) && !fromNotify && (
+            {(canUse === TabCouponStatus.CAN_USE || handleExchangeCoupon) && !fromNotify && !fromHome && (
                 <View style={[styles.wrapButton, commonStyles.shadow]}>
                     <StyledButton
                         title={
                             titleButton ||
-                            (disabledUse ? 'coupon.btnInCart' : isChooseTemp ? 'coupon.btnUnUse' : 'coupon.btnUse')
+                            (disableTextUse ? 'coupon.btnInCart' : isChooseTemp ? 'coupon.btnUnUse' : 'coupon.btnUse')
                         }
                         onPress={handleUseCouponDetail}
                         disabled={handleExchangeCoupon ? false : disabledUse}

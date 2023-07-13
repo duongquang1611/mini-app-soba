@@ -51,7 +51,13 @@ const CouponTab = (props: CouponTabProps) => {
     }, [couponsCanUse]);
 
     const goToDetail = (item: any) => {
-        navigate(COUPON_ROUTE.DETAIL_COUPON, { item, canUse, handleUseCoupon, cartOrder: cartListCouponOrder });
+        navigate(COUPON_ROUTE.DETAIL_COUPON, {
+            item,
+            canUse,
+            handleUseCoupon,
+            cartOrder: cartListCouponOrder,
+            fromHome: isHomeTab,
+        });
     };
 
     const handleUseCouponItem = (item: any) => {

@@ -2,6 +2,7 @@ import { saveOrderOption } from 'api/modules/api-app/order';
 import { RootState } from 'app-redux/hooks';
 import {
     clearCartOrder,
+    clearDefaultOrder,
     clearMobileOrder,
     updateCartOrder,
     updateDefaultOrder,
@@ -149,20 +150,19 @@ const CartEditQrScreen = (props: any) => {
             dispatch(clearMobileOrder());
             dispatch(clearCartOrder());
         }
-        // if (orderType === OrderTypeMenu.DEFAULT_ORDER) {
-        //     if (checkSameData(defaultOrder, defaultOrderLocal)) {
-        //         dispatch(clearDefaultOrderLocal());
-        //     }
-        //     dispatch(clearDefaultOrder());
-        //     onClearOrder(3);
-        //     navigate(APP_ROUTE.MAIN_TAB, { screen: SETTING_ROUTE.ROOT });
-        // }
+        if (orderType === OrderTypeMenu.DEFAULT_ORDER || orderType === OrderTypeMenu.DEFAULT_ORDER_LOCAL) {
+            // if (checkSameData(defaultOrder, defaultOrderLocal)) {
+            //     dispatch(clearDefaultOrderLocal());
+            // }
+            // dispatch(clearDefaultOrder());
+            // onClearOrder(3);
+            // navigate(APP_ROUTE.MAIN_TAB, { screen: SETTING_ROUTE.ROOT });
+            dispatch(clearDefaultOrder());
+        }
         if (orderType === OrderTypeMenu.DEFAULT_ORDER_LOCAL) {
             // dispatch(updateDefaultOrderLocal(defaultOrder));
         }
-        if (orderType !== OrderTypeMenu.DEFAULT_ORDER) {
-            navigate(APP_ROUTE.MAIN_TAB, { screen: HOME_ROUTE.ROOT });
-        }
+        navigate(APP_ROUTE.MAIN_TAB, { screen: HOME_ROUTE.ROOT });
         onClearOrder();
     };
 
@@ -249,8 +249,7 @@ const CartEditQrScreen = (props: any) => {
                         style={[
                             styles.orderView,
                             { marginBottom: saveOrderCart?.dishes?.length === 0 ? 0 : scale(10) },
-                        ]}
-                    >
+                        ]}>
                         {saveOrderCart?.dishes?.map((item: any, index: number) => (
                             <OrderItemCart
                                 saveOrder={saveOrderCart}
@@ -287,8 +286,7 @@ const CartEditQrScreen = (props: any) => {
                             <StyledTouchable
                                 disabled={saveOrderCart?.length >= staticValue.MAX_ORDER}
                                 onPress={goToCouponList}
-                                customStyle={styles.moreCouponView}
-                            >
+                                customStyle={styles.moreCouponView}>
                                 <StyledText customStyle={styles.moreCoupon} i18nText={'coupon.moreCoupon'} />
                                 <StyledIcon source={Images.icons.add} size={20} />
                             </StyledTouchable>
