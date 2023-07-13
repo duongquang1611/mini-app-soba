@@ -235,11 +235,7 @@ const OrderQrCodeScreen = (props: any) => {
     };
 
     const handleBack = () => {
-        if (orderType === OrderTypeMenu.DEFAULT_ORDER) {
-            navigate(APP_ROUTE.MAIN_TAB, { screen: SETTING_ROUTE.ROOT });
-        } else {
-            navigate(APP_ROUTE.MAIN_TAB, { screen: HOME_ROUTE.HOME });
-        }
+        navigate(APP_ROUTE.MAIN_TAB, { screen: HOME_ROUTE.HOME });
         return true;
     };
 
@@ -280,8 +276,7 @@ const OrderQrCodeScreen = (props: any) => {
                                     activeOpacity={1}
                                     onLongPress={handleLongPress}
                                     onPress={handleOnPressQR}
-                                    delayLongPress={staticValue.DELAY_LONG_PRESS}
-                                >
+                                    delayLongPress={staticValue.DELAY_LONG_PRESS}>
                                     <QRCode value={qrEncrypt} size={staticValue.QR_SIZE_2CM} />
                                 </TouchableOpacity>
                             )}
