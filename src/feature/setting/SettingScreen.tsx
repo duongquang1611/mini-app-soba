@@ -114,13 +114,7 @@ const SettingScreen = () => {
         navigate(SETTING_ROUTE.ORDER_HISTORY);
     };
     const goToChooseRestaurants = () => {
-        if (defaultOrderQR) {
-            navigate(ORDER_ROUTE.ORDER_QR_CODE, { orderType: OrderTypeMenu.DEFAULT_ORDER, saveOrder: false });
-        } else {
-            navigate(HOME_ROUTE.CHOOSE_RESTAURANT);
-            // TODO : comment 116 change navigate choose restaurants
-            // navigate(AUTHENTICATE_ROUTE.ORDER_DEFAULT_MENU, { screen: SETTING_ROUTE.ORDER_DEFAULT_SETTING });
-        }
+        navigate(HOME_ROUTE.CHOOSE_RESTAURANT);
     };
     const goToNotification = () => {
         navigate(SETTING_ROUTE.SETTING_NOTIFICATION);
@@ -233,8 +227,7 @@ const SettingScreen = () => {
                                         {checkValidRank(levelRank) && (
                                             <LinearView
                                                 style={styles.linear}
-                                                colors={colorRank?.colors || defaultRankColor}
-                                            >
+                                                colors={colorRank?.colors || defaultRankColor}>
                                                 <StyledText originValue={levelRank} isBlack customStyle={styles.rank} />
                                                 <StyledIcon
                                                     source={Images.icons.gold}
@@ -268,13 +261,11 @@ const SettingScreen = () => {
                                         alignSelf: 'flex-start',
                                     },
                                     getStylePrice(),
-                                ]}
-                            >
+                                ]}>
                                 <View
-                                    onLayout={(event) => {
+                                    onLayout={event => {
                                         setContentWidth(event?.nativeEvent?.layout?.width);
-                                    }}
-                                >
+                                    }}>
                                     <StyledText
                                         i18nText={'order.rangePrice'}
                                         i18nParams={{ price: numberWithCommas(money) || 0 }}
@@ -307,8 +298,7 @@ const SettingScreen = () => {
                         tintColor={Themes.COLORS.primary}
                         onRefresh={handleRefresh}
                     />
-                }
-            >
+                }>
                 <View style={styles.wrapListOptionSetting}>{listButton.map(renderItemSetting)}</View>
                 <View style={styles.infoContainerView}>
                     {information.map((item, index) => (

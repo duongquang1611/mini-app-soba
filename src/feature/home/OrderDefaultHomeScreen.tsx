@@ -60,7 +60,7 @@ const OrderDefaultHomeScreen = () => {
     const confirm = () => null;
     return (
         <View style={styles.container}>
-            <StyledHeader title={'いつもの！選択'} iconRight={Images.icons.question} />
+            <StyledHeader title={'クーポン選択'} iconRight={Images.icons.question} />
             <StyledKeyboardAware>
                 <View style={styles.body}>
                     <View style={styles.qrView}>

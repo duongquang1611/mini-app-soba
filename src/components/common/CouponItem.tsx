@@ -70,7 +70,7 @@ export const CouponItem = (props: any) => {
 
     const getText = () => {
         if (isExchangeCoupon) return 'exchangeCoupon.btnExchange';
-        if (disabledUse) return 'coupon.btnInCart';
+        if (!!checkChooseInCart) return 'coupon.btnInCart';
         return checkChooseTemp ? 'coupon.btnUnUse' : isTabCoupon ? 'coupon.btnUseTabCoupon' : 'coupon.btnUse';
     };
 
