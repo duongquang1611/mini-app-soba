@@ -44,7 +44,7 @@ const CouponTab = (props: CouponTabProps) => {
     const newCouponsCanUse = useMemo(() => {
         if (isShowAllRestaurants) return couponsCanUse;
         return couponsCanUse?.filter(
-            (item) =>
+            item =>
                 item?.coupon?.isDiscountAllRestaurants === TypeDiscountCoupon.ALL_RESTAURANT ||
                 item?.coupon?.restaurants?.map((itemBranch: any) => itemBranch?.id)?.includes(branchId),
         );

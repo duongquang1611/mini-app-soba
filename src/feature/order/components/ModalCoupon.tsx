@@ -1,10 +1,11 @@
 import { RootState } from 'app-redux/hooks';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
-import { StyledButton, StyledImage, StyledText, StyledTouchable } from 'components/base';
+import { StyledButton, StyledImage, StyledList, StyledText, StyledTouchable } from 'components/base';
 import DashView from 'components/common/DashView';
 import React, { useEffect, useState } from 'react';
-import { ScrollView, View } from 'react-native';
+import { View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { ScaledSheet } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
 
@@ -57,7 +58,7 @@ export const OneCoupon = (props: any) => {
     } = useSelector((state: RootState) => state);
     const [chooseDish, setChooseDish] = useState(item?.choose);
     const newListCouponDish =
-        item?.coupon?.couponDish?.filter((itemDish: any) =>
+        item?.coupon?.couponDishes?.filter((itemDish: any) =>
             itemDish?.restaurants?.map((itemBranch: any) => itemBranch?.id)?.includes(chooseBranch?.id),
         ) || [];
 
@@ -108,21 +109,20 @@ const ModalCoupon = (props: any) => {
 
     const checkDisableButton = enableButton?.filter((item: any) => !item?.choose);
     const numCheck = enableButton?.filter((item: any) => item?.choose)?.length || 0;
-
     return (
         <>
-            <ScrollView scrollEnabled={isHomeTab}>
-                <View style={[styles.modalView, customStyle]}>
-                    {!isHomeTab && listCouponsModal?.length > 1 && (
-                        <StyledText
-                            i18nText={'order.rangeEditMenu'}
-                            i18nParams={{
-                                numOrderCheck: numCheck,
-                                numOrder: listCouponsModal?.length,
-                            }}
-                            customStyle={styles.textNumCheck}
-                        />
-                    )}
+            <View style={[styles.modalView, customStyle]}>
+                {!isHomeTab && listCouponsModal?.length > 1 && (
+                    <StyledText
+                        i18nText={'order.rangeEditMenu'}
+                        i18nParams={{
+                            numOrderCheck: numCheck,
+                            numOrder: listCouponsModal?.length,
+                        }}
+                        customStyle={styles.textNumCheck}
+                    />
+                )}
+                <ScrollView>
                     {listCouponsModal?.map((item: any, index: number) => (
                         <OneCoupon
                             dashView={index < listCouponsModal?.length - 1}
@@ -133,23 +133,24 @@ const ModalCoupon = (props: any) => {
                             isHomeTab={isHomeTab}
                         />
                     ))}
-                    {!isHomeTab && (
-                        <StyledButton
-                            title={'order.keep'}
-                            onPress={() => {
-                                if (applyChooseDish) {
-                                    applyChooseDish?.(enableButton);
-                                } else {
-                                    setCartListCouponOrder?.([...enableButton, ...cartListCouponAll]);
-                                    updateCouponsCart?.([...enableButton, ...cartListCouponAll]);
-                                }
-                            }}
-                            disabled={checkDisableButton.length > 0}
-                            customStyle={styles.saveButton}
-                        />
-                    )}
-                </View>
-            </ScrollView>
+                </ScrollView>
+
+                {!isHomeTab && (
+                    <StyledButton
+                        title={'order.keep'}
+                        onPress={() => {
+                            if (applyChooseDish) {
+                                applyChooseDish?.(enableButton);
+                            } else {
+                                setCartListCouponOrder?.([...enableButton, ...cartListCouponAll]);
+                                updateCouponsCart?.([...enableButton, ...cartListCouponAll]);
+                            }
+                        }}
+                        disabled={checkDisableButton.length > 0}
+                        customStyle={styles.saveButton}
+                    />
+                )}
+            </View>
             {showButton && isHomeTab && (
                 <View style={styles.buttonView}>
                     <StyledButton

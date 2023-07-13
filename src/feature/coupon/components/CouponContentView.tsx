@@ -60,7 +60,7 @@ const CouponContentView = (props: IProps) => {
         title,
         image,
         description,
-        couponDish,
+        couponDishes,
         discountType,
         discount,
         stringId = '',
@@ -214,9 +214,9 @@ const CouponContentView = (props: IProps) => {
                                 customStyle={styles.discountText}
                             />
                         ) : (
-                            isArray(couponDish) &&
-                            couponDish.length > 0 &&
-                            orderBy(couponDish, ['id'], ['asc']).map((item: any, index: number) => (
+                            isArray(couponDishes) &&
+                            couponDishes.length > 0 &&
+                            orderBy(couponDishes, ['id'], ['asc']).map((item: any, index: number) => (
                                 <CouponDishItem item={item} key={index.toString()} />
                             ))
                         )}

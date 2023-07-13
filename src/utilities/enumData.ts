@@ -66,7 +66,7 @@ export enum CouponType {
     RESTAURANT = 0, // isAccounted: 0
 }
 
-// coupon.couponDish[0].type
+// coupon.couponDishes[0].type
 export enum CouponDishType {
     SETTING_DISCOUNT = 1,
     FREE = 2,

@@ -531,7 +531,7 @@ export const changeOrderApiToStore = (orderData: any) => {
     const newCoupons =
         coupons?.map((itemCoupon: any) => {
             const { coupon, dish } = itemCoupon;
-            const choose = coupon?.couponDish?.find((itemDish: any) => itemDish?.dish?.stringId === dish?.stringId);
+            const choose = coupon?.couponDishes?.find((itemDish: any) => itemDish?.dish?.stringId === dish?.stringId);
             const couponFormat = {
                 id: coupon?.id,
                 stringId: coupon?.stringId,
@@ -539,7 +539,7 @@ export const changeOrderApiToStore = (orderData: any) => {
                 type: coupon?.type,
                 discountType: coupon?.discountType,
                 discount: coupon?.discount,
-                couponDish: coupon?.couponDish,
+                couponDishes: coupon?.couponDishes,
             };
             return {
                 id: itemCoupon?.memberCoupon?.id,

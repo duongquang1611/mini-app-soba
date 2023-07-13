@@ -60,8 +60,7 @@ const ModalChooseRestaurants = (props: IProps, ref: any) => {
             snapPoint={verticalScale(370)}
             HeaderComponent={
                 <HeaderDefault title={'authen.register.selectBranchStore.titleModal'} onPress={handlePressIconClose} />
-            }
-        >
+            }>
             <PopupConfirm
                 selectBox={selectBox}
                 setSelectBox={setSelectBox}
@@ -78,7 +77,7 @@ const ModalChooseRestaurants = (props: IProps, ref: any) => {
 
 const PopupConfirm = (props: IPopupConfirm) => {
     const { selectBox, setSelectBox, customStyle } = props;
-    const { listRestaurants } = useAppSelector((state) => state.globalData);
+    const { listRestaurants } = useAppSelector(state => state.globalData);
 
     const handleChooseBranch = (itemBranch: { id?: number; name: string }) => {
         setSelectBox(itemBranch);
@@ -90,8 +89,7 @@ const PopupConfirm = (props: IPopupConfirm) => {
                 <StyledTouchable
                     customStyle={styles.viewSelect}
                     key={item?.id}
-                    onPress={() => handleChooseBranch(item)}
-                >
+                    onPress={() => handleChooseBranch(item)}>
                     <RadioCheckView check={selectBox?.id === item?.id} />
                     <StyledText i18nText={item?.name} customStyle={styles.cssTxtName} />
                 </StyledTouchable>
@@ -169,6 +167,7 @@ const styles = ScaledSheet.create({
     okBtn: {
         width: 'auto',
         flex: 1,
+        marginBottom: Metrics.safeBottomPadding ? 0 : '20@vs',
     },
     nonPaddingVer: {
         paddingVertical: '2@vs',

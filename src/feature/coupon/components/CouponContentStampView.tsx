@@ -48,7 +48,7 @@ const CouponContentItem = ({ item }: any) => {
         endDate,
         description,
         dateType,
-        couponDish,
+        couponDishes,
         discountType,
         discount,
         stringId = '',
@@ -109,9 +109,9 @@ const CouponContentItem = ({ item }: any) => {
                         customStyle={styles.discountText}
                     />
                 ) : (
-                    isArray(couponDish) &&
-                    couponDish.length > 0 &&
-                    orderBy(couponDish, ['id'], ['asc']).map((item: any, index: number) => (
+                    isArray(couponDishes) &&
+                    couponDishes.length > 0 &&
+                    orderBy(couponDishes, ['id'], ['asc']).map((item: any, index: number) => (
                         <CouponDishItem item={item} key={index.toString()} />
                     ))
                 )}

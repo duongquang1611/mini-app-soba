@@ -12,12 +12,14 @@ import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledIcon, StyledText, StyledTouchable } from 'components/base';
+import AlertMessage from 'components/base/AlertMessage';
 import CouponTab from 'feature/coupon/components/CouponTab';
 import ModalCoupon from 'feature/order/components/ModalCoupon';
 import { navigate } from 'navigation/NavigationService';
 import { ORDER_ROUTE } from 'navigation/config/routes';
 import React, { useMemo, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import QRCode from 'react-native-qrcode-svg';
 import { ScaledSheet, scale, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
@@ -70,6 +72,7 @@ const ChooseCouponTab = (props: any) => {
             setShowQrCode(true);
         } catch (error) {
             console.log('saveOrderDefault -> error', error);
+            AlertMessage(error);
         }
     };
 
@@ -122,8 +125,7 @@ const ChooseCouponTab = (props: any) => {
                         <StyledTouchable
                             hitSlop={staticValue.DEFAULT_HIT_SLOP}
                             onPress={onBackChooseCoupon}
-                            customStyle={styles.containerBack}
-                        >
+                            customStyle={styles.containerBack}>
                             <StyledIcon size={24} source={Images.icons.back} />
                         </StyledTouchable>
 
@@ -131,8 +133,7 @@ const ChooseCouponTab = (props: any) => {
                             activeOpacity={1}
                             onLongPress={handleLongPress}
                             onPress={handleOnPressQR}
-                            style={styles.qrView}
-                        >
+                            style={styles.qrView}>
                             <QRCode value={qrEncrypt} size={staticValue.QR_SIZE_2CM} />
                         </TouchableOpacity>
 
@@ -150,16 +151,18 @@ const ChooseCouponTab = (props: any) => {
                         <View style={styles.titleView}>
                             <StyledText customStyle={styles.title} i18nText="notification.couponList" />
                         </View>
-                        <CouponTab
-                            canUse={TabCouponStatus.CAN_USE}
-                            isHomeTab={true}
-                            handleUseCoupon={handleUseCoupon}
-                            order={defaultOrderLocal}
-                        />
+                        <ScrollView>
+                            <CouponTab
+                                canUse={TabCouponStatus.CAN_USE}
+                                isHomeTab={true}
+                                handleUseCoupon={handleUseCoupon}
+                                order={defaultOrderLocal}
+                            />
+                        </ScrollView>
                     </View>
                     <View style={styles.halfViewRight}>
                         <View>
-                            <View style={styles.titleView}>
+                            <View style={[styles.titleView, styles.titleRight]}>
                                 <StyledText customStyle={styles.title} i18nText="home.listDishesOfCoupon" />
                             </View>
                             <View style={(checkChooseCouponNoDish || noCouponChoose) && styles.viewDish}>
@@ -251,7 +254,7 @@ const styles = ScaledSheet.create({
         paddingBottom: '10@vs',
     },
     viewDish: {
-        height: '100@s',
+        height: '105@s',
     },
     listDish: {
         backgroundColor: Themes.COLORS.white,
@@ -279,6 +282,9 @@ const styles = ScaledSheet.create({
         marginBottom: '5@vs',
         height: '28@s',
     },
+    titleRight: {
+        marginBottom: 0,
+    },
     title: {
         fontSize: '16@ms0.3',
     },
@@ -302,5 +308,6 @@ const styles = ScaledSheet.create({
     customModal: {
         paddingHorizontal: '5@s',
         paddingTop: '5@vs',
+        paddingBottom: 0,
     },
 });
