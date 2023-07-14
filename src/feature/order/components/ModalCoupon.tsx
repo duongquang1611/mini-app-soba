@@ -107,7 +107,7 @@ const ModalCoupon = (props: any) => {
         setEnableButton(listCouponsModal?.map((item: any) => ({ ...item })));
     }, [listCouponsModal]);
 
-    const checkDisableButton = enableButton?.filter((item: any) => !item?.choose);
+    const checkDisableButton = enableButton?.filter((item: any) => !item?.choose) || [];
     const numCheck = enableButton?.filter((item: any) => item?.choose)?.length || 0;
     return (
         <>

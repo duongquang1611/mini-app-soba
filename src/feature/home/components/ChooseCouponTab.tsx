@@ -17,7 +17,7 @@ import CouponTab from 'feature/coupon/components/CouponTab';
 import ModalCoupon from 'feature/order/components/ModalCoupon';
 import { navigate } from 'navigation/NavigationService';
 import { ORDER_ROUTE } from 'navigation/config/routes';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import QRCode from 'react-native-qrcode-svg';
@@ -69,7 +69,6 @@ const ChooseCouponTab = (props: any) => {
             await saveOrderOption(defaultOrderSettingSaveOrderOption);
             dispatch(updateCouponDefaultOrder(data));
             dispatch(clearDefaultOrderLocal());
-            setShowQrCode(true);
         } catch (error) {
             console.log('saveOrderDefault -> error', error);
             AlertMessage(error);
@@ -79,7 +78,6 @@ const ChooseCouponTab = (props: any) => {
     const handleChooseDish = (coupons: any) => {
         dispatch(clearDefaultOrderLocal());
         dispatch(updateDefaultOrder(coupons));
-        setShowQrCode(true);
     };
 
     const handleLongPress = () => {
@@ -101,7 +99,7 @@ const ChooseCouponTab = (props: any) => {
     const onBackChooseCoupon = async () => {
         try {
             const saveOrderParams = {
-                orderType: OrderType.DEFAULT_HOME,
+                orderType: OrderType.DEFAULT_SETTING,
                 totalAmount: 0,
                 dishes: [],
                 coupons: [],
@@ -116,6 +114,9 @@ const ChooseCouponTab = (props: any) => {
             console.log('saveOrderDefault -> error', error);
         }
     };
+    useEffect(() => {
+        setShowQrCode(!!defaultOrder?.coupons?.length);
+    }, [defaultOrder?.coupons?.length]);
 
     return (
         <View style={[styles.containerQrTab]}>
