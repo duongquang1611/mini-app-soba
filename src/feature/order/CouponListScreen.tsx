@@ -3,21 +3,23 @@ import { updateCartOrder } from 'app-redux/slices/orderSlice';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledButton } from 'components/base';
-import ModalizeManager from 'components/base/modal/ModalizeManager';
+import ModalizeManager, { HeaderDefault } from 'components/base/modal/ModalizeManager';
 import StyledHeader from 'components/common/StyledHeader';
 import CouponTab from 'feature/coupon/components/CouponTab';
 import { getCouponData } from 'feature/home/HomeScreen';
 import { goBack } from 'navigation/NavigationService';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View } from 'react-native';
 import { ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
 import { commonStyles } from 'utilities/commonStyles';
 import { DiscountType, MODAL_ID, OrderTypeMenu, TabCouponStatus } from 'utilities/staticData';
 import ModalCoupon from './components/ModalCoupon';
+import { Modalize } from 'react-native-modalize';
 
 const CouponListScreen = (props: any) => {
     const { orderType, order, setOrder } = props?.route?.params || {};
+    const modalRef = useRef<Modalize>();
     const { cartOrder } = useSelector((state: RootState) => state.order);
     const checkOrder = order || cartOrder;
     const dispatch = useDispatch();
@@ -48,41 +50,24 @@ const CouponListScreen = (props: any) => {
         modalize.dismiss(MODAL_ID.APPLY_COUPON);
         goBack();
     };
+    const listCouponsEdit = cartListCouponOrder?.coupons?.filter(
+        (item: any) => item?.coupon?.discountType === DiscountType.EACH_DISH,
+    );
+    const listCouponsModal = listCouponsEdit?.filter(
+        (item: any) => !(order || cartOrder)?.coupons?.find((itemCart: any) => itemCart?.id === item?.id),
+    );
+    const listCouponsAll = cartListCouponOrder?.coupons?.filter(
+        (item: any) => !listCouponsModal?.find((itemCart: any) => itemCart?.id === item?.id),
+    );
 
     const saveCartCoupon = () => {
-        const listCouponsEdit = cartListCouponOrder?.coupons?.filter(
-            (item: any) => item?.coupon?.discountType === DiscountType.EACH_DISH,
-        );
-        const listCouponsModal = listCouponsEdit?.filter(
-            (item: any) => !(order || cartOrder)?.coupons?.find((itemCart: any) => itemCart?.id === item?.id),
-        );
-        const listCouponsAll = cartListCouponOrder?.coupons?.filter(
-            (item: any) => !listCouponsModal?.find((itemCart: any) => itemCart?.id === item?.id),
-        );
         if (listCouponsModal.length > 0) {
-            showApplyCoupon(listCouponsModal, listCouponsAll);
+            showApplyCoupon();
         } else updateCart();
     };
 
-    const showApplyCoupon = (listCouponsModal: any, listCouponsAll: any) => {
-        modalize.show(
-            MODAL_ID.APPLY_COUPON,
-            <ModalCoupon
-                listCouponsModal={listCouponsModal}
-                cartListCouponAll={listCouponsAll}
-                setCartListCouponOrder={setCartListCouponOrder}
-                updateCouponsCart={updateCouponsCart}
-            />,
-            {
-                modalHeight: Metrics.screenHeight * 0.8,
-
-                snapPoint: verticalScale(370),
-                scrollViewProps: {
-                    contentContainerStyle: { flexGrow: 1 },
-                },
-            },
-            { title: 'order.applyCoupon' },
-        );
+    const showApplyCoupon = () => {
+        modalRef.current?.open();
     };
 
     const handleUseCoupon = (itemCoupon: any) => {
@@ -102,10 +87,36 @@ const CouponListScreen = (props: any) => {
             });
         }
     };
+    const handlePressIconClose = () => {
+        modalRef?.current?.close();
+    };
+
+    const ModalChooseMultiDishes = () => {
+        return (
+            <Modalize
+                ref={modalRef}
+                withHandle={false}
+                scrollViewProps={{
+                    keyboardShouldPersistTaps: 'handled',
+                    contentContainerStyle: styles.contentContainerStyle,
+                }}
+                modalHeight={Metrics.screenHeight * 0.8}
+                snapPoint={verticalScale(370)}
+                HeaderComponent={<HeaderDefault title={'order.applyCoupon'} onPress={handlePressIconClose} />}>
+                <ModalCoupon
+                    listCouponsModal={listCouponsModal}
+                    cartListCouponAll={listCouponsAll}
+                    setCartListCouponOrder={setCartListCouponOrder}
+                    updateCouponsCart={updateCouponsCart}
+                />
+            </Modalize>
+        );
+    };
 
     return (
         <View style={styles.container}>
             <StyledHeader title={'order.couponTitle'} />
+            <ModalChooseMultiDishes />
             <CouponTab
                 canUse={TabCouponStatus.CAN_USE}
                 cartListCouponOrder={cartListCouponOrder}
@@ -192,5 +203,8 @@ const styles = ScaledSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: 10,
+    },
+    contentContainerStyle: {
+        flexGrow: 1,
     },
 });

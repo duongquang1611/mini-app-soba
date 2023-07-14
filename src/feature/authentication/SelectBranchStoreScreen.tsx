@@ -1,6 +1,8 @@
 import { editProfile, getProfile } from 'api/modules/api-app/authenticate';
+import { saveOrderOption } from 'api/modules/api-app/order';
 import { RootState } from 'app-redux/hooks';
 import { updateChooseBranch } from 'app-redux/slices/globalDataSlice';
+import { clearDefaultOrder, clearMobileOrder } from 'app-redux/slices/orderSlice';
 import { userInfoActions } from 'app-redux/slices/userInfoSlice';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledText, StyledTouchable } from 'components/base';
@@ -16,6 +18,7 @@ import { View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { ScaledSheet } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
+import { OrderTypeMenu } from 'utilities/staticData';
 
 const SelectBranchStoreScreen: FunctionComponent = (props: any) => {
     const { setChooseBranch, chooseBranchRegister } = props?.route?.params || {};
@@ -30,6 +33,21 @@ const SelectBranchStoreScreen: FunctionComponent = (props: any) => {
     const [restaurant, setRestaurant] = useState<any>(chooseBranchRegister || chooseBranch);
     const { name } = restaurant || {};
     const modalRef = useRef<Modalize>();
+
+    const onClearOrder = async (orderType?: number) => {
+        try {
+            const saveOrderParams = {
+                orderType,
+                totalAmount: 0,
+                dishes: [],
+                coupons: [],
+            };
+            const res = await saveOrderOption(saveOrderParams);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     const onSaveRestaurant = async () => {
         try {
             if (user?.member?.id) {
@@ -37,6 +55,10 @@ const SelectBranchStoreScreen: FunctionComponent = (props: any) => {
                 const resProfile = await getProfile();
                 dispatch(userInfoActions.getUserInfoSuccess(resProfile?.data));
                 dispatch(updateChooseBranch(restaurant));
+                onClearOrder(OrderTypeMenu.DEFAULT_ORDER);
+                onClearOrder(OrderTypeMenu.MOBILE_ORDER);
+                dispatch(clearDefaultOrder());
+                dispatch(clearMobileOrder());
             }
             setChooseBranch?.(restaurant);
             goBack();

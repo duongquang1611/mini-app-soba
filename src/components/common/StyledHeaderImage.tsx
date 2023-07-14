@@ -54,7 +54,7 @@ const StyledHeaderImage = (props: HeaderProps) => {
     const { notificationUnRead } = globalData;
     const { configs = [] } = resource?.data || {};
     const dataConfig = configs.find((item: any) => item.key === CONFIG_KEYS.BANNER_TRANSITION_TIME) || {};
-    const transitionTime = Number(dataConfig?.value || staticValue.DEFAULT_TIME_BANNER);
+    const transitionTime = Number(JSON.parse(dataConfig.value).time || staticValue.DEFAULT_TIME_BANNER);
 
     const [index, setIndex] = useState(0);
 
@@ -114,8 +114,7 @@ const StyledHeaderImage = (props: HeaderProps) => {
                     )}
                     <View
                         pointerEvents={'none'}
-                        style={[styles.containerDot, { bottom: content ? verticalScale(20) : verticalScale(-10) }]}
-                    >
+                        style={[styles.containerDot, { bottom: content ? verticalScale(20) : verticalScale(-10) }]}>
                         <Pagination
                             containerStyle={styles.containerPagination}
                             dotsLength={images.length}
@@ -166,8 +165,7 @@ const StyledHeaderImage = (props: HeaderProps) => {
                                             top: notificationUnRead > 99 ? scale(0) : scale(5),
                                             right: notificationUnRead > 99 ? scale(0) : scale(5),
                                         },
-                                    ]}
-                                >
+                                    ]}>
                                     <StyledText
                                         customStyle={styles.numNoti}
                                         originValue={notificationUnRead > 99 ? `99+` : `${notificationUnRead}`}

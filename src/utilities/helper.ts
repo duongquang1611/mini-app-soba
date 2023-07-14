@@ -663,8 +663,8 @@ export const getInformationSetting = (data: any) => {
     ];
 };
 export const getIndexTab = (defaultOrder: any, mobileOrder: any) => {
-    if (mobileOrder?.dishes?.length > 0 || mobileOrder?.coupon?.length > 0) return 1;
-    if (defaultOrder?.dishes?.length > 0 || defaultOrder?.coupon?.length > 0) return 0;
+    if (mobileOrder?.dishes?.length > 0 || mobileOrder?.coupons?.length > 0) return 1;
+    if (defaultOrder?.dishes?.length > 0 || defaultOrder?.coupons?.length > 0) return 0;
     return 2;
 };
 export function numberWithCommas(x: number) {

@@ -58,8 +58,7 @@ const netWorkItem = (data: any) => {
     return (
         <TouchableOpacity
             onPress={() => openURL(item?.link)}
-            style={[styles.netWorkView, { marginLeft: index === 0 ? scale(20) : 0 }]}
-        >
+            style={[styles.netWorkView, { marginLeft: index === 0 ? scale(20) : 0 }]}>
             <StyledIcon resizeMode={'cover'} source={{ uri: item?.image }} size={30} customStyle={styles.iconNetwork} />
             <StyledText originValue={item?.title} isBlack />
         </TouchableOpacity>
@@ -151,7 +150,7 @@ const HomeScreen: FunctionComponent = () => {
         getMenuData();
         getCouponData();
         getNotification();
-        setTab(withoutAccount || !branchId ? 2 : getIndexTab(defaultOrderLocal, mobileOrder));
+        setTab(withoutAccount || !branchId ? 2 : getIndexTab(defaultOrder, mobileOrder));
     }, [withoutAccount, branchId]);
 
     useEffect(() => {
@@ -262,8 +261,7 @@ const HomeScreen: FunctionComponent = () => {
                         tintColor={Themes.COLORS.primary}
                         onRefresh={handleRefresh}
                     />
-                }
-            >
+                }>
                 <StyledHeaderImage
                     iconQr={Images.icons.tab.notification}
                     iconNoti={Images.icons.tab.notification}
@@ -289,7 +287,7 @@ const HomeScreen: FunctionComponent = () => {
                             showsHorizontalScrollIndicator={false}
                             renderItem={netWorkItem}
                             onEndReachedThreshold={0.1}
-                            keyExtractor={(item) => `${item.id}`}
+                            keyExtractor={item => `${item.id}`}
                         />
                     </View>
                     <StyledTabTopView
@@ -309,8 +307,7 @@ const HomeScreen: FunctionComponent = () => {
                         </View>
                         <TouchableOpacity
                             style={styles.buttonMobile}
-                            onPress={() => navigate(HOME_ROUTE.NEW_LIST, { listNews })}
-                        >
+                            onPress={() => navigate(HOME_ROUTE.NEW_LIST, { listNews })}>
                             <StyledText i18nText={'home.seeAll'} customStyle={styles.textNews} />
                         </TouchableOpacity>
                     </StyledImageBackground>
