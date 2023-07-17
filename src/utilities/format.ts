@@ -1,9 +1,10 @@
 import dayjs from 'dayjs';
 import 'dayjs/locale/ja';
-import i18next from 'i18next';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
+import i18next from 'i18next';
 import { TypeDiscountCoupon } from './enumData';
+import { DiscountType } from './staticData';
 
 dayjs.locale('ja');
 dayjs.extend(utc);
@@ -58,4 +59,15 @@ export const formatCouponStringId = (stringId: string, exchangeTime?: number) =>
     if (!exchangeTime) return stringId;
     if (exchangeTime < 10) return `${stringId}_0${exchangeTime}`;
     return `${stringId}_${exchangeTime}`;
+};
+
+export const formatRestaurantsDishesShow = (restaurants: any, discountType: number) => {
+    if (discountType === DiscountType.ALL_ORDER || !discountType) return '';
+    if (restaurants?.length) {
+        const restaurantsShow = restaurants
+            .map((item: any) => `${i18next.t('coupon.itemDishesRestaurantShow')}${item.name}`)
+            .join(i18next.t('common.comma'));
+        return `(${restaurantsShow})`;
+    }
+    return i18next.t('coupon.noRestaurant');
 };

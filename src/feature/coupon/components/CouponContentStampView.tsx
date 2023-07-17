@@ -9,7 +9,7 @@ import React from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import { CouponDishType } from 'utilities/enumData';
-import { formatDate, formatRestaurantsCouponShow } from 'utilities/format';
+import { formatDate, formatRestaurantsCouponShow, formatRestaurantsDishesShow } from 'utilities/format';
 import { getRangeCoupon } from 'utilities/helper';
 import { DateType, DiscountType } from 'utilities/staticData';
 
@@ -19,13 +19,13 @@ interface IProps {
     isOpen?: boolean;
     datas: any[];
 }
-const CouponDishItem = ({ item }: any) => {
-    const { type, dish, discount } = item;
+const CouponDishItem = ({ item, discountType }: any) => {
+    const { type, dish, discount, restaurants } = item;
     const { title = '' } = dish || {};
     return (
         <StyledText
             i18nText={type === CouponDishType.SETTING_DISCOUNT ? 'coupon.detail.discount' : 'coupon.detail.free'}
-            i18nParams={{ discount, title }}
+            i18nParams={{ discount, title, restaurants: formatRestaurantsDishesShow(restaurants, discountType) }}
             customStyle={styles.discountText}
         />
     );
@@ -112,7 +112,7 @@ const CouponContentItem = ({ item }: any) => {
                     isArray(couponDishes) &&
                     couponDishes.length > 0 &&
                     orderBy(couponDishes, ['id'], ['asc']).map((item: any, index: number) => (
-                        <CouponDishItem item={item} key={index.toString()} />
+                        <CouponDishItem item={item} key={index.toString()} discountType={discountType} />
                     ))
                 )}
             </View>

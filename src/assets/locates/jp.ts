@@ -376,8 +376,8 @@ export default {
             id: 'クーポンＩＤ：{{id}}',
             expired: '有効期限切れ',
             getCoupon: '{{count}}つクーポンをGETできます',
-            discount: '{{title}} : ￥{{discount}}割引',
-            free: '{{title}} : 無料',
+            discount: '{{title}}{{restaurants}} : ￥{{discount}}割引',
+            free: '{{title}}{{restaurants}} : 無料',
             discountAllOrder: '注文全体用のクーポン : ￥{{discount}}割引',
             invalid: '無効',
         },
@@ -397,6 +397,7 @@ export default {
         titleItemCoupon: '{{restaurants}}{{title}}',
         restaurantsTitle: '利用可能店舗: {{restaurants}}',
         noRestaurant: 'ありません。',
+        itemDishesRestaurantShow: '兜町店',
     },
     otp: {
         register: {
