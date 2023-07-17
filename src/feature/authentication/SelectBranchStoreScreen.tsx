@@ -50,7 +50,7 @@ const SelectBranchStoreScreen: FunctionComponent = (props: any) => {
 
     const onSaveRestaurant = async () => {
         try {
-            if (user?.member?.id) {
+            if (user?.member?.id && restaurant?.id !== chooseBranch?.id) {
                 await editProfile({ frequentlyUsedRestaurantId: restaurant?.id });
                 const resProfile = await getProfile();
                 dispatch(userInfoActions.getUserInfoSuccess(resProfile?.data));

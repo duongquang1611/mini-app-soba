@@ -177,6 +177,9 @@ const ChooseCouponTab = (props: any) => {
                                         showButton={!checkChooseCouponNoDish && defaultOrder?.coupons}
                                     />
                                 )}
+                                {checkChooseCouponNoDish && (
+                                    <StyledText i18nText="coupon.allOrder" customStyle={styles.allOrder} />
+                                )}
                             </View>
                         </View>
                         {checkChooseCouponNoDish && (
@@ -310,5 +313,11 @@ const styles = ScaledSheet.create({
         paddingHorizontal: '5@s',
         paddingTop: '5@vs',
         paddingBottom: 0,
+    },
+    allOrder: {
+        paddingHorizontal: '5@s',
+        fontWeight: '700',
+        fontSize: '14@ms0.3',
+        paddingVertical: '5@vs',
     },
 });

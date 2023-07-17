@@ -65,9 +65,9 @@ export const formatRestaurantsDishesShow = (restaurants: any, discountType: numb
     if (discountType === DiscountType.ALL_ORDER || !discountType) return '';
     if (restaurants?.length) {
         const restaurantsShow = restaurants
-            .map((item: any) => `${i18next.t('coupon.itemDishesRestaurantShow')}${item.name}`)
+            .map((item: any) => `${item.name}${i18next.t('coupon.itemDishesRestaurantShow')}`)
             .join(i18next.t('common.comma'));
         return `(${restaurantsShow})`;
     }
-    return i18next.t('coupon.noRestaurant');
+    return `(${i18next.t('coupon.noRestaurant')})`;
 };
