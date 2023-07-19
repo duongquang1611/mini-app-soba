@@ -25,7 +25,7 @@ import { MODAL_ID, MenuType, OrderType, POPUP_TYPE, STORE_URL, VERSION_APP_KEY }
 
 const checkVersion = (configs: any[]) => {
     const modalize = ModalizeManager();
-    const versionApp = configs.find((config) => {
+    const versionApp = configs.find(config => {
         return VERSION_APP_KEY === config?.key;
     });
     if (!versionApp?.value) return false;
@@ -68,6 +68,7 @@ const checkVersion = (configs: any[]) => {
 
 export const getResourcesData = async (updateOrderToAPI = true, checkCoupons = false) => {
     const {
+        userInfo: { token },
         globalData: { chooseBranch },
         globalDataUnSave: { withoutAccount },
     } = store.getState();
@@ -80,7 +81,7 @@ export const getResourcesData = async (updateOrderToAPI = true, checkCoupons = f
         const { order } = store.getState();
         const { menu: menuResource, categories = [] } = newResources || {};
         let menu = menuResource;
-        if (!withoutAccount) {
+        if (!withoutAccount && token && chooseBranch?.id) {
             const res = await getMenu(chooseBranch?.id);
             menu = res?.data?.filter((item: any) => item?.status === MenuType.ENABLE);
         }
@@ -182,7 +183,7 @@ const useNetwork = () => {
     const isFirstRun = useRef<any>(true);
 
     useEffect(() => {
-        const unsubscribe = NetInfo.addEventListener((state) => {
+        const unsubscribe = NetInfo.addEventListener(state => {
             if (state.isConnected && isFirstRun?.current) {
                 isFirstRun.current = false;
             }

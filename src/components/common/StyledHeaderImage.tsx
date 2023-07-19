@@ -53,8 +53,8 @@ const StyledHeaderImage = (props: HeaderProps) => {
     const { globalData, resource } = useSelector((state: RootState) => state);
     const { notificationUnRead } = globalData;
     const { configs = [] } = resource?.data || {};
-    const dataConfig = configs.find((item: any) => item.key === CONFIG_KEYS.BANNER_TRANSITION_TIME) || {};
-    const transitionTime = Number(JSON.parse(dataConfig.value).time || staticValue.DEFAULT_TIME_BANNER);
+    const dataConfig = configs?.find((item: any) => item?.key === CONFIG_KEYS.BANNER_TRANSITION_TIME) || {};
+    const transitionTime = Number(JSON.parse(dataConfig?.value || '{}')?.time || staticValue.DEFAULT_TIME_BANNER);
 
     const [index, setIndex] = useState(0);
 
