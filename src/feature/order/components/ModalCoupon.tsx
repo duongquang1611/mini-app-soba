@@ -258,6 +258,7 @@ const styles = ScaledSheet.create({
     customNameOrder: {
         marginRight: '0@s',
         marginLeft: '-15@vs',
+        fontSize: '12@ms0.3',
     },
     saveHome: {
         width: '170@s',
@@ -266,7 +267,7 @@ const styles = ScaledSheet.create({
         paddingVertical: '8@vs',
     },
     detailButton: {
-        width: '170@s',
+        width: '100@s',
         padding: 0,
         marginTop: '5@vs',
         paddingVertical: '8@vs',
@@ -276,7 +277,7 @@ const styles = ScaledSheet.create({
         justifyContent: 'center',
     },
     button: {
-        width: '170@s',
+        width: '100@s',
         marginTop: '5@s',
     },
     textBtn: {

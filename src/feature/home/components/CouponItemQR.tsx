@@ -46,7 +46,7 @@ export const CouponItemQR = (props: any) => {
     } = coupon || {};
     // const isInCartAPI = useMemo(() => status === MemberCouponStatus.IN_CART, [status]);
     const checkChooseTemp = cartOrderState?.coupons?.find((itemCoupon: any) => itemCoupon?.id === idMemberCoupon);
-    const checkChooseInCart = (order || cartOrder)?.coupons?.find(
+    const checkChooseInCart = !!(order || cartOrder)?.coupons?.find(
         (itemCoupon: any) => itemCoupon?.id === idMemberCoupon && itemCoupon?.receivedDate === receivedDate,
     );
     const disabledUse = checkChooseInCart;
@@ -77,8 +77,7 @@ export const CouponItemQR = (props: any) => {
                         customStyle={styles.btnCanUSe}
                         onPress={handleUseCoupon}
                         disabled={isExchangeCoupon ? true : disabledUse}
-                        hitSlop={staticValue.DEFAULT_HIT_SLOP}
-                    >
+                        hitSlop={staticValue.DEFAULT_HIT_SLOP}>
                         <StyledText
                             i18nText={getText()}
                             customStyle={[
