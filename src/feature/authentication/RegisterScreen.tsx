@@ -6,23 +6,25 @@ import Images from 'assets/images';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledIcon, StyledImage, StyledInputForm, StyledText, StyledTouchable } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
-import { LabelInput } from 'components/base/StyledInput';
+import StyledInput, { LabelInput } from 'components/base/StyledInput';
 import StyledKeyboardAware from 'components/base/StyledKeyboardAware';
 import StyledOverlayLoading from 'components/base/StyledOverlayLoading';
 import RadioCheckView from 'components/common/RadioCheckView';
 import StyledHeader from 'components/common/StyledHeader';
-import InputChooseRestaurants from 'feature/authentication/components/InputChooseRestaurants';
 import { navigate } from 'navigation/NavigationService';
 import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
 import React, { useCallback, useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { Keyboard, Text, View } from 'react-native';
+import { Modalize } from 'react-native-modalize';
 import { ScaledSheet } from 'react-native-size-matters';
 import { checkPasswordMatch, getConfig, openURL } from 'utilities/helper';
 import { CONFIG_KEYS, GENDER_DATA, VerifiedCodeType, staticValue } from 'utilities/staticData';
 import { PASSWORD_MAX_LENGTH, USERNAME_MAX_LENGTH } from 'utilities/validate';
 import yupValidate from 'utilities/yupValidate';
 import * as yup from 'yup';
+import ModalChooseRestaurants from './components/ModalChooseRestaurants';
 import UpLoadAvatar from './components/UpLoadAvatar';
 
 const REGISTER_DEFAULT_FORM = __DEV__
@@ -37,6 +39,8 @@ const REGISTER_DEFAULT_FORM = __DEV__
     : {};
 
 const RegisterScreen = () => {
+    const { t } = useTranslation();
+    const modalRef = useRef<Modalize>();
     const [chooseBranch, setChooseBranch] = useState<IRestaurants>({
         id: 0,
         name: '',
@@ -114,8 +118,7 @@ const RegisterScreen = () => {
             <StyledTouchable
                 customStyle={styles.buttonGender}
                 key={item.title}
-                onPress={() => setValueForm('gender', item.value)}
-            >
+                onPress={() => setValueForm('gender', item.value)}>
                 <RadioCheckView check={watch('gender') === item.value} />
                 <StyledText customStyle={styles.textGender} originValue={item.title} />
             </StyledTouchable>
@@ -137,13 +140,13 @@ const RegisterScreen = () => {
                 renderCenter={renderCenter}
                 customContainer={styles.customContainerHeader}
             />
+            <ModalChooseRestaurants ref={modalRef} chooseBranch={chooseBranch} selectBranch={setChooseBranch} />
 
             <StyledKeyboardAware
                 style={styles.scrollView}
                 customStyle={styles.contentScrollView}
                 enableResetScrollToCoords={false}
-                enableOnAndroid={false}
-            >
+                enableOnAndroid={false}>
                 <StyledText customStyle={styles.title} i18nText={'authen.register.title'} />
                 <FormProvider {...form}>
                     <View style={styles.fakeRegisterInput}>
@@ -196,7 +199,6 @@ const RegisterScreen = () => {
                         containerStyle={styles.normalInputContainer}
                         onSubmitEditing={Keyboard.dismiss}
                     />
-                    <InputChooseRestaurants setChooseBranch={setChooseBranch} chooseBranch={chooseBranch} />
                     <StyledInputForm
                         name={'birthday'}
                         label={'authen.labelRegister.birthday'}
@@ -216,6 +218,47 @@ const RegisterScreen = () => {
                         labelRequire={''}
                     />
                     {GENDER_DATA.map(renderItemGender)}
+                    <View style={styles.containerContent}>
+                        <LabelInput
+                            label={'authen.register.selectBranchStore.labelInput'}
+                            customStyle={styles.cssLabel}
+                            labelRequire={'*'}
+                        />
+                        <View style={styles.viewInput}>
+                            <StyledInput
+                                value={
+                                    !chooseBranch?.id && chooseBranch?.name
+                                        ? t('authen.register.selectBranchStore.noBranch')
+                                        : chooseBranch?.name
+                                }
+                                containerStyle={styles.restaurant}
+                                pointerEvents="none"
+                                customPlaceHolder="authen.register.selectBranchStore.placeHolderBranch"
+                            />
+                            <StyledTouchable
+                                customStyle={styles.btnOpenModal}
+                                onPress={() => modalRef?.current?.open()}>
+                                <StyledText
+                                    i18nText={'authen.register.selectBranchStore.descriptionInput'}
+                                    customStyle={styles.cssTxtInput}
+                                />
+                            </StyledTouchable>
+                        </View>
+                        <View style={styles.viewCheckSquare}>
+                            <StyledText
+                                i18nText="authen.register.selectBranchStore.attention.first"
+                                customStyle={[styles.textBlack, styles.attention]}
+                            />
+                            <StyledText
+                                i18nText="authen.register.selectBranchStore.attention.second"
+                                customStyle={styles.textBlack}
+                            />
+                            <StyledText
+                                i18nText="authen.register.selectBranchStore.attention.three"
+                                customStyle={styles.textBlack}
+                            />
+                        </View>
+                    </View>
                     <View style={styles.buttonRule}>
                         <StyledTouchable onPress={() => setRule(!rule)}>
                             <StyledIcon source={rule ? Images.icons.tickSquare : Images.icons.untickSquare} size={20} />
@@ -302,7 +345,7 @@ const styles = ScaledSheet.create({
     },
     buttonRule: {
         flexDirection: 'row',
-        marginTop: '40@vs',
+        marginTop: '20@vs',
         marginHorizontal: '20@s',
         flexShrink: 1,
         alignItems: 'center',
@@ -356,5 +399,62 @@ const styles = ScaledSheet.create({
     },
     ml20: {
         marginLeft: '20@s',
+    },
+    cssLabel: {
+        marginTop: '10@vs',
+        fontSize: '16@ms0.3',
+        marginBottom: '-5@vs',
+    },
+    containerContent: {
+        paddingHorizontal: '20@s',
+        paddingTop: '10@vs',
+    },
+    viewInput: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+    textBlack: {
+        color: Themes.COLORS.black,
+        lineHeight: '20@vs',
+        marginTop: '8@vs',
+    },
+    cssTxtInput: {
+        fontSize: '16@vs',
+        fontWeight: 'bold',
+        color: Themes.COLORS.textSecondary,
+    },
+    viewCheckSquare: {
+        marginTop: '3@vs',
+    },
+    viewFooter: {
+        backgroundColor: Themes.COLORS.white,
+        height: '34@vs',
+    },
+    describeLabel: {
+        color: Themes.COLORS.black,
+        lineHeight: '20@vs',
+        fontWeight: '400',
+    },
+    restaurant: {
+        width: '235@s',
+        paddingVertical: '0@s',
+        borderRadius: 10,
+        borderColor: Themes.COLORS.silver,
+        backgroundColor: Themes.COLORS.backGroundInput,
+        paddingHorizontal: 0,
+    },
+    btnOpenModal: {
+        borderWidth: 1,
+        height: '50@vs',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginLeft: '11@s',
+        width: '90@s',
+        borderRadius: 5,
+    },
+    attention: {
+        marginTop: 0,
+        fontWeight: '700',
     },
 });
