@@ -48,8 +48,7 @@ const StyledButton: FunctionComponent<StyledButtonProps> = (props: StyledButtonP
             customStyle={[styles.container, customStyle]}
             onPress={onPress}
             onLongPress={onLongPress}
-            disabled={disabled}
-        >
+            disabled={disabled}>
             {isNormal ? (
                 <StyledText
                     i18nText={title}
@@ -64,8 +63,7 @@ const StyledButton: FunctionComponent<StyledButtonProps> = (props: StyledButtonP
                     outline={outline}
                     disabled={disabled}
                     colors={colors}
-                    customStyle={customContentStyle}
-                >
+                    customStyle={customContentStyle}>
                     <StyledText
                         i18nText={title}
                         customStyle={[

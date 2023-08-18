@@ -2,7 +2,7 @@ import { editProfile, getProfile } from 'api/modules/api-app/authenticate';
 import { saveOrderOption } from 'api/modules/api-app/order';
 import { RootState } from 'app-redux/hooks';
 import { updateChooseBranch } from 'app-redux/slices/globalDataSlice';
-import { clearDefaultOrder, clearMobileOrder } from 'app-redux/slices/orderSlice';
+import { clearCartOrder, clearDefaultOrder, clearMobileOrder } from 'app-redux/slices/orderSlice';
 import { userInfoActions } from 'app-redux/slices/userInfoSlice';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledText, StyledTouchable } from 'components/base';
@@ -57,8 +57,10 @@ const SelectBranchStoreScreen: FunctionComponent = (props: any) => {
                 dispatch(updateChooseBranch(restaurant));
                 onClearOrder(OrderTypeMenu.DEFAULT_ORDER);
                 onClearOrder(OrderTypeMenu.MOBILE_ORDER);
+                onClearOrder(OrderTypeMenu.CART_ORDER);
                 dispatch(clearDefaultOrder());
                 dispatch(clearMobileOrder());
+                dispatch(clearCartOrder());
             }
             setChooseBranch?.(restaurant);
             goBack();
@@ -84,7 +86,6 @@ const SelectBranchStoreScreen: FunctionComponent = (props: any) => {
                         customStyle={styles.cssLabel}
                         labelRequire={'*'}
                     />
-
                     <View style={styles.viewInput}>
                         <StyledInput
                             value={!restaurant?.id && name ? t('authen.register.selectBranchStore.noBranch') : name}

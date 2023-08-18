@@ -22,7 +22,7 @@ export default {
         save: '保存',
         next: '次へ',
         uploadVersion: 'アプリを最新バージョンにしてください',
-        defaultRestaurants: '店舗指定なし\n（事前注文機能・クーポン機能が使用できません）',
+        defaultRestaurants: '店舗指定なし\n該当店舗なし',
         sendOTP: {
             title: '認証コード',
             titleForgotPassword: 'パスワードを忘れた',

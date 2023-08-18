@@ -56,8 +56,7 @@ const ModalChooseRestaurants = (props: IProps, ref: any) => {
                 contentContainerStyle: styles.contentContainerStyle,
             }}
             FooterComponent={<FooterComponent handleOk={handleOk} selectBox={selectBox} />}
-            modalHeight={Metrics.screenHeight * 0.8}
-            snapPoint={verticalScale(370)}
+            modalHeight={Metrics.screenHeight * 0.6}
             HeaderComponent={
                 <HeaderDefault title={'authen.register.selectBranchStore.titleModal'} onPress={handlePressIconClose} />
             }>

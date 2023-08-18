@@ -187,7 +187,7 @@ const ChooseCouponTab = (props: any) => {
                                 <StyledButton
                                     onPress={() => applyChooseDish(defaultOrderLocal?.coupons)}
                                     title={'home.createOr'}
-                                    customContentStyle={styles.detailButton}
+                                    customContentStyle={styles.detailButtonDish}
                                     customStyle={styles.button}
                                     customStyleText={styles.textBtn}
                                     disabled={noCouponChoose}
@@ -214,8 +214,13 @@ const styles = ScaledSheet.create({
         padding: 0,
         paddingVertical: '8@vs',
     },
+    detailButtonDish: {
+        width: '100@s',
+        padding: 0,
+        paddingVertical: '8@vs',
+    },
     button: {
-        width: '170@s',
+        width: '100@s',
         marginTop: '0@s',
     },
     noQrCodeView: {

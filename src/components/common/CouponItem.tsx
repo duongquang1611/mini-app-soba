@@ -46,7 +46,7 @@ export const CouponItem = (props: any) => {
     const checkChooseTemp = (isHomeTab ? defaultOrderLocal : cartOrderState)?.coupons?.find(
         (itemCoupon: any) => itemCoupon?.id === idMemberCoupon,
     );
-    const checkChooseInCart = (isHomeTab ? {} : order || cartOrder)?.coupons?.find(
+    const checkChooseInCart = !!(isHomeTab ? {} : order || cartOrder)?.coupons?.find(
         (itemCoupon: any) => itemCoupon?.id === idMemberCoupon && itemCoupon?.receivedDate === receivedDate,
     );
 
@@ -54,7 +54,7 @@ export const CouponItem = (props: any) => {
         item?.coupon?.isDiscountAllRestaurants === TypeDiscountCoupon.NOT_DISCOUNT_ALL &&
         !item?.coupon?.restaurants?.map((itemBranch: any) => itemBranch?.id)?.includes(chooseBranch?.id);
 
-    const disabledUse = !!checkChooseInCart || checkNotRestaurant;
+    const disabledUse = checkChooseInCart || checkNotRestaurant;
     const isBlock = Boolean(coupon?.isBlock);
     const hasExpired = dateType === DateType.EXPIRED_DATE;
 
@@ -114,7 +114,10 @@ export const CouponItem = (props: any) => {
     return (
         <>
             {showDashTop && <DashView customStyle={blStyle.dash} />}
-            <StyledTouchable customStyle={[blStyle.couponItem, customStyle]} onPress={handleGoToDetail}>
+            <StyledTouchable
+                customStyle={[blStyle.couponItem, customStyle]}
+                onPress={handleGoToDetail}
+                disabled={isHomeTab}>
                 {!!isExchangeCoupon && (
                     <PointExchangeView stampAmount={stampAmount} customStyle={blStyle.stylePointExchange} />
                 )}
@@ -130,7 +133,7 @@ export const CouponItem = (props: any) => {
                             ),
                             title,
                         }}
-                        numberOfLines={1}
+                        numberOfLines={isHomeTab ? null : 1}
                         customStyle={blStyle.title}
                     />
                     <View style={blStyle.rowView}>
