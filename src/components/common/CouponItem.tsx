@@ -116,8 +116,7 @@ export const CouponItem = (props: any) => {
             {showDashTop && <DashView customStyle={blStyle.dash} />}
             <StyledTouchable
                 customStyle={[blStyle.couponItem, customStyle]}
-                onPress={handleGoToDetail}
-                disabled={isHomeTab}>
+                onPress={isHomeTab ? handleUseCoupon : handleGoToDetail}>
                 {!!isExchangeCoupon && (
                     <PointExchangeView stampAmount={stampAmount} customStyle={blStyle.stylePointExchange} />
                 )}
