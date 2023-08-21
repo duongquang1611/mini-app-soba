@@ -92,6 +92,8 @@ const SelectBranchStoreScreen: FunctionComponent = (props: any) => {
                             containerStyle={styles.restaurant}
                             pointerEvents="none"
                             customPlaceHolder="authen.register.selectBranchStore.placeHolderBranch"
+                            editable={false}
+                            selectTextOnFocus={false}
                         />
                         <StyledTouchable customStyle={styles.btnOpenModal} onPress={() => modalRef?.current?.open()}>
                             <StyledText

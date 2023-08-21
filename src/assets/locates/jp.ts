@@ -22,7 +22,7 @@ export default {
         save: '保存',
         next: '次へ',
         uploadVersion: 'アプリを最新バージョンにしてください',
-        defaultRestaurants: '店舗指定なし\n該当店舗なし',
+        defaultRestaurants: '店舗指定なし・該当店舗なし',
         sendOTP: {
             title: '認証コード',
             titleForgotPassword: 'パスワードを忘れた',
@@ -116,7 +116,7 @@ export default {
                 chooseStore: '選択店舗',
                 currentlySelected: '選択中',
                 btnChangeBranch: '変更は\nこちら',
-                noBranch: '店舗指定なし',
+                noBranch: '店舗指定なし・該当店舗なし',
                 description: '使用する店舗を選択してくださ',
                 labelInput: '選択中店舗',
                 describeLabel: '券売機に来店QRコードをかざす',

@@ -234,10 +234,15 @@ const RegisterScreen = () => {
                                 containerStyle={styles.restaurant}
                                 pointerEvents="none"
                                 customPlaceHolder="authen.register.selectBranchStore.placeHolderBranch"
+                                editable={false}
+                                selectTextOnFocus={false}
                             />
                             <StyledTouchable
                                 customStyle={styles.btnOpenModal}
-                                onPress={() => modalRef?.current?.open()}>
+                                onPress={() => {
+                                    Keyboard?.dismiss();
+                                    modalRef?.current?.open();
+                                }}>
                                 <StyledText
                                     i18nText={'authen.register.selectBranchStore.descriptionInput'}
                                     customStyle={styles.cssTxtInput}

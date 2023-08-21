@@ -4,6 +4,7 @@ import React, { forwardRef, useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
     ColorValue,
+    Keyboard,
     ReturnKeyTypeOptions,
     StyleProp,
     Text,
@@ -98,6 +99,7 @@ const StyledInput = (props: StyledInputProps, ref: any) => {
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
     const showDatePicker = () => {
+        Keyboard.dismiss();
         setDatePickerVisibility(true);
     };
 
@@ -132,8 +134,7 @@ const StyledInput = (props: StyledInputProps, ref: any) => {
                         !!(errorMessage || customErrorMessage) && { borderColor: Themes.COLORS.borderInputError },
                 ]}
                 onPress={icBirthday ? showDatePicker : onPress}
-                disabled={disabled}
-            >
+                disabled={disabled}>
                 <TextInput
                     ref={ref || input}
                     onFocus={() => setIsFocused(true)}
