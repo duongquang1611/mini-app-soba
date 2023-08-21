@@ -264,7 +264,7 @@ const styles = ScaledSheet.create({
         color: Themes.COLORS.secondary,
     },
     restaurantHeight: {
-        lineHeight: '20@vs',
+        lineHeight: '24@vs',
     },
     discountText: {
         fontSize: '16@ms0.3',

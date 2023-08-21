@@ -34,6 +34,7 @@ const CouponTab = (props: CouponTabProps) => {
         isHomeTab,
         isShowAllRestaurants,
     } = props;
+
     const {
         coupon,
         globalData: { chooseBranch },
@@ -49,6 +50,14 @@ const CouponTab = (props: CouponTabProps) => {
                 item?.coupon?.restaurants?.map((itemBranch: any) => itemBranch?.id)?.includes(branchId),
         );
     }, [couponsCanUse]);
+    const newCouponsUsed = useMemo(() => {
+        if (isShowAllRestaurants) return couponsUsed;
+        return couponsUsed?.filter(
+            item =>
+                item?.coupon?.isDiscountAllRestaurants === TypeDiscountCoupon.ALL_RESTAURANT ||
+                item?.coupon?.restaurants?.map((itemBranch: any) => itemBranch?.id)?.includes(branchId),
+        );
+    }, [couponsUsed]);
 
     const goToDetail = (item: any) => {
         navigate(COUPON_ROUTE.DETAIL_COUPON, {
@@ -84,7 +93,7 @@ const CouponTab = (props: CouponTabProps) => {
         <View style={styles.container}>
             {!isHomeTab && <View style={styles.separator} />}
             <StyledList
-                data={canUse ? newCouponsCanUse : couponsUsed}
+                data={canUse ? newCouponsCanUse : newCouponsUsed}
                 renderItem={renderItem}
                 customStyle={styles.listCoupon}
                 onRefresh={() => getCouponData(canUse)}
