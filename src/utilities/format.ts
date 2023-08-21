@@ -48,7 +48,7 @@ export const formatRestaurantsCouponShow = (
         return detailScreen ? i18next.t('coupon.allRestaurant') : `[${i18next.t('coupon.allRestaurant')}]`;
     if (restaurants?.length) {
         const restaurantsShow = restaurants
-            .map((item: any) => `${item.name}${i18next.t('coupon.itemRestaurantShow')}`)
+            .map((item: any) => `${item.name}${detailScreen ? '' : i18next.t('coupon.itemRestaurantShow')}`)
             .join(i18next.t('common.comma'));
         return detailScreen ? restaurantsShow : `[${restaurantsShow}]`;
     }
