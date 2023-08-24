@@ -1,5 +1,5 @@
 import { DefaultEventsMap } from '@socket.io/component-emitter';
-import { getProfile } from 'api/modules/api-app/authenticate';
+import { getProfile, getRestaurantsApi } from 'api/modules/api-app/authenticate';
 import { saveOrderOption } from 'api/modules/api-app/order';
 import {
     clearCartOrder,
@@ -28,6 +28,9 @@ import {
     logger,
 } from './helper';
 import { OrderType, listScreenBackWhenPayment } from './staticData';
+import { getResourcesData } from 'hooks/useNetwork';
+import { updateGlobalData } from 'app-redux/slices/globalDataSlice';
+import i18next from 'i18next';
 
 let socket: Socket<DefaultEventsMap, DefaultEventsMap>;
 
@@ -105,6 +108,17 @@ const handleActionCancelOrder = async (data: any) => {
     store.dispatch(updateCartOrder(deleteUsedCoupon(cartOrder, coupons)));
     await generalActionSocket();
 };
+const handleActionUpdateResource = async () => {
+    const restaurantsDefault = [{ id: null, name: i18next.t('common.defaultRestaurants') }];
+    try {
+        await getResourcesData();
+        const resRestaurants = await getRestaurantsApi();
+        if (!resRestaurants?.data) return;
+        store.dispatch(updateGlobalData({ listRestaurants: [...resRestaurants?.data, ...restaurantsDefault] }));
+    } catch (error) {
+        console.log('getListRestaurants -> error', error);
+    }
+};
 
 const handleDisconnectSocket = async () => {
     try {
@@ -158,6 +172,7 @@ export const SocketProvider = ({ children }: any) => {
         });
         socket.on(SocketEvent.SUCCESS_PAYMENT, handleActionSuccessPayment);
         socket.on(SocketEvent.CANCEL_ORDER, handleActionCancelOrder);
+        socket.on(SocketEvent.UPDATE_RESOURCE, handleActionUpdateResource);
         socket.on(SocketEvent.DISCONNECT, handleDisconnectSocket);
     };
 
@@ -166,6 +181,7 @@ export const SocketProvider = ({ children }: any) => {
         socket?.off(SocketEvent.connectError);
         socket?.off(SocketEvent.SUCCESS_PAYMENT);
         socket?.off(SocketEvent.CANCEL_ORDER);
+        socket?.off(SocketEvent.UPDATE_RESOURCE);
         socket?.off(SocketEvent.DISCONNECT);
         socket?.disconnect();
     };

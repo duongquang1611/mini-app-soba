@@ -129,10 +129,27 @@ export enum SocketEvent {
     CANCEL_ORDER = 'CANCEL_ORDER',
     MESSAGE = 'MESSAGE',
     DISCONNECT = 'disconnect',
+    UPDATE_RESOURCE = 'UPDATE_RESOURCE',
 }
 
 // coupon.isDiscountAllRestaurants
 export enum TypeDiscountCoupon {
     ALL_RESTAURANT = 1,
     NOT_DISCOUNT_ALL = 0,
+}
+
+export enum DiscountType {
+    ALL_ORDER = 1,
+    EACH_DISH = 2,
+}
+
+export enum CheckCouponDishSpecify {
+    FULL_0 = 0,
+    FULL_1 = 1,
+    ALL = 2,
+}
+
+export enum SpecifyRestaurantsType {
+    NO = 0,
+    YES = 1,
 }

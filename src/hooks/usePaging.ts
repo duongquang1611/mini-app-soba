@@ -10,7 +10,7 @@ const usePaging = (
     mainKeyData?: string,
 ) => {
     const [pagingData, setPagingData] = useState<any>({
-        refreshing: false,
+        refreshing: true,
         loadingMore: false,
         pageIndex: 1,
         list: mainKeyData

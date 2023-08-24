@@ -399,6 +399,8 @@ export default {
         noRestaurant: 'ありません',
         itemDishesRestaurantShow: '限定',
         allOrder: '全ての商品に使用可能なクーポンです。',
+        allStore: 'アプリ対応店舗 全店',
+        allStoreContent: '注意事項：商品毎に利用可能店舗が異なります。ご注意ください。',
     },
     otp: {
         register: {

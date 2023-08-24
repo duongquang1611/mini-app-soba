@@ -9,8 +9,8 @@ import StyledHeader from 'components/common/StyledHeader';
 import AmountOrder from 'feature/order/components/AmountOrder';
 import React, { useEffect, useRef, useState } from 'react';
 import { RefreshControl, View } from 'react-native';
-import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
-import { formatDate, formatRestaurantsCouponShow, YMDHm } from 'utilities/format';
+import { ScaledSheet, scale, verticalScale } from 'react-native-size-matters';
+import { YMDHm, formatDate } from 'utilities/format';
 import { numberWithCommas } from 'utilities/helper';
 
 const OrderItem = (props: any) => {
@@ -125,8 +125,7 @@ const OrderHistoryDetailScreen = (props: any) => {
                             tintColor={Themes.COLORS.primary}
                             onRefresh={handleRefresh}
                         />
-                    }
-                >
+                    }>
                     <View style={styles.body}>
                         <View style={styles.restaurantView}>
                             <StyledText i18nText={'setting.restaurant'} isBlack />
@@ -171,15 +170,7 @@ const OrderHistoryDetailScreen = (props: any) => {
                                                 customStyle={styles.couponItem}
                                             />
                                             <StyledText
-                                                i18nParams={{
-                                                    restaurants: formatRestaurantsCouponShow(
-                                                        itemCoupon?.coupon?.restaurants,
-                                                        itemCoupon?.coupon?.isDiscountAllRestaurants,
-                                                        false,
-                                                    ),
-                                                    title: itemCoupon?.coupon?.title,
-                                                }}
-                                                i18nText={'coupon.titleItemCoupon'}
+                                                originValue={itemCoupon?.coupon?.title}
                                                 isBlack
                                                 customStyle={{ flexShrink: 1 }}
                                             />

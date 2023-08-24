@@ -8,12 +8,13 @@ import { isArray, orderBy } from 'lodash';
 import React from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
-import { CouponDishType } from 'utilities/enumData';
+import { CheckCouponDishSpecify, CouponDishType } from 'utilities/enumData';
 import {
     formatCouponStringId,
     formatDate,
     formatRestaurantsCouponShow,
     formatRestaurantsDishesShow,
+    getCouponDishSpecify,
 } from 'utilities/format';
 import { getRangeCoupon } from 'utilities/helper';
 import { DateType, DiscountType } from 'utilities/staticData';
@@ -29,12 +30,16 @@ interface IProps {
     isExchange?: boolean;
 }
 const CouponDishItem = ({ item, discountType }: any) => {
-    const { type, dish, discount, restaurants } = item;
+    const { type, dish, discount, restaurants, isSpecifyRestaurants } = item;
     const { title = '' } = dish || {};
     return (
         <StyledText
             i18nText={type === CouponDishType.SETTING_DISCOUNT ? 'coupon.detail.discount' : 'coupon.detail.free'}
-            i18nParams={{ discount, title, restaurants: formatRestaurantsDishesShow(restaurants, discountType) }}
+            i18nParams={{
+                discount,
+                title,
+                restaurants: formatRestaurantsDishesShow(restaurants, discountType, isSpecifyRestaurants),
+            }}
             customStyle={styles.discountText}
         />
     );
@@ -81,6 +86,9 @@ const CouponContentView = (props: IProps) => {
     const isBlock = Boolean(coupon?.isBlock);
     const hasExpired = dateType === DateType.EXPIRED_DATE;
 
+    const showTextStoreDescription =
+        discountType === DiscountType.EACH_DISH && getCouponDishSpecify(couponDishes) === CheckCouponDishSpecify.ALL;
+
     return (
         <WrapComponent customStyle={[styles.container, customStyle]} isModal={isModal}>
             {hasSeparatorView && <View style={styles.grayView} />}
@@ -121,11 +129,18 @@ const CouponContentView = (props: IProps) => {
                         />
 
                         <StyledText
-                            originValue={formatRestaurantsCouponShow(restaurants, isDiscountAllRestaurants, true)}
+                            originValue={formatRestaurantsCouponShow(
+                                restaurants,
+                                isDiscountAllRestaurants,
+                                discountType,
+                                couponDishes,
+                            )}
                             customStyle={[styles.restaurant, styles.restaurantHeight]}
                         />
                     </View>
-
+                    {showTextStoreDescription && (
+                        <StyledText i18nText={'coupon.allStoreContent'} customStyle={styles.allStore} />
+                    )}
                     {isExchange && (
                         <StyledText
                             customStyle={styles.exchangeLimit}
@@ -357,6 +372,9 @@ const styles = ScaledSheet.create({
     restaurant: {
         flexShrink: 1,
         marginLeft: '5@s',
+    },
+    allStore: {
+        color: Themes.COLORS.primary,
     },
 });
 

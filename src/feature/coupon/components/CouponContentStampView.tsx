@@ -7,9 +7,9 @@ import DashView from 'components/common/DashView';
 import { isArray, orderBy } from 'lodash';
 import React from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
-import { scale, ScaledSheet } from 'react-native-size-matters';
+import { ScaledSheet, scale } from 'react-native-size-matters';
 import { CouponDishType } from 'utilities/enumData';
-import { formatDate, formatRestaurantsCouponShow, formatRestaurantsDishesShow } from 'utilities/format';
+import { formatDate, formatRestaurantsDishesShow } from 'utilities/format';
 import { getRangeCoupon } from 'utilities/helper';
 import { DateType, DiscountType } from 'utilities/staticData';
 
@@ -20,12 +20,16 @@ interface IProps {
     datas: any[];
 }
 const CouponDishItem = ({ item, discountType }: any) => {
-    const { type, dish, discount, restaurants } = item;
+    const { type, dish, discount, restaurants, isSpecifyRestaurants } = item;
     const { title = '' } = dish || {};
     return (
         <StyledText
             i18nText={type === CouponDishType.SETTING_DISCOUNT ? 'coupon.detail.discount' : 'coupon.detail.free'}
-            i18nParams={{ discount, title, restaurants: formatRestaurantsDishesShow(restaurants, discountType) }}
+            i18nParams={{
+                discount,
+                title,
+                restaurants: formatRestaurantsDishesShow(restaurants, discountType, isSpecifyRestaurants),
+            }}
             customStyle={styles.discountText}
         />
     );
@@ -54,21 +58,12 @@ const CouponContentItem = ({ item }: any) => {
         stringId = '',
         expiryDayType,
         expiryDay,
-        restaurants,
-        isDiscountAllRestaurants,
     } = coupon;
 
     return (
         <>
             <StyledText i18nText={'coupon.detail.id'} i18nParams={{ id: stringId }} customStyle={styles.textId} />
-            <StyledText
-                i18nParams={{
-                    restaurants: formatRestaurantsCouponShow(restaurants, isDiscountAllRestaurants, false),
-                    title,
-                }}
-                i18nText={'coupon.titleItemCoupon'}
-                customStyle={styles.title}
-            />
+            <StyledText originValue={title} customStyle={styles.title} />
             <StyledImageBackground style={styles.img} source={{ uri: image }} />
             <View style={styles.rowView}>
                 <StyledIcon source={Images.icons.calendar} size={20} customStyle={styles.iconDate} />

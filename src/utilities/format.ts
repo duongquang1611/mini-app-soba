@@ -3,7 +3,7 @@ import 'dayjs/locale/ja';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import i18next from 'i18next';
-import { TypeDiscountCoupon } from './enumData';
+import { CheckCouponDishSpecify, SpecifyRestaurantsType, TypeDiscountCoupon } from './enumData';
 import { DiscountType } from './staticData';
 
 dayjs.locale('ja');
@@ -39,20 +39,29 @@ export const formatDateJapan = (date: Date | string | number, defaultFormat = YY
     if (!date) return '';
     return `${dayjs(date).tz('Asia/Tokyo').format(defaultFormat)}`;
 };
+
+export const getCouponDishSpecify = (couponDishes: any) => {
+    if (!couponDishes?.find((itemDish: any) => itemDish.isSpecifyRestaurants === SpecifyRestaurantsType.NO))
+        return CheckCouponDishSpecify.FULL_1;
+    if (!couponDishes?.find((itemDish: any) => itemDish.isSpecifyRestaurants === SpecifyRestaurantsType.YES))
+        return CheckCouponDishSpecify.FULL_0;
+    return CheckCouponDishSpecify.ALL;
+};
+
 export const formatRestaurantsCouponShow = (
     restaurants: any,
     isDiscountAllRestaurants: number,
-    detailScreen?: boolean,
+    discountType: number,
+    couponDishes: any,
 ) => {
-    if (isDiscountAllRestaurants === TypeDiscountCoupon.ALL_RESTAURANT)
-        return detailScreen ? i18next.t('coupon.allRestaurant') : `[${i18next.t('coupon.allRestaurant')}]`;
+    if (isDiscountAllRestaurants === TypeDiscountCoupon.ALL_RESTAURANT) return i18next.t('coupon.allRestaurant');
+    if (discountType === DiscountType.EACH_DISH && getCouponDishSpecify(couponDishes) !== CheckCouponDishSpecify.FULL_1)
+        return i18next.t('coupon.allStore');
     if (restaurants?.length) {
-        const restaurantsShow = restaurants
-            .map((item: any) => `${item.name}${detailScreen ? '' : i18next.t('coupon.itemRestaurantShow')}`)
-            .join(i18next.t('common.comma'));
-        return detailScreen ? restaurantsShow : `[${restaurantsShow}]`;
+        const restaurantsShow = restaurants.map((item: any) => item.name).join(i18next.t('common.comma'));
+        return restaurantsShow;
     }
-    return detailScreen ? i18next.t('coupon.noRestaurant') : '';
+    return i18next.t('coupon.noRestaurant');
 };
 
 export const formatCouponStringId = (stringId: string, exchangeTime?: number) => {
@@ -61,8 +70,9 @@ export const formatCouponStringId = (stringId: string, exchangeTime?: number) =>
     return `${stringId}_${exchangeTime}`;
 };
 
-export const formatRestaurantsDishesShow = (restaurants: any, discountType: number) => {
+export const formatRestaurantsDishesShow = (restaurants: any, discountType: number, isSpecifyRestaurants: number) => {
     if (discountType === DiscountType.ALL_ORDER || !discountType) return '';
+    if (isSpecifyRestaurants === SpecifyRestaurantsType.NO) return `(${i18next.t('coupon.allStore')})`;
     if (restaurants?.length) {
         const restaurantsShow = restaurants
             .map((item: any) => `${item.name}${i18next.t('coupon.itemDishesRestaurantShow')}`)
