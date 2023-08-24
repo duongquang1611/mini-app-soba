@@ -21,7 +21,7 @@ import { RefreshControl, ScrollView, View } from 'react-native';
 import { scale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useDispatch } from 'react-redux';
 import { StampCardType, StampSettingDuration } from 'utilities/enumData';
-import { formatDate, formatRestaurantsCouponShow } from 'utilities/format';
+import { formatDate } from 'utilities/format';
 import { isTimePast, openURL } from 'utilities/helper';
 import {
     DateType,
@@ -71,8 +71,7 @@ const NotificationDetailScreen = (props: any) => {
     const { item = {} } = props.route?.params || {};
     const { id } = item;
     const [coupon, setCoupon] = useState<any>({});
-    const { title, content, receivedDate, notification, notificationSpecial, restaurants, isDiscountAllRestaurants } =
-        coupon;
+    const { title, content, receivedDate, notification, notificationSpecial } = coupon;
     const { images = [], memberStamps, memberCoupons, link } = notificationSpecial || notification || {};
     const [refreshing, setRefreshing] = useState(false);
 
@@ -178,14 +177,7 @@ const NotificationDetailScreen = (props: any) => {
                     <View style={styles.grayView} />
                     <View style={styles.contentContainer}>
                         <StyledText originValue={formatDate(receivedDate)} customStyle={styles.time} />
-                        <StyledText
-                            i18nParams={{
-                                restaurants: formatRestaurantsCouponShow(restaurants, isDiscountAllRestaurants, false),
-                                title,
-                            }}
-                            i18nText={'coupon.titleItemCoupon'}
-                            customStyle={styles.title}
-                        />
+                        <StyledText originValue={title} customStyle={styles.title} />
 
                         {listImage?.length > 0 && (
                             <StyledHeaderImage

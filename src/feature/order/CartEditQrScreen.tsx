@@ -21,7 +21,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { View } from 'react-native';
 import { ScaledSheet, scale, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
-import { formatRestaurantsCouponShow } from 'utilities/format';
 import { titleOrder } from 'utilities/helper';
 import { DiscountType, MODAL_ID, OrderTypeMenu, POPUP_TYPE, staticValue } from 'utilities/staticData';
 import AmountOrder from './components/AmountOrder';
@@ -32,7 +31,6 @@ const ItemCoupon = (props: any) => {
     const { cancelCouponItem, data, orderType, setSaveOrderCoupon, saveOrderCart } = props;
     const { cartOrder } = useSelector((state: RootState) => state.order);
     const { coupon, id, choose } = data || {};
-    const { restaurants, isDiscountAllRestaurants } = coupon || {};
     const modalize = ModalizeManager();
     const dispatch = useDispatch();
     const updateCouponsCart = (coupons: any) => {
@@ -79,14 +77,7 @@ const ItemCoupon = (props: any) => {
                 <View style={styles.rowItem}>
                     <StyledIcon source={Images.icons.coupon} size={20} customStyle={styles.icCoupon} />
                     <View style={styles.nameCoupon}>
-                        <StyledText
-                            i18nParams={{
-                                restaurants: formatRestaurantsCouponShow(restaurants, isDiscountAllRestaurants, false),
-                                title: coupon?.title,
-                            }}
-                            i18nText={'coupon.titleItemCoupon'}
-                            isBlack
-                        />
+                        <StyledText originValue={coupon?.title} isBlack />
                     </View>
                 </View>
                 {choose && (

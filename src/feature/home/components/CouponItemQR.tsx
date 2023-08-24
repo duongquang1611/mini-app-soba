@@ -2,16 +2,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { RootState } from 'app-redux/hooks';
 import Images from 'assets/images';
-import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledIcon, StyledImage, StyledText, StyledTouchable } from 'components/base';
 import DashView from 'components/common/DashView';
 import PointExchangeView from 'components/common/PointExchangeView';
 import React from 'react';
 import { View } from 'react-native';
-import { scale, ScaledSheet } from 'react-native-size-matters';
+import { ScaledSheet } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
-import { formatDate, formatRestaurantsCouponShow } from 'utilities/format';
+import { formatDate } from 'utilities/format';
 import { getRangeCoupon } from 'utilities/helper';
 import { DateType, staticValue } from 'utilities/staticData';
 
@@ -33,17 +32,7 @@ export const CouponItemQR = (props: any) => {
     } = props || {};
 
     const { coupon, usedDate, id: idMemberCoupon, receivedDate, expiryDate, stampAmount = 0 } = item;
-    const {
-        image_150,
-        title,
-        startDate,
-        endDate,
-        dateType,
-        expiryDay,
-        expiryDayType,
-        restaurants,
-        isDiscountAllRestaurants,
-    } = coupon || {};
+    const { image_150, title, startDate, endDate, dateType, expiryDay, expiryDayType } = coupon || {};
     // const isInCartAPI = useMemo(() => status === MemberCouponStatus.IN_CART, [status]);
     const checkChooseTemp = cartOrderState?.coupons?.find((itemCoupon: any) => itemCoupon?.id === idMemberCoupon);
     const checkChooseInCart = !!(order || cartOrder)?.coupons?.find(
@@ -115,15 +104,7 @@ export const CouponItemQR = (props: any) => {
                 )}
                 <StyledImage resizeMode={'cover'} source={{ uri: image_150 }} customStyle={styles.couponImage} />
                 <View style={styles.content}>
-                    <StyledText
-                        i18nParams={{
-                            restaurants: formatRestaurantsCouponShow(restaurants, isDiscountAllRestaurants, false),
-                            title,
-                        }}
-                        i18nText={'coupon.titleItemCoupon'}
-                        numberOfLines={1}
-                        customStyle={styles.title}
-                    />
+                    <StyledText originValue={title} numberOfLines={1} customStyle={styles.title} />
                     <View style={styles.rowView}>
                         {isExchangeCoupon ? (
                             <>
