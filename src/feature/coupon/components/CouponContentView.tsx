@@ -87,7 +87,7 @@ const CouponContentView = (props: IProps) => {
     const hasExpired = dateType === DateType.EXPIRED_DATE;
 
     const showTextStoreDescription =
-        discountType === DiscountType.EACH_DISH && getCouponDishSpecify(couponDishes) === CheckCouponDishSpecify.ALL;
+        discountType === DiscountType.EACH_DISH && getCouponDishSpecify(couponDishes) !== CheckCouponDishSpecify.FULL_0;
 
     return (
         <WrapComponent customStyle={[styles.container, customStyle]} isModal={isModal}>
