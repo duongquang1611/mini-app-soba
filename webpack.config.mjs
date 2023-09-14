@@ -2,6 +2,8 @@ import path from 'path';
 import TerserPlugin from 'terser-webpack-plugin';
 import * as Repack from '@callstack/repack';
 
+const STANDALONE = Boolean(process.env.STANDALONE);
+
 /**
  * More documentation, installation, usage, motivation and differences with Metro is available at:
  * https://github.com/callstack/repack/blob/main/README.md
@@ -105,7 +107,6 @@ export default env => {
          */
         output: {
             clean: true,
-            hashFunction: 'xxhash64',
             path: path.join(dirname, 'build/generated', platform),
             filename: 'index.bundle',
             chunkFilename: '[name].chunk.bundle',
@@ -149,8 +150,7 @@ export default env => {
                 {
                     test: /\.[jt]sx?$/,
                     include: [
-                        /node_modules(.*[/\\])+react\//,
-                        /node_modules(.*[/\\])+react-native/,
+                        /node_modules(.*[/\\])+react/,
                         /node_modules(.*[/\\])+@react-native/,
                         /node_modules(.*[/\\])+@react-navigation/,
                         /node_modules(.*[/\\])+@react-native-community/,
@@ -228,23 +228,32 @@ export default env => {
                     assetsPath,
                 },
             }),
-
             new Repack.plugins.ModuleFederationPlugin({
-                name: 'SobaApp',
+                name: 'soba',
                 exposes: {
                     './App': './App.tsx',
                 },
                 shared: {
                     react: {
                         ...Repack.Federated.SHARED_REACT,
-                        eager: STANDALONE, // to be figured out
+                        requiredVersion: '18.2.0',
+                        eager: STANDALONE,
                     },
                     'react-native': {
                         ...Repack.Federated.SHARED_REACT_NATIVE,
-                        eager: STANDALONE, // to be figured out
                         requiredVersion: '0.72.0',
+                        eager: STANDALONE,
+                    },
+                    '@react-navigation/native': {
+                        singleton: true,
+                        eager: STANDALONE,
+                        requiredVersion: '6.1.7',
                     },
                 },
+            }),
+            new Repack.plugins.CodeSigningPlugin({
+                privateKeyPath: './code-signing.pem',
+                outputPath: path.join('build', 'outputs', platform, 'remotes'),
             }),
         ],
     };
