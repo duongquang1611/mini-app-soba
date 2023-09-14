@@ -21,33 +21,6 @@ import * as yup from 'yup';
 
 const DEFAULT_FORM: any = __DEV__
     ? {
-<<<<<<< HEAD
-          //   email: 'yeuquaimo@love.you',
-          //   password: 'loveyou3000',
-          //   email: 'yeuquaimo050@love.you',
-          //   password: 'loveyou3000',
-          //   email: 'tuyet08@gmail.com',
-          //   password: 'abc12345',
-        //   email: 'tuyet.nguyen01@amela.vn',
-        //   password: 'abc12345',
-          //   email: 'anh.nguyenthingoc@amela.vn',
-          //   password: 'abc12345',
-          //   email: 'tuyet10@gmail.com',
-          //   password: 'abc12345',
-          //   email: 'tester4@gmail.com',
-          //   password: 'abc12345',
-          //   email: 'amela1@gmail.com',
-          //   password: 'abc12345',
-          //   email: 'amela01@gmail.com',
-          //   password: 'abc12345',
-          //   email: 'amela02@gmail.com',
-          //   password: 'abc12345',
-          //   email: 'le.ngo@amela.vn',
-          //   password: 'abc12345',
-          //   email: 'quang.duong@amela.vn',
-          //   password: 'abc12345',
-=======
->>>>>>> 2214c12 (fix: remove email)
           //   email: 'komoro.app.test001@gmail.com',
           //   password: 'Test0320',
       }
