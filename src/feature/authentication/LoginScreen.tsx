@@ -21,6 +21,7 @@ import * as yup from 'yup';
 
 const DEFAULT_FORM: any = __DEV__
     ? {
+<<<<<<< HEAD
           //   email: 'yeuquaimo@love.you',
           //   password: 'loveyou3000',
           //   email: 'yeuquaimo050@love.you',
@@ -45,6 +46,8 @@ const DEFAULT_FORM: any = __DEV__
           //   password: 'abc12345',
           //   email: 'quang.duong@amela.vn',
           //   password: 'abc12345',
+=======
+>>>>>>> 2214c12 (fix: remove email)
           //   email: 'komoro.app.test001@gmail.com',
           //   password: 'Test0320',
       }
