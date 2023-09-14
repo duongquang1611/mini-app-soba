@@ -4,14 +4,15 @@
     "private": true,
     "scripts": {
         "init-project": "react-native eject && npm run pod-install",
-        "start": "react-native start ",
+        "start": "react-native webpack-start --port 8085",
+        "bundle": "react-native webpack-bundle",
         "android": "react-native run-android",
         "ios": "react-native run-ios",
         "test": "jest",
         "codepush": "./code-push.command",
         "pod-install": "patch-package && cd ios && bundle exec pod install && cd ..",
         "pod-install-m1": "cd ios && arch -x86_64 pod install && cd ..",
-        "postinstall": "cd scripts && sh ./fix-lib.sh && yarn pod-install",
+        "postinstall": "cd scripts && sh ./fix-lib.sh && bundle install && yarn pod-install",
         "prepare": "husky install",
         "assets-link": "npx react-native link",
         "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
@@ -143,6 +144,7 @@
         "@babel/core": "^7.20.0",
         "@babel/preset-env": "^7.20.0",
         "@babel/runtime": "^7.20.0",
+        "@callstack/repack": "^3.4.0",
         "@react-native/eslint-config": "^0.72.2",
         "@react-native/metro-config": "^0.72.6",
         "@tsconfig/react-native": "^3.0.0",
@@ -158,6 +160,7 @@
         "@typescript-eslint/eslint-plugin-tslint": "^4.28.2",
         "@typescript-eslint/parser": "^4.28.2",
         "babel-jest": "^29.2.1",
+        "babel-loader": "^9.1.3",
         "babel-plugin-module-resolver": "^4.1.0",
         "eslint": "^8.19.0",
         "eslint-config-prettier": "^8.3.0",
@@ -176,12 +179,15 @@
         "react-native-clean-project": "^4.0.1",
         "react-native-eject": "^0.1.2",
         "react-test-renderer": "18.2.0",
-        "typescript": "4.8.4"
+        "terser-webpack-plugin": "^5.3.9",
+        "typescript": "4.8.4",
+        "webpack": "^5.88.2"
     },
     "engines": {
         "node": ">=16"
     },
     "resolutions": {
-        "@types/react": "^17"
+        "@types/react": "^17",
+        "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3"
     }
 }
